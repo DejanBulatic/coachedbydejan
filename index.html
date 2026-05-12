@@ -1,9 +1,808 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Coached by Dejan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FAF8F4">
+<title>Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#FAF8F4;--white:#FFFFFF;--beige:#E8E0D0;--beige-mid:#D4C9B5;
+  --sage:#A8B8A0;--sage-dark:#5C7A5E;--sage-light:#D4E0D4;--sage-xlight:#EEF3EE;
+  --rose:#EE9F9F;--rose-light:#FDF0F0;--rose-dark:#C97878;
+  --charcoal:#2C2C2A;--charcoal-light:#4A4A47;
+  --muted:#7A7A76;--faint:#AEAEA9;
+  --gold:#B8973A;--gold-light:#F0E8D0;
+  --border:rgba(44,44,42,0.1);--border-soft:rgba(44,44,42,0.06);
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-width:430px;margin:0 auto;position:relative}
+
+/* ══ SCREENS ══ */
+.screen{display:none;height:100vh;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ══ LOGIN ══ */
+#screen-login{
+  background:linear-gradient(160deg,var(--cream) 0%,rgba(168,184,160,0.14) 55%,var(--cream) 100%);
+  align-items:center;justify-content:center;padding:40px 28px;overflow-y:auto
+}
+.login-brand{text-align:center;margin-bottom:44px}
+.login-logo{font-family:var(--fd);font-size:30px;font-weight:300;color:var(--charcoal);letter-spacing:5px;text-transform:uppercase;white-space:nowrap}
+.login-logo em{color:var(--sage-dark);font-style:italic}
+.login-tagline{font-size:10px;color:var(--faint);letter-spacing:0.2em;text-transform:uppercase;margin-top:8px}
+.login-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:32px 28px;width:100%;box-shadow:0 8px 40px rgba(44,44,42,0.07)}
+.login-title{font-family:var(--fd);font-size:24px;font-weight:300;color:var(--charcoal);margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:26px}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lf input{width:100%;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;color:var(--charcoal);font-family:var(--fb);outline:none;transition:border-color .15s}
+.lf input:focus{border-color:var(--sage-dark);background:var(--white)}
+.lf input::placeholder{color:var(--faint)}
+.btn-login{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:14px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;margin-top:6px;transition:opacity .15s}
+.btn-login:hover{opacity:.9}
+.login-forgot{text-align:center;margin-top:14px;font-size:12px;color:var(--faint);cursor:pointer}
+.login-footer{margin-top:32px;text-align:center;font-size:11px;color:var(--faint);letter-spacing:0.1em}
+
+/* ══ APP SHELL ══ */
+.app-header{background:var(--white);border-bottom:1px solid var(--border);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
+.hdr-logo{font-family:var(--fd);font-size:19px;font-weight:300;color:var(--charcoal);letter-spacing:2px;white-space:nowrap}
+.hdr-logo em{color:var(--sage-dark);font-style:italic}
+.hdr-avatar{width:34px;height:34px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:15px;color:var(--sage-dark);border:2px solid var(--sage-light);cursor:pointer;flex-shrink:0}
+
+.app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 90px}
+
+/* ══ BOTTOM NAV ══ */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:10px 0 20px;z-index:200;flex-shrink:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.nav-svg{width:20px;height:20px;stroke:var(--faint);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.nav-lbl{font-size:9px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);transition:color .15s}
+.nav-dot{width:3px;height:3px;border-radius:50%;background:var(--sage-dark);opacity:0;transition:opacity .15s}
+.nav-item.active .nav-svg{stroke:var(--sage-dark)}
+.nav-item.active .nav-lbl{color:var(--sage-dark)}
+.nav-item.active .nav-dot{opacity:1}
+
+/* ══ CARDS ══ */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px}
+.sec-lbl{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+
+/* ══ QUOTE CARD WITH PARTICLES ══ */
+.quote-wrap{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;min-height:170px;cursor:pointer}
+.quote-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1s ease}
+.quote-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(44,44,42,0.58),rgba(44,44,42,0.36))}
+#particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.quote-content{position:relative;z-index:3;padding:22px 20px 20px;display:flex;gap:14px;align-items:flex-start}
+.quote-avatar{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;color:var(--white);flex-shrink:0;border:2px solid rgba(255,255,255,0.25)}
+.quote-text{font-family:var(--fd);font-size:16px;font-weight:300;font-style:italic;color:var(--white);line-height:1.55;text-shadow:0 1px 8px rgba(0,0,0,0.35)}
+.quote-from{font-size:10px;color:rgba(255,255,255,0.55);margin-top:8px;letter-spacing:0.1em;text-transform:uppercase}
+.quote-date-lbl{font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:0.06em}
+
+/* ══ DASHBOARD ══ */
+.greet-name{font-family:var(--fd);font-size:32px;font-weight:300;line-height:1;color:var(--charcoal);margin-bottom:4px}
+.greet-name em{font-style:italic;color:var(--sage-dark)}
+.greet-date{font-size:12px;color:var(--muted);margin-bottom:18px}
+
+.today-card{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;cursor:pointer;min-height:170px}
+.today-bg{position:absolute;inset:0;background-size:cover;background-position:center top;transition:transform .3s ease}
+.today-card:active .today-bg{transform:scale(1.02)}
+.today-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(44,44,42,0.08) 0%,rgba(44,44,42,0.68) 100%)}
+.today-content{position:relative;z-index:2;padding:18px}
+.today-tag{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:5px}
+.today-name{font-family:var(--fd);font-size:24px;font-weight:300;color:var(--white);margin-bottom:5px;text-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.today-meta{display:flex;gap:12px}
+.today-meta span{font-size:12px;color:rgba(255,255,255,0.7)}
+.btn-begin{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--sage-dark);border:none;border-radius:8px;padding:9px 16px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;margin-top:14px}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 8px;text-align:center}
+.stat-num{font-family:var(--fd);font-size:22px;font-weight:300;display:block}
+.stat-num.pos{color:var(--sage-dark)}
+.stat-lbl{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-top:2px;display:block}
+
+.pb-wrap{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
+.pb-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pb-title{font-size:13px;font-weight:500;color:var(--charcoal)}
+.pb-pct{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--sage-dark)}
+.pb-track{height:5px;background:var(--beige);border-radius:3px;overflow:hidden}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-dark));border-radius:3px}
+.pb-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-top:6px}
+
+.upsell-card{background:linear-gradient(135deg,var(--gold-light),rgba(184,151,58,0.06));border:1px solid rgba(184,151,58,0.3);border-radius:12px;padding:18px;margin-bottom:12px}
+.upsell-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.upsell-title{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:6px}
+.upsell-text{font-size:13px;color:var(--charcoal-light);line-height:1.6;margin-bottom:14px}
+.btn-upsell{display:inline-flex;align-items:center;gap:6px;background:var(--charcoal);color:var(--cream);border:none;border-radius:8px;padding:10px 18px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer}
+
+.ci-status{background:var(--gold-light);border:1px solid rgba(184,151,58,0.2);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;cursor:pointer}
+.ci-st-text{font-size:13px;color:var(--charcoal-light)}
+.ci-st-badge{font-size:10px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--gold);color:var(--white)}
+
+.wa-btn{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;cursor:pointer;text-decoration:none;transition:border-color .15s}
+.wa-btn:active{border-color:var(--sage)}
+.wa-icon{width:36px;height:36px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wa-text strong{display:block;font-size:13px;font-weight:500;color:var(--charcoal)}
+.wa-text span{font-size:11px;color:var(--muted)}
+
+/* ══ PROGRAMME ══ */
+.prog-header{background:var(--charcoal);border-radius:12px;padding:20px;margin-bottom:14px}
+.ph-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(250,248,244,0.4);margin-bottom:3px}
+.ph-name{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);margin-bottom:3px}
+.ph-desc{font-size:12px;color:rgba(250,248,244,0.5)}
+.ph-week{font-size:11px;color:rgba(250,248,244,0.35);margin-top:2px}
+
+.week-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.week-scroll::-webkit-scrollbar{display:none}
+.day-pill{flex-shrink:0;border-radius:10px;padding:10px 12px;text-align:center;border:1px solid var(--border);background:var(--white);min-width:52px}
+.day-pill.workout{border-color:var(--sage);background:rgba(168,184,160,0.1)}
+.day-pill.today{background:var(--sage-dark);border-color:var(--sage-dark)}
+.day-pill.rest{background:var(--cream)}
+.dp-name{font-size:9px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+.day-pill.today .dp-name,.day-pill.today .dp-type{color:rgba(250,248,244,0.85)}
+.dp-type{font-size:10px;color:var(--charcoal);margin-top:3px}
+
+.sess-card{border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid var(--border)}
+.sess-img-hdr{position:relative;height:105px;cursor:pointer;overflow:hidden}
+.sess-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s ease}
+.sess-card.open .sess-bg{transform:scale(1.04)}
+.sess-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(44,44,42,0.08),rgba(44,44,42,0.62))}
+.sess-hdr-content{position:relative;z-index:2;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-end;height:100%}
+.sess-tag{font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.12);padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:3px}
+.sess-name{font-family:var(--fd);font-size:19px;font-weight:300;color:var(--white);text-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.sess-meta{font-size:11px;color:rgba(255,255,255,0.65);margin-top:1px}
+.sess-arrow{color:rgba(255,255,255,0.7);font-size:14px;transition:transform .2s;flex-shrink:0;align-self:center}
+.sess-card.open .sess-arrow{transform:rotate(180deg)}
+.sess-body{display:none;background:var(--white);border-top:1px solid var(--border)}
+.sess-card.open .sess-body{display:block}
+
+.ex-row{border-bottom:1px solid var(--border-soft)}
+.ex-row:last-of-type{border-bottom:none}
+.ex-main{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer}
+.ex-num{width:22px;height:22px;border-radius:50%;background:var(--beige);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--muted);flex-shrink:0}
+.ex-info{flex:1}
+.ex-name{font-size:13px;font-weight:500;color:var(--charcoal)}
+.ex-detail{font-size:11px;color:var(--muted);margin-top:1px}
+.ex-tog{font-size:11px;color:var(--sage-dark);background:var(--sage-xlight);padding:3px 8px;border-radius:6px;cursor:pointer;flex-shrink:0;border:1px solid rgba(168,184,160,0.3)}
+.ex-logger{display:none;padding:0 16px 14px;background:var(--cream)}
+.ex-row.log-open .ex-logger{display:block}
+.ex-vid{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--sage-dark);padding:5px 10px;background:var(--sage-xlight);border-radius:6px;cursor:pointer;margin-bottom:10px;border:1px solid rgba(168,184,160,0.3);text-decoration:none}
+.set-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.set-lbl{font-size:11px;font-weight:500;color:var(--muted);min-width:36px}
+.set-in{border:1px solid var(--border);border-radius:6px;padding:7px 8px;font-size:13px;font-family:var(--fb);color:var(--charcoal);background:var(--white);text-align:center;outline:none;transition:border-color .15s}
+.set-in:focus{border-color:var(--sage-dark)}
+.set-in.reps{width:52px}
+.set-in.wgt{width:60px}
+.set-unit{font-size:11px;color:var(--faint)}
+.set-done{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;flex-shrink:0}
+.set-done.done{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--white)}
+.btn-complete{width:100%;background:var(--sage-dark);color:var(--white);border:none;padding:14px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;letter-spacing:0.04em}
+
+.coach-note{background:var(--gold-light);border:1px solid rgba(184,151,58,0.2);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.cn-lbl{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px}
+.cn-txt{font-size:13px;color:var(--charcoal-light);font-style:italic;line-height:1.6}
+
+/* ══ NUTRITION ══ */
+.macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.macro-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center}
+.mb-num{font-family:var(--fd);font-size:20px;font-weight:300;display:block}
+.mb-lbl{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-top:2px;display:block}
+.mb-bar{height:3px;background:var(--beige);border-radius:2px;margin-top:8px;overflow:hidden}
+.mb-fill{height:100%;border-radius:2px}
+.meal-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--cream);border-radius:8px;margin-bottom:6px}
+.meal-time{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.meal-name{font-size:13px;font-weight:500;color:var(--charcoal)}
+.meal-kcal{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--gold);text-align:right}
+.meal-kcal-lbl{font-size:9px;color:var(--faint)}
+.meal-add{opacity:.45;border:1.5px dashed var(--beige-mid);background:transparent;cursor:pointer}
+.water-row{display:flex;gap:6px;flex-wrap:wrap}
+.wg{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;transition:all .15s}
+.wg.filled{background:var(--sage-xlight);border-color:var(--sage)}
+.habit-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border-soft);cursor:pointer}
+.habit-item:last-child{border-bottom:none}
+.hab-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.habit-item.done .hab-chk{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--white);font-size:11px}
+.hab-txt{font-size:13px;color:var(--charcoal-light)}
+.habit-item.done .hab-txt{color:var(--faint);text-decoration:line-through}
+
+/* ══ PROGRESS ══ */
+.prog-hero{background:var(--sage-dark);border-radius:12px;padding:20px;margin-bottom:14px}
+.ph-wlbl{font-family:var(--fd);font-size:14px;font-style:italic;color:rgba(250,248,244,0.55);margin-bottom:12px}
+.ph-sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ph-stat{text-align:center}
+.ph-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
+.ph-lbl{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(250,248,244,0.45);margin-top:2px}
+.chart-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px}
+.chart-title{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.milestone-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-soft)}
+.milestone-row:last-child{border-bottom:none}
+.ms-icon{width:36px;height:36px;border-radius:10px;background:var(--rose-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ms-name{font-size:13px;font-weight:500;color:var(--charcoal)}
+.ms-val{font-size:11px;color:var(--muted);margin-top:1px}
+.ms-badge{font-family:var(--fd);font-size:16px;font-weight:300;color:var(--rose-dark)}
+
+/* ══ CHECK-IN ══ */
+.ci-banner{background:var(--charcoal);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.ci-week{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream)}
+.ci-due{font-size:12px;color:rgba(250,248,244,0.45);margin-top:4px}
+.ci-sec{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px}
+.ci-sec-title{font-family:var(--fd);font-size:18px;font-weight:400;color:var(--charcoal);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.ci-q{margin-bottom:14px}
+.ci-q:last-child{margin-bottom:0}
+.ci-lbl{font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:block}
+.ci-hint{font-size:11px;color:var(--faint);font-style:italic;margin-bottom:5px}
+.ci-inp{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;background:var(--cream);color:var(--charcoal);font-family:var(--fb);outline:none;transition:border-color .15s}
+.ci-inp:focus{border-color:var(--sage-dark);background:var(--white)}
+textarea.ci-inp{resize:vertical;min-height:70px}
+select.ci-inp{cursor:pointer}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r-btns{display:flex;gap:4px;flex-wrap:wrap}
+.r-btn{width:34px;height:34px;border-radius:7px;border:1px solid var(--border);background:var(--cream);font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s}
+.r-btn.sel{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark)}
+.s-btns{display:flex;gap:6px;flex-wrap:wrap}
+.s-btn{padding:8px 13px;border-radius:7px;border:1px solid var(--border);background:var(--cream);font-size:12px;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s}
+.s-btn.sel{background:var(--sage);color:var(--white);border-color:var(--sage)}
+.win-wrap{background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:8px;padding:12px}
+.win-lbl{font-size:10px;font-weight:500;color:var(--rose-dark);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+.btn-submit{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:15px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;margin-top:4px;transition:opacity .15s}
+.success-card{background:var(--sage-dark);border-radius:12px;padding:28px;text-align:center;margin-bottom:12px}
+.sc-icon{font-size:36px;margin-bottom:12px}
+.sc-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);margin-bottom:6px}
+.sc-sub{font-size:13px;color:rgba(250,248,244,0.6);line-height:1.6}
+</style>
 </head>
 <body>
-  <h1>Coming soon</h1>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="screen-login" class="screen active">
+  <div class="login-brand">
+    <div class="login-logo">Coached <em>by</em> Dejan</div>
+    <div class="login-tagline">Your transformation starts here</div>
+  </div>
+  <div class="login-card">
+    <div class="login-title">Welcome back</div>
+    <div class="login-sub">Sign in to continue your journey</div>
+    <div class="lf"><label>Email address</label><input type="email" placeholder="your@email.com" autocomplete="email"></div>
+    <div class="lf"><label>Password</label><input type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn-login" onclick="login()">Sign In</button>
+    <div class="login-forgot">Forgot your password?</div>
+  </div>
+  <div class="login-footer">Coached by Dejan · Private & Secure</div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="screen-dashboard" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar">S</div>
+  </div>
+  <div class="app-scroll">
+    <div class="greet-name">Hej, <em>Sarah</em></div>
+    <div class="greet-date" id="today-date"></div>
+
+    <!-- DAILY QUOTE WITH PARTICLES -->
+    <div class="quote-wrap" id="quote-wrap">
+      <div class="quote-bg" id="quote-bg"></div>
+      <div class="quote-overlay"></div>
+      <canvas id="particle-canvas"></canvas>
+      <div class="quote-content">
+        <div class="quote-avatar">D</div>
+        <div>
+          <div class="quote-text" id="quote-text"></div>
+          <div class="quote-from">Dejan</div>
+          <div class="quote-date-lbl" id="quote-date-lbl"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPSELL — shows from week 8+ -->
+    <div class="upsell-card" id="upsell-card" style="display:none">
+      <div class="upsell-label">✦ Your next chapter</div>
+      <div class="upsell-title">You are nearly there, <em>Sarah</em></div>
+      <div class="upsell-text">Week 8 of 12 — you have come further than you know. When you are ready to continue, your next programme is waiting.</div>
+      <button class="btn-upsell" onclick="window.open('https://coachedbydejan.primalhybrid.com','_blank')">Discover what comes next →</button>
+    </div>
+
+    <!-- TODAY SESSION -->
+    <div class="today-card" onclick="showTab('programme')">
+      <!-- REPLACE src with /images/quote-7.png after uploading to GitHub -->
+      <div class="today-bg" style="background-image:url('https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80')"></div>
+      <div class="today-overlay"></div>
+      <div class="today-content">
+        <div class="today-tag">Today's Session</div>
+        <div class="today-name">Full Body A — Squat Focus</div>
+        <div class="today-meta"><span>45 min</span><span>5 exercises</span><span>Building gym</span></div>
+        <button class="btn-begin" onclick="event.stopPropagation();showTab('programme')">Begin session →</button>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Your Progress</div>
+    <div class="stats-row">
+      <div class="stat-box"><span class="stat-num pos">−3.2 kg</span><span class="stat-lbl">Lost</span></div>
+      <div class="stat-box"><span class="stat-num">70.8</span><span class="stat-lbl">Current kg</span></div>
+      <div class="stat-box"><span class="stat-num">63</span><span class="stat-lbl">Goal kg</span></div>
+    </div>
+
+    <div class="pb-wrap">
+      <div class="pb-top"><div class="pb-title">Journey to goal</div><div class="pb-pct">29%</div></div>
+      <div class="pb-track"><div class="pb-fill" style="width:29%"></div></div>
+      <div class="pb-labels"><span>74 kg start</span><span>70.8 kg now</span><span>63 kg goal</span></div>
+    </div>
+
+    <div class="ci-status" onclick="showTab('checkin')">
+      <div class="ci-st-text">Weekly check-in — due Thursday noon</div>
+      <div class="ci-st-badge">Due Thu</div>
+    </div>
+
+    <!-- WHATSAPP — Balanced & Elevate only -->
+    <a class="wa-btn" href="https://wa.me/46700000000" target="_blank">
+      <div class="wa-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </div>
+      <div class="wa-text">
+        <strong>Message Dejan</strong>
+        <span>Priority support · Balanced &amp; Elevate</span>
+      </div>
+    </a>
+  </div>
+  <div class="bottom-nav" id="nav-dashboard"></div>
+</div>
+
+<!-- ═══ PROGRAMME ═══ -->
+<div id="screen-programme" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar">S</div>
+  </div>
+  <div class="app-scroll">
+    <div class="prog-header">
+      <div class="ph-label">Your Programme</div>
+      <div class="ph-name">Foundation</div>
+      <div class="ph-desc">A 12-week transformation programme</div>
+      <div class="ph-week">Week 3 of 12</div>
+    </div>
+    <div class="sec-lbl">This Week</div>
+    <div class="week-scroll">
+      <div class="day-pill workout today"><div class="dp-name">Mon</div><div class="dp-type">Str A</div></div>
+      <div class="day-pill rest"><div class="dp-name">Tue</div><div class="dp-type">Cardio</div></div>
+      <div class="day-pill workout"><div class="dp-name">Wed</div><div class="dp-type">Str B</div></div>
+      <div class="day-pill rest"><div class="dp-name">Thu</div><div class="dp-type">Rest</div></div>
+      <div class="day-pill workout"><div class="dp-name">Fri</div><div class="dp-type">Str C</div></div>
+      <div class="day-pill rest"><div class="dp-name">Sat</div><div class="dp-type">Walk</div></div>
+      <div class="day-pill rest"><div class="dp-name">Sun</div><div class="dp-type">Rest</div></div>
+    </div>
+    <div class="sec-lbl">Sessions</div>
+    <div class="sess-card" id="sess-a">
+      <div class="sess-img-hdr" onclick="toggleSess('sess-a')">
+        <!-- REPLACE with: background-image:url('/images/quote-1.png') -->
+        <div class="sess-bg" style="background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80')"></div>
+        <div class="sess-overlay"></div>
+        <div class="sess-hdr-content">
+          <div><div class="sess-tag">Today · Full Body</div><div class="sess-name">Session A — Squat Focus</div><div class="sess-meta">5 exercises · 45 min</div></div>
+          <div class="sess-arrow">⌄</div>
+        </div>
+      </div>
+      <div class="sess-body"><div id="ex-list-a"></div><button class="btn-complete">Mark Session Complete ✓</button></div>
+    </div>
+    <div class="sess-card" id="sess-b">
+      <div class="sess-img-hdr" onclick="toggleSess('sess-b')">
+        <!-- REPLACE with: background-image:url('/images/quote-4.jpg') -->
+        <div class="sess-bg" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80')"></div>
+        <div class="sess-overlay"></div>
+        <div class="sess-hdr-content">
+          <div><div class="sess-tag">Wednesday · Full Body</div><div class="sess-name">Session B — Hinge Focus</div><div class="sess-meta">5 exercises · 45 min</div></div>
+          <div class="sess-arrow">⌄</div>
+        </div>
+      </div>
+      <div class="sess-body"><div id="ex-list-b"></div><button class="btn-complete">Start Session →</button></div>
+    </div>
+    <div class="sess-card" id="sess-c">
+      <div class="sess-img-hdr" onclick="toggleSess('sess-c')">
+        <!-- REPLACE with: background-image:url('/images/quote-2.png') -->
+        <div class="sess-bg" style="background-image:url('https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80')"></div>
+        <div class="sess-overlay"></div>
+        <div class="sess-hdr-content">
+          <div><div class="sess-tag">Friday · Glutes &amp; Upper</div><div class="sess-name">Session C — Glute Focus</div><div class="sess-meta">5 exercises + HIIT · 50 min</div></div>
+          <div class="sess-arrow">⌄</div>
+        </div>
+      </div>
+      <div class="sess-body"><div id="ex-list-c"></div><button class="btn-complete">Start Session →</button></div>
+    </div>
+    <div class="coach-note">
+      <div class="cn-lbl">From Dejan</div>
+      <div class="cn-txt">"You are doing brilliantly in week 3. Focus on form over weight — the strength will come. So proud of your consistency."</div>
+    </div>
+  </div>
+  <div class="bottom-nav" id="nav-programme"></div>
+</div>
+
+<!-- ═══ NUTRITION ═══ -->
+<div id="screen-nutrition" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar">S</div>
+  </div>
+  <div class="app-scroll">
+    <div class="sec-lbl">Today's Targets</div>
+    <div class="macro-grid">
+      <div class="macro-box"><span class="mb-num" style="color:var(--gold)">1,600</span><span class="mb-lbl">kcal</span><div class="mb-bar"><div class="mb-fill" style="width:68%;background:var(--gold)"></div></div></div>
+      <div class="macro-box"><span class="mb-num" style="color:var(--sage-dark)">130g</span><span class="mb-lbl">Protein</span><div class="mb-bar"><div class="mb-fill" style="width:72%;background:var(--sage-dark)"></div></div></div>
+      <div class="macro-box"><span class="mb-num" style="color:#5B8DD9">160g</span><span class="mb-lbl">Carbs</span><div class="mb-bar"><div class="mb-fill" style="width:55%;background:#5B8DD9"></div></div></div>
+      <div class="macro-box"><span class="mb-num" style="color:var(--rose-dark)">53g</span><span class="mb-lbl">Fat</span><div class="mb-bar"><div class="mb-fill" style="width:45%;background:var(--rose)"></div></div></div>
+    </div>
+    <div class="sec-lbl">Today's Meals</div>
+    <div class="card">
+      <div class="meal-item"><div><div class="meal-time">Breakfast · 08:00</div><div class="meal-name">Greek yoghurt, berries, granola</div></div><div><div class="meal-kcal">320</div><div class="meal-kcal-lbl">kcal</div></div></div>
+      <div class="meal-item"><div><div class="meal-time">Lunch · 12:30</div><div class="meal-name">Chicken breast, rice, salad</div></div><div><div class="meal-kcal">480</div><div class="meal-kcal-lbl">kcal</div></div></div>
+      <div class="meal-item meal-add"><div><div class="meal-time">Dinner</div><div class="meal-name">+ Add dinner</div></div><div><div class="meal-kcal">—</div><div class="meal-kcal-lbl">kcal</div></div></div>
+    </div>
+    <div class="sec-lbl">Hydration <span id="water-lbl" style="color:var(--sage-dark);font-weight:500">5 / 8</span></div>
+    <div class="card">
+      <div class="water-row">
+        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg filled" onclick="tw(this)">💧</div>
+        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg filled" onclick="tw(this)">💧</div>
+        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg" onclick="tw(this)">💧</div>
+        <div class="wg" onclick="tw(this)">💧</div><div class="wg" onclick="tw(this)">💧</div>
+      </div>
+    </div>
+    <div class="sec-lbl">Daily Habits</div>
+    <div class="card">
+      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Hit protein target every day</div></div>
+      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Drink 2 litres of water</div></div>
+      <div class="habit-item" onclick="th(this)"><div class="hab-chk"></div><div class="hab-txt">Vegetables with at least 2 meals</div></div>
+      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Eat breakfast</div></div>
+      <div class="habit-item" onclick="th(this)"><div class="hab-chk"></div><div class="hab-txt">Track food in MyFitnessPal</div></div>
+    </div>
+  </div>
+  <div class="bottom-nav" id="nav-nutrition"></div>
+</div>
+
+<!-- ═══ PROGRESS ═══ -->
+<div id="screen-progress" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar">S</div>
+  </div>
+  <div class="app-scroll">
+    <div class="prog-hero">
+      <div class="ph-wlbl">Week 3 of 12</div>
+      <div class="ph-sg">
+        <div class="ph-stat"><span class="ph-num">−3.2</span><span class="ph-lbl">kg lost</span></div>
+        <div class="ph-stat"><span class="ph-num">−2 cm</span><span class="ph-lbl">waist</span></div>
+        <div class="ph-stat"><span class="ph-num">29%</span><span class="ph-lbl">to goal</span></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Weight Journey (kg)</div>
+      <svg viewBox="0 0 300 80" style="width:100%;height:80px">
+        <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5C7A5E" stop-opacity="0.15"/><stop offset="100%" stop-color="#5C7A5E" stop-opacity="0"/></linearGradient></defs>
+        <line x1="0" y1="65" x2="300" y2="65" stroke="#B8973A" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+        <text x="248" y="61" font-size="8" fill="#B8973A" opacity="0.7">Goal 63 kg</text>
+        <path d="M10,18 L70,26 L130,34 L190,38 L250,42" fill="none" stroke="#5C7A5E" stroke-width="2" stroke-linecap="round"/>
+        <path d="M10,18 L70,26 L130,34 L190,38 L250,42 L250,80 L10,80Z" fill="url(#wg)"/>
+        <circle cx="10" cy="18" r="3.5" fill="#5C7A5E"/><circle cx="70" cy="26" r="3.5" fill="#5C7A5E"/>
+        <circle cx="130" cy="34" r="3.5" fill="#5C7A5E"/><circle cx="190" cy="38" r="3.5" fill="#5C7A5E"/>
+        <circle cx="250" cy="42" r="4.5" fill="#5C7A5E" stroke="white" stroke-width="2"/>
+        <text x="10" y="13" font-size="7.5" fill="#7A7A76" text-anchor="middle">74</text>
+        <text x="70" y="21" font-size="7.5" fill="#7A7A76" text-anchor="middle">73.1</text>
+        <text x="130" y="29" font-size="7.5" fill="#7A7A76" text-anchor="middle">72.2</text>
+        <text x="190" y="33" font-size="7.5" fill="#7A7A76" text-anchor="middle">71.4</text>
+        <text x="250" y="37" font-size="7.5" fill="#5C7A5E" text-anchor="middle" font-weight="500">70.8</text>
+        <text x="10" y="78" font-size="7" fill="#AEAEA9" text-anchor="middle">W1</text>
+        <text x="70" y="78" font-size="7" fill="#AEAEA9" text-anchor="middle">W2</text>
+        <text x="130" y="78" font-size="7" fill="#AEAEA9" text-anchor="middle">W3</text>
+        <text x="190" y="78" font-size="7" fill="#AEAEA9" text-anchor="middle">W4</text>
+        <text x="250" y="78" font-size="7" fill="#AEAEA9" text-anchor="middle">W5</text>
+      </svg>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Training Consistency (sessions/week)</div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:90px;padding-bottom:4px">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end"><div style="width:100%;height:60%;background:var(--sage-light);border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:9px;color:var(--muted)">3</div><div style="font-size:9px;color:var(--faint);margin-top:4px">W1</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end"><div style="width:100%;height:100%;background:var(--sage-light);border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:9px;color:var(--muted)">5</div><div style="font-size:9px;color:var(--faint);margin-top:4px">W2</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end"><div style="width:100%;height:80%;background:var(--sage);border-radius:4px 4px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:9px;color:white">4</div><div style="font-size:9px;color:var(--faint);margin-top:4px">W3</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end"><div style="width:100%;height:20%;background:var(--beige);border-radius:4px 4px 0 0;border:1px dashed var(--border)"></div><div style="font-size:9px;color:var(--faint);margin-top:4px">W4</div></div>
+      </div>
+    </div>
+    <div class="sec-lbl">Strength Milestones</div>
+    <div class="card">
+      <div class="milestone-row"><div class="ms-icon">🏆</div><div style="flex:1"><div class="ms-name">Push-ups</div><div class="ms-val">Started at 5 · Now at 11</div></div><div class="ms-badge">+6 reps</div></div>
+      <div class="milestone-row"><div class="ms-icon">⏱</div><div style="flex:1"><div class="ms-name">Plank Hold</div><div class="ms-val">Started at 22 sec · Now at 45 sec</div></div><div class="ms-badge">+23 sec</div></div>
+      <div class="milestone-row"><div class="ms-icon">💪</div><div style="flex:1"><div class="ms-name">Goblet Squat</div><div class="ms-val">Started at 8 kg · Now at 14 kg</div></div><div class="ms-badge">+6 kg</div></div>
+      <div class="milestone-row"><div class="ms-icon">✨</div><div style="flex:1"><div class="ms-name">Hip Thrust</div><div class="ms-val">Bodyweight → 20 kg barbell</div></div><div class="ms-badge">+20 kg</div></div>
+    </div>
+  </div>
+  <div class="bottom-nav" id="nav-progress"></div>
+</div>
+
+<!-- ═══ CHECK-IN ═══ -->
+<div id="screen-checkin" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar">S</div>
+  </div>
+  <div class="app-scroll" id="ci-content">
+    <div class="ci-banner">
+      <div class="ci-week">Week 3 Check-in</div>
+      <div class="ci-due">Due Thursday 12:00 · Dejan responds Friday evening</div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Before We Start</div>
+      <div class="ci-q"><label class="ci-lbl">Anything to flag straight away?</label><div class="ci-hint">Injury, illness, big life event, or something you are proud of</div><input class="ci-inp" placeholder="e.g. Knee felt sore, or nothing to flag"></div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Training</div>
+      <div class="ci-q"><label class="ci-lbl">Sessions completed this week</label><div class="s-btns"><button class="s-btn" onclick="sb(this)">0</button><button class="s-btn" onclick="sb(this)">1</button><button class="s-btn" onclick="sb(this)">2</button><button class="s-btn sel" onclick="sb(this)">3</button><button class="s-btn" onclick="sb(this)">4</button><button class="s-btn" onclick="sb(this)">5+</button></div></div>
+      <div class="ci-q"><label class="ci-lbl">If you missed any — what got in the way?</label><input class="ci-inp" placeholder="e.g. Work, wasn't feeling well, or nothing missed"></div>
+      <div class="ci-q"><label class="ci-lbl">How did your sessions feel?</label><select class="ci-inp"><option>Strong — felt great</option><option selected>Good — solid sessions</option><option>Okay — got through it</option><option>Hard — felt tired</option><option>Very hard — really struggled</option></select></div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Measurements</div>
+      <div class="ci-hint" style="margin-bottom:12px">First thing in the morning, after bathroom, before eating. Same every week.</div>
+      <div class="ci-q"><label class="ci-lbl">This morning's weight (kg)</label><input class="ci-inp" type="number" step="0.1" placeholder="e.g. 70.8"></div>
+      <div class="two-col">
+        <div class="ci-q"><label class="ci-lbl">Waist (cm)</label><div class="ci-hint">Every 2 weeks</div><input class="ci-inp" type="number" placeholder="or skip"></div>
+        <div class="ci-q"><label class="ci-lbl">Hips (cm)</label><div class="ci-hint">Every 2 weeks</div><input class="ci-inp" type="number" placeholder="or skip"></div>
+      </div>
+      <div class="ci-q"><label class="ci-lbl">Is it that time of the month?</label><div class="ci-hint">Affects water retention — important context</div><select class="ci-inp"><option>No</option><option>Yes — may affect weight reading</option><option>Approaching — possible water retention</option></select></div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Nutrition</div>
+      <div class="ci-q"><label class="ci-lbl">How was your nutrition this week?</label><div class="ci-hint">Be honest — it helps me make the right adjustments</div><textarea class="ci-inp" placeholder="e.g. Hit protein most days, went over Saturday, struggling with evening snacking..."></textarea></div>
+      <div class="two-col">
+        <div class="ci-q"><label class="ci-lbl">Water intake</label><select class="ci-inp"><option>Poor — barely 1 L</option><option>Fair — 1–1.5 L</option><option selected>Good — 1.5–2 L</option><option>Great — 2+ L daily</option></select></div>
+        <div class="ci-q"><label class="ci-lbl">Tracked food?</label><select class="ci-inp"><option>Yes — every day</option><option selected>Mostly</option><option>Partially</option><option>No — not this week</option></select></div>
+      </div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Energy & Wellbeing</div>
+      <div class="ci-q"><label class="ci-lbl">Energy levels (1 = exhausted · 10 = excellent)</label><div class="r-btns"><button class="r-btn" onclick="rb(this)">1</button><button class="r-btn" onclick="rb(this)">2</button><button class="r-btn" onclick="rb(this)">3</button><button class="r-btn" onclick="rb(this)">4</button><button class="r-btn" onclick="rb(this)">5</button><button class="r-btn" onclick="rb(this)">6</button><button class="r-btn sel" onclick="rb(this)">7</button><button class="r-btn" onclick="rb(this)">8</button><button class="r-btn" onclick="rb(this)">9</button><button class="r-btn" onclick="rb(this)">10</button></div></div>
+      <div class="two-col">
+        <div class="ci-q"><label class="ci-lbl">Sleep</label><select class="ci-inp"><option>Poor — under 6 hrs</option><option selected>Fair — 6–7 hrs</option><option>Good — 7–8 hrs</option><option>Excellent — 8+</option></select></div>
+        <div class="ci-q"><label class="ci-lbl">Stress</label><select class="ci-inp"><option>Low</option><option selected>Moderate</option><option>High</option><option>Very high</option></select></div>
+      </div>
+    </div>
+    <div class="ci-sec">
+      <div class="ci-sec-title">Reflection</div>
+      <div class="ci-q"><div class="win-wrap"><div class="win-lbl">🌸 Your win this week</div><textarea class="ci-inp" style="background:transparent;border-color:rgba(238,159,159,0.3)" placeholder="Big or small — what are you proud of this week?"></textarea></div></div>
+      <div class="ci-q"><label class="ci-lbl">Your biggest challenge</label><textarea class="ci-inp" placeholder="e.g. Evening cravings, motivation, joint discomfort..."></textarea></div>
+      <div class="ci-q"><label class="ci-lbl">Anything you need from me?</label><input class="ci-inp" placeholder="Programme adjustment, question, extra support..."></div>
+    </div>
+    <button class="btn-submit" onclick="submitCI()">Submit Check-in →</button>
+  </div>
+  <div class="bottom-nav" id="nav-checkin"></div>
+</div>
+
+<script>
+// ══ NAV ══
+const navDefs=[
+  {id:'dashboard',l:'Home',p:'M3 9L10 3L17 9V17H13V12H7V17H3V9Z'},
+  {id:'programme',l:'Programme',p:'M4 4h12a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2 4h8M6 11h8M6 14h5'},
+  {id:'nutrition',l:'Nutrition',p:'M12 17C12 17 5 14 5 8C5 5 8 3 12 3C16 3 19 5 19 8C19 14 12 17 12 17ZM12 10V17'},
+  {id:'progress',l:'Progress',p:'M3 15L8 9L12 12L17 5M3 17H17'},
+  {id:'checkin',l:'Check-in',p:'M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM7 12L10 15L17 8'},
+];
+
+function renderNav(activeId){
+  navDefs.forEach(n=>{
+    const el=document.getElementById('nav-'+n.id);
+    if(!el)return;
+    el.innerHTML=navDefs.map(t=>`
+      <div class="nav-item ${t.id===activeId?'active':''}" onclick="showTab('${t.id}')">
+        <svg class="nav-svg" viewBox="0 0 20 20"><path d="${t.p}" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="nav-lbl">${t.l}</div>
+        <div class="nav-dot"></div>
+      </div>`).join('');
+  });
+}
+
+function showTab(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  renderNav(id);
+}
+
+function login(){showTab('dashboard');}
+
+// ══ DAILY QUOTE (one per day, changes at midnight) ══
+const quotes=[
+  {text:"Progress is not always visible on the scale — but it is always happening.",bg:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80"},
+  {text:"Strength is built one session at a time. You are building something real.",bg:"https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80"},
+  {text:"The woman you are becoming is worth every effort you make today.",bg:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"},
+  {text:"Rest is part of the programme. Recovery is where results are made.",bg:"https://images.unsplash.com/photo-1540206395-68808572332f?w=800&q=80"},
+  {text:"Every meal you choose with intention is a vote for the life you want.",bg:"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80"},
+  {text:"You do not have to be perfect. You just have to keep going.",bg:"https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80"},
+  {text:"Consistency is the only secret. You already have it.",bg:"https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80"},
+  {text:"Your body is listening to everything you do for it. Keep going.",bg:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&q=80"},
+  {text:"Small steps taken every day become the transformation of a lifetime.",bg:"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=80"},
+  {text:"You showed up today. That is always enough to start.",bg:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80"},
+  {text:"The strongest version of you is already inside you — training is just finding her.",bg:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80"},
+  {text:"Slow progress is still progress. Never forget that.",bg:"https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80"},
+  {text:"What you do today will be visible in six weeks. Trust it.",bg:"https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80"},
+  {text:"You are not starting over. You are starting stronger.",bg:"https://images.unsplash.com/photo-1540206395-68808572332f?w=800&q=80"},
+  // NOTE: Replace all bg URLs with /images/quote-N.png after uploading your images
+];
+
+function initDailyQuote(){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),0,0);
+  const dayOfYear=Math.floor((now-start)/86400000);
+  const q=quotes[dayOfYear%quotes.length];
+  document.getElementById('quote-bg').style.backgroundImage=`url('${q.bg}')`;
+  document.getElementById('quote-text').textContent='"'+q.text+'"';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('quote-date-lbl').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()];
+  document.getElementById('today-date').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()];
+}
+
+// ══ PARTICLES ══
+function initParticles(){
+  const canvas=document.getElementById('particle-canvas');
+  const wrap=document.getElementById('quote-wrap');
+  if(!canvas||!wrap)return;
+  canvas.width=wrap.offsetWidth||370;
+  canvas.height=wrap.offsetHeight||170;
+  const ctx=canvas.getContext('2d');
+  const particles=Array.from({length:26},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    baseSize:Math.random()*2.6+0.7,
+    speedX:(Math.random()*0.32+0.08)*(Math.random()>.5?1:-1),
+    speedY:Math.random()*0.12-0.06,
+    baseOp:Math.random()*0.52+0.18,
+    twSpeed:Math.random()*0.018+0.004,
+    twOff:Math.random()*Math.PI*2,
+    isStar:Math.random()>.7,
+    t:Math.random()*1000,
+    glowR:0
+  }));
+  particles.forEach(p=>{p.glowR=p.baseSize*(Math.random()*3+3);});
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.t+=0.016;
+      p.x+=p.speedX;
+      p.y+=p.speedY+Math.sin(p.t*0.4+p.twOff)*0.055;
+      const op=p.baseOp*(0.58+0.42*Math.sin(p.t*p.twSpeed*60+p.twOff));
+      const sz=p.baseSize*(0.85+0.15*Math.sin(p.t*p.twSpeed*40+p.twOff));
+      if(p.x<-10)p.x=canvas.width+10;
+      if(p.x>canvas.width+10)p.x=-10;
+      if(p.y<-10)p.y=canvas.height+10;
+      if(p.y>canvas.height+10)p.y=-10;
+      ctx.save();
+      // outer glow
+      const grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.glowR);
+      grd.addColorStop(0,`rgba(255,255,255,${op*0.3})`);
+      grd.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.beginPath();ctx.arc(p.x,p.y,p.glowR,0,Math.PI*2);
+      ctx.fillStyle=grd;ctx.fill();
+      if(p.isStar){
+        // 4-point sparkle
+        ctx.strokeStyle=`rgba(255,255,255,${op})`;
+        ctx.lineWidth=sz*0.55;ctx.lineCap='round';
+        const arm=sz*3.8;
+        ctx.beginPath();ctx.moveTo(p.x-arm,p.y);ctx.lineTo(p.x+arm,p.y);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(p.x,p.y-arm);ctx.lineTo(p.x,p.y+arm);ctx.stroke();
+        const d=arm*0.45;ctx.lineWidth=sz*0.28;ctx.globalAlpha=op*0.45;
+        ctx.beginPath();ctx.moveTo(p.x-d,p.y-d);ctx.lineTo(p.x+d,p.y+d);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(p.x+d,p.y-d);ctx.lineTo(p.x-d,p.y+d);ctx.stroke();
+        ctx.globalAlpha=1;
+        // centre
+        const cg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz*1.2);
+        cg.addColorStop(0,`rgba(255,255,255,${op})`);cg.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.beginPath();ctx.arc(p.x,p.y,sz*1.2,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();
+      } else {
+        // soft bokeh dot
+        const dg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz*2.2);
+        dg.addColorStop(0,`rgba(255,255,255,${op})`);
+        dg.addColorStop(0.5,`rgba(255,255,255,${op*0.55})`);
+        dg.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.beginPath();ctx.arc(p.x,p.y,sz*2.2,0,Math.PI*2);ctx.fillStyle=dg;ctx.fill();
+      }
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ══ EXERCISES ══
+const exData={
+  a:[
+    {n:'Goblet Squat',d:'3 × 12–15 · 90 sec rest · Focus on depth, knees over toes',s:3,v:'https://www.youtube.com/results?search_query=goblet+squat+tutorial'},
+    {n:'Lat Pulldown',d:'3 × 12–15 · 90 sec rest · Pull to chest, squeeze shoulder blades',s:3,v:'https://www.youtube.com/results?search_query=lat+pulldown+tutorial'},
+    {n:'Dumbbell Shoulder Press',d:'3 × 12–15 · 90 sec rest · Control the descent',s:3,v:'https://www.youtube.com/results?search_query=dumbbell+shoulder+press+tutorial'},
+    {n:'Lateral Raises',d:'2 × 15 · 60 sec rest · Very light weight',s:2,v:'https://www.youtube.com/results?search_query=lateral+raises+tutorial'},
+    {n:'Plank Hold',d:'3 × 30 sec · 45 sec rest · Build toward 60 seconds',s:3,v:'https://www.youtube.com/results?search_query=plank+exercise+tutorial'},
+  ],
+  b:[
+    {n:'Romanian Deadlift',d:'3 × 12 · 90 sec rest · Push hips back, feel hamstrings',s:3,v:'https://www.youtube.com/results?search_query=romanian+deadlift+tutorial'},
+    {n:'Seated Cable Row',d:'3 × 12–15 · 90 sec rest · Squeeze back at end of rep',s:3,v:'https://www.youtube.com/results?search_query=seated+cable+row+tutorial'},
+    {n:'Dumbbell Chest Press',d:'3 × 12–15 · 90 sec rest · Full range of motion',s:3,v:'https://www.youtube.com/results?search_query=dumbbell+chest+press+tutorial'},
+    {n:'Tricep Pushdown',d:'2 × 15 · 60 sec rest · Elbows stay by sides',s:2,v:'https://www.youtube.com/results?search_query=tricep+pushdown+tutorial'},
+    {n:'Dead Bug',d:'3 × 8 each side · 45 sec rest · Back flat on floor',s:3,v:'https://www.youtube.com/results?search_query=dead+bug+exercise+tutorial'},
+  ],
+  c:[
+    {n:'Hip Thrust',d:'3 × 15–20 · 60 sec rest · Squeeze glutes hard at top',s:3,v:'https://www.youtube.com/results?search_query=hip+thrust+tutorial'},
+    {n:'Step-Up with Dumbbells',d:'3 × 10 each leg · 60 sec rest · Drive through heel',s:3,v:'https://www.youtube.com/results?search_query=step+up+exercise+tutorial'},
+    {n:'Single Arm Dumbbell Row',d:'3 × 12 each side · 60 sec rest · Full stretch at bottom',s:3,v:'https://www.youtube.com/results?search_query=single+arm+row+tutorial'},
+    {n:'Push-Up',d:'3 × 10–12 · 60 sec rest · Choose incline or full',s:3,v:'https://www.youtube.com/results?search_query=push+up+tutorial+beginner'},
+    {n:'HIIT Finisher',d:'3 rounds · 20 sec on / 40 sec off · Step-ups or mountain climbers',s:3,v:'https://www.youtube.com/results?search_query=HIIT+finisher+beginner'},
+  ]
+};
+
+function buildExList(key){
+  const el=document.getElementById('ex-list-'+key);
+  if(!el)return;
+  el.innerHTML=exData[key].map((ex,i)=>{
+    const rows=Array.from({length:ex.s},(_,s)=>`
+      <div class="set-row">
+        <span class="set-lbl">Set ${s+1}</span>
+        <input class="set-in reps" type="number" placeholder="reps" min="0" inputmode="numeric">
+        <span class="set-unit">reps</span>
+        <span class="set-unit" style="margin:0 2px">@</span>
+        <input class="set-in wgt" type="number" placeholder="kg" min="0" step="0.5" inputmode="decimal">
+        <span class="set-unit">kg</span>
+        <button class="set-done" onclick="markSet(this)">○</button>
+      </div>`).join('');
+    return `
+      <div class="ex-row" id="ex-${key}-${i}">
+        <div class="ex-main" onclick="toggleEx('${key}',${i})">
+          <div class="ex-num">${i+1}</div>
+          <div class="ex-info"><div class="ex-name">${ex.n}</div><div class="ex-detail">${ex.d}</div></div>
+          <div class="ex-tog">Log</div>
+        </div>
+        <div class="ex-logger">
+          <a class="ex-vid" href="${ex.v}" target="_blank">
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,10 5,17"/></svg>
+            Watch tutorial
+          </a>
+          ${rows}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleEx(k,i){
+  const row=document.getElementById(`ex-${k}-${i}`);
+  const was=row.classList.contains('log-open');
+  document.querySelectorAll('.ex-row').forEach(r=>r.classList.remove('log-open'));
+  if(!was)row.classList.add('log-open');
+}
+function markSet(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'○';}
+function toggleSess(id){document.getElementById(id).classList.toggle('open');}
+function tw(el){el.classList.toggle('filled');document.getElementById('water-lbl').textContent=document.querySelectorAll('.wg.filled').length+' / 8';}
+function th(el){el.classList.toggle('done');el.querySelector('.hab-chk').textContent=el.classList.contains('done')?'✓':'';}
+function rb(btn){btn.closest('.r-btns').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function sb(btn){btn.closest('.s-btns').querySelectorAll('.s-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function submitCI(){
+  document.getElementById('ci-content').innerHTML=`
+    <div class="success-card">
+      <div class="sc-icon">🌿</div>
+      <div class="sc-title">Check-in received</div>
+      <div class="sc-sub">Dejan will review everything carefully and respond by Friday evening.<br><br>Well done for showing up this week.</div>
+    </div>
+    <div class="card" style="text-align:center;padding:24px">
+      <div style="font-family:var(--fd);font-size:20px;font-weight:300;font-style:italic;color:var(--charcoal);margin-bottom:6px">"Every check-in is an act of self-care."</div>
+      <div style="font-size:12px;color:var(--muted)">See you next week 💚</div>
+    </div>`;
+}
+
+// UPSELL — set currentWeek to 8+ to show
+const currentWeek=3;
+if(currentWeek>=8)document.getElementById('upsell-card').style.display='block';
+
+// INIT
+['a','b','c'].forEach(buildExList);
+renderNav('dashboard');
+initDailyQuote();
+setTimeout(initParticles,150);
+</script>
 </body>
 </html>
