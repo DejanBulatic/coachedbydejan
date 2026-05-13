@@ -54,7 +54,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 .hdr-avatar{width:36px;height:36px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;color:var(--sage-dark);border:2px solid var(--sage-light);cursor:pointer;flex-shrink:0}
 
 /* FIX: enough bottom padding so WhatsApp button is never hidden */
-.app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 150px}
+.app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:10px 0 22px;z-index:200}
@@ -71,9 +71,8 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 .sec-lbl{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 
 /* QUOTE CARD */
-.quote-wrap{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;min-height:195px}
-.quote-bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0;background-color:#3a4a3c}
-.quote-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(44,44,42,0.55),rgba(44,44,42,0.32));z-index:1}
+.quote-wrap{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;min-height:195px;background-size:cover;background-position:center;background-color:#3C5040}
+.quote-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,40,32,0.55),rgba(30,40,32,0.32));z-index:1}
 #particle-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 .quote-content{position:relative;z-index:3;padding:24px 20px 22px;display:flex;gap:16px;align-items:flex-start}
 /* Square avatar — bigger */
@@ -249,7 +248,7 @@ select.ci-inp{cursor:pointer}
 .s-btn.sel{background:var(--sage);color:var(--white);border-color:var(--sage)}
 .win-wrap{background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:8px;padding:14px}
 .win-lbl{font-size:13px;font-weight:500;color:var(--rose-dark);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px}
-.btn-submit{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:17px;font-family:var(--fb);font-size:16px;font-weight:500;cursor:pointer;margin-top:4px}
+.btn-submit{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:20px;font-family:var(--fb);font-size:17px;font-weight:500;cursor:pointer;margin-top:8px;margin-bottom:16px}
 .success-card{background:var(--sage-dark);border-radius:12px;padding:28px;text-align:center;margin-bottom:12px}
 .sc-icon{font-size:38px;margin-bottom:12px}
 .sc-title{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);margin-bottom:6px}
@@ -286,7 +285,6 @@ select.ci-inp{cursor:pointer}
     <div class="greet-date" id="today-date"></div>
 
     <div class="quote-wrap" id="quote-wrap">
-      <div class="quote-bg" id="quote-bg"></div>
       <div class="quote-overlay"></div>
       <canvas id="particle-canvas"></canvas>
       <div class="quote-content">
@@ -624,7 +622,7 @@ function initDailyQuote(){
   const now=new Date();
   const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
   const q=quotes[doy%quotes.length];
-  document.getElementById('quote-bg').style.backgroundImage=`url('${q.bg}')`;
+  document.getElementById('quote-wrap').style.backgroundImage=`url('${q.bg}')`;
   document.getElementById('quote-text').textContent='"'+q.text+'"';
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -778,6 +776,28 @@ if(currentWeek>=8)document.getElementById('upsell-card').style.display='block';
 renderNav('dashboard');
 initDailyQuote();
 setTimeout(initParticles,150);
+
+// iOS Add to Home Screen prompt
+function showIOSPrompt(){
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone=window.navigator.standalone===true;
+  const dismissed=localStorage.getItem('cbd-ios-prompt');
+  if(isIOS&&!isStandalone&&!dismissed){
+    const banner=document.createElement('div');
+    banner.id='ios-prompt';
+    banner.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:398px;background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:0 8px 32px rgba(44,44,42,0.18);z-index:999;display:flex;gap:12px;align-items:center;font-family:var(--fb)';
+    banner.innerHTML=`
+      <div style="font-size:28px;flex-shrink:0">📲</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:3px">Add to your home screen</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.4">Tap <strong>Share</strong> then <strong>"Add to Home Screen"</strong> for the best experience</div>
+      </div>
+      <button onclick="document.getElementById('ios-prompt').remove();localStorage.setItem('cbd-ios-prompt','1')" style="background:none;border:none;font-size:20px;color:var(--faint);cursor:pointer;flex-shrink:0;padding:4px">✕</button>`;
+    document.body.appendChild(banner);
+    setTimeout(()=>{if(document.getElementById('ios-prompt'))document.getElementById('ios-prompt').remove();},10000);
+  }
+}
+setTimeout(showIOSPrompt,2000);
 </script>
 </body>
 </html>
