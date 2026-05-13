@@ -261,121 +261,139 @@ select.ci-inp{cursor:pointer}
 .sc-sub{font-size:15px;color:rgba(250,248,244,0.6);line-height:1.7}
 
 /* ── COACH DASHBOARD ─────────────────────────────── */
-#screen-coach{background:var(--cream)}
-.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px}
+#screen-coach{background:#1C1C1A}
+#screen-client-detail{background:#1C1C1A}
+.coach-app-header{background:#242422;border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
+.coach-hdr-logo{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--cream);letter-spacing:2px;white-space:nowrap}
+.coach-hdr-logo em{color:var(--sage);font-style:italic}
+.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
 
-/* Header */
-.coach-hdr{background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:24px 22px;margin-bottom:18px;position:relative;overflow:hidden}
+/* Header hero */
+.coach-hdr{background:linear-gradient(145deg,#2A3328,#1E2820);background-image:var(--botanical);border-radius:14px;padding:24px 22px;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid rgba(168,184,160,0.12)}
 .coach-hdr-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
 .coach-hdr-title{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);line-height:1.1}
 .coach-hdr-title span{font-style:italic;color:var(--sage)}
-.coach-logout{font-size:12px;color:rgba(250,248,244,0.4);background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 12px;cursor:pointer;font-family:var(--fb);letter-spacing:0.05em}
-.coach-hdr-date{font-size:13px;color:rgba(250,248,244,0.4);margin-top:6px;position:relative;z-index:1;letter-spacing:0.04em}
+.coach-logout{font-size:12px;color:rgba(250,248,244,0.35);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:7px 12px;cursor:pointer;font-family:var(--fb);letter-spacing:0.05em}
+.coach-hdr-date{font-size:13px;color:rgba(250,248,244,0.35);margin-top:6px;position:relative;z-index:1;letter-spacing:0.04em}
 .coach-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;position:relative;z-index:1}
-.cs-box{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 8px;text-align:center}
+.cs-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 8px;text-align:center}
 .cs-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
-.cs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.4);margin-top:2px;display:block}
+.cs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-top:2px;display:block}
 
 /* Section headers */
 .dash-sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.dash-sec-lbl{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.dash-sec-lbl{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(250,248,244,0.35)}
 .btn-add-client{display:flex;align-items:center;gap:5px;background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer}
 
-/* Client cards */
-.client-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s}
-.client-card:active{box-shadow:0 4px 20px rgba(44,44,42,0.1)}
+/* Client cards — dark version */
+.client-card{background:#242422;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.client-card:active{border-color:rgba(168,184,160,0.3)}
 .cc-top{display:flex;align-items:center;gap:13px;margin-bottom:14px}
-.cc-avatar{width:46px;height:46px;border-radius:12px;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;color:var(--sage-dark);flex-shrink:0;font-style:italic}
-.cc-name{font-size:17px;font-weight:500;color:var(--charcoal)}
-.cc-prog{font-size:13px;color:var(--muted);margin-top:2px}
+.cc-avatar{width:46px;height:46px;border-radius:12px;background:rgba(168,184,160,0.12);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;color:var(--sage);flex-shrink:0;font-style:italic;border:1px solid rgba(168,184,160,0.2)}
+.cc-name{font-size:17px;font-weight:500;color:var(--cream)}
+.cc-prog{font-size:13px;color:rgba(250,248,244,0.4);margin-top:2px}
 .cc-badge{margin-left:auto;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0}
-.badge-active{background:var(--sage-xlight);color:var(--sage-dark);border:1px solid rgba(92,122,94,0.2)}
-.badge-pending{background:var(--gold-light);color:var(--gold);border:1px solid rgba(184,151,58,0.25)}
-.badge-launching{background:#EEF0FD;color:#5B6FD9;border:1px solid rgba(91,111,217,0.2)}
+.badge-active{background:rgba(92,122,94,0.2);color:var(--sage);border:1px solid rgba(92,122,94,0.3)}
+.badge-pending{background:rgba(184,151,58,0.15);color:var(--gold);border:1px solid rgba(184,151,58,0.25)}
+.badge-launching{background:rgba(91,111,217,0.15);color:#8B9FE8;border:1px solid rgba(91,111,217,0.25)}
 .cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.cc-stat{background:var(--cream);border-radius:8px;padding:10px 8px;text-align:center}
-.cc-stat-num{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);display:block}
-.cc-stat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);display:block;margin-top:2px}
+.cc-stat{background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,0.05)}
+.cc-stat-num{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--cream);display:block}
+.cc-stat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:rgba(250,248,244,0.3);display:block;margin-top:2px}
 .cc-bottom{display:flex;align-items:center;justify-content:space-between}
 .cc-week-bar{flex:1;margin-right:14px}
-.cc-week-track{height:5px;background:var(--beige);border-radius:3px;overflow:hidden;margin-top:5px}
+.cc-week-track{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;margin-top:5px}
 .cc-week-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-dark));border-radius:3px}
-.cc-week-lbl{font-size:12px;color:var(--muted)}
+.cc-week-lbl{font-size:12px;color:rgba(250,248,244,0.35)}
 .cc-checkin-badge{font-size:12px;font-weight:500;padding:5px 11px;border-radius:8px;flex-shrink:0}
-.ci-submitted{background:var(--sage-xlight);color:var(--sage-dark)}
-.ci-due{background:var(--gold-light);color:var(--gold)}
-.ci-overdue{background:var(--rose-light);color:var(--rose-dark)}
-.cc-open-btn{font-size:13px;color:var(--sage-dark);font-weight:500;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft);display:flex;justify-content:space-between;align-items:center}
+.ci-submitted{background:rgba(92,122,94,0.2);color:var(--sage)}
+.ci-due{background:rgba(184,151,58,0.15);color:var(--gold)}
+.ci-overdue{background:rgba(201,120,120,0.15);color:var(--rose)}
+.cc-open-btn{font-size:13px;color:var(--sage);font-weight:500;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center}
 
-/* Client detail */
-#screen-client-detail{background:var(--cream)}
-.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px}
-.cd-back{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--sage-dark);font-weight:500;cursor:pointer;margin-bottom:16px}
-.cd-hero{background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
-.cd-hero-name{font-family:var(--fd);font-size:32px;font-weight:300;color:var(--cream);position:relative;z-index:1}
-.cd-hero-prog{font-size:14px;color:rgba(250,248,244,0.5);margin-top:4px;position:relative;z-index:1}
-.cd-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;position:relative;z-index:1}
-.cd-hs{text-align:center}
-.cd-hs-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
-.cd-hs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.45);margin-top:2px}
+/* Dark cards for client detail */
+.coach-card{background:#242422;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;margin-bottom:12px}
+.coach-sec-lbl{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
 
-/* Client detail tabs */
-.cd-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
-.cd-tabs::-webkit-scrollbar{display:none}
-.cd-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s}
-.cd-tab.active{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
-
-/* Coach note editor */
-.note-editor{width:100%;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:15px;font-family:var(--fd);font-style:italic;color:var(--charcoal);background:var(--cream);resize:vertical;min-height:100px;outline:none;line-height:1.6;transition:border-color .15s}
-.note-editor:focus{border-color:var(--sage-dark);background:var(--white)}
-.btn-save-note{background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:11px 22px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
-.btn-save-note.saved{background:var(--sage)}
-
-/* Programme editor */
-.prog-sess-editor{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+/* Swipe-to-delete session */
+.pse-wrap{position:relative;margin-bottom:10px;border-radius:12px;overflow:hidden}
+.pse-delete-reveal{position:absolute;right:0;top:0;bottom:0;width:80px;background:var(--rose-dark);display:flex;align-items:center;justify-content:center;border-radius:0 12px 12px 0;z-index:0}
+.pse-delete-reveal svg{pointer-events:none}
+.prog-sess-editor{background:#242422;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;position:relative;z-index:1;transform:translateX(0);transition:transform .25s cubic-bezier(.4,0,.2,1);touch-action:pan-y;user-select:none}
 .pse-hdr{padding:16px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
-.pse-name{font-size:16px;font-weight:500;color:var(--charcoal)}
-.pse-meta{font-size:13px;color:var(--muted);margin-top:2px}
-.pse-toggle{font-size:18px;color:var(--faint);transition:transform .2s}
+.pse-name{font-size:16px;font-weight:500;color:var(--cream)}
+.pse-meta{font-size:13px;color:rgba(250,248,244,0.4);margin-top:2px}
+.pse-toggle{font-size:18px;color:rgba(250,248,244,0.3);transition:transform .2s}
 .pse-open .pse-toggle{transform:rotate(180deg)}
-.pse-body{display:none;border-top:1px solid var(--border);padding:16px 18px}
+.pse-body{display:none;border-top:1px solid rgba(255,255,255,0.07);padding:16px 18px}
 .pse-open .pse-body{display:block}
 .pse-field{margin-bottom:12px}
-.pse-field label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.pse-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none;transition:border-color .15s}
-.pse-input:focus{border-color:var(--sage-dark);background:var(--white)}
-.ex-editor-row{background:var(--cream);border-radius:8px;padding:12px;margin-bottom:8px}
+.pse-field label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-bottom:5px}
+.pse-input{width:100%;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 12px;font-size:14px;font-family:var(--fb);color:var(--cream);background:rgba(255,255,255,0.05);outline:none;transition:border-color .15s}
+.pse-input:focus{border-color:var(--sage);background:rgba(255,255,255,0.08)}
+.pse-input::placeholder{color:rgba(250,248,244,0.2)}
+.ex-editor-row{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:12px;margin-bottom:8px}
 .ex-editor-name{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px}
 .ex-editor-detail{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
+/* Dark note editor & inputs */
+.note-editor{width:100%;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px;font-size:15px;font-family:var(--fd);font-style:italic;color:var(--cream);background:rgba(255,255,255,0.05);resize:vertical;min-height:100px;outline:none;line-height:1.6;transition:border-color .15s}
+.note-editor:focus{border-color:var(--sage);background:rgba(255,255,255,0.08)}
+.note-editor::placeholder{color:rgba(250,248,244,0.2)}
+.btn-save-note{background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:11px 22px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+
+/* Client detail tabs — dark */
+.cd-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.cd-tabs::-webkit-scrollbar{display:none}
+.cd-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);font-size:13px;font-weight:500;cursor:pointer;color:rgba(250,248,244,0.4);font-family:var(--fb);transition:all .1s}
+.cd-tab.active{background:var(--sage-dark);color:var(--cream);border-color:var(--sage-dark)}
+
+/* Client detail hero */
+.cd-back{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--sage);font-weight:500;cursor:pointer;margin-bottom:16px}
+.cd-hero{background:linear-gradient(145deg,#2A3328,#1E2820);background-image:var(--botanical);border-radius:14px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden;border:1px solid rgba(168,184,160,0.12)}
+.cd-hero-name{font-family:var(--fd);font-size:32px;font-weight:300;color:var(--cream);position:relative;z-index:1}
+.cd-hero-prog{font-size:14px;color:rgba(250,248,244,0.45);margin-top:4px;position:relative;z-index:1}
+.cd-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;position:relative;z-index:1}
+.cd-hs{text-align:center}
+.cd-hs-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
+.cd-hs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.4);margin-top:2px}
+/* Check-in dark inputs */
+.ci-reply-inp{width:100%;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 13px;font-size:14px;font-family:var(--fb);color:var(--cream);background:rgba(255,255,255,0.05);resize:none;min-height:70px;outline:none;transition:border-color .15s}
+.ci-reply-inp:focus{border-color:var(--sage);background:rgba(255,255,255,0.08)}
+.ci-reply-inp::placeholder{color:rgba(250,248,244,0.2)}
+
 /* Check-in viewer */
-.ci-response-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px}
-.ci-resp-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border-soft)}
-.ci-resp-week{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--charcoal)}
-.ci-resp-date{font-size:12px;color:var(--faint)}
-.ci-resp-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:14px}
+.ci-response-card{background:#242422;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;margin-bottom:10px}
+.ci-resp-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.ci-resp-week{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--cream)}
+.ci-resp-date{font-size:12px;color:rgba(250,248,244,0.3)}
+.ci-resp-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px}
 .ci-resp-row:last-child{border-bottom:none}
-.ci-resp-q{color:var(--muted);flex:1}
-.ci-resp-a{color:var(--charcoal);font-weight:500;text-align:right;flex:1}
-.ci-reply-area{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
-.ci-reply-inp{width:100%;border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:14px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);resize:none;min-height:70px;outline:none;transition:border-color .15s}
-.ci-reply-inp:focus{border-color:var(--sage-dark);background:var(--white)}
+.ci-resp-q{color:rgba(250,248,244,0.4);flex:1}
+.ci-resp-a{color:var(--cream);font-weight:500;text-align:right;flex:1}
+.ci-reply-area{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)}
 .btn-send-reply{background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:10px 20px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;margin-top:7px}
-.no-checkins{text-align:center;padding:40px 20px;color:var(--faint);font-size:15px}
+.no-checkins{text-align:center;padding:40px 20px;color:rgba(250,248,244,0.25);font-size:15px}
+
+/* Nutrition inputs dark */
+#cd-tab-nutrition .pse-field label{color:rgba(250,248,244,0.35)}
 
 /* Add client modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.5);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.7);z-index:500;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal-sheet{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:24px 22px 40px}
-.modal-drag{width:36px;height:4px;background:var(--beige-mid);border-radius:2px;margin:0 auto 20px}
-.modal-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--charcoal);margin-bottom:18px}
+.modal-sheet{background:#242422;border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:24px 22px 40px;border-top:1px solid rgba(255,255,255,0.08)}
+.modal-drag{width:36px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);margin-bottom:18px}
 .mf{margin-bottom:14px}
-.mf label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.mf input,.mf select{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 13px;font-size:15px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none;transition:border-color .15s}
-.mf input:focus,.mf select:focus{border-color:var(--sage-dark);background:var(--white)}
+.mf label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-bottom:6px}
+.mf input,.mf select{width:100%;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 13px;font-size:15px;font-family:var(--fb);color:var(--cream);background:rgba(255,255,255,0.05);outline:none;transition:border-color .15s}
+.mf input:focus,.mf select:focus{border-color:var(--sage);background:rgba(255,255,255,0.08)}
+.mf input::placeholder{color:rgba(250,248,244,0.2)}
+.mf select option{background:#242422;color:var(--cream)}
 .mf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn-create-client{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:var(--fb);font-size:16px;font-weight:500;cursor:pointer;margin-top:6px}
-.btn-cancel-modal{width:100%;background:none;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:13px;font-family:var(--fb);font-size:15px;cursor:pointer;margin-top:8px}
+.btn-cancel-modal{width:100%;background:none;color:rgba(250,248,244,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:13px;font-family:var(--fb);font-size:15px;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
@@ -686,9 +704,9 @@ select.ci-inp{cursor:pointer}
 
 <!-- COACH DASHBOARD -->
 <div id="screen-coach" class="screen">
-  <div class="app-header">
-    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar" style="background:var(--charcoal);color:var(--cream);font-size:13px;font-weight:500;letter-spacing:0.05em">DC</div>
+  <div class="coach-app-header">
+    <div class="coach-hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar" style="background:rgba(168,184,160,0.15);color:var(--sage);border-color:rgba(168,184,160,0.2);font-size:13px;font-weight:500;letter-spacing:0.05em">DC</div>
   </div>
   <div class="coach-dash-scroll">
     <div class="coach-hdr">
@@ -715,17 +733,17 @@ select.ci-inp{cursor:pointer}
     <div id="client-list"></div>
     <div id="no-clients-msg" style="display:none;text-align:center;padding:48px 20px">
       <div style="font-size:36px;margin-bottom:12px">🌱</div>
-      <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--charcoal);margin-bottom:8px">No clients yet</div>
-      <div style="font-size:14px;color:var(--muted);line-height:1.6">Tap <strong>Add Client</strong> above to create your first client profile.</div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--cream);margin-bottom:8px">No clients yet</div>
+      <div style="font-size:14px;color:rgba(250,248,244,0.35);line-height:1.6">Tap <strong style="color:rgba(250,248,244,0.6)">Add Client</strong> above to create your first client profile.</div>
     </div>
   </div>
 </div>
 
 <!-- CLIENT DETAIL -->
 <div id="screen-client-detail" class="screen">
-  <div class="app-header">
-    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar" style="background:var(--charcoal);color:var(--cream);font-size:13px;font-weight:500">DC</div>
+  <div class="coach-app-header">
+    <div class="coach-hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar" style="background:rgba(168,184,160,0.15);color:var(--sage);border-color:rgba(168,184,160,0.2);font-size:13px;font-weight:500">DC</div>
   </div>
   <div class="cd-scroll">
     <div class="cd-back" onclick="showCoachDash()">
@@ -749,34 +767,34 @@ select.ci-inp{cursor:pointer}
     </div>
     <!-- OVERVIEW TAB -->
     <div id="cd-tab-overview">
-      <div class="card">
-        <div class="sec-lbl" style="margin-bottom:12px">Coach Note <span style="font-size:11px;color:var(--faint);font-weight:400;letter-spacing:0;text-transform:none">— shown on client's Programme tab</span></div>
+      <div class="coach-card">
+        <div class="coach-sec-lbl">Coach Note <span style="font-size:11px;color:rgba(250,248,244,0.2);font-weight:400;letter-spacing:0;text-transform:none">— shown on client's Programme tab</span></div>
         <textarea class="note-editor" id="cd-note-editor" placeholder="Write a personalised message to this client…"></textarea>
         <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
           <button class="btn-save-note" id="btn-save-note" onclick="saveCoachNote()">Save Note</button>
-          <span id="note-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s">✓ Saved</span>
+          <span id="note-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s">✓ Saved</span>
         </div>
       </div>
-      <div class="card">
-        <div class="sec-lbl" style="margin-bottom:12px">Client Info</div>
+      <div class="coach-card">
+        <div class="coach-sec-lbl">Client Info</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="cd-info-grid"></div>
       </div>
-      <div class="card" style="background:var(--rose-light);border-color:rgba(238,159,159,0.25)">
-        <div class="sec-lbl" style="color:var(--rose-dark);margin-bottom:10px">Danger Zone</div>
-        <button onclick="deleteClient()" style="background:none;border:1px solid var(--rose-dark);color:var(--rose-dark);border-radius:8px;padding:10px 18px;font-family:var(--fb);font-size:14px;cursor:pointer">Remove Client</button>
+      <div class="coach-card" style="border-color:rgba(201,120,120,0.2)">
+        <div class="coach-sec-lbl" style="color:var(--rose)">Danger Zone</div>
+        <button onclick="deleteClient()" style="background:none;border:1px solid rgba(201,120,120,0.4);color:var(--rose);border-radius:8px;padding:10px 18px;font-family:var(--fb);font-size:14px;cursor:pointer">Remove Client</button>
       </div>
     </div>
     <!-- PROGRAMME TAB -->
     <div id="cd-tab-programme" style="display:none">
-      <div class="card" style="margin-bottom:10px">
-        <div class="sec-lbl" style="margin-bottom:12px">Programme Details</div>
+      <div class="coach-card" style="margin-bottom:10px">
+        <div class="coach-sec-lbl">Programme Details</div>
         <div class="pse-field"><label>Programme Name</label><input class="pse-input" id="pe-prog-name" placeholder="e.g. Foundation 12 Week"></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div class="pse-field"><label>Current Week</label><input class="pse-input" id="pe-week" type="number" min="1" placeholder="1"></div>
           <div class="pse-field"><label>Total Weeks</label><input class="pse-input" id="pe-total-weeks" type="number" min="1" placeholder="12"></div>
         </div>
         <button class="btn-save-note" onclick="saveProgDetails()">Save</button>
-        <span id="prog-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
+        <span id="prog-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
       </div>
       <div class="dash-sec-hdr" style="margin-bottom:10px">
         <div class="dash-sec-lbl">Sessions</div>
@@ -790,8 +808,8 @@ select.ci-inp{cursor:pointer}
     </div>
     <!-- NUTRITION TAB -->
     <div id="cd-tab-nutrition" style="display:none">
-      <div class="card">
-        <div class="sec-lbl" style="margin-bottom:14px">Daily Targets</div>
+      <div class="coach-card">
+        <div class="coach-sec-lbl">Daily Targets</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div class="pse-field"><label>Calories (kcal)</label><input class="pse-input" id="nt-kcal" type="number" placeholder="1600"></div>
           <div class="pse-field"><label>Protein (g)</label><input class="pse-input" id="nt-protein" type="number" placeholder="130"></div>
@@ -799,7 +817,7 @@ select.ci-inp{cursor:pointer}
           <div class="pse-field"><label>Fat (g)</label><input class="pse-input" id="nt-fat" type="number" placeholder="53"></div>
         </div>
         <button class="btn-save-note" onclick="saveNutrition()">Save Targets</button>
-        <span id="nut-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
+        <span id="nut-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
       </div>
     </div>
   </div>
@@ -1026,9 +1044,9 @@ function openClientDetail(idx){
       ['Programme', c.programmeName||'—'],
     ];
     grid.innerHTML = rows.map(([l,v])=>`
-      <div style="background:var(--cream);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">${l}</div>
-        <div style="font-size:14px;color:var(--charcoal);font-weight:500">${v}</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 12px">
+        <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:rgba(250,248,244,0.3);margin-bottom:4px">${l}</div>
+        <div style="font-size:14px;color:var(--cream);font-weight:500">${v}</div>
       </div>`).join('');
   }
 
@@ -1114,45 +1132,87 @@ function renderSessionEditors(c){
   if(!container) return;
   const sessions = c.sessions||[];
   if(sessions.length === 0){
-    container.innerHTML=`<div style="text-align:center;padding:30px;color:var(--faint);font-size:14px">No sessions yet — tap <strong>+ Add Session</strong> to begin building the programme.</div>`;
+    container.innerHTML=`<div style="text-align:center;padding:30px;color:rgba(250,248,244,0.25);font-size:14px">No sessions yet — tap <strong style="color:rgba(250,248,244,0.4)">+ Add Session</strong> to begin building the programme.</div>`;
     return;
   }
   container.innerHTML = sessions.map((s,si)=>`
-    <div class="prog-sess-editor" id="pse-${si}">
-      <div class="pse-hdr" onclick="togglePSE(${si})">
-        <div>
-          <div class="pse-name">${s.name||'Session '+(si+1)}</div>
-          <div class="pse-meta">${s.day||''} · ${s.duration||45} min · ${(s.exercises||[]).length} exercises</div>
-        </div>
-        <div class="pse-toggle">⌄</div>
+    <div class="pse-wrap" id="pse-wrap-${si}">
+      <div class="pse-delete-reveal" onclick="removeSession(${si})">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6M14,11v6"/><path d="M9,6V4h6v2"/></svg>
       </div>
-      <div class="pse-body">
-        <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession(${si},'name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day||''}" onchange="updateSession(${si},'day',this.value)" placeholder="e.g. Monday"></div>
-          <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession(${si},'duration',parseInt(this.value))" placeholder="45"></div>
-        </div>
-        <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bgImage||''}" onchange="updateSession(${si},'bgImage',this.value)" placeholder="https://images.unsplash.com/…"></div>
-        <div style="margin-bottom:10px">
-          <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Exercises</div>
-          <div id="pse-ex-${si}">
-            ${(s.exercises||[]).map((ex,ei)=>`
-              <div class="ex-editor-row" id="pse-ex-${si}-${ei}">
-                <div class="ex-editor-name">
-                  <input class="pse-input" value="${ex.name||''}" onchange="updateExercise(${si},${ei},'name',this.value)" placeholder="Exercise name">
-                  <button onclick="removeExercise(${si},${ei})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
-                </div>
-                <div class="ex-editor-detail">
-                  <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise(${si},${ei},'detail',this.value)" placeholder="3 × 12 · 90 sec rest">
-                  <input class="pse-input" value="${ex.videoUrl||''}" onchange="updateExercise(${si},${ei},'videoUrl',this.value)" placeholder="YouTube URL">
-                </div>
-              </div>`).join('')}
+      <div class="prog-sess-editor" id="pse-${si}" data-si="${si}">
+        <div class="pse-hdr" onclick="togglePSE(${si})">
+          <div>
+            <div class="pse-name">${s.name||'Session '+(si+1)}</div>
+            <div class="pse-meta">${s.day||''} · ${s.duration||45} min · ${(s.exercises||[]).length} exercises</div>
           </div>
-          <button onclick="addExercise(${si})" style="background:var(--sage-xlight);border:1px solid rgba(168,184,160,0.3);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage-dark);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
+          <div class="pse-toggle">⌄</div>
         </div>
-        <button onclick="removeSession(${si})" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:var(--fb)">Remove Session</button>
+        <div class="pse-body">
+          <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession(${si},'name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day||''}" onchange="updateSession(${si},'day',this.value)" placeholder="e.g. Monday"></div>
+            <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession(${si},'duration',parseInt(this.value))" placeholder="45"></div>
+          </div>
+          <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bgImage||''}" onchange="updateSession(${si},'bgImage',this.value)" placeholder="https://images.unsplash.com/…"></div>
+          <div style="margin-bottom:10px">
+            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-bottom:8px">Exercises</div>
+            <div id="pse-ex-${si}">
+              ${(s.exercises||[]).map((ex,ei)=>`
+                <div class="ex-editor-row" id="pse-ex-${si}-${ei}">
+                  <div class="ex-editor-name">
+                    <input class="pse-input" value="${ex.name||''}" onchange="updateExercise(${si},${ei},'name',this.value)" placeholder="Exercise name">
+                    <button onclick="removeExercise(${si},${ei})" style="background:rgba(201,120,120,0.15);border:1px solid rgba(201,120,120,0.25);border-radius:6px;padding:8px 10px;color:var(--rose);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
+                  </div>
+                  <div class="ex-editor-detail">
+                    <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise(${si},${ei},'detail',this.value)" placeholder="3 × 12 · 90 sec rest">
+                    <input class="pse-input" value="${ex.videoUrl||''}" onchange="updateExercise(${si},${ei},'videoUrl',this.value)" placeholder="YouTube URL">
+                  </div>
+                </div>`).join('')}
+            </div>
+            <button onclick="addExercise(${si})" style="background:rgba(92,122,94,0.15);border:1px solid rgba(92,122,94,0.25);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
+          </div>
+        </div>
       </div>
     </div>`).join('');
+
+  // Attach swipe-to-delete touch handlers
+  sessions.forEach((_,si) => attachSwipe(si));
+}
+
+function attachSwipe(si){
+  const el = document.getElementById('pse-'+si);
+  if(!el) return;
+  let startX=0, curX=0, dragging=false;
+  const THRESHOLD = 72; // px to reveal delete
+
+  el.addEventListener('touchstart', e=>{
+    startX = e.touches[0].clientX;
+    dragging = true;
+    el.style.transition='none';
+  },{passive:true});
+
+  el.addEventListener('touchmove', e=>{
+    if(!dragging) return;
+    curX = e.touches[0].clientX - startX;
+    // Only allow left swipe (negative) up to 80px
+    if(curX > 0) curX = 0;
+    if(curX < -80) curX = -80;
+    el.style.transform = `translateX(${curX}px)`;
+  },{passive:true});
+
+  el.addEventListener('touchend', ()=>{
+    dragging=false;
+    el.style.transition='transform .25s cubic-bezier(.4,0,.2,1)';
+    if(curX < -THRESHOLD){
+      // Snap open — reveal delete button
+      el.style.transform='translateX(-80px)';
+    } else {
+      // Snap closed
+      el.style.transform='translateX(0)';
+    }
+    curX=0;
+  });
 }
 
 function togglePSE(si){
