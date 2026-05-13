@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<style>html{overscroll-behavior:none;overflow:hidden}body{overscroll-behavior:none;overflow:hidden;touch-action:pan-x pan-y}</style>
 <meta name="apple-mobile-web-app-title" content="Coached by Dejan">
 <meta name="theme-color" content="#5C7A5E">
 <meta property="og:title" content="Coached by Dejan">
@@ -30,7 +29,7 @@
   --fb:'DM Sans',system-ui,sans-serif;
   --botanical:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.11)' stroke-width='1.2' stroke-linecap='round'%3E%3Cellipse cx='40' cy='80' rx='28' ry='12' transform='rotate(-35 40 80)'/%3E%3Cpath d='M40 80 C44 55 65 48 70 28'/%3E%3Cellipse cx='120' cy='40' rx='22' ry='10' transform='rotate(25 120 40)'/%3E%3Cpath d='M120 40 C125 20 140 16 145 0'/%3E%3Cellipse cx='100' cy='130' rx='20' ry='9' transform='rotate(-20 100 130)'/%3E%3Cpath d='M100 130 C95 108 82 105 78 85'/%3E%3Cellipse cx='20' cy='145' rx='16' ry='7' transform='rotate(15 20 145)'/%3E%3Cpath d='M20 145 C18 128 8 123 5 110'/%3E%3Cellipse cx='148' cy='108' rx='18' ry='8' transform='rotate(-40 148 108)'/%3E%3Cpath d='M148 108 C152 88 160 83 160 68'/%3E%3C/g%3E%3C/svg%3E");
 }
-html,body{height:100%;overflow:hidden;background:#FAF8F4;overscroll-behavior:none}
+html,body{height:100%;overflow:hidden}
 body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:430px;margin:0 auto;position:relative;font-size:15px}
 
 .screen{display:none;height:100vh;flex-direction:column;overflow:hidden;background:#FAF8F4}
@@ -61,9 +60,9 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .hdr-avatar{width:36px;height:36px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;color:var(--sage-dark);border:2px solid var(--sage-light);cursor:pointer;flex-shrink:0}
 
 /* FIX: enough bottom padding so WhatsApp button is never hidden */
-.app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px;overscroll-behavior:none}
-.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px;overscroll-behavior:none}
-.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px;overscroll-behavior:none}
+.app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
+.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:10px 0 22px;z-index:200}
@@ -383,7 +382,7 @@ select.ci-inp{cursor:pointer}
 /* Add client modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.7);z-index:500;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal-sheet{background:#242422;border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:24px 22px 40px;border-top:1px solid rgba(255,255,255,0.08);overscroll-behavior:none}
+.modal-sheet{background:#242422;border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:24px 22px 40px;border-top:1px solid rgba(255,255,255,0.08)}
 .modal-drag{width:36px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin:0 auto 20px}
 .modal-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);margin-bottom:18px}
 .mf{margin-bottom:14px}
@@ -896,6 +895,15 @@ function saveClients(arr){
   localStorage.setItem('cbd_clients', JSON.stringify(arr));
 }
 
+function saveSession(role){ sessionStorage.setItem('cbd_session', role); }
+function clearSession(){ sessionStorage.removeItem('cbd_session'); }
+function restoreSession(){
+  const role = sessionStorage.getItem('cbd_session');
+  if(role === 'coach'){ showCoachDash(); return true; }
+  if(role === 'client'){ showTab('dashboard'); return true; }
+  return false;
+}
+
 function login(){
   const emailEl = document.querySelector('#screen-login input[type="email"]');
   const passEl  = document.querySelector('#screen-login input[type="password"]');
@@ -904,6 +912,7 @@ function login(){
 
   // Coach login
   if(email === COACH_EMAIL.toLowerCase() && pass === COACH_PASS){
+    saveSession('coach');
     showCoachDash();
     return;
   }
@@ -912,6 +921,7 @@ function login(){
   const clients = getClients();
   const client  = clients.find(c => c.email.toLowerCase() === email && c.password === pass);
   if(client){
+    saveSession('client');
     showTab('dashboard');
     return;
   }
@@ -928,6 +938,7 @@ function login(){
 }
 
 function coachLogout(){
+  clearSession();
   showScreen('login');
   const emailEl = document.querySelector('#screen-login input[type="email"]');
   const passEl  = document.querySelector('#screen-login input[type="password"]');
@@ -1390,6 +1401,7 @@ function seedDemoClient(){
   saveClients(existing);
 }
 seedDemoClient();
+restoreSession();
 
 // Begin Session — goes to programme, opens Session A, scrolls to it
 function beginSession(){
