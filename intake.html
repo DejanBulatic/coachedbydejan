@@ -602,47 +602,66 @@ async function submitForm(){
     status: 'new',
   };
 
-  // Submit via Formspree
+  // Submit via Formspree with clean formatted email
   const formData = {
-    name:  payload.first_name + ' ' + payload.last_name,
-    email: payload.email,
-    _subject: '🌿 New intake form — ' + payload.first_name + ' ' + payload.last_name,
-    'Age':            payload.age || '—',
-    'Current weight': (payload.current_weight || '—') + ' kg',
-    'Target weight':  (payload.target_weight  || '—') + ' kg',
-    'Height':         (payload.height || '—') + ' cm',
-    'Waist':          (payload.waist || '—') + ' cm',
-    'Hips':           (payload.hips  || '—') + ' cm',
-    '--- HEALTH ---': '---',
-    'Heart condition':  payload.parq.heart_condition  || '—',
-    'Chest pain':       payload.parq.chest_pain       || '—',
-    'Dizziness':        payload.parq.dizziness        || '—',
-    'Joint problems':   payload.parq.joint_problems   || '—',
-    'Pregnant':         payload.parq.pregnant         || '—',
-    'Medication':       payload.parq.medication       || '—',
-    'Injuries':         payload.parq.injuries         || 'None',
-    '--- TRAINING ---': '---',
-    'Fitness level':    payload.training.fitness_level  || '—',
-    'Days per week':    payload.training.days_per_week  || '—',
-    'Session length':   payload.training.session_length || '—',
-    'Location':         payload.training.location       || '—',
-    'Equipment':        payload.training.equipment      || '—',
-    'Enjoys':           payload.training.exercise_likes || '—',
-    'Programme before': payload.training.programme_history || '—',
-    '--- LIFESTYLE ---': '---',
-    'Typical eating':   payload.nutrition.typical_eating || '—',
-    'Allergies':        payload.nutrition.allergies      || '—',
-    'Diet type':        payload.nutrition.diet_type      || '—',
-    'Water intake':     payload.nutrition.water_intake   || '—',
-    'Sleep':            payload.nutrition.sleep          || '—',
-    'Stress':           payload.nutrition.stress         || '—',
-    'Job type':         payload.nutrition.job_type       || '—',
-    '--- GOALS ---': '---',
-    'Main goal':        payload.goals.main_goal    || '—',
-    'Why':              payload.goals.goal_why     || '—',
-    'Obstacles':        payload.goals.obstacles    || '—',
-    'Commitment':       (payload.goals.commitment  || '—') + '/10',
-    'Anything else':    payload.goals.anything_else|| '—',
+    _subject: '🌿 New intake — ' + payload.first_name + ' ' + payload.last_name,
+    _replyto: payload.email,
+    name: payload.first_name + ' ' + payload.last_name,
+    message: `
+NEW CLIENT INTAKE FORM
+══════════════════════════════════
+
+PERSONAL
+Name:           ${payload.first_name} ${payload.last_name}
+Email:          ${payload.email}
+Age:            ${payload.age || '—'}
+Current weight: ${payload.current_weight || '—'} kg
+Target weight:  ${payload.target_weight || '—'} kg
+Height:         ${payload.height || '—'} cm
+Waist:          ${payload.waist || '—'} cm
+Hips:           ${payload.hips || '—'} cm
+
+──────────────────────────────────
+HEALTH SCREENING (PAR-Q)
+Heart condition:  ${payload.parq.heart_condition || '—'}
+Chest pain:       ${payload.parq.chest_pain || '—'}
+Dizziness:        ${payload.parq.dizziness || '—'}
+Joint problems:   ${payload.parq.joint_problems || '—'}
+Pregnant:         ${payload.parq.pregnant || '—'}
+Medication:       ${payload.parq.medication || '—'}
+Injuries/limits:  ${payload.parq.injuries || 'None'}
+
+──────────────────────────────────
+TRAINING
+Fitness level:    ${payload.training.fitness_level || '—'}
+Days per week:    ${payload.training.days_per_week || '—'}
+Session length:   ${payload.training.session_length || '—'}
+Location:         ${payload.training.location || '—'}
+Equipment:        ${payload.training.equipment || '—'}
+Enjoys:           ${payload.training.exercise_likes || '—'}
+Programme before: ${payload.training.programme_history || '—'}
+
+──────────────────────────────────
+NUTRITION & LIFESTYLE
+Typical eating:   ${payload.nutrition.typical_eating || '—'}
+Allergies:        ${payload.nutrition.allergies || '—'}
+Diet type:        ${payload.nutrition.diet_type || '—'}
+Water intake:     ${payload.nutrition.water_intake || '—'}
+Sleep:            ${payload.nutrition.sleep || '—'}
+Stress:           ${payload.nutrition.stress || '—'}
+Job type:         ${payload.nutrition.job_type || '—'}
+
+──────────────────────────────────
+GOALS & MOTIVATION
+Main goal:        ${payload.goals.main_goal || '—'}
+Why it matters:   ${payload.goals.goal_why || '—'}
+Obstacles:        ${payload.goals.obstacles || '—'}
+Commitment:       ${payload.goals.commitment || '—'}/10
+Anything else:    ${payload.goals.anything_else || '—'}
+
+══════════════════════════════════
+Submitted via coachedbydejan.primalhybrid79.com
+    `.trim()
   };
 
   const res = await fetch('https://formspree.io/f/xvzlnzkd', {
