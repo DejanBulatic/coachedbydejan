@@ -392,6 +392,7 @@ select.ci-inp{cursor:pointer}
     <div class="lf"><label>Email address</label><input type="email" placeholder="your@email.com" autocomplete="email"></div>
     <div class="lf"><label>Password</label><input type="password" placeholder="••••••••" autocomplete="current-password"></div>
     <button class="btn-login" onclick="login()">Sign In</button>
+    <div id="login-error" style="display:none;margin-top:12px;background:var(--rose-light);border:1px solid rgba(238,159,159,0.4);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--rose-dark);text-align:center">Incorrect email or password</div>
     <div class="login-forgot">Forgot your password?</div>
   </div>
   <div class="login-footer">Coached by Dejan · Private &amp; Secure</div>
@@ -899,6 +900,8 @@ function login(){
   // Wrong credentials
   emailEl.style.borderColor = 'var(--rose-dark)';
   passEl.style.borderColor  = 'var(--rose-dark)';
+  const errMsg = document.getElementById('login-error');
+  if(errMsg){ errMsg.style.display='block'; }
   setTimeout(()=>{
     emailEl.style.borderColor='';
     passEl.style.borderColor='';
@@ -1516,6 +1519,13 @@ document.querySelector('#screen-login input[type="password"]')?.addEventListener
 });
 document.querySelector('#screen-login input[type="email"]')?.addEventListener('keydown',e=>{
   if(e.key==='Enter') login();
+});
+// Hide error on input
+document.querySelectorAll('#screen-login input').forEach(el=>{
+  el.addEventListener('input',()=>{
+    const err=document.getElementById('login-error');
+    if(err) err.style.display='none';
+  });
 });
 
 // Status toggle on add client modal
