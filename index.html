@@ -788,7 +788,7 @@ setTimeout(initParticles,150);
 function showIOSPrompt(){
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   const isStandalone=window.navigator.standalone===true;
-  const dismissed=localStorage.getItem('cbd-ios-prompt');
+  const dismissed=sessionStorage.getItem('cbd-ios-prompt');
   if(isIOS&&!isStandalone&&!dismissed){
     const banner=document.createElement('div');
     banner.id='ios-prompt';
@@ -799,7 +799,7 @@ function showIOSPrompt(){
         <div style="font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:3px">Add to your home screen</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.4">Tap <strong>Share</strong> then <strong>"Add to Home Screen"</strong> for the best experience</div>
       </div>
-      <button onclick="document.getElementById('ios-prompt').remove();localStorage.setItem('cbd-ios-prompt','1')" style="background:none;border:none;font-size:20px;color:var(--faint);cursor:pointer;flex-shrink:0;padding:4px">✕</button>`;
+      <button onclick="document.getElementById('ios-prompt').remove();sessionStorage.setItem('cbd-ios-prompt','1')" style="background:none;border:none;font-size:20px;color:var(--faint);cursor:pointer;flex-shrink:0;padding:4px">✕</button>`;
     document.body.appendChild(banner);
     setTimeout(()=>{if(document.getElementById('ios-prompt'))document.getElementById('ios-prompt').remove();},10000);
   }
