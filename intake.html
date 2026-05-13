@@ -485,9 +485,6 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 </div>
 
 <script>
-const SUPABASE_URL = 'https://rderrnouixyyotkitagls.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZXJucm91aXh5b3RraXRhZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2OTUxMDQsImV4cCI6MjA5NDI3MTEwNH0.qna1Dw5I0IRj_a-lOiffxk54MiADtuhFVTR7csJkGc0';
-
 let currentPart = 1;
 const parqAnswers = {};
 
@@ -605,52 +602,63 @@ async function submitForm(){
     status: 'new',
   };
 
-  // Save to Supabase via REST API
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/intake_forms`, {
+  // Submit via Formspree
+  const formData = {
+    name:  payload.first_name + ' ' + payload.last_name,
+    email: payload.email,
+    _subject: '🌿 New intake form — ' + payload.first_name + ' ' + payload.last_name,
+    'Age':            payload.age || '—',
+    'Current weight': (payload.current_weight || '—') + ' kg',
+    'Target weight':  (payload.target_weight  || '—') + ' kg',
+    'Height':         (payload.height || '—') + ' cm',
+    'Waist':          (payload.waist || '—') + ' cm',
+    'Hips':           (payload.hips  || '—') + ' cm',
+    '--- HEALTH ---': '---',
+    'Heart condition':  payload.parq.heart_condition  || '—',
+    'Chest pain':       payload.parq.chest_pain       || '—',
+    'Dizziness':        payload.parq.dizziness        || '—',
+    'Joint problems':   payload.parq.joint_problems   || '—',
+    'Pregnant':         payload.parq.pregnant         || '—',
+    'Medication':       payload.parq.medication       || '—',
+    'Injuries':         payload.parq.injuries         || 'None',
+    '--- TRAINING ---': '---',
+    'Fitness level':    payload.training.fitness_level  || '—',
+    'Days per week':    payload.training.days_per_week  || '—',
+    'Session length':   payload.training.session_length || '—',
+    'Location':         payload.training.location       || '—',
+    'Equipment':        payload.training.equipment      || '—',
+    'Enjoys':           payload.training.exercise_likes || '—',
+    'Programme before': payload.training.programme_history || '—',
+    '--- LIFESTYLE ---': '---',
+    'Typical eating':   payload.nutrition.typical_eating || '—',
+    'Allergies':        payload.nutrition.allergies      || '—',
+    'Diet type':        payload.nutrition.diet_type      || '—',
+    'Water intake':     payload.nutrition.water_intake   || '—',
+    'Sleep':            payload.nutrition.sleep          || '—',
+    'Stress':           payload.nutrition.stress         || '—',
+    'Job type':         payload.nutrition.job_type       || '—',
+    '--- GOALS ---': '---',
+    'Main goal':        payload.goals.main_goal    || '—',
+    'Why':              payload.goals.goal_why     || '—',
+    'Obstacles':        payload.goals.obstacles    || '—',
+    'Commitment':       (payload.goals.commitment  || '—') + '/10',
+    'Anything else':    payload.goals.anything_else|| '—',
+  };
+
+  const res = await fetch('https://formspree.io/f/xvzlnzkd', {
     method: 'POST',
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(payload)
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(formData)
   });
 
   if(!res.ok){
     const errText = await res.text();
     btn.textContent = 'Submit Form →';
     btn.disabled = false;
-    alert('Error ' + res.status + ': ' + errText);
+    alert('Submission failed. Please try again or contact Dejan directly.');
+    console.error(errText);
     return;
   }
-
-  // Send email notification via Formspree
-  try {
-    const emailBody = {
-      name:  payload.first_name + ' ' + payload.last_name,
-      email: payload.email,
-      _subject: '🌿 New intake form — ' + payload.first_name + ' ' + payload.last_name,
-      'Main goal':      payload.goals.main_goal,
-      'Why':            payload.goals.goal_why,
-      'Commitment':     payload.goals.commitment + '/10',
-      'Fitness level':  payload.training.fitness_level,
-      'Days/week':      payload.training.days_per_week,
-      'Location':       payload.training.location,
-      'Current weight': (payload.current_weight || '—') + ' kg',
-      'Target weight':  (payload.target_weight  || '—') + ' kg',
-      'Sleep':          payload.nutrition.sleep,
-      'Stress':         payload.nutrition.stress,
-      'Obstacles':      payload.goals.obstacles,
-      'Injuries':       payload.parq.injuries || 'None',
-      'Anything else':  payload.goals.anything_else || '—',
-    };
-    await fetch('https://formspree.io/f/xvzlnzkd', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(emailBody),
-    });
-  } catch(e){ console.log('Email notification failed silently', e); }
 
   // Show success
   document.getElementById('part-5').classList.remove('active');
