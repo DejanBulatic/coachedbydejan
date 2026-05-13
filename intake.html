@@ -652,7 +652,7 @@ async function submitForm(){
     const errText = await res.text();
     btn.textContent = 'Submit Form →';
     btn.disabled = false;
-    alert('Submission failed. Please try again or contact Dejan directly.');
+    alert('Error ' + res.status + ': ' + errText);
     console.error(errText);
     return;
   }
