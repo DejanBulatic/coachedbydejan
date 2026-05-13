@@ -869,6 +869,7 @@ select.ci-inp{cursor:pointer}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const navDefs=[
   {id:'dashboard',l:'Home',p:'M3 9L10 3L17 9V17H13V12H7V17H3V9Z'},
@@ -899,58 +900,76 @@ function showTab(id){
 
 function showCoachDashIfCoach(){showCoachDash();}
 
-// ── AUTH ─────────────────────────────────────────
+// ── SUPABASE ──────────────────────────────────────
+const SUPABASE_URL = 'https://rderrnouixyyotkitagls.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZXJucm91aXh5b3RraXRhZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2OTUxMDQsImV4cCI6MjA5NDI3MTEwNH0.qna1Dw5I0IRj_a-lOiffxk54MiADtuhFVTR7csJkGc0';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const COACH_EMAIL = 'coachedbydejan@gmail.com';
 const COACH_PASS  = 'coachdejan12345';
 
-// Simple client store (localStorage so it persists in browser)
-function getClients(){
-  try{ return JSON.parse(localStorage.getItem('cbd_clients')||'[]'); }catch(e){return [];}
-}
-function saveClients(arr){
-  localStorage.setItem('cbd_clients', JSON.stringify(arr));
-}
+let activeClientId   = null;
+let activeClientData = null;
 
-function saveSession(role){ sessionStorage.setItem('cbd_session', role); }
-function clearSession(){ sessionStorage.removeItem('cbd_session'); }
-function restoreSession(){
+// ── SESSION PERSISTENCE ───────────────────────────
+function saveSession(role, clientId=null){
+  sessionStorage.setItem('cbd_session', role);
+  if(clientId) sessionStorage.setItem('cbd_client_id', clientId);
+  else sessionStorage.removeItem('cbd_client_id');
+}
+function clearSession(){
+  sessionStorage.removeItem('cbd_session');
+  sessionStorage.removeItem('cbd_client_id');
+}
+async function restoreSession(){
   const role = sessionStorage.getItem('cbd_session');
-  if(role === 'coach'){ showCoachDash(); return true; }
-  if(role === 'client'){ showTab('dashboard'); return true; }
-  return false;
+  if(role === 'coach'){ showCoachDash(); return; }
+  if(role === 'client'){
+    const id = sessionStorage.getItem('cbd_client_id');
+    if(id) await loadClientDashboard(id);
+  }
 }
 
-function login(){
+// ── AUTH ──────────────────────────────────────────
+async function login(){
   const emailEl = document.querySelector('#screen-login input[type="email"]');
   const passEl  = document.querySelector('#screen-login input[type="password"]');
   const email   = (emailEl?.value||'').trim().toLowerCase();
   const pass    = passEl?.value||'';
+  const btn     = document.querySelector('.btn-login');
+  const errMsg  = document.getElementById('login-error');
 
-  // Coach login
+  if(btn){ btn.textContent='Signing in…'; btn.disabled=true; }
+  if(errMsg) errMsg.style.display='none';
+
+  // Coach
   if(email === COACH_EMAIL.toLowerCase() && pass === COACH_PASS){
     saveSession('coach');
+    if(btn){ btn.textContent='Sign In'; btn.disabled=false; }
     showCoachDash();
     return;
   }
 
-  // Client login
-  const clients = getClients();
-  const client  = clients.find(c => c.email.toLowerCase() === email && c.password === pass);
-  if(client){
-    saveSession('client');
-    showTab('dashboard');
+  // Client — check Supabase
+  const { data, error } = await db
+    .from('clients')
+    .select('id')
+    .eq('email', email)
+    .eq('password', pass)
+    .single();
+
+  if(btn){ btn.textContent='Sign In'; btn.disabled=false; }
+
+  if(data){
+    saveSession('client', data.id);
+    await loadClientDashboard(data.id);
     return;
   }
 
-  // Wrong credentials
   emailEl.style.borderColor = 'var(--rose-dark)';
   passEl.style.borderColor  = 'var(--rose-dark)';
-  const errMsg = document.getElementById('login-error');
-  if(errMsg){ errMsg.style.display='block'; }
-  setTimeout(()=>{
-    emailEl.style.borderColor='';
-    passEl.style.borderColor='';
-  }, 2000);
+  if(errMsg) errMsg.style.display='block';
+  setTimeout(()=>{ emailEl.style.borderColor=''; passEl.style.borderColor=''; }, 2000);
 }
 
 function coachLogout(){
@@ -962,80 +981,254 @@ function coachLogout(){
   if(passEl)  passEl.value='';
 }
 
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
+// ── CLIENT VIEW ───────────────────────────────────
+async function loadClientDashboard(clientId){
+  showScreen('dashboard');
+  document.querySelector('.greet-name') && (document.querySelector('.greet-name').innerHTML = 'Loading…');
+
+  const { data: client } = await db.from('clients').select('*').eq('id', clientId).single();
+  if(!client) return;
+
+  const { data: sessions } = await db.from('sessions')
+    .select('*, exercises(*)')
+    .eq('client_id', clientId)
+    .order('sort_order');
+
+  const { data: checkins } = await db.from('checkins')
+    .select('*').eq('client_id', clientId)
+    .order('submitted_at', { ascending: false }).limit(10);
+
+  activeClientData = { ...client, sessions: sessions||[], checkins: checkins||[] };
+  activeClientId   = clientId;
+
+  populateClientView(activeClientData);
+  showTab('dashboard');
 }
 
-// ── COACH DASHBOARD ──────────────────────────────
+function populateClientView(c){
+  const initial = c.name?.charAt(0).toUpperCase() || '?';
+  const lost    = (c.start_weight && c.current_weight) ? +(c.start_weight - c.current_weight).toFixed(1) : 0;
+  const range   = (c.start_weight && c.goal_weight)    ? c.start_weight - c.goal_weight : 1;
+  const pct     = Math.max(0, Math.min(100, Math.round((lost / range) * 100)));
+  const nut     = c.nutrition || {};
+
+  // Avatars (client-side only)
+  document.querySelectorAll('#screen-dashboard .hdr-avatar, #screen-programme .hdr-avatar, #screen-nutrition .hdr-avatar, #screen-progress .hdr-avatar, #screen-checkin .hdr-avatar').forEach(el => el.textContent = initial);
+
+  // Dashboard
+  const greet = document.querySelector('.greet-name');
+  if(greet) greet.innerHTML = `Hej, <em>${c.name}</em>`;
+
+  const statNums = document.querySelectorAll('#screen-dashboard .stat-num');
+  if(statNums[0]) statNums[0].textContent = lost > 0 ? '−'+lost+' kg' : '0 kg';
+  if(statNums[1]) statNums[1].textContent = c.current_weight || '—';
+  if(statNums[2]) statNums[2].textContent = c.goal_weight    || '—';
+
+  const pbPct  = document.querySelector('.pb-pct');
+  const pbFill = document.querySelector('.pb-fill');
+  const pbLbls = document.querySelectorAll('.pb-labels span');
+  if(pbPct)    pbPct.textContent  = pct + '%';
+  if(pbFill)   pbFill.style.width = pct + '%';
+  if(pbLbls[0]) pbLbls[0].textContent = (c.start_weight||'—')+' kg start';
+  if(pbLbls[1]) pbLbls[1].textContent = (c.current_weight||'—')+' kg now';
+  if(pbLbls[2]) pbLbls[2].textContent = (c.goal_weight||'—')+' kg goal';
+
+  // Progress screen
+  const phWlbl = document.querySelector('.ph-wlbl');
+  if(phWlbl) phWlbl.textContent = `Week ${c.current_week||1} of ${c.total_weeks||12}`;
+  const phNums = document.querySelectorAll('.ph-num');
+  if(phNums[0]) phNums[0].textContent = lost > 0 ? '−'+lost : '0';
+  if(phNums[2]) phNums[2].textContent = pct+'%';
+
+  // Programme tab
+  const phName = document.querySelector('.ph-name');
+  const phDesc = document.querySelector('.ph-desc');
+  const phWeek = document.querySelector('.ph-week');
+  if(phName) phName.textContent = c.programme_name || 'Your Programme';
+  if(phWeek) phWeek.textContent = `Week ${c.current_week||1} of ${c.total_weeks||12}`;
+
+  // Coach note
+  const cnTxt = document.querySelector('.cn-txt');
+  if(cnTxt && c.coach_note) cnTxt.textContent = '"'+c.coach_note+'"';
+
+  // Nutrition
+  const macroNums = document.querySelectorAll('.mb-num');
+  if(macroNums[0] && nut.kcal)    macroNums[0].textContent = Number(nut.kcal).toLocaleString();
+  if(macroNums[1] && nut.protein) macroNums[1].textContent = nut.protein+'g';
+  if(macroNums[2] && nut.carbs)   macroNums[2].textContent = nut.carbs+'g';
+  if(macroNums[3] && nut.fat)     macroNums[3].textContent = nut.fat+'g';
+
+  // Check-in week
+  const ciWeekEl = document.querySelector('.ci-week');
+  if(ciWeekEl) ciWeekEl.textContent = `Week ${c.current_week||1} Check-in`;
+
+  // Build sessions if client has any in DB
+  if(c.sessions && c.sessions.length > 0) buildClientSessions(c.sessions, c);
+}
+
+function buildClientSessions(sessions, c){
+  const scroll = document.querySelector('#screen-programme .app-scroll');
+  if(!scroll) return;
+
+  // Remove hardcoded session cards
+  scroll.querySelectorAll('.sess-card').forEach(el => el.remove());
+  scroll.querySelector('.coach-note')?.remove();
+
+  sessions.forEach((s, i) => {
+    const key = 'db'+i;
+    const exercises = (s.exercises||[]).sort((a,b) => a.sort_order - b.sort_order);
+    const card = document.createElement('div');
+    card.className = 'sess-card';
+    card.id = 'sess-'+key;
+    card.innerHTML = `
+      <div class="sess-img-hdr" onclick="toggleSess('sess-${key}')">
+        <div class="sess-bg" style="background-image:url('${s.bg_image||'/images/quote-'+(i%8+1)+'.png'}')"></div>
+        <div class="sess-overlay"></div>
+        <div class="sess-hdr-content">
+          <div>
+            <div class="sess-tag">${s.day_label||''}</div>
+            <div class="sess-name">${s.name||'Session '+(i+1)}</div>
+            <div class="sess-meta">${exercises.length} exercises · ${s.duration||45} min</div>
+          </div>
+          <div class="sess-arrow">⌄</div>
+        </div>
+      </div>
+      <div class="sess-body">
+        <div id="ex-list-${key}"></div>
+        <button class="btn-complete">Mark Session Complete ✓</button>
+      </div>`;
+    scroll.appendChild(card);
+
+    const exList = card.querySelector('#ex-list-'+key);
+    exList.innerHTML = exercises.map((ex, ei) => {
+      const setRows = Array.from({length:3}, (_,si) => `
+        <div class="set-row">
+          <span class="set-lbl">Set ${si+1}</span>
+          <input class="set-in reps" type="number" placeholder="reps" min="0" inputmode="numeric">
+          <span class="set-unit">×</span>
+          <input class="set-in wgt" type="number" placeholder="kg" min="0" step="0.5" inputmode="decimal">
+          <span class="set-unit">kg</span>
+          <button class="set-done" onclick="markSet(this)">○</button>
+        </div>`).join('');
+      return `
+        <div class="ex-row" id="ex-${key}-${ei}">
+          <div class="ex-main" onclick="toggleEx('${key}',${ei})">
+            <div class="ex-num">${ei+1}</div>
+            <div class="ex-info"><div class="ex-name">${ex.name||''}</div><div class="ex-detail">${ex.detail||''}</div></div>
+            <div class="ex-tog">Log</div>
+          </div>
+          <div class="ex-logger">
+            ${ex.video_url ? `<a class="ex-vid" href="${ex.video_url}" target="_blank">
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,10 5,17"/></svg>
+              Watch tutorial</a>` : ''}
+            ${setRows}
+          </div>
+        </div>`;
+    }).join('');
+  });
+
+  // Re-add coach note
+  if(c.coach_note){
+    const noteEl = document.createElement('div');
+    noteEl.className = 'coach-note';
+    noteEl.innerHTML = `<div class="cn-lbl">From Dejan</div><div class="cn-txt">"${c.coach_note}"</div>`;
+    scroll.appendChild(noteEl);
+  }
+}
+
+// Check-in submission
+async function submitCI(){
+  const answers = {};
+  document.querySelectorAll('#ci-content .ci-inp, #ci-content input, #ci-content textarea, #ci-content select').forEach(el => {
+    const lbl = el.closest('.ci-q')?.querySelector('.ci-lbl')?.textContent;
+    if(lbl && el.value) answers[lbl] = el.value;
+  });
+  const sessBtn = document.querySelector('#ci-content .s-btn.sel');
+  if(sessBtn) answers['Sessions completed'] = sessBtn.textContent;
+  const energyBtn = document.querySelector('#ci-content .r-btn.sel');
+  if(energyBtn) answers['Energy level'] = energyBtn.textContent;
+
+  if(activeClientId){
+    await db.from('checkins').insert({
+      client_id: activeClientId,
+      week: activeClientData?.current_week || 1,
+      answers,
+    });
+  }
+
+  document.getElementById('ci-content').innerHTML = `
+    <div class="success-card">
+      <div class="sc-icon">🌿</div>
+      <div class="sc-title">Check-in received</div>
+      <div class="sc-sub">Dejan will review everything carefully and respond by Friday evening.<br><br>Well done for showing up this week.</div>
+    </div>
+    <div class="card" style="text-align:center;padding:28px">
+      <div style="font-family:var(--fd);font-size:22px;font-weight:300;font-style:italic;color:var(--charcoal);margin-bottom:8px">"Every check-in is an act of self-care."</div>
+      <div style="font-size:14px;color:var(--muted)">See you next week 💚</div>
+    </div>`;
+}
+
+// ── COACH DASHBOARD ───────────────────────────────
 function showCoachDash(){
   showScreen('coach');
   renderCoachDash();
 }
 
-function renderCoachDash(){
-  const now  = new Date();
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+async function renderCoachDash(){
+  const now    = new Date();
+  const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const dateEl = document.getElementById('coach-date');
   if(dateEl) dateEl.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
 
-  const clients = getClients();
+  const { data: clients } = await db.from('clients').select('*').order('created_at');
+  const list  = document.getElementById('client-list');
+  const noMsg = document.getElementById('no-clients-msg');
+
   const totalEl = document.getElementById('cs-total');
   const ciEl    = document.getElementById('cs-checkins');
   const actEl   = document.getElementById('cs-active');
-  if(totalEl) totalEl.textContent = clients.length;
-  if(actEl)   actEl.textContent   = clients.filter(c=>c.status==='active').length;
-  // Check-ins due = clients where this week's check-in not yet submitted
-  if(ciEl)    ciEl.textContent    = clients.filter(c=>c.status==='active'&&!c.lastCheckin).length;
+  if(totalEl) totalEl.textContent = clients?.length || 0;
+  if(actEl)   actEl.textContent   = clients?.filter(c=>c.status==='active').length || 0;
+  if(ciEl)    ciEl.textContent    = '—';
 
-  const list = document.getElementById('client-list');
-  const noMsg= document.getElementById('no-clients-msg');
-  if(!list) return;
-
-  if(clients.length === 0){
-    list.innerHTML='';
-    if(noMsg) noMsg.style.display='block';
+  if(!clients || clients.length === 0){
+    if(list)  list.innerHTML = '';
+    if(noMsg) noMsg.style.display = 'block';
     return;
   }
-  if(noMsg) noMsg.style.display='none';
+  if(noMsg) noMsg.style.display = 'none';
 
-  list.innerHTML = clients.map((c,i) => {
-    const initial = c.name.charAt(0).toUpperCase();
-    const weekPct = c.totalWeeks ? Math.round((c.currentWeek/c.totalWeeks)*100) : 0;
-    const lost    = c.startWeight && c.currentWeight ? (c.startWeight - c.currentWeight).toFixed(1) : '—';
+  list.innerHTML = clients.map(c => {
+    const initial  = c.name.charAt(0).toUpperCase();
+    const lost     = (c.start_weight && c.current_weight) ? +(c.start_weight - c.current_weight).toFixed(1) : null;
+    const weekPct  = c.total_weeks ? Math.round((c.current_week / c.total_weeks) * 100) : 0;
+    const lostDisp = lost > 0 ? '−'+lost+' kg' : (c.start_weight ? '0 kg' : '—');
 
     let badgeClass = 'badge-active', badgeText = 'Active';
-    if(c.status==='pending')  { badgeClass='badge-pending';   badgeText='Pending'; }
-    if(c.status==='launching'){ badgeClass='badge-launching'; badgeText='Launching '+( c.launchDate||'soon'); }
+    if(c.status==='pending')   { badgeClass='badge-pending';   badgeText='Pending'; }
+    if(c.status==='launching') { badgeClass='badge-launching'; badgeText='Launching '+(c.launch_date||'soon'); }
 
-    let ciClass='ci-due', ciText='No check-in yet';
-    if(c.lastCheckin){ ciClass='ci-submitted'; ciText='Submitted ✓'; }
-
-    const weightDisplay = c.currentWeight || c.startWeight || '—';
-    const goalDisplay   = c.goalWeight || '—';
-    const lostDisplay   = parseFloat(lost) > 0 ? '−'+lost+' kg' : (c.startWeight ? '0 kg' : '—');
-
-    return `<div class="client-card" onclick="openClientDetail(${i})">
+    return `<div class="client-card" onclick="openClientDetail('${c.id}')">
       <div class="cc-top">
         <div class="cc-avatar">${initial}</div>
         <div style="flex:1">
           <div class="cc-name">${c.name}</div>
-          <div class="cc-prog">${c.programmeName||'No programme yet'}</div>
+          <div class="cc-prog">${c.programme_name||'No programme yet'}</div>
         </div>
         <div class="cc-badge ${badgeClass}">${badgeText}</div>
       </div>
       <div class="cc-stats">
-        <div class="cc-stat"><span class="cc-stat-num">${weightDisplay}</span><span class="cc-stat-lbl">Current kg</span></div>
-        <div class="cc-stat"><span class="cc-stat-num">${goalDisplay}</span><span class="cc-stat-lbl">Goal kg</span></div>
-        <div class="cc-stat"><span class="cc-stat-num" style="color:var(--sage-dark)">${lostDisplay}</span><span class="cc-stat-lbl">Lost</span></div>
+        <div class="cc-stat"><span class="cc-stat-num">${c.current_weight||'—'}</span><span class="cc-stat-lbl">Current kg</span></div>
+        <div class="cc-stat"><span class="cc-stat-num">${c.goal_weight||'—'}</span><span class="cc-stat-lbl">Goal kg</span></div>
+        <div class="cc-stat"><span class="cc-stat-num" style="color:var(--sage-dark)">${lostDisp}</span><span class="cc-stat-lbl">Lost</span></div>
       </div>
       <div class="cc-bottom">
         <div class="cc-week-bar">
-          <div class="cc-week-lbl">Week ${c.currentWeek||'—'} of ${c.totalWeeks||'—'}</div>
+          <div class="cc-week-lbl">Week ${c.current_week||'—'} of ${c.total_weeks||'—'}</div>
           <div class="cc-week-track"><div class="cc-week-fill" style="width:${weekPct}%"></div></div>
         </div>
-        <div class="cc-checkin-badge ${ciClass}">${ciText}</div>
+        <div class="cc-checkin-badge ci-due">Check-ins →</div>
       </div>
       <div class="cc-open-btn"><span>View full profile</span><span>→</span></div>
     </div>`;
@@ -1043,58 +1236,58 @@ function renderCoachDash(){
 }
 
 // ── CLIENT DETAIL ─────────────────────────────────
-let activeClientIndex = null;
+async function openClientDetail(clientId){
+  activeClientId = clientId;
+  showScreen('client-detail');
 
-function openClientDetail(idx){
-  activeClientIndex = idx;
-  const clients = getClients();
-  const c = clients[idx];
+  const { data: c } = await db.from('clients').select('*').eq('id', clientId).single();
   if(!c) return;
 
-  // Populate hero
+  const { data: sessions } = await db.from('sessions')
+    .select('*, exercises(*)').eq('client_id', clientId).order('sort_order');
+
+  const { data: checkins } = await db.from('checkins')
+    .select('*').eq('client_id', clientId).order('submitted_at', { ascending: false });
+
+  activeClientData = { ...c, sessions: sessions||[], checkins: checkins||[] };
+
+  // Hero
   document.getElementById('cd-name').textContent    = c.name;
-  document.getElementById('cd-prog').textContent    = (c.programmeName||'No programme') + (c.totalWeeks ? ' · Week '+(c.currentWeek||1)+' of '+c.totalWeeks : '');
-  document.getElementById('cd-start').textContent   = c.startWeight   || '—';
-  document.getElementById('cd-current').textContent = c.currentWeight || c.startWeight || '—';
-  document.getElementById('cd-goal').textContent    = c.goalWeight    || '—';
+  document.getElementById('cd-prog').textContent    = (c.programme_name||'No programme') + (c.total_weeks ? ` · Week ${c.current_week||1} of ${c.total_weeks}` : '');
+  document.getElementById('cd-start').textContent   = c.start_weight   || '—';
+  document.getElementById('cd-current').textContent = c.current_weight || '—';
+  document.getElementById('cd-goal').textContent    = c.goal_weight    || '—';
 
   // Coach note
   const noteEl = document.getElementById('cd-note-editor');
-  if(noteEl) noteEl.value = c.coachNote||'';
+  if(noteEl) noteEl.value = c.coach_note || '';
 
   // Info grid
   const grid = document.getElementById('cd-info-grid');
-  if(grid){
-    const rows = [
-      ['Email', c.email||'—'],
-      ['Status', c.status||'—'],
-      ['Launch Date', c.launchDate||'—'],
-      ['Programme', c.programmeName||'—'],
-    ];
-    grid.innerHTML = rows.map(([l,v])=>`
-      <div style="background:var(--cream);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">${l}</div>
-        <div style="font-size:14px;color:var(--charcoal);font-weight:500">${v}</div>
-      </div>`).join('');
-  }
+  if(grid) grid.innerHTML = [
+    ['Email', c.email||'—'], ['Status', c.status||'—'],
+    ['Launch Date', c.launch_date||'—'], ['Programme', c.programme_name||'—'],
+  ].map(([l,v])=>`
+    <div style="background:var(--cream);border-radius:8px;padding:10px 12px">
+      <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">${l}</div>
+      <div style="font-size:14px;color:var(--charcoal);font-weight:500">${v}</div>
+    </div>`).join('');
 
   // Nutrition
-  document.getElementById('nt-kcal').value    = c.nutrition?.kcal    || '';
-  document.getElementById('nt-protein').value = c.nutrition?.protein || '';
-  document.getElementById('nt-carbs').value   = c.nutrition?.carbs   || '';
-  document.getElementById('nt-fat').value     = c.nutrition?.fat     || '';
+  const nut = c.nutrition || {};
+  document.getElementById('nt-kcal').value    = nut.kcal    || '';
+  document.getElementById('nt-protein').value = nut.protein || '';
+  document.getElementById('nt-carbs').value   = nut.carbs   || '';
+  document.getElementById('nt-fat').value     = nut.fat     || '';
 
-  // Programme details
-  document.getElementById('pe-prog-name').value   = c.programmeName  || '';
-  document.getElementById('pe-week').value        = c.currentWeek    || '';
-  document.getElementById('pe-total-weeks').value = c.totalWeeks     || '';
+  // Programme
+  document.getElementById('pe-prog-name').value   = c.programme_name || '';
+  document.getElementById('pe-week').value        = c.current_week   || '';
+  document.getElementById('pe-total-weeks').value = c.total_weeks    || '';
 
-  renderSessionEditors(c);
-  renderCheckins(c);
-
-  // Reset to overview tab
+  renderSessionEditors(activeClientData);
+  renderCheckins(activeClientData);
   switchCDTab('overview', document.querySelector('.cd-tab'));
-  showScreen('client-detail');
 }
 
 function switchCDTab(tab, el){
@@ -1106,51 +1299,52 @@ function switchCDTab(tab, el){
   if(el) el.classList.add('active');
 }
 
-function saveCoachNote(){
-  const clients = getClients();
-  if(activeClientIndex === null || !clients[activeClientIndex]) return;
-  clients[activeClientIndex].coachNote = document.getElementById('cd-note-editor').value;
-  saveClients(clients);
+async function saveCoachNote(){
+  if(!activeClientId) return;
+  const note = document.getElementById('cd-note-editor').value;
+  await db.from('clients').update({ coach_note: note }).eq('id', activeClientId);
+  if(activeClientData) activeClientData.coach_note = note;
   const btn = document.getElementById('btn-save-note');
   const msg = document.getElementById('note-saved-msg');
   if(btn){ btn.textContent='Saved ✓'; btn.style.background='var(--sage)'; }
   if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
-  setTimeout(()=>{ if(btn){ btn.textContent='Save Note'; btn.style.background=''; } },2000);
+  setTimeout(()=>{ if(btn){ btn.textContent='Save Note'; btn.style.background=''; }},2000);
 }
 
-function saveProgDetails(){
-  const clients = getClients();
-  if(activeClientIndex === null) return;
-  clients[activeClientIndex].programmeName = document.getElementById('pe-prog-name').value;
-  clients[activeClientIndex].currentWeek   = parseInt(document.getElementById('pe-week').value)||1;
-  clients[activeClientIndex].totalWeeks    = parseInt(document.getElementById('pe-total-weeks').value)||12;
-  saveClients(clients);
+async function saveProgDetails(){
+  if(!activeClientId) return;
+  const update = {
+    programme_name: document.getElementById('pe-prog-name').value,
+    current_week:   parseInt(document.getElementById('pe-week').value)||1,
+    total_weeks:    parseInt(document.getElementById('pe-total-weeks').value)||12,
+  };
+  await db.from('clients').update(update).eq('id', activeClientId);
+  Object.assign(activeClientData, update);
   const msg = document.getElementById('prog-saved-msg');
   if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
 }
 
-function saveNutrition(){
-  const clients = getClients();
-  if(activeClientIndex === null) return;
-  clients[activeClientIndex].nutrition = {
+async function saveNutrition(){
+  if(!activeClientId) return;
+  const nutrition = {
     kcal:    parseInt(document.getElementById('nt-kcal').value)    || 0,
     protein: parseInt(document.getElementById('nt-protein').value) || 0,
     carbs:   parseInt(document.getElementById('nt-carbs').value)   || 0,
     fat:     parseInt(document.getElementById('nt-fat').value)     || 0,
   };
-  saveClients(clients);
+  await db.from('clients').update({ nutrition }).eq('id', activeClientId);
+  if(activeClientData) activeClientData.nutrition = nutrition;
   const msg = document.getElementById('nut-saved-msg');
   if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
 }
 
-function deleteClient(){
-  const clients = getClients();
-  if(activeClientIndex === null) return;
-  const name = clients[activeClientIndex].name;
+async function deleteClient(){
+  if(!activeClientId) return;
+  const name = activeClientData?.name || 'this client';
   if(!confirm('Remove '+name+'? This cannot be undone.')) return;
-  clients.splice(activeClientIndex,1);
-  saveClients(clients);
-  activeClientIndex = null;
+  await db.from('clients').delete().eq('id', activeClientId);
+  activeClientId   = null;
+  activeClientData = null;
   showCoachDash();
 }
 
@@ -1158,53 +1352,54 @@ function deleteClient(){
 function renderSessionEditors(c){
   const container = document.getElementById('pe-sessions-list');
   if(!container) return;
-  const sessions = c.sessions||[];
+  const sessions = c.sessions || [];
   if(sessions.length === 0){
     container.innerHTML=`<div style="text-align:center;padding:30px;color:var(--faint);font-size:14px">No sessions yet — tap <strong style="color:var(--muted)">+ Add Session</strong> to begin building the programme.</div>`;
     return;
   }
-  container.innerHTML = sessions.map((s,si)=>`
+  container.innerHTML = sessions.map((s, si) => {
+    const exercises = (s.exercises||[]).sort((a,b)=>a.sort_order-b.sort_order);
+    return `
     <div class="pse-wrap" id="pse-wrap-${si}">
-      <div class="pse-delete-reveal" onclick="removeSession(${si})">
+      <div class="pse-delete-reveal" onclick="removeSession('${s.id}',${si})">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/><path d="M10,11v6M14,11v6"/><path d="M9,6V4h6v2"/></svg>
       </div>
       <div class="prog-sess-editor" id="pse-${si}" data-si="${si}">
         <div class="pse-hdr" onclick="togglePSE(${si})">
           <div>
             <div class="pse-name">${s.name||'Session '+(si+1)}</div>
-            <div class="pse-meta">${s.day||''} · ${s.duration||45} min · ${(s.exercises||[]).length} exercises</div>
+            <div class="pse-meta">${s.day_label||''} · ${s.duration||45} min · ${exercises.length} exercises</div>
           </div>
           <div class="pse-toggle">⌄</div>
         </div>
         <div class="pse-body">
-          <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession(${si},'name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
+          <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession('${s.id}','name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day||''}" onchange="updateSession(${si},'day',this.value)" placeholder="e.g. Monday"></div>
-            <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession(${si},'duration',parseInt(this.value))" placeholder="45"></div>
+            <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day_label||''}" onchange="updateSession('${s.id}','day_label',this.value)" placeholder="e.g. Monday"></div>
+            <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession('${s.id}','duration',parseInt(this.value))" placeholder="45"></div>
           </div>
-          <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bgImage||''}" onchange="updateSession(${si},'bgImage',this.value)" placeholder="https://images.unsplash.com/…"></div>
+          <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bg_image||''}" onchange="updateSession('${s.id}','bg_image',this.value)" placeholder="https://images.unsplash.com/…"></div>
           <div style="margin-bottom:10px">
-            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.35);margin-bottom:8px">Exercises</div>
+            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Exercises</div>
             <div id="pse-ex-${si}">
-              ${(s.exercises||[]).map((ex,ei)=>`
-                <div class="ex-editor-row" id="pse-ex-${si}-${ei}">
+              ${exercises.map((ex, ei) => `
+                <div class="ex-editor-row">
                   <div class="ex-editor-name">
-                    <input class="pse-input" value="${ex.name||''}" onchange="updateExercise(${si},${ei},'name',this.value)" placeholder="Exercise name">
-                    <button onclick="removeExercise(${si},${ei})" style="background:rgba(201,120,120,0.15);border:1px solid rgba(201,120,120,0.25);border-radius:6px;padding:8px 10px;color:var(--rose);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
+                    <input class="pse-input" value="${ex.name||''}" onchange="updateExercise('${ex.id}','name',this.value)" placeholder="Exercise name">
+                    <button onclick="removeExercise('${ex.id}',${si})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
                   </div>
                   <div class="ex-editor-detail">
-                    <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise(${si},${ei},'detail',this.value)" placeholder="3 × 12 · 90 sec rest">
-                    <input class="pse-input" value="${ex.videoUrl||''}" onchange="updateExercise(${si},${ei},'videoUrl',this.value)" placeholder="YouTube URL">
+                    <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise('${ex.id}','detail',this.value)" placeholder="3 × 12 · 90 sec rest">
+                    <input class="pse-input" value="${ex.video_url||''}" onchange="updateExercise('${ex.id}','video_url',this.value)" placeholder="YouTube URL">
                   </div>
                 </div>`).join('')}
             </div>
-            <button onclick="addExercise(${si})" style="background:rgba(92,122,94,0.15);border:1px solid rgba(92,122,94,0.25);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
+            <button onclick="addExercise('${s.id}',${si})" style="background:var(--sage-xlight);border:1px solid rgba(168,184,160,0.3);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage-dark);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
           </div>
         </div>
       </div>
-    </div>`).join('');
-
-  // Attach swipe-to-delete touch handlers
+    </div>`;
+  }).join('');
   sessions.forEach((_,si) => attachSwipe(si));
 }
 
@@ -1212,131 +1407,91 @@ function attachSwipe(si){
   const el = document.getElementById('pse-'+si);
   if(!el) return;
   let startX=0, curX=0, dragging=false;
-  const THRESHOLD = 72; // px to reveal delete
-
-  el.addEventListener('touchstart', e=>{
-    startX = e.touches[0].clientX;
-    dragging = true;
-    el.style.transition='none';
-  },{passive:true});
-
-  el.addEventListener('touchmove', e=>{
-    if(!dragging) return;
-    curX = e.touches[0].clientX - startX;
-    // Only allow left swipe (negative) up to 80px
-    if(curX > 0) curX = 0;
-    if(curX < -80) curX = -80;
-    el.style.transform = `translateX(${curX}px)`;
-  },{passive:true});
-
-  el.addEventListener('touchend', ()=>{
-    dragging=false;
-    el.style.transition='transform .25s cubic-bezier(.4,0,.2,1)';
-    if(curX < -THRESHOLD){
-      // Snap open — reveal delete button
-      el.style.transform='translateX(-80px)';
-    } else {
-      // Snap closed
-      el.style.transform='translateX(0)';
-    }
-    curX=0;
-  });
+  el.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; dragging=true; el.style.transition='none'; },{passive:true});
+  el.addEventListener('touchmove',  e=>{ if(!dragging)return; curX=Math.max(-80,Math.min(0,e.touches[0].clientX-startX)); el.style.transform=`translateX(${curX}px)`; },{passive:true});
+  el.addEventListener('touchend',   ()=>{ dragging=false; el.style.transition='transform .25s cubic-bezier(.4,0,.2,1)'; el.style.transform=curX<-72?'translateX(-80px)':'translateX(0)'; curX=0; });
 }
 
-function togglePSE(si){
-  document.getElementById('pse-'+si)?.classList.toggle('pse-open');
+function togglePSE(si){ document.getElementById('pse-'+si)?.classList.toggle('pse-open'); }
+
+async function updateSession(sessionId, field, value){
+  await db.from('sessions').update({ [field]: value }).eq('id', sessionId);
 }
 
-function updateSession(si, field, value){
-  const clients = getClients();
-  if(activeClientIndex===null||!clients[activeClientIndex]) return;
-  if(!clients[activeClientIndex].sessions) clients[activeClientIndex].sessions=[];
-  clients[activeClientIndex].sessions[si][field] = value;
-  saveClients(clients);
+async function addSession(){
+  if(!activeClientId) return;
+  const maxOrder = (activeClientData.sessions||[]).length;
+  const { data } = await db.from('sessions').insert({
+    client_id: activeClientId, name: 'New Session', duration: 45, sort_order: maxOrder
+  }).select().single();
+  if(data){
+    activeClientData.sessions = [...(activeClientData.sessions||[]), { ...data, exercises:[] }];
+    renderSessionEditors(activeClientData);
+  }
 }
 
-function addSession(){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
-  if(!clients[activeClientIndex].sessions) clients[activeClientIndex].sessions=[];
-  clients[activeClientIndex].sessions.push({name:'New Session',day:'',duration:45,bgImage:'',exercises:[]});
-  saveClients(clients);
-  renderSessionEditors(clients[activeClientIndex]);
+async function removeSession(sessionId, si){
+  await db.from('sessions').delete().eq('id', sessionId);
+  activeClientData.sessions.splice(si, 1);
+  renderSessionEditors(activeClientData);
 }
 
-function removeSession(si){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
-  clients[activeClientIndex].sessions.splice(si,1);
-  saveClients(clients);
-  renderSessionEditors(clients[activeClientIndex]);
+async function addExercise(sessionId, si){
+  const maxOrder = (activeClientData.sessions[si]?.exercises||[]).length;
+  const { data } = await db.from('exercises').insert({
+    session_id: sessionId, name: '', detail: '', video_url: '', sort_order: maxOrder
+  }).select().single();
+  if(data){
+    activeClientData.sessions[si].exercises = [...(activeClientData.sessions[si].exercises||[]), data];
+    renderSessionEditors(activeClientData);
+  }
 }
 
-function addExercise(si){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
-  if(!clients[activeClientIndex].sessions[si].exercises) clients[activeClientIndex].sessions[si].exercises=[];
-  clients[activeClientIndex].sessions[si].exercises.push({name:'',detail:'',videoUrl:''});
-  saveClients(clients);
-  renderSessionEditors(clients[activeClientIndex]);
+async function removeExercise(exerciseId, si){
+  await db.from('exercises').delete().eq('id', exerciseId);
+  activeClientData.sessions[si].exercises = activeClientData.sessions[si].exercises.filter(e => e.id !== exerciseId);
+  renderSessionEditors(activeClientData);
 }
 
-function removeExercise(si,ei){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
-  clients[activeClientIndex].sessions[si].exercises.splice(ei,1);
-  saveClients(clients);
-  renderSessionEditors(clients[activeClientIndex]);
-}
-
-function updateExercise(si,ei,field,value){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
-  clients[activeClientIndex].sessions[si].exercises[ei][field]=value;
-  saveClients(clients);
+async function updateExercise(exerciseId, field, value){
+  await db.from('exercises').update({ [field]: value }).eq('id', exerciseId);
 }
 
 // ── CHECK-INS VIEWER ──────────────────────────────
 function renderCheckins(c){
   const container = document.getElementById('cd-checkins-list');
   if(!container) return;
-  const checkins = c.checkins||[];
-  if(checkins.length===0){
+  const checkins = c.checkins || [];
+  if(checkins.length === 0){
     container.innerHTML=`<div class="no-checkins">🌿<br><br>No check-ins submitted yet.<br>They will appear here once the client starts checking in.</div>`;
     return;
   }
-  container.innerHTML = checkins.map((ci,idx)=>`
+  container.innerHTML = checkins.map((ci, idx) => `
     <div class="ci-response-card">
       <div class="ci-resp-hdr">
         <div class="ci-resp-week">Week ${ci.week||idx+1} Check-in</div>
-        <div class="ci-resp-date">${ci.date||''}</div>
+        <div class="ci-resp-date">${ci.submitted_at ? new Date(ci.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : ''}</div>
       </div>
       ${Object.entries(ci.answers||{}).map(([q,a])=>`
         <div class="ci-resp-row"><div class="ci-resp-q">${q}</div><div class="ci-resp-a">${a}</div></div>`).join('')}
       <div class="ci-reply-area">
         <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
-        <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coachReply||''}</textarea>
-        <button class="btn-send-reply" onclick="saveCIReply(${idx},this)">Save Reply</button>
+        <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coach_reply||''}</textarea>
+        <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Save Reply</button>
       </div>
     </div>`).join('');
 }
 
-function saveCIReply(ciIdx, btn){
-  const clients = getClients();
-  if(activeClientIndex===null) return;
+async function saveCIReply(checkinId, btn){
   const textarea = btn.previousElementSibling;
-  if(!clients[activeClientIndex].checkins) return;
-  clients[activeClientIndex].checkins[ciIdx].coachReply = textarea.value;
-  saveClients(clients);
-  btn.textContent='Saved ✓';
-  btn.style.background='var(--sage)';
-  setTimeout(()=>{ btn.textContent='Save Reply'; btn.style.background=''; },2000);
+  await db.from('checkins').update({ coach_reply: textarea.value }).eq('id', checkinId);
+  btn.textContent='Saved ✓'; btn.style.background='var(--sage)';
+  setTimeout(()=>{ btn.textContent='Save Reply'; btn.style.background=''; }, 2000);
 }
 
 // ── ADD CLIENT MODAL ──────────────────────────────
 function openAddClient(){
   document.getElementById('add-client-modal').classList.add('open');
-  document.getElementById('nc-status').addEventListener('change', toggleLaunchField);
   toggleLaunchField();
 }
 function toggleLaunchField(){
@@ -1344,14 +1499,10 @@ function toggleLaunchField(){
   const wrap   = document.getElementById('nc-launch-wrap');
   if(wrap) wrap.style.display = (status==='launching') ? 'block' : 'none';
 }
-function closeAddClientModal(){
-  document.getElementById('add-client-modal').classList.remove('open');
-}
-function closeAddClient(e){
-  if(e.target.id==='add-client-modal') closeAddClientModal();
-}
+function closeAddClientModal(){ document.getElementById('add-client-modal').classList.remove('open'); }
+function closeAddClient(e){ if(e.target.id==='add-client-modal') closeAddClientModal(); }
 
-function createClient(){
+async function createClient(){
   const name     = document.getElementById('nc-name').value.trim();
   const email    = document.getElementById('nc-email').value.trim();
   const password = document.getElementById('nc-password').value.trim();
@@ -1363,61 +1514,35 @@ function createClient(){
   const status   = document.getElementById('nc-status').value;
   const launch   = document.getElementById('nc-launch').value.trim();
 
-  if(!name||!email||!password){
-    alert('Name, email, and password are required.');
-    return;
-  }
+  if(!name||!email||!password){ alert('Name, email, and password are required.'); return; }
 
-  const clients = getClients();
-  if(clients.find(c=>c.email.toLowerCase()===email.toLowerCase())){
-    alert('A client with this email already exists.');
-    return;
-  }
+  const btn = document.querySelector('.btn-create-client');
+  if(btn){ btn.textContent='Creating…'; btn.disabled=true; }
 
-  const newClient = {
+  const { data, error } = await db.from('clients').insert({
     name, email, password,
-    programmeName: prog,
-    totalWeeks: weeks,
-    currentWeek: startWk,
-    startWeight: sw,
-    currentWeight: sw,
-    goalWeight: gw,
+    programme_name: prog,
+    total_weeks: weeks,
+    current_week: startWk,
+    start_weight: sw,
+    current_weight: sw,
+    goal_weight: gw,
     status,
-    launchDate: status==='launching' ? launch : '',
-    coachNote: '',
-    sessions: [],
-    checkins: [],
+    launch_date: status==='launching' ? launch : '',
+    coach_note: '',
     nutrition: {},
-    lastCheckin: null,
-  };
+  }).select().single();
 
-  clients.push(newClient);
-  saveClients(clients);
+  if(btn){ btn.textContent='Create Client Profile'; btn.disabled=false; }
+
+  if(error){ alert('Error: '+error.message); return; }
+
   closeAddClientModal();
-  // Clear form
   ['nc-name','nc-email','nc-password','nc-prog','nc-weeks','nc-start-week','nc-sw','nc-gw','nc-launch'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
   renderCoachDash();
 }
-
-// Add Sarah as demo client if localStorage is empty (first load)
-function seedDemoClient(){
-  const existing = getClients();
-  if(existing.find(c=>c.email==='sarah@demo.com')) return;
-  const sarah = {
-    name:'Sarah',email:'sarah@demo.com',password:'sarah123',
-    programmeName:'Foundation',totalWeeks:12,currentWeek:3,
-    startWeight:74,currentWeight:70.8,goalWeight:63,
-    status:'active',launchDate:'',
-    coachNote:'You are doing brilliantly in week 3. Focus on form over weight — the strength will come. So proud of your consistency.',
-    sessions:[],checkins:[],nutrition:{kcal:1600,protein:130,carbs:160,fat:53},lastCheckin:null
-  };
-  existing.push(sarah);
-  saveClients(existing);
-}
-seedDemoClient();
-restoreSession();
 
 // Begin Session — goes to programme, opens Session A, scrolls to it
 function beginSession(){
@@ -1586,17 +1711,10 @@ function tw(el){el.classList.toggle('filled');document.getElementById('water-lbl
 function th(el){el.classList.toggle('done');el.querySelector('.hab-chk').textContent=el.classList.contains('done')?'✓':'';}
 function rb(btn){btn.closest('.r-btns').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
 function sb(btn){btn.closest('.s-btns').querySelectorAll('.s-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
-function submitCI(){
-  document.getElementById('ci-content').innerHTML=`
-    <div class="success-card">
-      <div class="sc-icon">🌿</div>
-      <div class="sc-title">Check-in received</div>
-      <div class="sc-sub">Dejan will review everything carefully and respond by Friday evening.<br><br>Well done for showing up this week.</div>
-    </div>
-    <div class="card" style="text-align:center;padding:28px">
-      <div style="font-family:var(--fd);font-size:22px;font-weight:300;font-style:italic;color:var(--charcoal);margin-bottom:8px">"Every check-in is an act of self-care."</div>
-      <div style="font-size:14px;color:var(--muted)">See you next week 💚</div>
-    </div>`;
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
 }
 
 const currentWeek=3;
@@ -1624,6 +1742,7 @@ document.getElementById('nc-status')?.addEventListener('change', toggleLaunchFie
 renderNav('dashboard');
 initDailyQuote();
 setTimeout(initParticles,150);
+restoreSession();
 
 // iOS Add to Home Screen prompt
 function showIOSPrompt(){
