@@ -61,8 +61,6 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 
 /* FIX: enough bottom padding so WhatsApp button is never hidden */
 .app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
-.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
-.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border);display:flex;padding:10px 0 22px;z-index:200}
@@ -263,8 +261,12 @@ select.ci-inp{cursor:pointer}
 .sc-sub{font-size:15px;color:rgba(250,248,244,0.6);line-height:1.7}
 
 /* ── COACH DASHBOARD ─────────────────────────────── */
-#screen-coach{background:var(--cream)}
-#screen-client-detail{background:var(--cream)}
+#screen-coach{background:var(--cream);display:none;height:100vh;flex-direction:column}
+#screen-coach.active{display:flex}
+.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px;min-height:0}
+#screen-client-detail{background:var(--cream);display:none;height:100vh;flex-direction:column}
+#screen-client-detail.active{display:flex}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px;min-height:0}
 .coach-app-header{background:var(--charcoal);border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
 .coach-hdr-logo{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--cream);letter-spacing:2px;white-space:nowrap}
 .coach-hdr-logo em{color:var(--sage);font-style:italic}
