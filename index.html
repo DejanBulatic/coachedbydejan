@@ -259,6 +259,123 @@ select.ci-inp{cursor:pointer}
 .sc-icon{font-size:38px;margin-bottom:12px}
 .sc-title{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);margin-bottom:6px}
 .sc-sub{font-size:15px;color:rgba(250,248,244,0.6);line-height:1.7}
+
+/* ── COACH DASHBOARD ─────────────────────────────── */
+#screen-coach{background:var(--cream)}
+.coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px}
+
+/* Header */
+.coach-hdr{background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:24px 22px;margin-bottom:18px;position:relative;overflow:hidden}
+.coach-hdr-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.coach-hdr-title{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);line-height:1.1}
+.coach-hdr-title span{font-style:italic;color:var(--sage)}
+.coach-logout{font-size:12px;color:rgba(250,248,244,0.4);background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 12px;cursor:pointer;font-family:var(--fb);letter-spacing:0.05em}
+.coach-hdr-date{font-size:13px;color:rgba(250,248,244,0.4);margin-top:6px;position:relative;z-index:1;letter-spacing:0.04em}
+.coach-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;position:relative;z-index:1}
+.cs-box{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 8px;text-align:center}
+.cs-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
+.cs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.4);margin-top:2px;display:block}
+
+/* Section headers */
+.dash-sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.dash-sec-lbl{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.btn-add-client{display:flex;align-items:center;gap:5px;background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer}
+
+/* Client cards */
+.client-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s}
+.client-card:active{box-shadow:0 4px 20px rgba(44,44,42,0.1)}
+.cc-top{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+.cc-avatar{width:46px;height:46px;border-radius:12px;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;color:var(--sage-dark);flex-shrink:0;font-style:italic}
+.cc-name{font-size:17px;font-weight:500;color:var(--charcoal)}
+.cc-prog{font-size:13px;color:var(--muted);margin-top:2px}
+.cc-badge{margin-left:auto;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;flex-shrink:0}
+.badge-active{background:var(--sage-xlight);color:var(--sage-dark);border:1px solid rgba(92,122,94,0.2)}
+.badge-pending{background:var(--gold-light);color:var(--gold);border:1px solid rgba(184,151,58,0.25)}
+.badge-launching{background:#EEF0FD;color:#5B6FD9;border:1px solid rgba(91,111,217,0.2)}
+.cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.cc-stat{background:var(--cream);border-radius:8px;padding:10px 8px;text-align:center}
+.cc-stat-num{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);display:block}
+.cc-stat-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);display:block;margin-top:2px}
+.cc-bottom{display:flex;align-items:center;justify-content:space-between}
+.cc-week-bar{flex:1;margin-right:14px}
+.cc-week-track{height:5px;background:var(--beige);border-radius:3px;overflow:hidden;margin-top:5px}
+.cc-week-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-dark));border-radius:3px}
+.cc-week-lbl{font-size:12px;color:var(--muted)}
+.cc-checkin-badge{font-size:12px;font-weight:500;padding:5px 11px;border-radius:8px;flex-shrink:0}
+.ci-submitted{background:var(--sage-xlight);color:var(--sage-dark)}
+.ci-due{background:var(--gold-light);color:var(--gold)}
+.ci-overdue{background:var(--rose-light);color:var(--rose-dark)}
+.cc-open-btn{font-size:13px;color:var(--sage-dark);font-weight:500;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft);display:flex;justify-content:space-between;align-items:center}
+
+/* Client detail */
+#screen-client-detail{background:var(--cream)}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px}
+.cd-back{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--sage-dark);font-weight:500;cursor:pointer;margin-bottom:16px}
+.cd-hero{background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+.cd-hero-name{font-family:var(--fd);font-size:32px;font-weight:300;color:var(--cream);position:relative;z-index:1}
+.cd-hero-prog{font-size:14px;color:rgba(250,248,244,0.5);margin-top:4px;position:relative;z-index:1}
+.cd-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;position:relative;z-index:1}
+.cd-hs{text-align:center}
+.cd-hs-num{font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);display:block}
+.cd-hs-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(250,248,244,0.45);margin-top:2px}
+
+/* Client detail tabs */
+.cd-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.cd-tabs::-webkit-scrollbar{display:none}
+.cd-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s}
+.cd-tab.active{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
+
+/* Coach note editor */
+.note-editor{width:100%;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:15px;font-family:var(--fd);font-style:italic;color:var(--charcoal);background:var(--cream);resize:vertical;min-height:100px;outline:none;line-height:1.6;transition:border-color .15s}
+.note-editor:focus{border-color:var(--sage-dark);background:var(--white)}
+.btn-save-note{background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:11px 22px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-save-note.saved{background:var(--sage)}
+
+/* Programme editor */
+.prog-sess-editor{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.pse-hdr{padding:16px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pse-name{font-size:16px;font-weight:500;color:var(--charcoal)}
+.pse-meta{font-size:13px;color:var(--muted);margin-top:2px}
+.pse-toggle{font-size:18px;color:var(--faint);transition:transform .2s}
+.pse-open .pse-toggle{transform:rotate(180deg)}
+.pse-body{display:none;border-top:1px solid var(--border);padding:16px 18px}
+.pse-open .pse-body{display:block}
+.pse-field{margin-bottom:12px}
+.pse-field label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.pse-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none;transition:border-color .15s}
+.pse-input:focus{border-color:var(--sage-dark);background:var(--white)}
+.ex-editor-row{background:var(--cream);border-radius:8px;padding:12px;margin-bottom:8px}
+.ex-editor-name{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px}
+.ex-editor-detail{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* Check-in viewer */
+.ci-response-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px}
+.ci-resp-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border-soft)}
+.ci-resp-week{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--charcoal)}
+.ci-resp-date{font-size:12px;color:var(--faint)}
+.ci-resp-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:14px}
+.ci-resp-row:last-child{border-bottom:none}
+.ci-resp-q{color:var(--muted);flex:1}
+.ci-resp-a{color:var(--charcoal);font-weight:500;text-align:right;flex:1}
+.ci-reply-area{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
+.ci-reply-inp{width:100%;border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:14px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);resize:none;min-height:70px;outline:none;transition:border-color .15s}
+.ci-reply-inp:focus{border-color:var(--sage-dark);background:var(--white)}
+.btn-send-reply{background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:10px 20px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;margin-top:7px}
+.no-checkins{text-align:center;padding:40px 20px;color:var(--faint);font-size:15px}
+
+/* Add client modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.5);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:24px 22px 40px}
+.modal-drag{width:36px;height:4px;background:var(--beige-mid);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--charcoal);margin-bottom:18px}
+.mf{margin-bottom:14px}
+.mf label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.mf input,.mf select{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 13px;font-size:15px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none;transition:border-color .15s}
+.mf input:focus,.mf select:focus{border-color:var(--sage-dark);background:var(--white)}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-create-client{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:var(--fb);font-size:16px;font-weight:500;cursor:pointer;margin-top:6px}
+.btn-cancel-modal{width:100%;background:none;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:13px;font-family:var(--fb);font-size:15px;cursor:pointer;margin-top:8px}
 </style>
 </head>
 <body>
@@ -566,6 +683,157 @@ select.ci-inp{cursor:pointer}
   <div class="bottom-nav" id="nav-checkin"></div>
 </div>
 
+<!-- COACH DASHBOARD -->
+<div id="screen-coach" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar" style="background:var(--charcoal);color:var(--cream);font-size:13px;font-weight:500;letter-spacing:0.05em">DC</div>
+  </div>
+  <div class="coach-dash-scroll">
+    <div class="coach-hdr">
+      <div class="coach-hdr-top">
+        <div>
+          <div class="coach-hdr-title">Coach <span>Dashboard</span></div>
+          <div class="coach-hdr-date" id="coach-date"></div>
+        </div>
+        <button class="coach-logout" onclick="coachLogout()">Sign out</button>
+      </div>
+      <div class="coach-summary">
+        <div class="cs-box"><span class="cs-num" id="cs-total">0</span><span class="cs-lbl">Clients</span></div>
+        <div class="cs-box"><span class="cs-num" id="cs-checkins">0</span><span class="cs-lbl">Check-ins due</span></div>
+        <div class="cs-box"><span class="cs-num" id="cs-active">0</span><span class="cs-lbl">Active</span></div>
+      </div>
+    </div>
+    <div class="dash-sec-hdr">
+      <div class="dash-sec-lbl">Your Clients</div>
+      <button class="btn-add-client" onclick="openAddClient()">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+        Add Client
+      </button>
+    </div>
+    <div id="client-list"></div>
+    <div id="no-clients-msg" style="display:none;text-align:center;padding:48px 20px">
+      <div style="font-size:36px;margin-bottom:12px">🌱</div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--charcoal);margin-bottom:8px">No clients yet</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">Tap <strong>Add Client</strong> above to create your first client profile.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT DETAIL -->
+<div id="screen-client-detail" class="screen">
+  <div class="app-header">
+    <div class="hdr-logo">Coached <em>by</em> Dejan</div>
+    <div class="hdr-avatar" style="background:var(--charcoal);color:var(--cream);font-size:13px;font-weight:500">DC</div>
+  </div>
+  <div class="cd-scroll">
+    <div class="cd-back" onclick="showCoachDash()">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="13,4 7,10 13,16"/></svg>
+      All Clients
+    </div>
+    <div class="cd-hero" id="cd-hero">
+      <div class="cd-hero-name" id="cd-name">—</div>
+      <div class="cd-hero-prog" id="cd-prog">—</div>
+      <div class="cd-hero-stats">
+        <div class="cd-hs"><span class="cd-hs-num" id="cd-start">—</span><span class="cd-hs-lbl">Start kg</span></div>
+        <div class="cd-hs"><span class="cd-hs-num" id="cd-current">—</span><span class="cd-hs-lbl">Current kg</span></div>
+        <div class="cd-hs"><span class="cd-hs-num" id="cd-goal">—</span><span class="cd-hs-lbl">Goal kg</span></div>
+      </div>
+    </div>
+    <div class="cd-tabs">
+      <div class="cd-tab active" onclick="switchCDTab('overview',this)">Overview</div>
+      <div class="cd-tab" onclick="switchCDTab('programme',this)">Programme</div>
+      <div class="cd-tab" onclick="switchCDTab('checkins',this)">Check-ins</div>
+      <div class="cd-tab" onclick="switchCDTab('nutrition',this)">Nutrition</div>
+    </div>
+    <!-- OVERVIEW TAB -->
+    <div id="cd-tab-overview">
+      <div class="card">
+        <div class="sec-lbl" style="margin-bottom:12px">Coach Note <span style="font-size:11px;color:var(--faint);font-weight:400;letter-spacing:0;text-transform:none">— shown on client's Programme tab</span></div>
+        <textarea class="note-editor" id="cd-note-editor" placeholder="Write a personalised message to this client…"></textarea>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+          <button class="btn-save-note" id="btn-save-note" onclick="saveCoachNote()">Save Note</button>
+          <span id="note-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s">✓ Saved</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-lbl" style="margin-bottom:12px">Client Info</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="cd-info-grid"></div>
+      </div>
+      <div class="card" style="background:var(--rose-light);border-color:rgba(238,159,159,0.25)">
+        <div class="sec-lbl" style="color:var(--rose-dark);margin-bottom:10px">Danger Zone</div>
+        <button onclick="deleteClient()" style="background:none;border:1px solid var(--rose-dark);color:var(--rose-dark);border-radius:8px;padding:10px 18px;font-family:var(--fb);font-size:14px;cursor:pointer">Remove Client</button>
+      </div>
+    </div>
+    <!-- PROGRAMME TAB -->
+    <div id="cd-tab-programme" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <div class="sec-lbl" style="margin-bottom:12px">Programme Details</div>
+        <div class="pse-field"><label>Programme Name</label><input class="pse-input" id="pe-prog-name" placeholder="e.g. Foundation 12 Week"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="pse-field"><label>Current Week</label><input class="pse-input" id="pe-week" type="number" min="1" placeholder="1"></div>
+          <div class="pse-field"><label>Total Weeks</label><input class="pse-input" id="pe-total-weeks" type="number" min="1" placeholder="12"></div>
+        </div>
+        <button class="btn-save-note" onclick="saveProgDetails()">Save</button>
+        <span id="prog-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
+      </div>
+      <div class="dash-sec-hdr" style="margin-bottom:10px">
+        <div class="dash-sec-lbl">Sessions</div>
+        <button class="btn-add-client" onclick="addSession()" style="font-size:12px;padding:7px 12px">+ Add Session</button>
+      </div>
+      <div id="pe-sessions-list"></div>
+    </div>
+    <!-- CHECK-INS TAB -->
+    <div id="cd-tab-checkins" style="display:none">
+      <div id="cd-checkins-list"></div>
+    </div>
+    <!-- NUTRITION TAB -->
+    <div id="cd-tab-nutrition" style="display:none">
+      <div class="card">
+        <div class="sec-lbl" style="margin-bottom:14px">Daily Targets</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="pse-field"><label>Calories (kcal)</label><input class="pse-input" id="nt-kcal" type="number" placeholder="1600"></div>
+          <div class="pse-field"><label>Protein (g)</label><input class="pse-input" id="nt-protein" type="number" placeholder="130"></div>
+          <div class="pse-field"><label>Carbs (g)</label><input class="pse-input" id="nt-carbs" type="number" placeholder="160"></div>
+          <div class="pse-field"><label>Fat (g)</label><input class="pse-input" id="nt-fat" type="number" placeholder="53"></div>
+        </div>
+        <button class="btn-save-note" onclick="saveNutrition()">Save Targets</button>
+        <span id="nut-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CLIENT MODAL -->
+<div class="modal-overlay" id="add-client-modal" onclick="closeAddClient(event)">
+  <div class="modal-sheet">
+    <div class="modal-drag"></div>
+    <div class="modal-title">Add New Client</div>
+    <div class="mf"><label>Full Name</label><input type="text" id="nc-name" placeholder="e.g. Slavica"></div>
+    <div class="mf"><label>Email (login)</label><input type="email" id="nc-email" placeholder="client@email.com" autocomplete="off"></div>
+    <div class="mf"><label>Password</label><input type="text" id="nc-password" placeholder="Set a login password" autocomplete="off"></div>
+    <div class="mf"><label>Programme Name</label><input type="text" id="nc-prog" placeholder="e.g. Transformation 12 Week"></div>
+    <div class="mf-row">
+      <div class="mf"><label>Total Weeks</label><input type="number" id="nc-weeks" placeholder="12" min="1"></div>
+      <div class="mf"><label>Start Week</label><input type="number" id="nc-start-week" placeholder="1" min="1"></div>
+    </div>
+    <div class="mf-row">
+      <div class="mf"><label>Start Weight (kg)</label><input type="number" id="nc-sw" placeholder="75" step="0.1"></div>
+      <div class="mf"><label>Goal Weight (kg)</label><input type="number" id="nc-gw" placeholder="63" step="0.1"></div>
+    </div>
+    <div class="mf"><label>Status</label>
+      <select id="nc-status">
+        <option value="launching">Launching (date TBC)</option>
+        <option value="active">Active</option>
+        <option value="pending">Pending — programme not yet ready</option>
+      </select>
+    </div>
+    <div class="mf" id="nc-launch-wrap"><label>Launch Date</label><input type="text" id="nc-launch" placeholder="e.g. 2 June 2026"></div>
+    <button class="btn-create-client" onclick="createClient()">Create Client Profile</button>
+    <button class="btn-cancel-modal" onclick="closeAddClientModal()">Cancel</button>
+  </div>
+</div>
+
 <script>
 const navDefs=[
   {id:'dashboard',l:'Home',p:'M3 9L10 3L17 9V17H13V12H7V17H3V9Z'},
@@ -594,7 +862,470 @@ function showTab(id){
   renderNav(id);
 }
 
-function login(){showTab('dashboard');}
+function showCoachDashIfCoach(){showCoachDash();}
+
+// ── AUTH ─────────────────────────────────────────
+const COACH_EMAIL = 'coachedbydejan@gmail.com';
+const COACH_PASS  = 'coachdejan12345';
+
+// Simple client store (localStorage so it persists in browser)
+function getClients(){
+  try{ return JSON.parse(localStorage.getItem('cbd_clients')||'[]'); }catch(e){return [];}
+}
+function saveClients(arr){
+  localStorage.setItem('cbd_clients', JSON.stringify(arr));
+}
+
+function login(){
+  const emailEl = document.querySelector('#screen-login input[type="email"]');
+  const passEl  = document.querySelector('#screen-login input[type="password"]');
+  const email   = (emailEl?.value||'').trim().toLowerCase();
+  const pass    = passEl?.value||'';
+
+  // Coach login
+  if(email === COACH_EMAIL.toLowerCase() && pass === COACH_PASS){
+    showCoachDash();
+    return;
+  }
+
+  // Client login
+  const clients = getClients();
+  const client  = clients.find(c => c.email.toLowerCase() === email && c.password === pass);
+  if(client){
+    showTab('dashboard');
+    return;
+  }
+
+  // Wrong credentials
+  emailEl.style.borderColor = 'var(--rose-dark)';
+  passEl.style.borderColor  = 'var(--rose-dark)';
+  setTimeout(()=>{
+    emailEl.style.borderColor='';
+    passEl.style.borderColor='';
+  }, 2000);
+}
+
+function coachLogout(){
+  showScreen('login');
+  const emailEl = document.querySelector('#screen-login input[type="email"]');
+  const passEl  = document.querySelector('#screen-login input[type="password"]');
+  if(emailEl) emailEl.value='';
+  if(passEl)  passEl.value='';
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+}
+
+// ── COACH DASHBOARD ──────────────────────────────
+function showCoachDash(){
+  showScreen('coach');
+  renderCoachDash();
+}
+
+function renderCoachDash(){
+  const now  = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateEl = document.getElementById('coach-date');
+  if(dateEl) dateEl.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+
+  const clients = getClients();
+  const totalEl = document.getElementById('cs-total');
+  const ciEl    = document.getElementById('cs-checkins');
+  const actEl   = document.getElementById('cs-active');
+  if(totalEl) totalEl.textContent = clients.length;
+  if(actEl)   actEl.textContent   = clients.filter(c=>c.status==='active').length;
+  // Check-ins due = clients where this week's check-in not yet submitted
+  if(ciEl)    ciEl.textContent    = clients.filter(c=>c.status==='active'&&!c.lastCheckin).length;
+
+  const list = document.getElementById('client-list');
+  const noMsg= document.getElementById('no-clients-msg');
+  if(!list) return;
+
+  if(clients.length === 0){
+    list.innerHTML='';
+    if(noMsg) noMsg.style.display='block';
+    return;
+  }
+  if(noMsg) noMsg.style.display='none';
+
+  list.innerHTML = clients.map((c,i) => {
+    const initial = c.name.charAt(0).toUpperCase();
+    const weekPct = c.totalWeeks ? Math.round((c.currentWeek/c.totalWeeks)*100) : 0;
+    const lost    = c.startWeight && c.currentWeight ? (c.startWeight - c.currentWeight).toFixed(1) : '—';
+
+    let badgeClass = 'badge-active', badgeText = 'Active';
+    if(c.status==='pending')  { badgeClass='badge-pending';   badgeText='Pending'; }
+    if(c.status==='launching'){ badgeClass='badge-launching'; badgeText='Launching '+( c.launchDate||'soon'); }
+
+    let ciClass='ci-due', ciText='No check-in yet';
+    if(c.lastCheckin){ ciClass='ci-submitted'; ciText='Submitted ✓'; }
+
+    const weightDisplay = c.currentWeight || c.startWeight || '—';
+    const goalDisplay   = c.goalWeight || '—';
+    const lostDisplay   = parseFloat(lost) > 0 ? '−'+lost+' kg' : (c.startWeight ? '0 kg' : '—');
+
+    return `<div class="client-card" onclick="openClientDetail(${i})">
+      <div class="cc-top">
+        <div class="cc-avatar">${initial}</div>
+        <div style="flex:1">
+          <div class="cc-name">${c.name}</div>
+          <div class="cc-prog">${c.programmeName||'No programme yet'}</div>
+        </div>
+        <div class="cc-badge ${badgeClass}">${badgeText}</div>
+      </div>
+      <div class="cc-stats">
+        <div class="cc-stat"><span class="cc-stat-num">${weightDisplay}</span><span class="cc-stat-lbl">Current kg</span></div>
+        <div class="cc-stat"><span class="cc-stat-num">${goalDisplay}</span><span class="cc-stat-lbl">Goal kg</span></div>
+        <div class="cc-stat"><span class="cc-stat-num" style="color:var(--sage-dark)">${lostDisplay}</span><span class="cc-stat-lbl">Lost</span></div>
+      </div>
+      <div class="cc-bottom">
+        <div class="cc-week-bar">
+          <div class="cc-week-lbl">Week ${c.currentWeek||'—'} of ${c.totalWeeks||'—'}</div>
+          <div class="cc-week-track"><div class="cc-week-fill" style="width:${weekPct}%"></div></div>
+        </div>
+        <div class="cc-checkin-badge ${ciClass}">${ciText}</div>
+      </div>
+      <div class="cc-open-btn"><span>View full profile</span><span>→</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ── CLIENT DETAIL ─────────────────────────────────
+let activeClientIndex = null;
+
+function openClientDetail(idx){
+  activeClientIndex = idx;
+  const clients = getClients();
+  const c = clients[idx];
+  if(!c) return;
+
+  // Populate hero
+  document.getElementById('cd-name').textContent    = c.name;
+  document.getElementById('cd-prog').textContent    = (c.programmeName||'No programme') + (c.totalWeeks ? ' · Week '+(c.currentWeek||1)+' of '+c.totalWeeks : '');
+  document.getElementById('cd-start').textContent   = c.startWeight   || '—';
+  document.getElementById('cd-current').textContent = c.currentWeight || c.startWeight || '—';
+  document.getElementById('cd-goal').textContent    = c.goalWeight    || '—';
+
+  // Coach note
+  const noteEl = document.getElementById('cd-note-editor');
+  if(noteEl) noteEl.value = c.coachNote||'';
+
+  // Info grid
+  const grid = document.getElementById('cd-info-grid');
+  if(grid){
+    const rows = [
+      ['Email', c.email||'—'],
+      ['Status', c.status||'—'],
+      ['Launch Date', c.launchDate||'—'],
+      ['Programme', c.programmeName||'—'],
+    ];
+    grid.innerHTML = rows.map(([l,v])=>`
+      <div style="background:var(--cream);border-radius:8px;padding:10px 12px">
+        <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:4px">${l}</div>
+        <div style="font-size:14px;color:var(--charcoal);font-weight:500">${v}</div>
+      </div>`).join('');
+  }
+
+  // Nutrition
+  document.getElementById('nt-kcal').value    = c.nutrition?.kcal    || '';
+  document.getElementById('nt-protein').value = c.nutrition?.protein || '';
+  document.getElementById('nt-carbs').value   = c.nutrition?.carbs   || '';
+  document.getElementById('nt-fat').value     = c.nutrition?.fat     || '';
+
+  // Programme details
+  document.getElementById('pe-prog-name').value   = c.programmeName  || '';
+  document.getElementById('pe-week').value        = c.currentWeek    || '';
+  document.getElementById('pe-total-weeks').value = c.totalWeeks     || '';
+
+  renderSessionEditors(c);
+  renderCheckins(c);
+
+  // Reset to overview tab
+  switchCDTab('overview', document.querySelector('.cd-tab'));
+  showScreen('client-detail');
+}
+
+function switchCDTab(tab, el){
+  ['overview','programme','checkins','nutrition'].forEach(t=>{
+    const tabEl = document.getElementById('cd-tab-'+t);
+    if(tabEl) tabEl.style.display = (t===tab) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.cd-tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function saveCoachNote(){
+  const clients = getClients();
+  if(activeClientIndex === null || !clients[activeClientIndex]) return;
+  clients[activeClientIndex].coachNote = document.getElementById('cd-note-editor').value;
+  saveClients(clients);
+  const btn = document.getElementById('btn-save-note');
+  const msg = document.getElementById('note-saved-msg');
+  if(btn){ btn.textContent='Saved ✓'; btn.style.background='var(--sage)'; }
+  if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
+  setTimeout(()=>{ if(btn){ btn.textContent='Save Note'; btn.style.background=''; } },2000);
+}
+
+function saveProgDetails(){
+  const clients = getClients();
+  if(activeClientIndex === null) return;
+  clients[activeClientIndex].programmeName = document.getElementById('pe-prog-name').value;
+  clients[activeClientIndex].currentWeek   = parseInt(document.getElementById('pe-week').value)||1;
+  clients[activeClientIndex].totalWeeks    = parseInt(document.getElementById('pe-total-weeks').value)||12;
+  saveClients(clients);
+  const msg = document.getElementById('prog-saved-msg');
+  if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
+}
+
+function saveNutrition(){
+  const clients = getClients();
+  if(activeClientIndex === null) return;
+  clients[activeClientIndex].nutrition = {
+    kcal:    parseInt(document.getElementById('nt-kcal').value)    || 0,
+    protein: parseInt(document.getElementById('nt-protein').value) || 0,
+    carbs:   parseInt(document.getElementById('nt-carbs').value)   || 0,
+    fat:     parseInt(document.getElementById('nt-fat').value)     || 0,
+  };
+  saveClients(clients);
+  const msg = document.getElementById('nut-saved-msg');
+  if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0',2000); }
+}
+
+function deleteClient(){
+  const clients = getClients();
+  if(activeClientIndex === null) return;
+  const name = clients[activeClientIndex].name;
+  if(!confirm('Remove '+name+'? This cannot be undone.')) return;
+  clients.splice(activeClientIndex,1);
+  saveClients(clients);
+  activeClientIndex = null;
+  showCoachDash();
+}
+
+// ── SESSIONS EDITOR ───────────────────────────────
+function renderSessionEditors(c){
+  const container = document.getElementById('pe-sessions-list');
+  if(!container) return;
+  const sessions = c.sessions||[];
+  if(sessions.length === 0){
+    container.innerHTML=`<div style="text-align:center;padding:30px;color:var(--faint);font-size:14px">No sessions yet — tap <strong>+ Add Session</strong> to begin building the programme.</div>`;
+    return;
+  }
+  container.innerHTML = sessions.map((s,si)=>`
+    <div class="prog-sess-editor" id="pse-${si}">
+      <div class="pse-hdr" onclick="togglePSE(${si})">
+        <div>
+          <div class="pse-name">${s.name||'Session '+(si+1)}</div>
+          <div class="pse-meta">${s.day||''} · ${s.duration||45} min · ${(s.exercises||[]).length} exercises</div>
+        </div>
+        <div class="pse-toggle">⌄</div>
+      </div>
+      <div class="pse-body">
+        <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession(${si},'name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day||''}" onchange="updateSession(${si},'day',this.value)" placeholder="e.g. Monday"></div>
+          <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession(${si},'duration',parseInt(this.value))" placeholder="45"></div>
+        </div>
+        <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bgImage||''}" onchange="updateSession(${si},'bgImage',this.value)" placeholder="https://images.unsplash.com/…"></div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Exercises</div>
+          <div id="pse-ex-${si}">
+            ${(s.exercises||[]).map((ex,ei)=>`
+              <div class="ex-editor-row" id="pse-ex-${si}-${ei}">
+                <div class="ex-editor-name">
+                  <input class="pse-input" value="${ex.name||''}" onchange="updateExercise(${si},${ei},'name',this.value)" placeholder="Exercise name">
+                  <button onclick="removeExercise(${si},${ei})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
+                </div>
+                <div class="ex-editor-detail">
+                  <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise(${si},${ei},'detail',this.value)" placeholder="3 × 12 · 90 sec rest">
+                  <input class="pse-input" value="${ex.videoUrl||''}" onchange="updateExercise(${si},${ei},'videoUrl',this.value)" placeholder="YouTube URL">
+                </div>
+              </div>`).join('')}
+          </div>
+          <button onclick="addExercise(${si})" style="background:var(--sage-xlight);border:1px solid rgba(168,184,160,0.3);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage-dark);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
+        </div>
+        <button onclick="removeSession(${si})" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:var(--fb)">Remove Session</button>
+      </div>
+    </div>`).join('');
+}
+
+function togglePSE(si){
+  document.getElementById('pse-'+si)?.classList.toggle('pse-open');
+}
+
+function updateSession(si, field, value){
+  const clients = getClients();
+  if(activeClientIndex===null||!clients[activeClientIndex]) return;
+  if(!clients[activeClientIndex].sessions) clients[activeClientIndex].sessions=[];
+  clients[activeClientIndex].sessions[si][field] = value;
+  saveClients(clients);
+}
+
+function addSession(){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  if(!clients[activeClientIndex].sessions) clients[activeClientIndex].sessions=[];
+  clients[activeClientIndex].sessions.push({name:'New Session',day:'',duration:45,bgImage:'',exercises:[]});
+  saveClients(clients);
+  renderSessionEditors(clients[activeClientIndex]);
+}
+
+function removeSession(si){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  clients[activeClientIndex].sessions.splice(si,1);
+  saveClients(clients);
+  renderSessionEditors(clients[activeClientIndex]);
+}
+
+function addExercise(si){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  if(!clients[activeClientIndex].sessions[si].exercises) clients[activeClientIndex].sessions[si].exercises=[];
+  clients[activeClientIndex].sessions[si].exercises.push({name:'',detail:'',videoUrl:''});
+  saveClients(clients);
+  renderSessionEditors(clients[activeClientIndex]);
+}
+
+function removeExercise(si,ei){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  clients[activeClientIndex].sessions[si].exercises.splice(ei,1);
+  saveClients(clients);
+  renderSessionEditors(clients[activeClientIndex]);
+}
+
+function updateExercise(si,ei,field,value){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  clients[activeClientIndex].sessions[si].exercises[ei][field]=value;
+  saveClients(clients);
+}
+
+// ── CHECK-INS VIEWER ──────────────────────────────
+function renderCheckins(c){
+  const container = document.getElementById('cd-checkins-list');
+  if(!container) return;
+  const checkins = c.checkins||[];
+  if(checkins.length===0){
+    container.innerHTML=`<div class="no-checkins">🌿<br><br>No check-ins submitted yet.<br>They will appear here once the client starts checking in.</div>`;
+    return;
+  }
+  container.innerHTML = checkins.map((ci,idx)=>`
+    <div class="ci-response-card">
+      <div class="ci-resp-hdr">
+        <div class="ci-resp-week">Week ${ci.week||idx+1} Check-in</div>
+        <div class="ci-resp-date">${ci.date||''}</div>
+      </div>
+      ${Object.entries(ci.answers||{}).map(([q,a])=>`
+        <div class="ci-resp-row"><div class="ci-resp-q">${q}</div><div class="ci-resp-a">${a}</div></div>`).join('')}
+      <div class="ci-reply-area">
+        <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
+        <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coachReply||''}</textarea>
+        <button class="btn-send-reply" onclick="saveCIReply(${idx},this)">Save Reply</button>
+      </div>
+    </div>`).join('');
+}
+
+function saveCIReply(ciIdx, btn){
+  const clients = getClients();
+  if(activeClientIndex===null) return;
+  const textarea = btn.previousElementSibling;
+  if(!clients[activeClientIndex].checkins) return;
+  clients[activeClientIndex].checkins[ciIdx].coachReply = textarea.value;
+  saveClients(clients);
+  btn.textContent='Saved ✓';
+  btn.style.background='var(--sage)';
+  setTimeout(()=>{ btn.textContent='Save Reply'; btn.style.background=''; },2000);
+}
+
+// ── ADD CLIENT MODAL ──────────────────────────────
+function openAddClient(){
+  document.getElementById('add-client-modal').classList.add('open');
+  document.getElementById('nc-status').addEventListener('change', toggleLaunchField);
+  toggleLaunchField();
+}
+function toggleLaunchField(){
+  const status = document.getElementById('nc-status')?.value;
+  const wrap   = document.getElementById('nc-launch-wrap');
+  if(wrap) wrap.style.display = (status==='launching') ? 'block' : 'none';
+}
+function closeAddClientModal(){
+  document.getElementById('add-client-modal').classList.remove('open');
+}
+function closeAddClient(e){
+  if(e.target.id==='add-client-modal') closeAddClientModal();
+}
+
+function createClient(){
+  const name     = document.getElementById('nc-name').value.trim();
+  const email    = document.getElementById('nc-email').value.trim();
+  const password = document.getElementById('nc-password').value.trim();
+  const prog     = document.getElementById('nc-prog').value.trim();
+  const weeks    = parseInt(document.getElementById('nc-weeks').value)||12;
+  const startWk  = parseInt(document.getElementById('nc-start-week').value)||1;
+  const sw       = parseFloat(document.getElementById('nc-sw').value)||null;
+  const gw       = parseFloat(document.getElementById('nc-gw').value)||null;
+  const status   = document.getElementById('nc-status').value;
+  const launch   = document.getElementById('nc-launch').value.trim();
+
+  if(!name||!email||!password){
+    alert('Name, email, and password are required.');
+    return;
+  }
+
+  const clients = getClients();
+  if(clients.find(c=>c.email.toLowerCase()===email.toLowerCase())){
+    alert('A client with this email already exists.');
+    return;
+  }
+
+  const newClient = {
+    name, email, password,
+    programmeName: prog,
+    totalWeeks: weeks,
+    currentWeek: startWk,
+    startWeight: sw,
+    currentWeight: sw,
+    goalWeight: gw,
+    status,
+    launchDate: status==='launching' ? launch : '',
+    coachNote: '',
+    sessions: [],
+    checkins: [],
+    nutrition: {},
+    lastCheckin: null,
+  };
+
+  clients.push(newClient);
+  saveClients(clients);
+  closeAddClientModal();
+  // Clear form
+  ['nc-name','nc-email','nc-password','nc-prog','nc-weeks','nc-start-week','nc-sw','nc-gw','nc-launch'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  renderCoachDash();
+}
+
+// Add Sarah as demo client if localStorage is empty (first load)
+function seedDemoClient(){
+  const existing = getClients();
+  if(existing.find(c=>c.email==='sarah@demo.com')) return;
+  const sarah = {
+    name:'Sarah',email:'sarah@demo.com',password:'sarah123',
+    programmeName:'Foundation',totalWeeks:12,currentWeek:3,
+    startWeight:74,currentWeight:70.8,goalWeight:63,
+    status:'active',launchDate:'',
+    coachNote:'You are doing brilliantly in week 3. Focus on form over weight — the strength will come. So proud of your consistency.',
+    sessions:[],checkins:[],nutrition:{kcal:1600,protein:130,carbs:160,fat:53},lastCheckin:null
+  };
+  existing.push(sarah);
+  saveClients(existing);
+}
+seedDemoClient();
 
 // Begin Session — goes to programme, opens Session A, scrolls to it
 function beginSession(){
@@ -778,6 +1509,17 @@ function submitCI(){
 
 const currentWeek=3;
 if(currentWeek>=8)document.getElementById('upsell-card').style.display='block';
+
+// Enter key on login
+document.querySelector('#screen-login input[type="password"]')?.addEventListener('keydown',e=>{
+  if(e.key==='Enter') login();
+});
+document.querySelector('#screen-login input[type="email"]')?.addEventListener('keydown',e=>{
+  if(e.key==='Enter') login();
+});
+
+// Status toggle on add client modal
+document.getElementById('nc-status')?.addEventListener('change', toggleLaunchField);
 
 ['a','b','c'].forEach(buildExList);
 renderNav('dashboard');
