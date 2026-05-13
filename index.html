@@ -381,7 +381,7 @@ select.ci-inp{cursor:pointer}
     </div>
     <div class="sess-card" id="sess-b">
       <div class="sess-img-hdr" onclick="toggleSess('sess-b')">
-        <div class="sess-bg" style="background-image:url('/images/quote-4.jpg')"></div>
+        <div class="sess-bg" style="background-image:url('/images/quote-4.png')"></div>
         <div class="sess-overlay"></div>
         <div class="sess-hdr-content">
           <div><div class="sess-tag">Wednesday · Full Body</div><div class="sess-name">Session B — Hinge Focus</div><div class="sess-meta">5 exercises · 45 min</div></div>
@@ -611,37 +611,25 @@ const quotes=[
   {text:"Progress is not always visible on the scale — but it is always happening.",bg:"/images/quote-1.png"},
   {text:"Strength is built one session at a time. You are building something real.",bg:"/images/quote-2.png"},
   {text:"The woman you are becoming is worth every effort you make today.",bg:"/images/quote-3.png"},
-  {text:"Rest is part of the programme. Recovery is where results are made.",bg:"/images/quote-4.jpg"},
-  {text:"Every meal you choose with intention is a vote for the life you want.",bg:"/images/quote-5.jpg"},
-  {text:"You do not have to be perfect. You just have to keep going.",bg:"/images/quote-6.jpg"},
+  {text:"Rest is part of the programme. Recovery is where results are made.",bg:"/images/quote-4.png"},
+  {text:"Every meal you choose with intention is a vote for the life you want.",bg:"/images/quote-5.png"},
+  {text:"You do not have to be perfect. You just have to keep going.",bg:"/images/quote-6.png"},
   {text:"Consistency is the only secret. You already have it.",bg:"/images/quote-7.png"},
-  {text:"Your body is listening to everything you do for it. Keep going.",bg:"/images/quote-8.jpg"},
+  {text:"Your body is listening to everything you do for it. Keep going.",bg:"/images/quote-8.png"},
   {text:"Small steps taken every day become the transformation of a lifetime.",bg:"/images/quote-1.png"},
   {text:"You showed up today. That is always enough to start.",bg:"/images/quote-2.png"},
   {text:"The strongest version of you is already inside you — training is just finding her.",bg:"/images/quote-3.png"},
-  {text:"Slow progress is still progress. Never forget that.",bg:"/images/quote-4.jpg"},
-  {text:"What you do today will be visible in six weeks. Trust it.",bg:"/images/quote-5.jpg"},
-  {text:"You are not starting over. You are starting stronger.",bg:"/images/quote-6.jpg"},
+  {text:"Slow progress is still progress. Never forget that.",bg:"/images/quote-4.png"},
+  {text:"What you do today will be visible in six weeks. Trust it.",bg:"/images/quote-5.png"},
+  {text:"You are not starting over. You are starting stronger.",bg:"/images/quote-6.png"},
 ];
-
-function loadQuoteImage(num,exts,el){
-  if(!exts.length)return;
-  const src='/images/quote-'+num+exts[0];
-  const img=new Image();
-  img.onload=()=>{ el.style.backgroundImage=`url('${src}')`; };
-  img.onerror=()=>{ loadQuoteImage(num,exts.slice(1),el); };
-  img.src=src;
-}
 
 function initDailyQuote(){
   const now=new Date();
   const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
   const q=quotes[doy%quotes.length];
   const wrap=document.getElementById('quote-wrap');
-  // Extract image number from path e.g. /images/quote-3.png → 3
-  const num=q.bg.replace(/.*quote-(\d+)\..*/,'$1');
-  // Try every possible extension — handles case mismatches on any server
-  loadQuoteImage(num,['.jpg','.JPG','.jpeg','.png','.PNG'],wrap);
+  wrap.style.backgroundImage=`url('${q.bg}')`;
   document.getElementById('quote-text').textContent='"'+q.text+'"';
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
