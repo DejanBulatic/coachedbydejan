@@ -112,7 +112,6 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 .field-error{border-color:var(--rose-dark) !important}
 .error-msg{font-size:12px;color:var(--rose-dark);margin-top:4px}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -489,13 +488,6 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 const SUPABASE_URL = 'https://rderrnouixyyotkitagls.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZXJucm91aXh5b3RraXRhZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2OTUxMDQsImV4cCI6MjA5NDI3MTEwNH0.qna1Dw5I0IRj_a-lOiffxk54MiADtuhFVTR7csJkGc0';
 
-let db;
-try {
-  db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} catch(e) {
-  console.error('Supabase init failed:', e);
-}
-
 let currentPart = 1;
 const parqAnswers = {};
 
@@ -563,8 +555,6 @@ async function submitForm(){
   const mainGoal = document.getElementById('main-goal').value.trim();
   if(!mainGoal){ alert('Please fill in your main goal before submitting.'); return; }
 
-  if(!db){ alert('Connection error — please refresh the page and try again.'); return; }
-
   btn.textContent = 'Submitting…';
   btn.disabled = true;
 
@@ -615,13 +605,23 @@ async function submitForm(){
     status: 'new',
   };
 
-  const { error } = await db.from('intake_forms').insert(payload);
+  // Save to Supabase via REST API
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/intake_forms`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  });
 
-  if(error){
+  if(!res.ok){
+    const errText = await res.text();
     btn.textContent = 'Submit Form →';
     btn.disabled = false;
-    alert('Error: ' + error.message + ' (code: ' + error.code + ')');
-    console.error(error);
+    alert('Error ' + res.status + ': ' + errText);
     return;
   }
 
