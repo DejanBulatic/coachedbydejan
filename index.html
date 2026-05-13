@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#FAF8F4">
+<meta name="apple-mobile-web-app-title" content="Coached by Dejan">
+<meta name="theme-color" content="#5C7A5E">
+<meta property="og:title" content="Coached by Dejan">
+<meta property="og:description" content="Your personal coaching app">
+<meta property="og:image" content="/images/quote-3.png">
+<meta property="og:type" content="website">
+<link rel="apple-touch-icon" href="/images/quote-3.png">
 <link rel="manifest" href="/manifest.json">
 <title>Coached by Dejan</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -618,11 +624,24 @@ const quotes=[
   {text:"You are not starting over. You are starting stronger.",bg:"/images/quote-6.jpg"},
 ];
 
+function loadQuoteImage(num,exts,el){
+  if(!exts.length)return;
+  const src='/images/quote-'+num+exts[0];
+  const img=new Image();
+  img.onload=()=>{ el.style.backgroundImage=`url('${src}')`; };
+  img.onerror=()=>{ loadQuoteImage(num,exts.slice(1),el); };
+  img.src=src;
+}
+
 function initDailyQuote(){
   const now=new Date();
   const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
   const q=quotes[doy%quotes.length];
-  document.getElementById('quote-wrap').style.backgroundImage=`url('${q.bg}')`;
+  const wrap=document.getElementById('quote-wrap');
+  // Extract image number from path e.g. /images/quote-3.png → 3
+  const num=q.bg.replace(/.*quote-(\d+)\..*/,'$1');
+  // Try every possible extension — handles case mismatches on any server
+  loadQuoteImage(num,['.jpg','.JPG','.jpeg','.png','.PNG'],wrap);
   document.getElementById('quote-text').textContent='"'+q.text+'"';
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
