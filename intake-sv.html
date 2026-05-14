@@ -164,7 +164,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
     <div id="parq-warning" class="callout callout-rose" style="display:none">
       <div class="callout-label">Observera</div>
-      <p>Du har svarat Ja på en eller flera frågor. Vi rekommenderar att du talar med din läkare innan du påbörjar ett nytt träningsprogram.</p>
+      <p>Om du svarar "Ja" på någon av frågorna ovan rekommenderas det alltid att rådgöra med läkare vid osäkerhet. Du kan fortsätta formuläret som vanligt 💚</p>
     </div>
 
     <div class="parq-item"><div class="parq-q">Har en läkare någon gång sagt att du har hjärtproblem eller högt blodtryck?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(0,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(0,'No',this)">Nej</button></div></div>
@@ -246,23 +246,23 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     <div class="field">
       <label>Hur skulle du beskriva dina nuvarande matvanor?</label>
       <div class="option-group" id="eating-habits">
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Ganska balanserade</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">En blandning av bra och mindre bra</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag äter mycket processad mat</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag hoppar ofta över måltider</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag äter sent på kvällen</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag småäter ofta</button>
+        <button class="option-btn" onclick="toggleOption(this)">Ganska balanserade</button>
+        <button class="option-btn" onclick="toggleOption(this)">En blandning av bra och mindre bra</button>
+        <button class="option-btn" onclick="toggleOption(this)">Jag äter mycket processad mat</button>
+        <button class="option-btn" onclick="toggleOption(this)">Jag hoppar ofta över måltider</button>
+        <button class="option-btn" onclick="toggleOption(this)">Jag äter sent på kvällen</button>
+        <button class="option-btn" onclick="toggleOption(this)">Jag småäter ofta</button>
       </div>
     </div>
     <div class="field">
       <label>Vad känns mest utmanande med kosten just nu?</label>
       <div class="option-group" id="food-challenge">
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Portionsstorlekar</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Sötsug</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Känsloätande</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Ingen tid att laga mat</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Äter ute för ofta</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Ingen större utmaning</button>
+        <button class="option-btn" onclick="toggleOption(this)">Portionsstorlekar</button>
+        <button class="option-btn" onclick="toggleOption(this)">Sötsug</button>
+        <button class="option-btn" onclick="toggleOption(this)">Känsloätande</button>
+        <button class="option-btn" onclick="toggleOption(this)">Ingen tid att laga mat</button>
+        <button class="option-btn" onclick="toggleOption(this)">Äter ute för ofta</button>
+        <button class="option-btn" onclick="toggleOption(this)">Ingen större utmaning</button>
       </div>
     </div>
     <div class="field">
@@ -318,6 +318,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
         <button class="option-btn" onclick="selectOption('job-type',this)">Blandat</button>
         <button class="option-btn" onclick="selectOption('job-type',this)">Mest stående och gående</button>
         <button class="option-btn" onclick="selectOption('job-type',this)">Fysiskt arbete</button>
+        <button class="option-btn" onclick="selectOption('job-type',this)">Pensionär</button>
       </div>
     </div>
     <div class="nav-row"><button class="btn-back" onclick="prevPart(4)">← Tillbaka</button><button class="btn-next" onclick="nextPart(4)">Fortsätt →</button></div>
@@ -403,7 +404,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
       </div>
     </div>
     <div class="field">
-      <label>Finns det något annat du'd vilja att jag ska veta? <span style="color:var(--faint);font-size:11px;text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+      <label>Finns det något annat du skulle vilja att jag ska veta? <span style="color:var(--faint);font-size:11px;text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
       <textarea id="anything-else" placeholder="Vad som helst..."></textarea>
     </div>
 
@@ -553,6 +554,12 @@ function getSelected(groupId){
 function getYN(key){return ynAnswers[key]||'';}
 
 
+
+function getMultiSelected(groupId){
+  const sels = document.querySelectorAll('#'+groupId+' .option-btn.sel');
+  if(!sels.length) return '-';
+  return Array.from(sels).map(b=>b.textContent.trim()).join(', ');
+}
 function validateEmail(input){
   const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
   const errEl = document.getElementById('email-error');
@@ -599,8 +606,8 @@ async function submitForm(){
       '19_Session_length': getSelected('session-length')||'-',
       '20_Location':       getSelected('training-location')||'-',
       '21_Programme_before': getSelected('programme-before')||'-',
-      '22_Eating_habits':  getSelected('eating-habits')||'-',
-      '23_Food_challenge': getSelected('food-challenge')||'-',
+      '22_Eating_habits':  getMultiSelected('eating-habits'),
+      '23_Food_challenge': getMultiSelected('food-challenge'),
       '24_Allergies':      ynAnswers['allergies-yn']==='Yes' ? (document.getElementById('allergies').value||'-') : 'No',
       '25_Diet_type':      getSelected('diet-type')||'-',
       '26_Water':          getSelected('water-intake')||'-',

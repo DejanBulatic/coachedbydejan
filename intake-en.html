@@ -164,7 +164,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
     <div id="parq-warning" class="callout callout-rose" style="display:none">
       <div class="callout-label">Please note</div>
-      <p>You have answered Yes to one or more questions. We recommend speaking with your doctor before starting a new exercise programme.</p>
+      <p>If you answer "Yes" to any of the questions above, it may be a good idea to speak with your doctor before starting intense exercise. You can continue filling out the form as usual 💚</p>
     </div>
 
     <div class="parq-item"><div class="parq-q">Has a doctor ever told you that you have a heart condition or high blood pressure?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(0,'Yes',this)">Yes</button><button class="parq-btn" onclick="selectParq(0,'No',this)">No</button></div></div>
@@ -246,23 +246,23 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     <div class="field">
       <label>How would you describe your current eating habits?</label>
       <div class="option-group" id="eating-habits">
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">Quite balanced</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">A mix of good and bad</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">I eat a lot of processed food</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">I often skip meals</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">I eat late at night</button>
-        <button class="option-btn" onclick="selectOption('eating-habits',this)">I snack often</button>
+        <button class="option-btn" onclick="toggleOption(this)">Quite balanced</button>
+        <button class="option-btn" onclick="toggleOption(this)">A mix of good and bad</button>
+        <button class="option-btn" onclick="toggleOption(this)">I eat a lot of processed food</button>
+        <button class="option-btn" onclick="toggleOption(this)">I often skip meals</button>
+        <button class="option-btn" onclick="toggleOption(this)">I eat late at night</button>
+        <button class="option-btn" onclick="toggleOption(this)">I snack often</button>
       </div>
     </div>
     <div class="field">
       <label>What feels most challenging with food right now?</label>
       <div class="option-group" id="food-challenge">
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Portion sizes</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Sugar cravings</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Emotional eating</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">No time to cook</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">Eating out too often</button>
-        <button class="option-btn" onclick="selectOption('food-challenge',this)">No major challenge</button>
+        <button class="option-btn" onclick="toggleOption(this)">Portion sizes</button>
+        <button class="option-btn" onclick="toggleOption(this)">Sugar cravings</button>
+        <button class="option-btn" onclick="toggleOption(this)">Emotional eating</button>
+        <button class="option-btn" onclick="toggleOption(this)">No time to cook</button>
+        <button class="option-btn" onclick="toggleOption(this)">Eating out too often</button>
+        <button class="option-btn" onclick="toggleOption(this)">No major challenge</button>
       </div>
     </div>
     <div class="field">
@@ -318,6 +318,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
         <button class="option-btn" onclick="selectOption('job-type',this)">A mix of sitting and moving</button>
         <button class="option-btn" onclick="selectOption('job-type',this)">Mostly on your feet</button>
         <button class="option-btn" onclick="selectOption('job-type',this)">Physical work</button>
+        <button class="option-btn" onclick="selectOption('job-type',this)">Retired</button>
       </div>
     </div>
     <div class="nav-row"><button class="btn-back" onclick="prevPart(4)">← Back</button><button class="btn-next" onclick="nextPart(4)">Continue →</button></div>
@@ -553,6 +554,12 @@ function getSelected(groupId){
 function getYN(key){return ynAnswers[key]||'';}
 
 
+
+function getMultiSelected(groupId){
+  const sels = document.querySelectorAll('#'+groupId+' .option-btn.sel');
+  if(!sels.length) return '-';
+  return Array.from(sels).map(b=>b.textContent.trim()).join(', ');
+}
 function validateEmail(input){
   const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
   const errEl = document.getElementById('email-error');
@@ -594,8 +601,8 @@ async function submitForm(){
     '19_Session_length': getSelected('session-length')||'-',
     '20_Location':       getSelected('training-location')||'-',
     '21_Programme_before': getSelected('programme-before')||'-',
-    '22_Eating_habits':  getSelected('eating-habits')||'-',
-    '23_Food_challenge': getSelected('food-challenge')||'-',
+    '22_Eating_habits':  getMultiSelected('eating-habits'),
+    '23_Food_challenge': getMultiSelected('food-challenge'),
     '24_Allergies':      getYN('allergies-yn')==='Yes'?(document.getElementById('allergies').value||'-'):'No',
     '25_Diet_type':      getSelected('diet-type')||'-',
     '26_Water':          getSelected('water-intake')||'-',
