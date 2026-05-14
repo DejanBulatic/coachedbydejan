@@ -1081,9 +1081,12 @@ function populateClientView(c){
   const todayCard = document.querySelector('.today-card');
   if(todayCard) todayCard.style.display = (c.sessions&&c.sessions.length>0) ? 'block' : 'none';
 
-  // Avatars
-  document.querySelectorAll('.hdr-avatar').forEach(el => {
-    if(!el.textContent.includes('DC')) el.textContent = initial;
+  // Avatars — only update the text node, preserve inner popup HTML
+  document.querySelectorAll('.client-avatar').forEach(el => {
+    // Update first text node only
+    for(let node of el.childNodes){
+      if(node.nodeType === 3){ node.textContent = initial; break; }
+    }
   });
 
   // Greeting
@@ -1119,16 +1122,23 @@ function populateClientView(c){
   if(phDesc) phDesc.textContent = c.total_weeks ? `A ${c.total_weeks}-week programme` : 'Your programme is being personalised';
   if(phWeek) phWeek.textContent = c.current_week ? `Week ${c.current_week} of ${c.total_weeks||'—'}` : '';
 
-  // If no sessions, show a message in programme tab
+  // If no sessions, show a launch card in programme tab
   const progScroll = document.querySelector('#screen-programme .app-scroll');
   if(progScroll && (!c.sessions || c.sessions.length === 0)){
-    // Remove any leftover sec-lbl Sessions label
     const existing = progScroll.querySelector('#no-sessions-msg');
     if(!existing){
       const msg = document.createElement('div');
       msg.id = 'no-sessions-msg';
-      msg.style.cssText = 'text-align:center;padding:40px 20px;color:var(--muted);font-size:15px;line-height:1.7';
-      msg.innerHTML = '🌿<br><br>Your programme is being built.<br>It will appear here once Dejan has set everything up.';
+      msg.innerHTML = `
+        <div style="background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:28px 22px;margin-bottom:14px;position:relative;overflow:hidden">
+          <div style="font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);position:relative;z-index:1;line-height:1.2">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
+          ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);margin-top:10px;position:relative;z-index:1;letter-spacing:0.04em">Launching ${c.launch_date}</div>` : ''}
+        </div>
+        <div class="card" style="text-align:center;padding:28px 20px">
+          <div style="font-size:36px;margin-bottom:14px">🌿</div>
+          <div style="font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:8px">Dejan is building your programme</div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.7">Your personalised sessions will appear here once everything is ready. Use this time to prepare — hydrate, rest well, and get excited.</div>
+        </div>`;
       progScroll.appendChild(msg);
     }
   } else {
