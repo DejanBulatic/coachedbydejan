@@ -481,6 +481,8 @@ select.ci-inp{cursor:pointer}
       </div>
     </div>
 
+    <div id="launch-banner" style="display:none;margin-bottom:16px"></div>
+
     <div class="sec-lbl">Your Progress</div>
     <div class="stats-row">
       <div class="stat-box"><span class="stat-num pos">−3.2 kg</span><span class="stat-lbl">Lost</span></div>
@@ -1033,10 +1035,23 @@ function populateClientView(c){
     if(el.textContent==='This Week'||el.textContent==='Sessions') el.remove();
   });
 
-  // Programme header — updated when tab is shown via renderProgrammeTab
-  // Today card — hide if no sessions
+  // Today card — hide if no sessions, show launch banner instead
   const todayCard = document.querySelector('.today-card');
-  if(todayCard) todayCard.style.display = (c.sessions&&c.sessions.length>0) ? 'block' : 'none';
+  const launchBanner = document.getElementById('launch-banner');
+  if(c.sessions && c.sessions.length > 0){
+    if(todayCard) todayCard.style.display = 'block';
+    if(launchBanner) launchBanner.style.display = 'none';
+  } else {
+    if(todayCard) todayCard.style.display = 'none';
+    if(launchBanner){
+      launchBanner.style.display = 'block';
+      launchBanner.innerHTML = `
+        <div style="background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:24px 22px;position:relative;overflow:hidden">
+          <div style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);position:relative;z-index:1;line-height:1.2;margin-bottom:8px">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
+          ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);position:relative;z-index:1;letter-spacing:0.04em">🗓 Launching ${c.launch_date}</div>` : '<div style="font-size:13px;color:rgba(250,248,244,0.5);position:relative;z-index:1">Dejan is building your personalised programme</div>'}
+        </div>`;
+    }
+  }
 
   // Avatars — only update the text node, preserve inner popup HTML
   document.querySelectorAll('.client-avatar').forEach(el => {
