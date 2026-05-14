@@ -1564,7 +1564,7 @@ async function createClient(){
     launch_date: status==='launching' ? launch : '',
     coach_note: '',
     nutrition: {},
-  }).select().single();
+  });
 
   if(btn){ btn.textContent='Create Client Profile'; btn.disabled=false; }
 
