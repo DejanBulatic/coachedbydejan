@@ -270,7 +270,7 @@ select.ci-inp{cursor:pointer}
 .coach-dash-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px;min-height:0}
 #screen-client-detail{background:var(--cream);display:none;height:100vh;flex-direction:column;overflow:visible}
 #screen-client-detail.active{display:flex}
-.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 40px;min-height:0}
+.cd-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 120px;min-height:0}
 .coach-app-header{background:var(--charcoal);border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
 .coach-hdr-logo{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--cream);letter-spacing:2px;white-space:nowrap}
 .coach-hdr-logo em{color:var(--sage);font-style:italic}
@@ -780,7 +780,7 @@ select.ci-inp{cursor:pointer}
       </div>
     </div>
     <!-- PROGRAMME TAB -->
-    <div id="cd-tab-programme" style="display:none">
+    <div id="cd-tab-programme" style="display:none;padding-bottom:60px">
       <div class="coach-card" style="margin-bottom:10px">
         <div class="coach-sec-lbl">Programme Details</div>
         <div class="pse-field"><label>Programme Name</label><input class="pse-input" id="pe-prog-name" placeholder="e.g. Foundation 12 Week"></div>
@@ -824,9 +824,9 @@ select.ci-inp{cursor:pointer}
   <div class="modal-sheet">
     <div class="modal-drag"></div>
     <div class="modal-title">Add New Client</div>
-    <div class="mf"><label>Full Name</label><input type="text" id="nc-name" placeholder="e.g. Slavica"></div>
+    <div class="mf"><label>Full Name</label><input type="text" id="nc-name" placeholder="e.g. Slavica Petrovic" autocapitalize="words"></div>
     <div class="mf"><label>Email (login)</label><input type="email" id="nc-email" placeholder="client@email.com" autocomplete="off"></div>
-    <div class="mf"><label>Password</label><input type="text" id="nc-password" placeholder="Set a login password" autocomplete="off"></div>
+    <div class="mf"><label>Password</label><input type="text" id="nc-password" placeholder="Set a login password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
     <div class="mf"><label>Programme Name</label><input type="text" id="nc-prog" placeholder="e.g. Transformation 12 Week"></div>
     <div class="mf-row">
       <div class="mf"><label>Total Weeks</label><input type="number" id="nc-weeks" placeholder="12" min="1"></div>
@@ -844,7 +844,7 @@ select.ci-inp{cursor:pointer}
         <option value="pending">Pending — programme not yet ready</option>
       </select>
     </div>
-    <div class="mf" id="nc-launch-wrap"><label>Launch Date</label><input type="text" id="nc-launch" placeholder="e.g. 2 June 2026"></div>
+    <div class="mf" id="nc-launch-wrap"><label>Launch Date</label><input type="date" id="nc-launch" style="color:var(--charcoal)"></div>
     <button class="btn-create-client" onclick="createClient()">Create Client Profile</button>
     <button class="btn-cancel-modal" onclick="closeAddClientModal()">Cancel</button>
   </div>
@@ -935,7 +935,20 @@ const COACH_PASS  = 'coachdejan12345';
 let activeClientId   = null;
 let activeClientData = null;
 
-// ── SESSION PERSISTENCE ───────────────────────────
+// ── IMAGE POOL — random background picker ─────────────────────────────────
+const IMG_POOL = [
+  '/images/bg-1.jpg','/images/bg-2.jpg','/images/bg-3.jpg',
+  '/images/bg-4.jpg','/images/bg-5.jpg','/images/bg-6.jpg',
+  '/images/bg-7.jpg','/images/bg-8.jpg',
+];
+let usedImages = [];
+function pickImage(){
+  if(usedImages.length >= IMG_POOL.length) usedImages = [];
+  const available = IMG_POOL.filter(i => !usedImages.includes(i));
+  const pick = available[Math.floor(Math.random()*available.length)];
+  usedImages.push(pick);
+  return pick;
+}
 function saveSession(role, clientId=null){
   sessionStorage.setItem('cbd_session', role);
   if(clientId) sessionStorage.setItem('cbd_client_id', clientId);
@@ -1047,7 +1060,7 @@ function populateClientView(c){
     if(todayCard) todayCard.style.display = 'none';
     if(launchBanner){
       launchBanner.style.display = 'block';
-      const bgStyle = c.programme_bg ? `background-image:url('${c.programme_bg}');background-size:cover;background-position:center;` : '';
+      const bgStyle = c.programme_bg ? `background-image:url('${c.programme_bg}');background-size:cover;background-position:center;` : `background-image:url('${pickImage()}');background-size:cover;background-position:center;`;
       launchBanner.innerHTML = `
         <div style="background:linear-gradient(145deg,#2A3328,#1E2820);${bgStyle}border-radius:14px;padding:24px 22px;position:relative;overflow:hidden" onclick="showTab('programme')">
           ${bgStyle ? '<div style="position:absolute;inset:0;background:rgba(20,30,20,0.55);border-radius:14px"></div>' : ''}
@@ -1156,7 +1169,7 @@ function buildClientSessions(sessions, c){
     card.id = 'sess-'+key;
     card.innerHTML = `
       <div class="sess-img-hdr" onclick="toggleSess('sess-${key}')">
-        <div class="sess-bg" style="background-image:url('${s.bg_image||'/images/quote-'+(i%8+1)+'.png'}')"></div>
+        <div class="sess-bg" style="background-image:url('${s.bg_image||pickImage()}')"></div>
         <div class="sess-overlay"></div>
         <div class="sess-hdr-content">
           <div>
@@ -1255,7 +1268,26 @@ async function renderCoachDash(){
   const dateEl = document.getElementById('coach-date');
   if(dateEl) dateEl.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
 
-  const clients = await SB.get('clients', {}, {select:'*', order:'created_at.asc'});
+  const allClients = await SB.get('clients', {}, {select:'*', order:'created_at.asc'});
+  if(!allClients) return;
+
+  // Sort: not-started (launching/pending) first by closest launch date, then active by least progress first
+  function parseLaunch(dateStr){
+    if(!dateStr) return new Date('9999-01-01');
+    const d = new Date(dateStr);
+    return isNaN(d) ? new Date('9999-01-01') : d;
+  }
+  const notStarted = allClients
+    .filter(c => c.status === 'launching' || c.status === 'pending')
+    .sort((a,b) => parseLaunch(a.launch_date) - parseLaunch(b.launch_date));
+  const active = allClients
+    .filter(c => c.status === 'active')
+    .sort((a,b) => {
+      const pctA = a.total_weeks ? (a.current_week||1)/a.total_weeks : 0;
+      const pctB = b.total_weeks ? (b.current_week||1)/b.total_weeks : 0;
+      return pctB - pctA; // furthest along last? No — furthest first so you see who needs attention
+    });
+  const clients = [...notStarted, ...active];
   const list  = document.getElementById('client-list');
   const noMsg = document.getElementById('no-clients-msg');
 
@@ -1586,7 +1618,13 @@ async function createClient(){
   const sw       = parseFloat(document.getElementById('nc-sw').value)||null;
   const gw       = parseFloat(document.getElementById('nc-gw').value)||null;
   const status   = document.getElementById('nc-status').value;
-  const launch   = document.getElementById('nc-launch').value.trim();
+  const launch_raw = document.getElementById('nc-launch').value;
+  // Format date nicely: 2026-06-02 → 2 June 2026
+  let launch = '';
+  if(launch_raw){
+    const d = new Date(launch_raw + 'T12:00:00');
+    launch = d.getDate() + ' ' + d.toLocaleString('en-GB',{month:'long'}) + ' ' + d.getFullYear();
+  }
 
   if(!name||!email||!password){ alert('Name, email, and password are required.'); return; }
 
