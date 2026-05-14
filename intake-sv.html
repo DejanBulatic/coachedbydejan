@@ -556,66 +556,78 @@ async function submitForm(){
 
   btn.textContent='Submitting…';btn.disabled=true;
 
-  const goalsText = Array.from(selectedGoals).map(i=>
-    `${goalNames[i]} (importance: ${goalSliderValues[i]}/10)`
-  ).join(' | ');
+  try {
+    const goalsText = Array.from(selectedGoals).map(i=>
+      goalNames[i] + ' (importance: ' + goalSliderValues[i] + '/10)'
+    ).join(' | ');
 
-  const payload = {
-    _subject: 'New intake - '+document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
-    _replyto: document.getElementById('email').value.trim(),
-    '01_Name':           document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
-    '02_Email':          document.getElementById('email').value.trim(),
-    '03_WhatsApp':       document.getElementById('whatsapp').value.trim()||'-',
-    '04_Age':            document.getElementById('age').value||'-',
-    '05_Weight_now':     (document.getElementById('current-weight').value||'-')+' kg',
-    '06_Weight_target':  (document.getElementById('target-weight').value||'-')+' kg',
-    '07_Height':         (document.getElementById('height').value||'-')+' cm',
-    '08_Waist':          (document.getElementById('waist').value||'-')+' cm',
-    '09_Hips':           (document.getElementById('hips').value||'-')+' cm',
-    '10_Heart':          parqAnswers[0]||'-',
-    '11_Chest_pain':     parqAnswers[1]||'-',
-    '12_Dizziness':      parqAnswers[2]||'-',
-    '13_Joints':         parqAnswers[3]||'-',
-    '14_Pregnant':       parqAnswers[4]||'-',
-    '15_Medication':     parqAnswers[5]||'-',
-    '16_Injuries':       getYN('injuries-yn')==='Yes'?(document.getElementById('injuries').value||'-'):'No',
-    '17_Fitness_level':  getSelected('fitness-level')||'-',
-    '18_Days_per_week':  getSelected('days-per-week')||'-',
-    '19_Session_length': getSelected('session-length')||'-',
-    '20_Location':       getSelected('training-location')||'-',
-    '21_Programme_before': getSelected('programme-before')||'-',
-    '22_Eating_habits':  getSelected('eating-habits')||'-',
-    '23_Food_challenge': getSelected('food-challenge')||'-',
-    '24_Allergies':      getYN('allergies-yn')==='Yes'?(document.getElementById('allergies').value||'-'):'No',
-    '25_Diet_type':      getSelected('diet-type')||'-',
-    '26_Water':          getSelected('water-intake')||'-',
-    '27_Sleep':          getSelected('sleep')||'-',
-    '28_Stress':         getSelected('stress')||'-',
-    '29_Job_type':       getSelected('job-type')||'-',
-    '30_Goals':          goalsText,
-    '31_Why':            document.getElementById('goal-why').value.trim()||'-',
-    '32_Obstacles':      document.getElementById('obstacles').value.trim()||'-',
-    '33_Commitment':     getSelected('commitment')+'/10',
-    '34_Anything_else':  document.getElementById('anything-else').value.trim()||'-',
-  };
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName  = document.getElementById('last-name').value.trim();
+    const email     = document.getElementById('email').value.trim();
 
-  const res=await fetch('https://formspree.io/f/xvzlnzkd',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify(payload)
-  });
+    const payload = {
+      _subject: 'New intake - ' + firstName + ' ' + lastName,
+      _replyto: email,
+      '01_Name':           firstName + ' ' + lastName,
+      '02_Email':          email,
+      '03_WhatsApp':       document.getElementById('whatsapp').value.trim()||'-',
+      '04_Age':            document.getElementById('age').value||'-',
+      '05_Weight_now':     (document.getElementById('current-weight').value||'-') + ' kg',
+      '06_Weight_target':  (document.getElementById('target-weight').value||'-') + ' kg',
+      '07_Height':         (document.getElementById('height').value||'-') + ' cm',
+      '08_Waist':          (document.getElementById('waist').value||'-') + ' cm',
+      '09_Hips':           (document.getElementById('hips').value||'-') + ' cm',
+      '10_Heart':          parqAnswers[0]||'-',
+      '11_Chest_pain':     parqAnswers[1]||'-',
+      '12_Dizziness':      parqAnswers[2]||'-',
+      '13_Joints':         parqAnswers[3]||'-',
+      '14_Pregnant':       parqAnswers[4]||'-',
+      '15_Medication':     parqAnswers[5]||'-',
+      '16_Injuries':       ynAnswers['injuries-yn']==='Yes' ? (document.getElementById('injuries').value||'-') : 'No',
+      '17_Fitness_level':  getSelected('fitness-level')||'-',
+      '18_Days_per_week':  getSelected('days-per-week')||'-',
+      '19_Session_length': getSelected('session-length')||'-',
+      '20_Location':       getSelected('training-location')||'-',
+      '21_Programme_before': getSelected('programme-before')||'-',
+      '22_Eating_habits':  getSelected('eating-habits')||'-',
+      '23_Food_challenge': getSelected('food-challenge')||'-',
+      '24_Allergies':      ynAnswers['allergies-yn']==='Yes' ? (document.getElementById('allergies').value||'-') : 'No',
+      '25_Diet_type':      getSelected('diet-type')||'-',
+      '26_Water':          getSelected('water-intake')||'-',
+      '27_Sleep':          getSelected('sleep')||'-',
+      '28_Stress':         getSelected('stress')||'-',
+      '29_Job_type':       getSelected('job-type')||'-',
+      '30_Goals':          goalsText,
+      '31_Why':            document.getElementById('goal-why').value.trim()||'-',
+      '32_Obstacles':      document.getElementById('obstacles').value.trim()||'-',
+      '33_Commitment':     getSelected('commitment') + '/10',
+      '34_Anything_else':  document.getElementById('anything-else').value.trim()||'-',
+    };
 
-  if(!res.ok){
-    btn.textContent='Submit Form →';btn.disabled=false;
-    alert('Något gick fel. Försök igen eller kontakta Dejan direkt.');
-    return;
+    const res = await fetch('https://formspree.io/f/xvzlnzkd', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if(!res.ok){
+      const errText = await res.text();
+      throw new Error('Formspree ' + res.status + ': ' + errText);
+    }
+
+    // Success
+    document.getElementById('part-5').classList.remove('active');
+    document.getElementById('success-screen').style.display='block';
+    document.getElementById('progress-fill').style.width='100%';
+    document.querySelectorAll('.ps-dot').forEach(d=>{d.className='ps-dot done';d.innerHTML='checkmark';});
+    window.scrollTo({top:0,behavior:'smooth'});
+
+  } catch(err) {
+    console.error('Submit error:', err);
+    btn.textContent='Skicka formulär →';
+    btn.disabled=false;
+    alert('Fel: ' + err.message);
   }
-
-  document.getElementById('part-5').classList.remove('active');
-  document.getElementById('success-screen').style.display='block';
-  document.getElementById('progress-fill').style.width='100%';
-  document.querySelectorAll('.ps-dot').forEach(d=>{d.className='ps-dot done';d.innerHTML='✓';});
-  window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
