@@ -132,7 +132,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
   <!-- PART 1 -->
   <div class="part active" id="part-1">
     <div class="part-title">Lične informacije</div>
-    <div class="part-sub">Počnimo sa osnovama.</div>
+    <div class="part-sub">Osnove.</div>
     <div class="field-row">
       <div class="field"><label>Ime <span class="req">*</span></label><input type="text" id="first-name" placeholder="Ime" autocomplete="given-name"></div>
       <div class="field"><label>Prezime <span class="req">*</span></label><input type="text" id="last-name" placeholder="Prezime" autocomplete="family-name"></div>
@@ -241,7 +241,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
 
   <!-- PART 4 -->
   <div class="part" id="part-4">
-    <div class="part-title">Ishrana i životni stil</div>
+    <div class="part-title">Ishrana i stil života</div>
     <div class="part-sub">Bez osude — što ste iskreniji, to bolje mogu da vam pomognem.</div>
     <div class="field">
       <label>Kako biste opisali svoje trenutne navike u ishrani?</label>
@@ -334,7 +334,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-0" onclick="toggleGoal(0)">
-      <div class="goal-title"><span class="goal-check">✓</span>Smršati i osećati se bolje u svom telu</div>
+      <div class="goal-title"><span class="goal-check"></span>Smršati i osećati se bolje u svom telu</div>
       <div class="goal-desc">Fokus na održivom gubitku masti, više energije i osećaju lakoće u svakodnevnom životu</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>Koliko važno?</span><span id="gval-0">5</span>/10</div>
@@ -343,7 +343,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-1" onclick="toggleGoal(1)">
-      <div class="goal-title"><span class="goal-check">✓</span>Izgraditi snagu i zategnuti telo</div>
+      <div class="goal-title"><span class="goal-check"></span>Izgraditi snagu i zategnuti telo</div>
       <div class="goal-desc">Izgradite snagu, oblikujte telo i osećajte se jače i sigurnije</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>Koliko važno?</span><span id="gval-1">5</span>/10</div>
@@ -352,7 +352,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-2" onclick="toggleGoal(2)">
-      <div class="goal-title"><span class="goal-check">✓</span>Poboljšati kondiciju i nivo energije</div>
+      <div class="goal-title"><span class="goal-check"></span>Poboljšati kondiciju i nivo energije</div>
       <div class="goal-desc">Poboljšajte izdržljivost, energiju i opštu kondiciju u svakodnevnom životu</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>Koliko važno?</span><span id="gval-2">5</span>/10</div>
@@ -361,7 +361,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-3" onclick="toggleGoal(3)">
-      <div class="goal-title"><span class="goal-check">✓</span>Poboljšati pokretljivost i osećati manje ukočenosti</div>
+      <div class="goal-title"><span class="goal-check"></span>Poboljšati pokretljivost i osećati manje ukočenosti</div>
       <div class="goal-desc">Krećite se lakše, poboljšajte fleksibilnost i pomozite telu da se oseća bolje</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>Koliko važno?</span><span id="gval-3">5</span>/10</div>
@@ -370,7 +370,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-4" onclick="toggleGoal(4)">
-      <div class="goal-title"><span class="goal-check">✓</span>Osećati se jače u svakodnevnom životu i dugoročno brinuti o zdravlju</div>
+      <div class="goal-title"><span class="goal-check"></span>Osećati se jače u svakodnevnom životu i dugoročno brinuti o zdravlju</div>
       <div class="goal-desc">Izgradite snagu, poboljšajte držanje i pokretljivost i podržite zdravo starenje</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>Koliko važno?</span><span id="gval-4">5</span>/10</div>
@@ -583,7 +583,7 @@ async function submitForm(){
     '18_Days_per_week':  getSelected('days-per-week')||'—',
     '19_Session_length': getSelected('session-length')||'—',
     '20_Location':       getSelected('training-location')||'—',
-    '21_Programme_before': getYN('programme-before')||'—',
+    '21_Programme_before': getSelected('programme-before')||'—',
     '22_Eating_habits':  getSelected('eating-habits')||'—',
     '23_Food_challenge': getSelected('food-challenge')||'—',
     '24_Allergies':      getYN('allergies-yn')==='Yes'?(document.getElementById('allergies').value||'—'):'No',

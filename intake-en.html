@@ -231,9 +231,9 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
     <div class="field">
       <label>Have you followed a workout programme before?</label>
-      <div class="yn-group" id="programme-before">
-        <button class="yn-btn" onclick="selectYN('programme-before',this,'Yes')">Yes</button>
-        <button class="yn-btn" onclick="selectYN('programme-before',this,'No')">No</button>
+      <div class="option-group" id="programme-before" style="margin-top:6px">
+        <button class="option-btn" onclick="selectOption('programme-before',this)">Yes</button>
+        <button class="option-btn" onclick="selectOption('programme-before',this)">No</button>
       </div>
     </div>
     <div class="nav-row"><button class="btn-back" onclick="prevPart(3)">← Back</button><button class="btn-next" onclick="nextPart(3)">Continue →</button></div>
@@ -334,7 +334,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-0" onclick="toggleGoal(0)">
-      <div class="goal-title"><span class="goal-check">✓</span>Lose weight & feel more comfortable in your body</div>
+      <div class="goal-title"><span class="goal-check"></span>Lose weight & feel more comfortable in your body</div>
       <div class="goal-desc">Focus on sustainable fat loss, more energy, and feeling lighter in everyday life</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>How important?</span><span id="gval-0">5</span>/10</div>
@@ -343,7 +343,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-1" onclick="toggleGoal(1)">
-      <div class="goal-title"><span class="goal-check">✓</span>Build strength & feel more toned</div>
+      <div class="goal-title"><span class="goal-check"></span>Build strength & feel more toned</div>
       <div class="goal-desc">Build strength, shape your body, and feel stronger and more confident</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>How important?</span><span id="gval-1">5</span>/10</div>
@@ -352,7 +352,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-2" onclick="toggleGoal(2)">
-      <div class="goal-title"><span class="goal-check">✓</span>Improve fitness & energy levels</div>
+      <div class="goal-title"><span class="goal-check"></span>Improve fitness & energy levels</div>
       <div class="goal-desc">Improve your endurance, energy, and overall fitness in daily life</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>How important?</span><span id="gval-2">5</span>/10</div>
@@ -361,7 +361,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-3" onclick="toggleGoal(3)">
-      <div class="goal-title"><span class="goal-check">✓</span>Improve mobility & feel less stiff</div>
+      <div class="goal-title"><span class="goal-check"></span>Improve mobility & feel less stiff</div>
       <div class="goal-desc">Move more freely, improve flexibility, and help your body feel better</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>How important?</span><span id="gval-3">5</span>/10</div>
@@ -370,7 +370,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
 
     <div class="goal-card" id="goal-4" onclick="toggleGoal(4)">
-      <div class="goal-title"><span class="goal-check">✓</span>Feel stronger for everyday life & long-term health</div>
+      <div class="goal-title"><span class="goal-check"></span>Feel stronger for everyday life & long-term health</div>
       <div class="goal-desc">Build strength, improve posture and movement, and support healthy aging</div>
       <div class="goal-slider-wrap">
         <div class="goal-slider-label"><span>How important?</span><span id="gval-4">5</span>/10</div>
@@ -583,7 +583,7 @@ async function submitForm(){
     '18_Days_per_week':  getSelected('days-per-week')||'—',
     '19_Session_length': getSelected('session-length')||'—',
     '20_Location':       getSelected('training-location')||'—',
-    '21_Programme_before': getYN('programme-before')||'—',
+    '21_Programme_before': getSelected('programme-before')||'—',
     '22_Eating_habits':  getSelected('eating-habits')||'—',
     '23_Food_challenge': getSelected('food-challenge')||'—',
     '24_Allergies':      getYN('allergies-yn')==='Yes'?(document.getElementById('allergies').value||'—'):'No',
