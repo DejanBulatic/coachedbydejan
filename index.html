@@ -517,58 +517,11 @@ select.ci-inp{cursor:pointer}
   <div class="app-scroll">
     <div class="prog-header">
       <div class="ph-label">Your Programme</div>
-      <div class="ph-name">Foundation</div>
-      <div class="ph-desc">A 12-week transformation programme</div>
-      <div class="ph-week">Week 3 of 12</div>
+      <div class="ph-name">—</div>
+      <div class="ph-desc"></div>
+      <div class="ph-week"></div>
     </div>
-    <div class="sec-lbl">This Week</div>
-    <div class="week-scroll">
-      <div class="day-pill workout today"><div class="dp-name">Mon</div><div class="dp-type">Str A</div></div>
-      <div class="day-pill rest"><div class="dp-name">Tue</div><div class="dp-type">Cardio</div></div>
-      <div class="day-pill workout"><div class="dp-name">Wed</div><div class="dp-type">Str B</div></div>
-      <div class="day-pill rest"><div class="dp-name">Thu</div><div class="dp-type">Rest</div></div>
-      <div class="day-pill workout"><div class="dp-name">Fri</div><div class="dp-type">Str C</div></div>
-      <div class="day-pill rest"><div class="dp-name">Sat</div><div class="dp-type">Walk</div></div>
-      <div class="day-pill rest"><div class="dp-name">Sun</div><div class="dp-type">Rest</div></div>
-    </div>
-    <div class="sec-lbl">Sessions</div>
-    <div class="sess-card" id="sess-a">
-      <div class="sess-img-hdr" onclick="toggleSess('sess-a')">
-        <div class="sess-bg" style="background-image:url('/images/quote-1.png')"></div>
-        <div class="sess-overlay"></div>
-        <div class="sess-hdr-content">
-          <div><div class="sess-tag">Today · Full Body</div><div class="sess-name">Session A — Squat Focus</div><div class="sess-meta">5 exercises · 45 min</div></div>
-          <div class="sess-arrow">⌄</div>
-        </div>
-      </div>
-      <div class="sess-body"><div id="ex-list-a"></div><button class="btn-complete">Mark Session Complete ✓</button></div>
-    </div>
-    <div class="sess-card" id="sess-b">
-      <div class="sess-img-hdr" onclick="toggleSess('sess-b')">
-        <div class="sess-bg" style="background-image:url('/images/quote-4.png')"></div>
-        <div class="sess-overlay"></div>
-        <div class="sess-hdr-content">
-          <div><div class="sess-tag">Wednesday · Full Body</div><div class="sess-name">Session B — Hinge Focus</div><div class="sess-meta">5 exercises · 45 min</div></div>
-          <div class="sess-arrow">⌄</div>
-        </div>
-      </div>
-      <div class="sess-body"><div id="ex-list-b"></div><button class="btn-complete">Start Session →</button></div>
-    </div>
-    <div class="sess-card" id="sess-c">
-      <div class="sess-img-hdr" onclick="toggleSess('sess-c')">
-        <div class="sess-bg" style="background-image:url('/images/quote-2.png')"></div>
-        <div class="sess-overlay"></div>
-        <div class="sess-hdr-content">
-          <div><div class="sess-tag">Friday · Glutes &amp; Upper</div><div class="sess-name">Session C — Glute Focus</div><div class="sess-meta">5 exercises + HIIT · 50 min</div></div>
-          <div class="sess-arrow">⌄</div>
-        </div>
-      </div>
-      <div class="sess-body"><div id="ex-list-c"></div><button class="btn-complete">Start Session →</button></div>
-    </div>
-    <div class="coach-note">
-      <div class="cn-lbl">From Dejan</div>
-      <div class="cn-txt">"You are doing brilliantly in week 3. Focus on form over weight — the strength will come. So proud of your consistency."</div>
-    </div>
+    <div id="programme-content"></div>
   </div>
   <div class="bottom-nav" id="nav-programme"></div>
 </div>
@@ -1071,11 +1024,16 @@ function populateClientView(c){
   const pct     = Math.max(0, Math.min(100, Math.round((lost / range) * 100)));
   const nut     = c.nutrition || {};
 
-  // Clear ALL hardcoded demo content first
+  // Clear hardcoded content that may still exist
   document.querySelectorAll('.sess-card').forEach(el=>el.remove());
   document.querySelectorAll('.coach-note').forEach(el=>el.remove());
   document.querySelectorAll('.week-scroll').forEach(el=>el.remove());
-  document.querySelectorAll('.sec-lbl').forEach(el=>{ if(el.textContent==='This Week'||el.textContent==='Sessions') el.remove(); });
+  document.querySelectorAll('.sec-lbl').forEach(el=>{
+    if(el.textContent==='This Week'||el.textContent==='Sessions') el.remove();
+  });
+
+  // Programme content container
+  const progContent = document.getElementById('programme-content');
 
   // Hide today card if no sessions
   const todayCard = document.querySelector('.today-card');
@@ -1122,14 +1080,11 @@ function populateClientView(c){
   if(phDesc) phDesc.textContent = c.total_weeks ? `A ${c.total_weeks}-week programme` : 'Your programme is being personalised';
   if(phWeek) phWeek.textContent = c.current_week ? `Week ${c.current_week} of ${c.total_weeks||'—'}` : '';
 
-  // If no sessions, show a launch card in programme tab
-  const progScroll = document.querySelector('#screen-programme .app-scroll');
-  if(progScroll && (!c.sessions || c.sessions.length === 0)){
-    const existing = progScroll.querySelector('#no-sessions-msg');
-    if(!existing){
-      const msg = document.createElement('div');
-      msg.id = 'no-sessions-msg';
-      msg.innerHTML = `
+  // Programme content
+  if(progContent){
+    progContent.innerHTML = '';
+    if(!c.sessions || c.sessions.length === 0){
+      progContent.innerHTML = `
         <div style="background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:28px 22px;margin-bottom:14px;position:relative;overflow:hidden">
           <div style="font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);position:relative;z-index:1;line-height:1.2">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
           ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);margin-top:10px;position:relative;z-index:1;letter-spacing:0.04em">Launching ${c.launch_date}</div>` : ''}
@@ -1139,11 +1094,7 @@ function populateClientView(c){
           <div style="font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:8px">Dejan is building your programme</div>
           <div style="font-size:14px;color:var(--muted);line-height:1.7">Your personalised sessions will appear here once everything is ready. Use this time to prepare — hydrate, rest well, and get excited.</div>
         </div>`;
-      progScroll.appendChild(msg);
     }
-  } else {
-    const msg = document.getElementById('no-sessions-msg');
-    if(msg) msg.remove();
   }
 
   // Coach note
@@ -1164,17 +1115,14 @@ function populateClientView(c){
   const ciWeekEl = document.querySelector('.ci-week');
   if(ciWeekEl) ciWeekEl.textContent = `Week ${c.current_week||1} Check-in`;
 
-  // Build sessions if client has any in DB
+  // Build sessions if client has any
   if(c.sessions && c.sessions.length > 0) buildClientSessions(c.sessions, c);
 }
 
 function buildClientSessions(sessions, c){
-  const scroll = document.querySelector('#screen-programme .app-scroll');
-  if(!scroll) return;
-
-  // Remove hardcoded session cards
-  scroll.querySelectorAll('.sess-card').forEach(el => el.remove());
-  scroll.querySelector('.coach-note')?.remove();
+  const content = document.getElementById('programme-content');
+  if(!content) return;
+  content.innerHTML = '';
 
   sessions.forEach((s, i) => {
     const key = 'db'+i;
@@ -1199,7 +1147,7 @@ function buildClientSessions(sessions, c){
         <div id="ex-list-${key}"></div>
         <button class="btn-complete">Mark Session Complete ✓</button>
       </div>`;
-    scroll.appendChild(card);
+    content.appendChild(card);
 
     const exList = card.querySelector('#ex-list-'+key);
     exList.innerHTML = exercises.map((ex, ei) => {
@@ -1234,7 +1182,7 @@ function buildClientSessions(sessions, c){
     const noteEl = document.createElement('div');
     noteEl.className = 'coach-note';
     noteEl.innerHTML = `<div class="cn-lbl">From Dejan</div><div class="cn-txt">"${c.coach_note}"</div>`;
-    scroll.appendChild(noteEl);
+    content.appendChild(noteEl);
   }
 }
 
