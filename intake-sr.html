@@ -461,7 +461,9 @@ function nextPart(from){
   if(from===1){
     const fn=document.getElementById('first-name').value.trim();
     const em=document.getElementById('email').value.trim();
-    if(!fn||!em){alert('Molimo unesite ime i e-mail adresu za nastavak.');return;}
+    const emailValid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    if(!fn||!em||!emailValid){alert('Unesite ispravnu e-mail adresu da biste nastavili.');return;}
+    if(false){alert('Molimo unesite ime i e-mail adresu za nastavak.');return;}
   }
   if(from===2){
     const injYN=ynAnswers['injuries-yn'];
@@ -549,6 +551,14 @@ function getSelected(groupId){
 }
 
 function getYN(key){return ynAnswers[key]||'';}
+
+
+function validateEmail(input){
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+  const errEl = document.getElementById('email-error');
+  if(errEl) errEl.style.display = (!valid && input.value.length > 0) ? 'block' : 'none';
+  input.style.borderColor = (!valid && input.value.length > 0) ? 'var(--rose-dark)' : '';
+}
 
 async function submitForm(){
   const btn=document.getElementById('submit-btn');

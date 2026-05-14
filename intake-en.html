@@ -139,7 +139,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-wid
     </div>
     <div class="field-row">
       <div class="field"><label>Age <span class="req">*</span></label><input type="number" id="age" placeholder="34" min="16" max="80"></div>
-      <div class="field"><label>Email address <span class="req">*</span></label><input type="email" id="email" placeholder="you@email.com" autocomplete="email"></div>
+      <div class="field"><label>Email address <span class="req">*</span></label><input type="email" id="email" placeholder="you@email.com" autocomplete="email" oninput="validateEmail(this)"><div id="email-error" style="display:none;font-size:12px;color:var(--rose-dark);margin-top:4px">Please check your email address is correct</div></div>
     </div>
     <div class="field"><label>WhatsApp number (including country code)</label><input type="tel" id="whatsapp" placeholder="+46 70 000 00 00" autocomplete="tel"></div>
     <div class="field-row-3">
@@ -461,7 +461,9 @@ function nextPart(from){
   if(from===1){
     const fn=document.getElementById('first-name').value.trim();
     const em=document.getElementById('email').value.trim();
-    if(!fn||!em){alert('Please fill in your first name and email to continue.');return;}
+    const emailValid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    if(!fn||!em||!emailValid){alert('Please enter a valid email address to continue.');return;}
+    if(false){alert('Please fill in your first name and email to continue.');return;}
   }
   if(from===2){
     const injYN=ynAnswers['injuries-yn'];
@@ -549,6 +551,14 @@ function getSelected(groupId){
 }
 
 function getYN(key){return ynAnswers[key]||'';}
+
+
+function validateEmail(input){
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+  const errEl = document.getElementById('email-error');
+  if(errEl) errEl.style.display = (!valid && input.value.length > 0) ? 'block' : 'none';
+  input.style.borderColor = (!valid && input.value.length > 0) ? 'var(--rose-dark)' : '';
+}
 
 async function submitForm(){
   const btn=document.getElementById('submit-btn');
