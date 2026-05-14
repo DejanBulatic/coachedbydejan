@@ -872,6 +872,7 @@ function showTab(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   renderNav(id);
+  if(id === 'programme' && activeClientData) renderProgrammeTab(activeClientData);
 }
 
 function showCoachDashIfCoach(){showCoachDash();}
@@ -1032,10 +1033,8 @@ function populateClientView(c){
     if(el.textContent==='This Week'||el.textContent==='Sessions') el.remove();
   });
 
-  // Programme content container
-  const progContent = document.getElementById('programme-content');
-
-  // Hide today card if no sessions
+  // Programme header — updated when tab is shown via renderProgrammeTab
+  // Today card — hide if no sessions
   const todayCard = document.querySelector('.today-card');
   if(todayCard) todayCard.style.display = (c.sessions&&c.sessions.length>0) ? 'block' : 'none';
 
@@ -1072,31 +1071,6 @@ function populateClientView(c){
   if(phNums[0]) phNums[0].textContent = lost > 0 ? '−'+lost : '0';
   if(phNums[2]) phNums[2].textContent = pct+'%';
 
-  // Programme tab
-  const phName = document.querySelector('.ph-name');
-  const phDesc = document.querySelector('.ph-desc');
-  const phWeek = document.querySelector('.ph-week');
-  if(phName) phName.textContent = c.programme_name || 'Your Programme';
-  if(phDesc) phDesc.textContent = c.total_weeks ? `A ${c.total_weeks}-week programme` : 'Your programme is being personalised';
-  if(phWeek) phWeek.textContent = c.current_week ? `Week ${c.current_week} of ${c.total_weeks||'—'}` : '';
-
-  // Programme content
-  if(progContent){
-    progContent.innerHTML = '';
-    if(!c.sessions || c.sessions.length === 0){
-      progContent.innerHTML = `
-        <div style="background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:28px 22px;margin-bottom:14px;position:relative;overflow:hidden">
-          <div style="font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);position:relative;z-index:1;line-height:1.2">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
-          ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);margin-top:10px;position:relative;z-index:1;letter-spacing:0.04em">Launching ${c.launch_date}</div>` : ''}
-        </div>
-        <div class="card" style="text-align:center;padding:28px 20px">
-          <div style="font-size:36px;margin-bottom:14px">🌿</div>
-          <div style="font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:8px">Dejan is building your programme</div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.7">Your personalised sessions will appear here once everything is ready. Use this time to prepare — hydrate, rest well, and get excited.</div>
-        </div>`;
-    }
-  }
-
   // Coach note
   const cnTxt = document.querySelector('.cn-txt');
   if(cnTxt && c.coach_note) cnTxt.textContent = '"'+c.coach_note+'"';
@@ -1117,6 +1091,34 @@ function populateClientView(c){
 
   // Build sessions if client has any
   if(c.sessions && c.sessions.length > 0) buildClientSessions(c.sessions, c);
+}
+
+function renderProgrammeTab(c){
+  const phName = document.querySelector('.ph-name');
+  const phDesc = document.querySelector('.ph-desc');
+  const phWeek = document.querySelector('.ph-week');
+  if(phName) phName.textContent = c.programme_name || 'Your Programme';
+  if(phDesc) phDesc.textContent = c.total_weeks ? `A ${c.total_weeks}-week programme` : '';
+  if(phWeek) phWeek.textContent = c.current_week ? `Week ${c.current_week} of ${c.total_weeks||'—'}` : '';
+
+  const progContent = document.getElementById('programme-content');
+  if(!progContent) return;
+  progContent.innerHTML = '';
+
+  if(!c.sessions || c.sessions.length === 0){
+    progContent.innerHTML = `
+      <div style="background:var(--charcoal);background-image:var(--botanical);border-radius:14px;padding:28px 22px;margin-bottom:14px;position:relative;overflow:hidden">
+        <div style="font-family:var(--fd);font-size:28px;font-weight:300;color:var(--cream);position:relative;z-index:1;line-height:1.2">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
+        ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);margin-top:10px;position:relative;z-index:1;letter-spacing:0.04em">Launching ${c.launch_date}</div>` : ''}
+      </div>
+      <div class="card" style="text-align:center;padding:28px 20px">
+        <div style="font-size:36px;margin-bottom:14px">🌿</div>
+        <div style="font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:8px">Dejan is building your programme</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7">Your personalised sessions will appear here once everything is ready. Use this time to prepare — hydrate, rest well, and get excited.</div>
+      </div>`;
+  } else {
+    buildClientSessions(c.sessions, c);
+  }
 }
 
 function buildClientSessions(sessions, c){
