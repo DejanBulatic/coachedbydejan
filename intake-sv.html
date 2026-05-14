@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#5C7A5E">
+<title>Klientformulär — Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#FAF8F4;--white:#FFFFFF;--beige:#E8E0D0;--beige-mid:#D4C9B5;
+  --sage:#A8B8A0;--sage-dark:#5C7A5E;--sage-light:#D4E0D4;--sage-xlight:#EEF3EE;
+  --rose:#EE9F9F;--rose-light:#FDF0F0;--rose-dark:#C97878;
+  --charcoal:#2C2C2A;--charcoal-light:#4A4A47;
+  --muted:#7A7A76;--faint:#AEAEA9;
+  --gold:#B8973A;--gold-light:#F0E8D0;
+  --border:rgba(44,44,42,0.1);
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+}
+html{background:var(--cream)}
+body{font-family:var(--fb);background:var(--cream);color:var(--charcoal);max-width:560px;margin:0 auto;min-height:100vh;padding:0 0 60px}
+.intake-header{background:var(--charcoal);padding:28px 28px 24px;text-align:center;position:relative;overflow:hidden}
+.intake-header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.07)' stroke-width='1.2' stroke-linecap='round'%3E%3Cellipse cx='40' cy='80' rx='28' ry='12' transform='rotate(-35 40 80)'/%3E%3Cpath d='M40 80 C44 55 65 48 70 28'/%3E%3Cellipse cx='120' cy='40' rx='22' ry='10' transform='rotate(25 120 40)'/%3E%3Cpath d='M120 40 C125 20 140 16 145 0'/%3E%3C/g%3E%3C/svg%3E")}
+.header-logo{font-family:var(--fd);font-size:22px;font-weight:300;color:var(--cream);letter-spacing:3px;text-transform:uppercase;position:relative;z-index:1}
+.header-logo em{color:var(--sage);font-style:italic}
+.header-title{font-family:var(--fd);font-size:32px;font-weight:300;color:var(--cream);margin-top:10px;position:relative;z-index:1;line-height:1.2}
+.header-sub{font-size:13px;color:rgba(250,248,244,0.5);margin-top:8px;position:relative;z-index:1;line-height:1.6}
+.progress-wrap{background:var(--white);border-bottom:1px solid var(--border);padding:16px 28px;position:sticky;top:0;z-index:100}
+.progress-steps{display:flex;justify-content:space-between;margin-bottom:10px}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.ps-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--beige-mid);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--faint);transition:all .2s}
+.ps-dot.active{border-color:var(--sage-dark);background:var(--sage-dark);color:var(--white)}
+.ps-dot.done{border-color:var(--sage);background:var(--sage);color:var(--white)}
+.ps-label{font-size:9px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);text-align:center;transition:color .2s;line-height:1.3}
+.ps-label.active{color:var(--sage-dark)}
+.progress-bar-track{height:3px;background:var(--beige);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-dark));border-radius:2px;transition:width .35s ease}
+.form-body{padding:24px 20px 0}
+.part{display:none}.part.active{display:block}
+.part-title{font-family:var(--fd);font-size:30px;font-weight:300;color:var(--charcoal);margin-bottom:4px}
+.part-sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.callout{background:var(--gold-light);border:1px solid rgba(184,151,58,0.25);border-radius:10px;padding:14px 16px;margin-bottom:20px}
+.callout-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.callout p{font-size:13px;color:var(--charcoal-light);line-height:1.6;margin:0}
+.callout-sage{background:var(--sage-xlight);border:1px solid rgba(168,184,160,0.3)}
+.callout-sage .callout-label{color:var(--sage-dark)}
+.callout-rose{background:var(--rose-light);border:1px solid rgba(201,120,120,0.2);display:none;margin-top:10px}
+.callout-rose .callout-label{color:var(--rose-dark)}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field-hint{font-size:12px;color:var(--faint);font-style:italic;margin-bottom:6px;line-height:1.5}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--border);border-radius:8px;padding:13px 14px;font-size:15px;font-family:var(--fb);color:var(--charcoal);background:var(--white);outline:none;transition:border-color .15s;-webkit-appearance:none}
+.field input:focus,.field textarea:focus{border-color:var(--sage-dark)}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.option-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.option-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-size:14px;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s;flex-shrink:0}
+.option-btn.sel{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark)}
+.yn-group{display:flex;gap:10px;margin-top:6px}
+.yn-btn{flex:1;padding:11px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-size:15px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s;text-align:center}
+.yn-btn.yes{border-color:var(--rose-dark);background:var(--rose-light);color:var(--rose-dark)}
+.yn-btn.no{border-color:var(--sage);background:var(--sage-xlight);color:var(--sage-dark)}
+.conditional-field{display:none;margin-top:10px}
+.conditional-field.visible{display:block}
+.parq-item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
+.parq-q{font-size:14px;color:var(--charcoal);line-height:1.5;margin-bottom:12px}
+.parq-btns{display:flex;gap:8px}
+.parq-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--cream);font-size:14px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s;text-align:center}
+.parq-btn.yes{border-color:var(--rose-dark);background:var(--rose-light);color:var(--rose-dark)}
+.parq-btn.no{border-color:var(--sage);background:var(--sage-xlight);color:var(--sage-dark)}
+/* Goal sliders */
+.goal-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px;cursor:pointer;transition:all .15s;position:relative}
+.goal-card.sel{border-color:var(--sage-dark);background:var(--sage-xlight)}
+.goal-card.disabled{opacity:0.45;cursor:not-allowed}
+.goal-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--beige-mid);background:var(--white);display:inline-flex;align-items:center;justify-content:center;margin-right:10px;flex-shrink:0;transition:all .15s;font-size:12px}
+.goal-card.sel .goal-check{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--white)}
+.goal-title{font-size:16px;font-weight:500;color:var(--charcoal);display:flex;align-items:center}
+.goal-desc{font-size:13px;color:var(--muted);margin-top:6px;margin-left:32px;line-height:1.5}
+.goal-slider-wrap{margin-top:14px;margin-left:32px;display:none}
+.goal-card.sel .goal-slider-wrap{display:block}
+.goal-slider-label{font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+.goal-slider{width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:var(--beige);outline:none}
+.goal-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--sage-dark);cursor:pointer;box-shadow:0 1px 4px rgba(44,44,42,0.2)}
+.goal-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--sage-dark);cursor:pointer;border:none}
+.goal-slider-val{font-size:13px;font-weight:500;color:var(--sage-dark);text-align:right;margin-top:4px}
+/* Scale */
+.scale-row{display:flex;gap:6px;flex-wrap:wrap}
+.scale-btn{width:42px;height:42px;border-radius:8px;border:1px solid var(--border);background:var(--white);font-size:14px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s;display:flex;align-items:center;justify-content:center}
+.scale-btn.sel{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark)}
+/* Nav */
+.nav-row{display:flex;gap:10px;margin-top:28px;padding-bottom:10px}
+.btn-next{flex:1;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:var(--fb);font-size:16px;font-weight:500;cursor:pointer}
+.btn-back{background:var(--white);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:16px 20px;font-family:var(--fb);font-size:15px;cursor:pointer}
+.btn-submit{flex:1;background:var(--charcoal);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:var(--fb);font-size:16px;font-weight:500;cursor:pointer}
+/* Success */
+.success-screen{display:none;padding:40px 24px;text-align:center}
+.success-icon{font-size:52px;margin-bottom:20px}
+.success-title{font-family:var(--fd);font-size:36px;font-weight:300;color:var(--charcoal);margin-bottom:10px}
+.success-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+.success-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:left}
+.success-card-title{font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.success-card p{font-size:14px;color:var(--charcoal-light);line-height:1.8}
+.req{color:var(--rose-dark);margin-left:2px}
+</style>
+</head>
+<body>
+
+<div class="intake-header">
+  <div class="header-logo">Coached <em>by</em> Dejan</div>
+  <div class="header-title">Klientformulär</div>
+  <div class="header-sub">5 minuter · Allt förblir privat · Det finns inga rätta eller fel svar</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="progress-step"><div class="ps-dot active" id="dot-1">1</div><div class="ps-label active" id="lbl-1">Personligt</div></div>
+    <div class="progress-step"><div class="ps-dot" id="dot-2">2</div><div class="ps-label" id="lbl-2">Hälsa</div></div>
+    <div class="progress-step"><div class="ps-dot" id="dot-3">3</div><div class="ps-label" id="lbl-3">Träning</div></div>
+    <div class="progress-step"><div class="ps-dot" id="dot-4">4</div><div class="ps-label" id="lbl-4">Livsstil</div></div>
+    <div class="progress-step"><div class="ps-dot" id="dot-5">5</div><div class="ps-label" id="lbl-5">Mål</div></div>
+  </div>
+  <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:10%"></div></div>
+</div>
+
+<div class="form-body">
+
+  <!-- PART 1 -->
+  <div class="part active" id="part-1">
+    <div class="part-title">Personlig information</div>
+    <div class="part-sub">Vi börjar med grunderna.</div>
+    <div class="field-row">
+      <div class="field"><label>Förnamn <span class="req">*</span></label><input type="text" id="first-name" placeholder="Förnamn" autocomplete="given-name"></div>
+      <div class="field"><label>Efternamn <span class="req">*</span></label><input type="text" id="last-name" placeholder="Efternamn" autocomplete="family-name"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Ålder <span class="req">*</span></label><input type="number" id="age" placeholder="34" min="16" max="80"></div>
+      <div class="field"><label>E-postadress <span class="req">*</span></label><input type="email" id="email" placeholder="du@email.se" autocomplete="email"></div>
+    </div>
+    <div class="field"><label>WhatsApp-nummer (inklusive landskod)</label><input type="tel" id="whatsapp" placeholder="+46 70 000 00 00" autocomplete="tel"></div>
+    <div class="field-row-3">
+      <div class="field"><label>Nuvarande vikt (kg)</label><input type="number" id="current-weight" placeholder="72" step="0.1"></div>
+      <div class="field"><label>Längd (cm)</label><input type="number" id="height" placeholder="165"></div>
+      <div class="field"><label>Målvikt (kg)</label><input type="number" id="target-weight" placeholder="62" step="0.1"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Midjemått (cm)</label><div class="field-hint">Mät runt den smalaste delen av midjan i avslappnat läge</div><input type="number" id="waist" placeholder="78"></div>
+      <div class="field"><label>Höftmått (cm)</label><div class="field-hint">Mät runt den bredaste delen av höfterna</div><input type="number" id="hips" placeholder="96"></div>
+    </div>
+    <div class="nav-row"><button class="btn-next" onclick="nextPart(1)">Fortsätt →</button></div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="part" id="part-2">
+    <div class="part-title">Hälsa & välmående</div>
+    <div class="part-sub">Viktiga frågor innan vi börjar. Svara gärna ärligt.</div>
+    <div class="callout">
+      <div class="callout-label">PAR-Q · Fysisk aktivitetsberedskap</div>
+      <p>Svara Ja eller Nej på varje fråga.</p>
+    </div>
+    <div id="parq-warning" class="callout callout-rose" style="display:none">
+      <div class="callout-label">Observera</div>
+      <p>Du har svarat Ja på en eller flera frågor. Vi rekommenderar att du talar med din läkare innan du påbörjar ett nytt träningsprogram.</p>
+    </div>
+
+    <div class="parq-item"><div class="parq-q">Har en läkare någon gång sagt att du har hjärtproblem eller högt blodtryck?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(0,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(0,'No',this)">Nej</button></div></div>
+    <div class="parq-item"><div class="parq-q">Känner du ibland smärta eller obehag i bröstet vid vila, vardagliga aktiviteter eller träning?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(1,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(1,'No',this)">Nej</button></div></div>
+    <div class="parq-item"><div class="parq-q">Har du upplevt yrsel, balansproblem eller svimning under de senaste 12 månaderna?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(2,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(2,'No',this)">Nej</button></div></div>
+    <div class="parq-item"><div class="parq-q">Har du problem med leder, rygg, knän, höfter eller skelett som träning kan förvärra?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(3,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(3,'No',this)">Nej</button></div></div>
+    <div class="parq-item"><div class="parq-q">Är du gravid just nu eller har du fött barn under de senaste 6 månaderna?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(4,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(4,'No',this)">Nej</button></div></div>
+    <div class="parq-item"><div class="parq-q">Har du någon medicinsk diagnos eller tar medicin som kan påverka din möjlighet att träna säkert?</div><div class="parq-btns"><button class="parq-btn" onclick="selectParq(5,'Yes',this)">Ja</button><button class="parq-btn" onclick="selectParq(5,'No',this)">Nej</button></div></div>
+
+    <div class="field" style="margin-top:20px">
+      <label>Har du några skador, smärtor eller begränsningar som jag bör känna till?</label>
+      <div class="yn-group">
+        <button class="yn-btn" onclick="toggleConditional('injuries-yn','injuries-field','Yes',this)">Ja</button>
+        <button class="yn-btn" onclick="toggleConditional('injuries-yn','injuries-field','No',this)">Nej</button>
+      </div>
+      <div class="conditional-field" id="injuries-field">
+        <input type="text" id="injuries" placeholder="Beskriv gärna dina skador eller begränsningar">
+      </div>
+    </div>
+
+    <div class="nav-row"><button class="btn-back" onclick="prevPart(2)">← Tillbaka</button><button class="btn-next" onclick="nextPart(2)">Fortsätt →</button></div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="part" id="part-3">
+    <div class="part-title">Träningsbakgrund</div>
+    <div class="part-sub">Berätta om din erfarenhet och hur din träning ser ut idag.</div>
+    <div class="field">
+      <label>Hur skulle du beskriva din nuvarande träningsnivå?</label>
+      <div class="option-group" id="fitness-level">
+        <button class="option-btn" onclick="selectOption('fitness-level',this)">Helt nybörjare</button>
+        <button class="option-btn" onclick="selectOption('fitness-level',this)">Lite erfarenhet</button>
+        <button class="option-btn" onclick="selectOption('fitness-level',this)">Medelnivå</button>
+        <button class="option-btn" onclick="selectOption('fitness-level',this)">Avancerad</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hur många dagar per vecka kan du realistiskt träna?</label>
+      <div class="option-group" id="days-per-week">
+        <button class="option-btn" onclick="selectOption('days-per-week',this)">2 days</button>
+        <button class="option-btn" onclick="selectOption('days-per-week',this)">3 days</button>
+        <button class="option-btn" onclick="selectOption('days-per-week',this)">4 days</button>
+        <button class="option-btn" onclick="selectOption('days-per-week',this)">5 days</button>
+        <button class="option-btn" onclick="selectOption('days-per-week',this)">6+ days</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Föredragen träningslängd</label>
+      <div class="option-group" id="session-length">
+        <button class="option-btn" onclick="selectOption('session-length',this)">30 min</button>
+        <button class="option-btn" onclick="selectOption('session-length',this)">45 min</button>
+        <button class="option-btn" onclick="selectOption('session-length',this)">60 min</button>
+        <button class="option-btn" onclick="selectOption('session-length',this)">75+ min</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Var kommer du främst att träna?</label>
+      <div class="option-group" id="training-location">
+        <button class="option-btn" onclick="selectOption('training-location',this)">Gym</button>
+        <button class="option-btn" onclick="selectOption('training-location',this)">Hemma</button>
+        <button class="option-btn" onclick="selectOption('training-location',this)">Utomhus</button>
+        <button class="option-btn" onclick="selectOption('training-location',this)">Blandat</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Har du följt ett träningsprogram tidigare?</label>
+      <div class="yn-group" id="programme-before">
+        <button class="yn-btn" onclick="selectYN('programme-before',this,'Yes')">Ja</button>
+        <button class="yn-btn" onclick="selectYN('programme-before',this,'No')">Nej</button>
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="prevPart(3)">← Tillbaka</button><button class="btn-next" onclick="nextPart(3)">Fortsätt →</button></div>
+  </div>
+
+  <!-- PART 4 -->
+  <div class="part" id="part-4">
+    <div class="part-title">Kost & livsstil</div>
+    <div class="part-sub">Inga domar — ju mer ärlig du är, desto bättre kan jag hjälpa dig.</div>
+    <div class="field">
+      <label>Hur skulle du beskriva dina nuvarande matvanor?</label>
+      <div class="option-group" id="eating-habits">
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">Ganska balanserade</button>
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">En blandning av bra och mindre bra</button>
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag äter mycket processad mat</button>
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag hoppar ofta över måltider</button>
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag äter sent på kvällen</button>
+        <button class="option-btn" onclick="selectOption('eating-habits',this)">Jag småäter ofta</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Vad känns mest utmanande med kosten just nu?</label>
+      <div class="option-group" id="food-challenge">
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Portionsstorlekar</button>
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Sötsug</button>
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Känsloätande</button>
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Ingen tid att laga mat</button>
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Äter ute för ofta</button>
+        <button class="option-btn" onclick="selectOption('food-challenge',this)">Ingen större utmaning</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Har du några matallergier eller intoleranser?</label>
+      <div class="yn-group">
+        <button class="yn-btn" onclick="toggleConditional('allergies-yn','allergies-field','Yes',this)">Ja</button>
+        <button class="yn-btn" onclick="toggleConditional('allergies-yn','allergies-field','No',this)">Nej</button>
+      </div>
+      <div class="conditional-field" id="allergies-field">
+        <input type="text" id="allergies" placeholder="Beskriv gärna dina allergier eller intoleranser">
+      </div>
+    </div>
+    <div class="field">
+      <label>Följer du någon särskild kosthållning?</label>
+      <div class="option-group" id="diet-type">
+        <button class="option-btn" onclick="selectOption('diet-type',this)">Inga restriktioner</button>
+        <button class="option-btn" onclick="selectOption('diet-type',this)">Vegetarisk</button>
+        <button class="option-btn" onclick="selectOption('diet-type',this)">Vegansk</button>
+        <button class="option-btn" onclick="selectOption('diet-type',this)">Annat</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hur mycket vatten dricker du vanligtvis per dag?</label>
+      <div class="option-group" id="water-intake">
+        <button class="option-btn" onclick="selectOption('water-intake',this)">Mindre än 1L</button>
+        <button class="option-btn" onclick="selectOption('water-intake',this)">1–1.5L</button>
+        <button class="option-btn" onclick="selectOption('water-intake',this)">1.5–2L</button>
+        <button class="option-btn" onclick="selectOption('water-intake',this)">2L+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Genomsnittlig sömn per natt</label>
+      <div class="option-group" id="sleep">
+        <button class="option-btn" onclick="selectOption('sleep',this)">Under 6 timmar</button>
+        <button class="option-btn" onclick="selectOption('sleep',this)">6–7 timmar</button>
+        <button class="option-btn" onclick="selectOption('sleep',this)">7–8 timmar</button>
+        <button class="option-btn" onclick="selectOption('sleep',this)">8+ timmar</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hur skulle du beskriva din stressnivå just nu?</label>
+      <div class="option-group" id="stress">
+        <button class="option-btn" onclick="selectOption('stress',this)">Låg</button>
+        <button class="option-btn" onclick="selectOption('stress',this)">Medel</button>
+        <button class="option-btn" onclick="selectOption('stress',this)">Hög</button>
+        <button class="option-btn" onclick="selectOption('stress',this)">Väldigt hög</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hur ser ditt arbete ut?</label>
+      <div class="option-group" id="job-type">
+        <button class="option-btn" onclick="selectOption('job-type',this)">Mest stillasittande</button>
+        <button class="option-btn" onclick="selectOption('job-type',this)">Blandat</button>
+        <button class="option-btn" onclick="selectOption('job-type',this)">Mest stående och gående</button>
+        <button class="option-btn" onclick="selectOption('job-type',this)">Fysiskt arbete</button>
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn-back" onclick="prevPart(4)">← Tillbaka</button><button class="btn-next" onclick="nextPart(4)">Fortsätt →</button></div>
+  </div>
+
+  <!-- PART 5 -->
+  <div class="part" id="part-5">
+    <div class="part-title">Mål & motivation</div>
+    <div class="part-sub">Välj upp till 2 mål och betygsätt hur viktiga de är för dig.</div>
+
+    <div class="callout callout-sage" style="margin-bottom:18px">
+      <div class="callout-label">Välj upp till 2</div>
+      <p>Välj de mål som betyder mest för dig just nu. Använd reglaget för att visa hur viktigt varje mål är.</p>
+    </div>
+
+    <div class="goal-card" id="goal-0" onclick="toggleGoal(0)">
+      <div class="goal-title"><span class="goal-check">✓</span>Gå ner i vikt & känna dig mer bekväm i din kropp</div>
+      <div class="goal-desc">Fokus på hållbar fettminskning, mer energi och att känna sig lättare i vardagen</div>
+      <div class="goal-slider-wrap">
+        <div class="goal-slider-label"><span>Hur viktigt?</span><span id="gval-0">5</span>/10</div>
+        <input type="range" class="goal-slider" id="gslider-0" min="1" max="10" value="5" oninput="updateSlider(0,this.value)" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div class="goal-card" id="goal-1" onclick="toggleGoal(1)">
+      <div class="goal-title"><span class="goal-check">✓</span>Bygga styrka & känna sig mer tonad</div>
+      <div class="goal-desc">Bygg styrka, forma kroppen och känn dig starkare och mer självsäker</div>
+      <div class="goal-slider-wrap">
+        <div class="goal-slider-label"><span>Hur viktigt?</span><span id="gval-1">5</span>/10</div>
+        <input type="range" class="goal-slider" id="gslider-1" min="1" max="10" value="5" oninput="updateSlider(1,this.value)" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div class="goal-card" id="goal-2" onclick="toggleGoal(2)">
+      <div class="goal-title"><span class="goal-check">✓</span>Förbättra kondition & energinivåer</div>
+      <div class="goal-desc">Förbättra uthållighet, energi och ork i vardagen</div>
+      <div class="goal-slider-wrap">
+        <div class="goal-slider-label"><span>Hur viktigt?</span><span id="gval-2">5</span>/10</div>
+        <input type="range" class="goal-slider" id="gslider-2" min="1" max="10" value="5" oninput="updateSlider(2,this.value)" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div class="goal-card" id="goal-3" onclick="toggleGoal(3)">
+      <div class="goal-title"><span class="goal-check">✓</span>Förbättra rörlighet & känna sig mindre stel</div>
+      <div class="goal-desc">Rör dig friare, förbättra flexibiliteten och hjälp kroppen att må bättre</div>
+      <div class="goal-slider-wrap">
+        <div class="goal-slider-label"><span>Hur viktigt?</span><span id="gval-3">5</span>/10</div>
+        <input type="range" class="goal-slider" id="gslider-3" min="1" max="10" value="5" oninput="updateSlider(3,this.value)" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div class="goal-card" id="goal-4" onclick="toggleGoal(4)">
+      <div class="goal-title"><span class="goal-check">✓</span>Känna sig starkare i vardagen & må bra långsiktigt</div>
+      <div class="goal-desc">Bygg styrka, förbättra hållning och rörelse, och stötta ett hälsosamt åldrande</div>
+      <div class="goal-slider-wrap">
+        <div class="goal-slider-label"><span>Hur viktigt?</span><span id="gval-4">5</span>/10</div>
+        <input type="range" class="goal-slider" id="gslider-4" min="1" max="10" value="5" oninput="updateSlider(4,this.value)" onclick="event.stopPropagation()">
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:20px">
+      <label>Varför är detta mål viktigt för dig?</label>
+      <textarea id="goal-why" placeholder="Vad kommer att förändras i ditt liv när du uppnår det?"></textarea>
+    </div>
+    <div class="field">
+      <label>Vad känner du har hållit dig tillbaka tidigare?</label>
+      <textarea id="obstacles" placeholder="Var ärlig — det hjälper mig att stödja dig bättre"></textarea>
+    </div>
+    <div class="field">
+      <label>Hur redo känner du dig att göra en förändring just nu?</label>
+      <div class="field-hint">1 = inte riktigt redo / 10 = helt redo</div>
+      <div class="scale-row" id="commitment">
+        <button class="scale-btn" onclick="selectScale('commitment',this)">1</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">2</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">3</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">4</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">5</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">6</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">7</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">8</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">9</button>
+        <button class="scale-btn" onclick="selectScale('commitment',this)">10</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Finns det något annat du'd vilja att jag ska veta? <span style="color:var(--faint);font-size:11px;text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+      <textarea id="anything-else" placeholder="Vad som helst..."></textarea>
+    </div>
+
+    <div class="nav-row"><button class="btn-back" onclick="prevPart(5)">← Tillbaka</button><button class="btn-submit" id="submit-btn" onclick="submitForm()">Skicka formulär →</button></div>
+  </div>
+
+</div>
+
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">🌿</div>
+  <div class="success-title">Formulär mottaget</div>
+  <div class="success-sub">Tack för att du tog dig tid att fylla i detta. Dejan kommer att gå igenom dina svar och kontakta dig inom 48 timmar för att boka ett introduktionssamtal.</div>
+  <div class="success-card">
+    <div class="success-card-title">Vad händer nu</div>
+    <p>
+      1. Dejan granskar ditt formulär<br>
+      2. Du får ett meddelande för att boka ett introduktionssamtal<br>
+      3. Under samtalet går vi igenom dina mål och hur appen fungerar<br>
+      4. Ditt personliga program skapas<br>
+      5. Du får dina inloggningsuppgifter och startar din resa
+    </p>
+  </div>
+</div>
+
+<script>
+let currentPart = 1;
+const parqAnswers = {};
+const ynAnswers = {};
+const selectedGoals = new Set();
+const goalSliderValues = {0:5,1:5,2:5,3:5,4:5};
+const goalNames = [
+  'Lose weight & feel more comfortable in your body',
+  'Build strength & feel more toned',
+  'Improve fitness & energy levels',
+  'Improve mobility & feel less stiff',
+  'Feel stronger for everyday life & long-term health'
+];
+
+const progressPct = [10,28,50,72,90];
+const partLabels = ['Personal','Health','Training','Lifestyle','Goals'];
+
+function updateProgress(part){
+  partLabels.forEach((_,i)=>{
+    const n=i+1;
+    const dot=document.getElementById('dot-'+n);
+    const lbl=document.getElementById('lbl-'+n);
+    if(n<part){dot.className='ps-dot done';dot.innerHTML='✓';lbl.className='ps-label';}
+    else if(n===part){dot.className='ps-dot active';dot.textContent=n;lbl.className='ps-label active';}
+    else{dot.className='ps-dot';dot.textContent=n;lbl.className='ps-label';}
+  });
+  document.getElementById('progress-fill').style.width=progressPct[part-1]+'%';
+}
+
+function nextPart(from){
+  if(from===1){
+    const fn=document.getElementById('first-name').value.trim();
+    const em=document.getElementById('email').value.trim();
+    if(!fn||!em){alert('Fyll i ditt förnamn och din e-postadress för att fortsätta.');return;}
+  }
+  if(from===2){
+    const injYN=ynAnswers['injuries-yn'];
+    if(injYN==='Yes'&&!document.getElementById('injuries').value.trim()){
+      alert('Beskriv gärna dina skador eller begränsningar.');return;
+    }
+  }
+  if(from===4){
+    const algYN=ynAnswers['allergies-yn'];
+    if(algYN==='Yes'&&!document.getElementById('allergies').value.trim()){
+      alert('Beskriv dina matallergier eller intoleranser.');return;
+    }
+  }
+  document.getElementById('part-'+from).classList.remove('active');
+  currentPart=from+1;
+  document.getElementById('part-'+currentPart).classList.add('active');
+  updateProgress(currentPart);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function prevPart(from){
+  document.getElementById('part-'+from).classList.remove('active');
+  currentPart=from-1;
+  document.getElementById('part-'+currentPart).classList.add('active');
+  updateProgress(currentPart);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectOption(groupId,btn){
+  document.querySelectorAll('#'+groupId+' .option-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function selectYN(groupId,btn,val){
+  const wrap=document.getElementById(groupId);
+  wrap.querySelectorAll('.yn-btn').forEach(b=>{b.classList.remove('yes','no');});
+  btn.classList.add(val.toLowerCase());
+  ynAnswers[groupId]=val;
+}
+
+function toggleConditional(ynKey,fieldId,val,btn){
+  const siblings=btn.parentElement.querySelectorAll('.yn-btn');
+  siblings.forEach(b=>b.classList.remove('yes','no'));
+  btn.classList.add(val.toLowerCase());
+  ynAnswers[ynKey]=val;
+  const field=document.getElementById(fieldId);
+  if(val==='Yes'){field.classList.add('visible');}
+  else{field.classList.remove('visible');}
+}
+
+function selectParq(idx,answer,btn){
+  btn.parentElement.querySelectorAll('.parq-btn').forEach(b=>b.classList.remove('yes','no'));
+  btn.classList.add(answer.toLowerCase());
+  parqAnswers[idx]=answer;
+  const hasYes=Object.values(parqAnswers).some(v=>v==='Yes');
+  document.getElementById('parq-warning').style.display=hasYes?'block':'none';
+}
+
+function toggleGoal(idx){
+  if(selectedGoals.has(idx)){
+    selectedGoals.delete(idx);
+    document.getElementById('goal-'+idx).classList.remove('sel');
+  } else {
+    if(selectedGoals.size>=2){
+      alert('Du kan välja upp till 2 mål.');return;
+    }
+    selectedGoals.add(idx);
+    document.getElementById('goal-'+idx).classList.add('sel');
+  }
+}
+
+function updateSlider(idx,val){
+  goalSliderValues[idx]=parseInt(val);
+  document.getElementById('gval-'+idx).textContent=val;
+}
+
+function selectScale(groupId,btn){
+  document.querySelectorAll('#'+groupId+' .scale-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function getSelected(groupId){
+  const sel=document.querySelector('#'+groupId+' .sel, #'+groupId+' .option-btn.sel, #'+groupId+' .scale-btn.sel');
+  return sel?sel.textContent.trim():'';
+}
+
+function getYN(key){return ynAnswers[key]||'';}
+
+async function submitForm(){
+  const btn=document.getElementById('submit-btn');
+  if(selectedGoals.size===0){alert('Välj minst ett mål.');return;}
+
+  btn.textContent='Submitting…';btn.disabled=true;
+
+  const goalsText = Array.from(selectedGoals).map(i=>
+    `${goalNames[i]} (importance: ${goalSliderValues[i]}/10)`
+  ).join(' | ');
+
+  const payload = {
+    _subject: '🌿 New intake — '+document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
+    _replyto: document.getElementById('email').value.trim(),
+    '01_Name':           document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
+    '02_Email':          document.getElementById('email').value.trim(),
+    '03_WhatsApp':       document.getElementById('whatsapp').value.trim()||'—',
+    '04_Age':            document.getElementById('age').value||'—',
+    '05_Weight_now':     (document.getElementById('current-weight').value||'—')+' kg',
+    '06_Weight_target':  (document.getElementById('target-weight').value||'—')+' kg',
+    '07_Height':         (document.getElementById('height').value||'—')+' cm',
+    '08_Waist':          (document.getElementById('waist').value||'—')+' cm',
+    '09_Hips':           (document.getElementById('hips').value||'—')+' cm',
+    '10_Heart':          parqAnswers[0]||'—',
+    '11_Chest_pain':     parqAnswers[1]||'—',
+    '12_Dizziness':      parqAnswers[2]||'—',
+    '13_Joints':         parqAnswers[3]||'—',
+    '14_Pregnant':       parqAnswers[4]||'—',
+    '15_Medication':     parqAnswers[5]||'—',
+    '16_Injuries':       getYN('injuries-yn')==='Yes'?(document.getElementById('injuries').value||'—'):'No',
+    '17_Fitness_level':  getSelected('fitness-level')||'—',
+    '18_Days_per_week':  getSelected('days-per-week')||'—',
+    '19_Session_length': getSelected('session-length')||'—',
+    '20_Location':       getSelected('training-location')||'—',
+    '21_Programme_before': getYN('programme-before')||'—',
+    '22_Eating_habits':  getSelected('eating-habits')||'—',
+    '23_Food_challenge': getSelected('food-challenge')||'—',
+    '24_Allergies':      getYN('allergies-yn')==='Yes'?(document.getElementById('allergies').value||'—'):'No',
+    '25_Diet_type':      getSelected('diet-type')||'—',
+    '26_Water':          getSelected('water-intake')||'—',
+    '27_Sleep':          getSelected('sleep')||'—',
+    '28_Stress':         getSelected('stress')||'—',
+    '29_Job_type':       getSelected('job-type')||'—',
+    '30_Goals':          goalsText,
+    '31_Why':            document.getElementById('goal-why').value.trim()||'—',
+    '32_Obstacles':      document.getElementById('obstacles').value.trim()||'—',
+    '33_Commitment':     getSelected('commitment')+'/10',
+    '34_Anything_else':  document.getElementById('anything-else').value.trim()||'—',
+  };
+
+  const res=await fetch('https://formspree.io/f/xvzlnzkd',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(payload)
+  });
+
+  if(!res.ok){
+    btn.textContent='Submit Form →';btn.disabled=false;
+    alert('Något gick fel. Försök igen eller kontakta Dejan direkt.');
+    return;
+  }
+
+  document.getElementById('part-5').classList.remove('active');
+  document.getElementById('success-screen').style.display='block';
+  document.getElementById('progress-fill').style.width='100%';
+  document.querySelectorAll('.ps-dot').forEach(d=>{d.className='ps-dot done';d.innerHTML='✓';});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
