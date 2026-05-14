@@ -57,7 +57,11 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .app-header{background:var(--white);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
 .hdr-logo{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);letter-spacing:2px;white-space:nowrap}
 .hdr-logo em{color:var(--sage-dark);font-style:italic}
-.hdr-avatar{width:36px;height:36px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;color:var(--sage-dark);border:2px solid var(--sage-light);cursor:pointer;flex-shrink:0}
+.hdr-avatar{width:36px;height:36px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;color:var(--sage-dark);border:2px solid var(--sage-light);cursor:pointer;flex-shrink:0;position:relative}
+.logout-popup{position:absolute;top:44px;right:0;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:6px;min-width:130px;box-shadow:0 4px 20px rgba(44,44,42,0.12);z-index:200;display:none}
+.logout-popup.open{display:block}
+.logout-popup-btn{width:100%;padding:10px 14px;border:none;background:none;font-family:var(--fb);font-size:14px;color:var(--rose-dark);cursor:pointer;border-radius:7px;text-align:left}
+.logout-popup-btn:hover{background:var(--rose-light)}
 
 /* FIX: enough bottom padding so WhatsApp button is never hidden */
 .app-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 170px}
@@ -436,7 +440,11 @@ select.ci-inp{cursor:pointer}
 <div id="screen-dashboard" class="screen">
   <div class="app-header">
     <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar">S</div>
+    <div class="hdr-avatar client-avatar" onclick="toggleLogoutPopup(this)">S
+      <div class="logout-popup" onclick="event.stopPropagation()">
+        <button class="logout-popup-btn" onclick="clientLogout()">Sign out</button>
+      </div>
+    </div>
   </div>
   <div class="app-scroll">
     <div class="greet-name">Hej, <em>Sarah</em></div>
@@ -500,7 +508,11 @@ select.ci-inp{cursor:pointer}
 <div id="screen-programme" class="screen">
   <div class="app-header">
     <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar">S</div>
+    <div class="hdr-avatar client-avatar" onclick="toggleLogoutPopup(this)">S
+      <div class="logout-popup" onclick="event.stopPropagation()">
+        <button class="logout-popup-btn" onclick="clientLogout()">Sign out</button>
+      </div>
+    </div>
   </div>
   <div class="app-scroll">
     <div class="prog-header">
@@ -565,7 +577,11 @@ select.ci-inp{cursor:pointer}
 <div id="screen-nutrition" class="screen">
   <div class="app-header">
     <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar">S</div>
+    <div class="hdr-avatar client-avatar" onclick="toggleLogoutPopup(this)">S
+      <div class="logout-popup" onclick="event.stopPropagation()">
+        <button class="logout-popup-btn" onclick="clientLogout()">Sign out</button>
+      </div>
+    </div>
   </div>
   <div class="app-scroll">
     <div class="sec-lbl">Today's Targets</div>
@@ -606,7 +622,11 @@ select.ci-inp{cursor:pointer}
 <div id="screen-progress" class="screen">
   <div class="app-header">
     <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar">S</div>
+    <div class="hdr-avatar client-avatar" onclick="toggleLogoutPopup(this)">S
+      <div class="logout-popup" onclick="event.stopPropagation()">
+        <button class="logout-popup-btn" onclick="clientLogout()">Sign out</button>
+      </div>
+    </div>
   </div>
   <div class="app-scroll">
     <div class="prog-hero">
@@ -664,7 +684,11 @@ select.ci-inp{cursor:pointer}
 <div id="screen-checkin" class="screen">
   <div class="app-header">
     <div class="hdr-logo">Coached <em>by</em> Dejan</div>
-    <div class="hdr-avatar">S</div>
+    <div class="hdr-avatar client-avatar" onclick="toggleLogoutPopup(this)">S
+      <div class="logout-popup" onclick="event.stopPropagation()">
+        <button class="logout-popup-btn" onclick="clientLogout()">Sign out</button>
+      </div>
+    </div>
   </div>
   <div class="app-scroll" id="ci-content">
     <div class="ci-banner">
@@ -1777,6 +1801,30 @@ function tw(el){el.classList.toggle('filled');document.getElementById('water-lbl
 function th(el){el.classList.toggle('done');el.querySelector('.hab-chk').textContent=el.classList.contains('done')?'✓':'';}
 function rb(btn){btn.closest('.r-btns').querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
 function sb(btn){btn.closest('.s-btns').querySelectorAll('.s-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+
+function toggleLogoutPopup(avatarEl){
+  const popup = avatarEl.querySelector('.logout-popup');
+  if(!popup) return;
+  popup.classList.toggle('open');
+  // Close on outside click
+  setTimeout(()=>{
+    document.addEventListener('click', function handler(){
+      popup.classList.remove('open');
+      document.removeEventListener('click', handler);
+    });
+  }, 10);
+}
+
+function clientLogout(){
+  clearSession();
+  activeClientId   = null;
+  activeClientData = null;
+  showScreen('login');
+  const emailEl = document.querySelector('#screen-login input[type="email"]');
+  const passEl  = document.querySelector('#screen-login input[type="password"]');
+  if(emailEl) emailEl.value='';
+  if(passEl)  passEl.value='';
+}
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
