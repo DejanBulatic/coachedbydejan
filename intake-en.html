@@ -435,11 +435,11 @@ const ynAnswers = {};
 const selectedGoals = new Set();
 const goalSliderValues = {0:5,1:5,2:5,3:5,4:5};
 const goalNames = [
-  'Lose weight & feel more comfortable in your body',
-  'Build strength & feel more toned',
-  'Improve fitness & energy levels',
-  'Improve mobility & feel less stiff',
-  'Feel stronger for everyday life & long-term health'
+  'Lose weight and feel more comfortable in your body',
+  'Build strength and feel more toned',
+  'Improve fitness and energy levels',
+  'Improve mobility and feel less stiff',
+  'Feel stronger for everyday life and long-term health'
 ];
 
 const progressPct = [10,28,50,72,90];
@@ -561,7 +561,7 @@ async function submitForm(){
   ).join(' | ');
 
   const payload = {
-    _subject: '🌿 New intake — '+document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
+    _subject: 'New intake - '+document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
     _replyto: document.getElementById('email').value.trim(),
     '01_Name':           document.getElementById('first-name').value.trim()+' '+document.getElementById('last-name').value.trim(),
     '02_Email':          document.getElementById('email').value.trim(),
