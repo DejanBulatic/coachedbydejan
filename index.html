@@ -181,8 +181,8 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .ex-vid{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--sage-dark);padding:8px 14px;background:var(--sage-xlight);border-radius:8px;cursor:pointer;margin-bottom:14px;border:1px solid rgba(168,184,160,0.3);text-decoration:none;font-weight:500}
 
 /* SET LOGGING — generous hit targets for working out */
-.set-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.set-lbl{font-size:14px;font-weight:500;color:var(--muted);min-width:44px}
+.set-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.set-lbl{font-size:13px;font-weight:500;color:var(--muted);min-width:44px;padding-top:18px}
 .set-in{border:1.5px solid var(--border);border-radius:8px;padding:11px 8px;font-size:18px;font-family:var(--fb);color:var(--charcoal);background:var(--white);text-align:center;outline:none;transition:border-color .15s;font-weight:500}
 .set-in:focus{border-color:var(--sage-dark)}
 .set-in.reps{width:64px}
@@ -1199,27 +1199,38 @@ function buildClientSessions(sessions, c){
 
     const exList = card.querySelector('#ex-list-'+key);
     exList.innerHTML = exercises.map((ex, ei) => {
-      const setRows = Array.from({length:3}, (_,si) => `
+      const setsData = (ex.sets_data && ex.sets_data.length > 0)
+        ? ex.sets_data
+        : Array.from({length: ex.sets||3}, () => ({reps: ex.reps||'12', kg: '', rest: ex.rest_seconds||60}));
+
+      const setRows = setsData.map((set, si) => `
         <div class="set-row">
           <span class="set-lbl">Set ${si+1}</span>
-          <input class="set-in reps" type="number" placeholder="reps" min="0" inputmode="numeric">
-          <span class="set-unit">×</span>
-          <input class="set-in wgt" type="number" placeholder="kg" min="0" step="0.5" inputmode="decimal">
-          <span class="set-unit">kg</span>
-          <button class="set-done" onclick="markSet(this)">○</button>
+          <div style="flex:1">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:5px">
+              Aim for <strong>${set.reps||'—'} reps</strong>${set.kg ? ` with <strong>${set.kg}kg</strong>` : ''}, rest for <strong>${set.rest||60} sec</strong>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input class="set-in reps" type="number" placeholder="reps" min="0" inputmode="numeric">
+              <span class="set-unit">×</span>
+              <input class="set-in wgt" type="number" placeholder="kg" min="0" step="0.5" inputmode="decimal">
+              <span class="set-unit">kg</span>
+              <button class="set-done" onclick="markSet(this)">○</button>
+            </div>
+          </div>
         </div>`).join('');
+
+      const totalSets = setsData.length;
+      const headerDetail = `${totalSets} set${totalSets>1?'s':''}`;
+
       return `
         <div class="ex-row" id="ex-${key}-${ei}">
           <div class="ex-main" onclick="toggleEx('${key}',${ei})">
             <div class="ex-num">${ei+1}</div>
             <div class="ex-info">
-            <div class="ex-name">${ex.name||''}</div>
-            <div class="ex-detail">${ex.sets||3} sets${
-              (ex.sets_data && ex.sets_data.length > 0)
-                ? ' · ' + ex.sets_data.map((s,i) => `Set ${i+1}: ${s.reps} reps${s.kg ? ' @ '+s.kg+'kg' : ''} · ${s.rest}s rest`).join(' / ')
-                : ` × ${ex.reps||'12'} reps · ${ex.rest_seconds||60}s rest`
-            }</div>
-          </div>
+              <div class="ex-name">${ex.name||''}</div>
+              <div class="ex-detail">${headerDetail}</div>
+            </div>
             <div class="ex-tog">Log</div>
           </div>
           <div class="ex-logger">
