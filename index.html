@@ -1681,7 +1681,7 @@ async function addSet(exerciseId, si, ei){
   if(listEl){
     const newIdx = setsData.length - 1;
     const div = document.createElement('div');
-    div.style.cssText = 'display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px';
+    div.style.cssText = 'display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px';
     div.innerHTML = `
       <div style="font-size:12px;color:var(--faint);font-weight:500;padding-right:4px;min-width:40px">Set ${newIdx+1}</div>
       <input class="pse-input" type="text" value="${lastSet.reps}" onchange="updateSetData('${exerciseId}',${si},${ei},${newIdx},'reps',this.value)" placeholder="12" style="text-align:center;padding:8px 6px">
