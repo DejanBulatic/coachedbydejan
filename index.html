@@ -1567,24 +1567,24 @@ async function addExercise(sessionId, si){
       const ex = data;
       const div = document.createElement('div');
       div.className = 'ex-editor-row';
-      div.innerHTML = \`
+      div.innerHTML = `
         <div class="ex-editor-name">
-          <input class="pse-input" value="" onchange="updateExercise('\${ex.id}','name',this.value)" placeholder="Exercise name">
-          <button onclick="removeExercise('\${ex.id}',\${si})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
+          <input class="pse-input" value="" onchange="updateExercise('${ex.id}','name',this.value)" placeholder="Exercise name">
+          <button onclick="removeExercise('${ex.id}',${si})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
           <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Sets</div>
-          <input class="pse-input" type="number" min="1" max="20" value="3" onchange="updateExercise('\${ex.id}','sets',parseInt(this.value))" placeholder="3"></div>
+          <input class="pse-input" type="number" min="1" max="20" value="3" onchange="updateExercise('${ex.id}','sets',parseInt(this.value))" placeholder="3"></div>
           <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Reps</div>
-          <input class="pse-input" value="12" onchange="updateExercise('\${ex.id}','reps',this.value)" placeholder="12"></div>
+          <input class="pse-input" value="12" onchange="updateExercise('${ex.id}','reps',this.value)" placeholder="12"></div>
           <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Rest (sec)</div>
-          <input class="pse-input" type="number" min="0" value="60" onchange="updateExercise('\${ex.id}','rest_seconds',parseInt(this.value))" placeholder="60"></div>
+          <input class="pse-input" type="number" min="0" value="60" onchange="updateExercise('${ex.id}','rest_seconds',parseInt(this.value))" placeholder="60"></div>
         </div>
-        <input class="pse-input" value="" onchange="updateExercise('\${ex.id}','video_url',this.value)" placeholder="YouTube URL" style="margin-bottom:0">
-      \`;
+        <input class="pse-input" value="" onchange="updateExercise('${ex.id}','video_url',this.value)" placeholder="YouTube URL" style="margin-bottom:0">
+      `;
       exContainer.appendChild(div);
       // Update session meta count
-      const metaEl = document.querySelector('#pse-\${si} .pse-meta');
+      const metaEl = document.querySelector(`#pse-${si} .pse-meta`);
       if(metaEl) metaEl.textContent = (activeClientData.sessions[si].exercises.length) + ' exercises · ' + (activeClientData.sessions[si].duration||45) + ' min';
     }
   }
