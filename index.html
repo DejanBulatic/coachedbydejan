@@ -771,8 +771,15 @@ select.ci-inp{cursor:pointer}
         </div>
       </div>
       <div class="coach-card">
-        <div class="coach-sec-lbl">Client Info</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="cd-info-grid"></div>
+        <div class="coach-sec-lbl">Login Credentials</div>
+        <div class="pse-field"><label>Email</label><input class="pse-input" id="cd-cred-email" style="background:var(--cream)" readonly></div>
+        <div class="pse-field" style="margin-bottom:8px"><label>Password</label>
+          <div style="display:flex;gap:8px">
+            <input class="pse-input" id="cd-cred-password" type="text" placeholder="New password" autocapitalize="none" autocorrect="off" spellcheck="false">
+            <button onclick="savePassword()" style="background:var(--sage-dark);color:var(--white);border:none;border-radius:8px;padding:10px 16px;font-family:var(--fb);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap">Save</button>
+          </div>
+          <span id="pwd-saved-msg" style="font-size:13px;color:var(--sage-dark);opacity:0;transition:opacity .3s;margin-top:6px;display:block">✓ Password updated</span>
+        </div>
       </div>
       <div class="coach-card" style="border-color:rgba(201,120,120,0.2)">
         <div class="coach-sec-lbl" style="color:var(--rose)">Danger Zone</div>
@@ -1379,8 +1386,11 @@ async function openClientDetail(clientId){
   const noteEl = document.getElementById('cd-note-editor');
   if(noteEl) noteEl.value = c.coach_note || '';
 
-  // Info grid
-  const grid = document.getElementById('cd-info-grid');
+  // Credentials
+  const credEmail = document.getElementById('cd-cred-email');
+  const credPwd   = document.getElementById('cd-cred-password');
+  if(credEmail) credEmail.value = c.email || '';
+  if(credPwd)   credPwd.value   = c.password || '';
   if(grid) grid.innerHTML = [
     ['Email', c.email||'—'], ['Status', c.status||'—'],
     ['Launch Date', c.launch_date||'—'], ['Programme', c.programme_name||'—'],
@@ -1415,6 +1425,16 @@ function switchCDTab(tab, el){
   });
   document.querySelectorAll('.cd-tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
+}
+
+async function savePassword(){
+  if(!activeClientId) return;
+  const pwd = document.getElementById('cd-cred-password').value.trim();
+  if(!pwd){ alert('Please enter a new password.'); return; }
+  await SB.patch('clients', {id: activeClientId}, { password: pwd });
+  if(activeClientData) activeClientData.password = pwd;
+  const msg = document.getElementById('pwd-saved-msg');
+  if(msg){ msg.style.opacity='1'; setTimeout(()=>msg.style.opacity='0', 2000); }
 }
 
 async function saveCoachNote(){
