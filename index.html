@@ -1638,7 +1638,17 @@ async function addExercise(sessionId, si){
 async function removeExercise(exerciseId, si){
   await SB.delete('exercises', {id: exerciseId});
   activeClientData.sessions[si].exercises = activeClientData.sessions[si].exercises.filter(e => e.id !== exerciseId);
-  renderSessionEditors(activeClientData);
+  // Remove just the exercise row without closing the session
+  const exContainer = document.getElementById('pse-ex-'+si);
+  if(exContainer){
+    const rows = exContainer.querySelectorAll('.ex-editor-row');
+    rows.forEach(row => {
+      const btn = row.querySelector('button[onclick*="' + exerciseId + '"]');
+      if(btn) row.remove();
+    });
+  }
+  const metaEl = document.querySelector('#pse-'+si+' .pse-meta');
+  if(metaEl) metaEl.textContent = activeClientData.sessions[si].exercises.length + ' exercises · ' + (activeClientData.sessions[si].duration||45) + ' min';
 }
 
 async function updateSetData(exerciseId, si, ei, sIdx, field, value){
@@ -1690,7 +1700,10 @@ async function removeSet(exerciseId, si, ei){
   const countEl = document.getElementById(`set-count-${si}-${ei}`);
   if(countEl) countEl.textContent = setsData.length;
   const listEl = document.getElementById(`sets-list-${si}-${ei}`);
-  if(listEl && listEl.lastChild) listEl.removeChild(listEl.lastChild);
+  if(listEl){
+    const rows = listEl.querySelectorAll('div[style*="grid-template-columns"]');
+    if(rows.length > 0) rows[rows.length - 1].remove();
+  }
 }
 
 async function updateExercise(exerciseId, field, value){
