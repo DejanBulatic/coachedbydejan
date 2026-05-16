@@ -745,7 +745,7 @@ select.ci-inp{cursor:pointer}
       <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="13,4 7,10 13,16"/></svg>
       All Clients
     </div>
-    <div class="cd-hero" id="cd-hero">
+    <div class="cd-hero" id="cd-hero" style="background:linear-gradient(145deg,#2A3328,#1E2820)">
       <div class="cd-hero-name" id="cd-name">—</div>
       <div class="cd-hero-prog" id="cd-prog">—</div>
       <div class="cd-hero-stats">
@@ -960,7 +960,11 @@ function clearSession(){
 }
 async function restoreSession(){
   const role = sessionStorage.getItem('cbd_session');
-  if(role === 'coach'){ showCoachDash(); return; }
+  if(role === 'coach'){
+    const lastClient = sessionStorage.getItem('cbd_active_client');
+    if(lastClient){ await openClientDetail(lastClient); return; }
+    showCoachDash(); return;
+  }
   if(role === 'client'){
     const id = sessionStorage.getItem('cbd_client_id');
     if(id) await loadClientDashboard(id);
@@ -1201,7 +1205,7 @@ function buildClientSessions(sessions, c){
         <div class="ex-row" id="ex-${key}-${ei}">
           <div class="ex-main" onclick="toggleEx('${key}',${ei})">
             <div class="ex-num">${ei+1}</div>
-            <div class="ex-info"><div class="ex-name">${ex.name||''}</div><div class="ex-detail">${ex.detail||''}</div></div>
+            <div class="ex-info"><div class="ex-name">${ex.name||''}</div><div class="ex-detail">${ex.sets||3} sets × ${ex.reps||'12'} reps · ${ex.rest_seconds ? Math.floor(ex.rest_seconds/60)+'m '+(ex.rest_seconds%60||'')+'s rest' : '60s rest'}</div></div>
             <div class="ex-tog">Log</div>
           </div>
           <div class="ex-logger">
@@ -1257,6 +1261,7 @@ async function submitCI(){
 
 // ── COACH DASHBOARD ───────────────────────────────
 function showCoachDash(){
+  sessionStorage.removeItem('cbd_active_client');
   showScreen('coach');
   renderCoachDash();
 }
@@ -1344,6 +1349,7 @@ async function renderCoachDash(){
 // ── CLIENT DETAIL ─────────────────────────────────
 async function openClientDetail(clientId){
   activeClientId = clientId;
+  sessionStorage.setItem('cbd_active_client', clientId);
   showScreen('client-detail');
 
   const c = await SB.get('clients', {id: clientId}, {select:'*', single:true});
@@ -1494,14 +1500,20 @@ function renderSessionEditors(c){
                     <input class="pse-input" value="${ex.name||''}" onchange="updateExercise('${ex.id}','name',this.value)" placeholder="Exercise name">
                     <button onclick="removeExercise('${ex.id}',${si})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
                   </div>
-                  <div class="ex-editor-detail">
-                    <input class="pse-input" value="${ex.detail||''}" onchange="updateExercise('${ex.id}','detail',this.value)" placeholder="3 × 12 · 90 sec rest">
-                    <input class="pse-input" value="${ex.video_url||''}" onchange="updateExercise('${ex.id}','video_url',this.value)" placeholder="YouTube URL">
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+                    <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Sets</div>
+                    <input class="pse-input" type="number" min="1" max="20" value="${ex.sets||3}" onchange="updateExercise('${ex.id}','sets',parseInt(this.value))" placeholder="3"></div>
+                    <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Reps</div>
+                    <input class="pse-input" value="${ex.reps||'12'}" onchange="updateExercise('${ex.id}','reps',this.value)" placeholder="12"></div>
+                    <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Rest (sec)</div>
+                    <input class="pse-input" type="number" min="0" value="${ex.rest_seconds||60}" onchange="updateExercise('${ex.id}','rest_seconds',parseInt(this.value))" placeholder="60"></div>
                   </div>
+                  <input class="pse-input" value="${ex.video_url||''}" onchange="updateExercise('${ex.id}','video_url',this.value)" placeholder="YouTube URL" style="margin-bottom:0">
                 </div>`).join('')}
             </div>
             <button onclick="addExercise('${s.id}',${si})" style="background:var(--sage-xlight);border:1px solid rgba(168,184,160,0.3);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--sage-dark);font-family:var(--fb);font-weight:500;cursor:pointer;width:100%;margin-top:4px">+ Add Exercise</button>
           </div>
+          <button onclick="removeSession('${s.id}',${si})" style="background:none;border:1px solid var(--border);color:var(--rose-dark);border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:var(--fb);width:100%;margin-top:4px">🗑 Delete Session</button>
         </div>
       </div>
     </div>`;
@@ -1545,11 +1557,36 @@ async function removeSession(sessionId, si){
 async function addExercise(sessionId, si){
   const maxOrder = (activeClientData.sessions[si]?.exercises||[]).length;
   const { data } = await SB.post('exercises', {
-    session_id: sessionId, name: '', detail: '', video_url: '', sort_order: maxOrder
+    session_id: sessionId, name: '', detail: '', video_url: '', sets: 3, reps: '12', rest_seconds: 60, sort_order: maxOrder
   });
   if(data){
     activeClientData.sessions[si].exercises = [...(activeClientData.sessions[si].exercises||[]), data];
-    renderSessionEditors(activeClientData);
+    // Append new exercise row without closing session
+    const exContainer = document.getElementById('pse-ex-'+si);
+    if(exContainer){
+      const ex = data;
+      const div = document.createElement('div');
+      div.className = 'ex-editor-row';
+      div.innerHTML = \`
+        <div class="ex-editor-name">
+          <input class="pse-input" value="" onchange="updateExercise('\${ex.id}','name',this.value)" placeholder="Exercise name">
+          <button onclick="removeExercise('\${ex.id}',\${si})" style="background:var(--rose-light);border:1px solid rgba(238,159,159,0.3);border-radius:6px;padding:8px 10px;color:var(--rose-dark);cursor:pointer;font-size:12px;white-space:nowrap">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+          <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Sets</div>
+          <input class="pse-input" type="number" min="1" max="20" value="3" onchange="updateExercise('\${ex.id}','sets',parseInt(this.value))" placeholder="3"></div>
+          <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Reps</div>
+          <input class="pse-input" value="12" onchange="updateExercise('\${ex.id}','reps',this.value)" placeholder="12"></div>
+          <div><div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Rest (sec)</div>
+          <input class="pse-input" type="number" min="0" value="60" onchange="updateExercise('\${ex.id}','rest_seconds',parseInt(this.value))" placeholder="60"></div>
+        </div>
+        <input class="pse-input" value="" onchange="updateExercise('\${ex.id}','video_url',this.value)" placeholder="YouTube URL" style="margin-bottom:0">
+      \`;
+      exContainer.appendChild(div);
+      // Update session meta count
+      const metaEl = document.querySelector('#pse-\${si} .pse-meta');
+      if(metaEl) metaEl.textContent = (activeClientData.sessions[si].exercises.length) + ' exercises · ' + (activeClientData.sessions[si].duration||45) + ' min';
+    }
   }
 }
 
