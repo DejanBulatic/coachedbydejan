@@ -1209,7 +1209,7 @@ function buildClientSessions(sessions, c){
             <div class="ex-name">${ex.name||''}</div>
             <div class="ex-detail">${ex.sets||3} sets${
               (ex.sets_data && ex.sets_data.length > 0)
-                ? ' · ' + ex.sets_data.map((s,i) => `Set ${i+1}: ${s.reps} reps · ${s.rest}s rest`).join(' / ')
+                ? ' · ' + ex.sets_data.map((s,i) => `Set ${i+1}: ${s.reps} reps${s.kg ? ' @ '+s.kg+'kg' : ''} · ${s.rest}s rest`).join(' / ')
                 : ` × ${ex.reps||'12'} reps · ${ex.rest_seconds||60}s rest`
             }</div>
           </div>
@@ -1527,9 +1527,10 @@ function renderSessionEditors(c){
                     </div>
                     <div id="sets-list-${si}-${ei}">
                       ${setsData.map((set, sIdx) => `
-                      <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
+                      <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
                         <div style="font-size:12px;color:var(--faint);font-weight:500;padding-right:4px;min-width:40px">Set ${sIdx+1}</div>
                         <input class="pse-input" type="text" value="${set.reps||'12'}" onchange="updateSetData('${ex.id}',${si},${ei},${sIdx},'reps',this.value)" placeholder="12" style="text-align:center;padding:8px 6px">
+                        <input class="pse-input" type="number" value="${set.kg||''}" onchange="updateSetData('${ex.id}',${si},${ei},${sIdx},'kg',this.value)" placeholder="kg" step="0.5" style="text-align:center;padding:8px 6px">
                         <input class="pse-input" type="number" value="${set.rest||60}" onchange="updateSetData('${ex.id}',${si},${ei},${sIdx},'rest',parseInt(this.value))" placeholder="60" style="text-align:center;padding:8px 6px">
                       </div>`).join('')}
                     </div>
@@ -1611,16 +1612,18 @@ async function addExercise(sessionId, si){
               <button onclick="addSet('${ex.id}',${si},${newIdx})" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--sage);background:var(--sage-xlight);font-size:16px;cursor:pointer;color:var(--sage-dark);display:flex;align-items:center;justify-content:center">+</button>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
+          <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
             <div style="min-width:40px"></div>
             <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);text-align:center">Reps</div>
+            <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);text-align:center">Kg</div>
             <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);text-align:center">Rest (sec)</div>
           </div>
           <div id="sets-list-${si}-${newIdx}">
             ${[1,2,3].map(n => `
-            <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
+            <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:4px;align-items:center;margin-bottom:4px">
               <div style="font-size:12px;color:var(--faint);font-weight:500;padding-right:4px;min-width:40px">Set ${n}</div>
               <input class="pse-input" type="text" value="12" onchange="updateSetData('${ex.id}',${si},${newIdx},${n-1},'reps',this.value)" placeholder="12" style="text-align:center;padding:8px 6px">
+              <input class="pse-input" type="number" value="" onchange="updateSetData('${ex.id}',${si},${newIdx},${n-1},'kg',this.value)" placeholder="kg" step="0.5" style="text-align:center;padding:8px 6px">
               <input class="pse-input" type="number" value="60" onchange="updateSetData('${ex.id}',${si},${newIdx},${n-1},'rest',parseInt(this.value))" placeholder="60" style="text-align:center;padding:8px 6px">
             </div>`).join('')}
           </div>
@@ -1682,6 +1685,7 @@ async function addSet(exerciseId, si, ei){
     div.innerHTML = `
       <div style="font-size:12px;color:var(--faint);font-weight:500;padding-right:4px;min-width:40px">Set ${newIdx+1}</div>
       <input class="pse-input" type="text" value="${lastSet.reps}" onchange="updateSetData('${exerciseId}',${si},${ei},${newIdx},'reps',this.value)" placeholder="12" style="text-align:center;padding:8px 6px">
+      <input class="pse-input" type="number" value="${lastSet.kg||''}" onchange="updateSetData('${exerciseId}',${si},${ei},${newIdx},'kg',this.value)" placeholder="kg" step="0.5" style="text-align:center;padding:8px 6px">
       <input class="pse-input" type="number" value="${lastSet.rest}" onchange="updateSetData('${exerciseId}',${si},${ei},${newIdx},'rest',parseInt(this.value))" placeholder="60" style="text-align:center;padding:8px 6px">`;
     listEl.appendChild(div);
   }
