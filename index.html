@@ -792,6 +792,7 @@ select.ci-inp{cursor:pointer}
       <div class="cd-tab" onclick="switchCDTab('programme',this)">Programme</div>
       <div class="cd-tab" onclick="switchCDTab('checkins',this)">Check-ins</div>
       <div class="cd-tab" onclick="switchCDTab('nutrition',this)">Nutrition</div>
+      <div class="cd-tab" onclick="switchCDTab('logs',this)">Workout Logs</div>
     </div>
     <!-- OVERVIEW TAB -->
     <div id="cd-tab-overview">
@@ -842,6 +843,11 @@ select.ci-inp{cursor:pointer}
     <div id="cd-tab-checkins" style="display:none">
       <div id="cd-checkins-list"></div>
     </div>
+    <!-- WORKOUT LOGS TAB -->
+    <div id="cd-tab-logs" style="display:none">
+      <div id="cd-logs-list"><div class="no-checkins">🌿<br><br>No sessions logged yet.</div></div>
+    </div>
+
     <!-- NUTRITION TAB -->
     <div id="cd-tab-nutrition" style="display:none">
       <div class="coach-card">
@@ -1266,7 +1272,7 @@ function buildClientSessions(sessions, c){
       </div>
       <div class="sess-body">
         <div id="ex-list-${key}"></div>
-        <button class="btn-complete">Mark Session Complete ✓</button>
+        <button class="btn-complete" onclick="completeSession(this,'${s.id}','${s.name||'Session '+(i+1)}','${key}')">Mark Session Complete ✓</button>
       </div>`;
     content.appendChild(card);
 
@@ -1507,13 +1513,46 @@ async function openClientDetail(clientId){
 }
 
 function switchCDTab(tab, el){
-  ['overview','programme','checkins','nutrition'].forEach(t=>{
+  ['overview','programme','checkins','nutrition','logs'].forEach(t=>{
     const tabEl = document.getElementById('cd-tab-'+t);
     if(tabEl) tabEl.style.display = (t===tab) ? 'block' : 'none';
   });
   document.querySelectorAll('.cd-tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
   if(tab === 'checkins' && activeClientId) loadAndRenderCheckins();
+  if(tab === 'logs' && activeClientId) loadAndRenderWorkoutLogs();
+}
+
+async function loadAndRenderWorkoutLogs(){
+  const container = document.getElementById('cd-logs-list');
+  if(!container) return;
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:14px">Loading…</div>';
+
+  const logs = await SB.get('workout_logs', {client_id: activeClientId}, {select:'*', order:'logged_at.desc'});
+
+  if(!logs || logs.length === 0){
+    container.innerHTML = '<div class="no-checkins">🌿<br><br>No sessions logged yet.</div>';
+    return;
+  }
+
+  container.innerHTML = logs.map(log => `
+    <div class="ci-response-card" style="margin-bottom:10px">
+      <div class="ci-resp-hdr">
+        <div class="ci-resp-week">${log.session_name||'Session'} — Week ${log.week||'—'}</div>
+        <div class="ci-resp-date">${log.logged_at ? new Date(log.logged_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : ''}</div>
+      </div>
+      ${(log.exercises||[]).map(ex => `
+        <div style="margin-bottom:12px">
+          <div style="font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:6px">${ex.name}</div>
+          ${(ex.sets||[]).map(s => `
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border-soft);font-size:13px">
+              <span style="color:var(--faint);min-width:44px">Set ${s.set}</span>
+              <span style="color:var(--charcoal);font-weight:500">${s.reps||'—'} reps</span>
+              ${s.kg ? `<span style="color:var(--muted)">@ ${s.kg} kg</span>` : ''}
+              ${s.completed ? '<span style="color:var(--sage-dark);margin-left:auto">✓</span>' : '<span style="color:var(--faint);margin-left:auto">—</span>'}
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`).join('');
 }
 
 async function loadAndRenderCheckins(){
@@ -2284,6 +2323,39 @@ function toggleEx(k,i){
   document.querySelectorAll('.ex-row').forEach(r=>r.classList.remove('log-open'));
   if(!was)row.classList.add('log-open');
 }
+async function completeSession(btn, sessionId, sessionName, key){
+  const card = document.getElementById('sess-'+key);
+  if(!card) return;
+
+  const exercises = [];
+  card.querySelectorAll('.ex-row').forEach(exRow => {
+    const name = exRow.querySelector('.ex-name')?.textContent || '';
+    const sets = [];
+    exRow.querySelectorAll('.set-row').forEach((setRow, si) => {
+      const reps = setRow.querySelector('.set-in.reps')?.value || '';
+      const kg   = setRow.querySelector('.set-in.wgt')?.value  || '';
+      const done = setRow.querySelector('.set-done')?.classList.contains('done') || false;
+      sets.push({ set: si+1, reps, kg, completed: done });
+    });
+    if(name) exercises.push({ name, sets });
+  });
+
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  await SB.post('workout_logs', {
+    client_id:    activeClientId,
+    session_id:   sessionId,
+    session_name: sessionName,
+    week:         activeClientData?.current_week || 1,
+    exercises,
+  });
+
+  btn.textContent = 'Session Complete ✓';
+  btn.style.background = 'var(--sage)';
+  btn.disabled = true;
+}
+
 function markSet(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'○';}
 function toggleSess(id){document.getElementById(id).classList.toggle('open');}
 function tw(el){el.classList.toggle('filled');document.getElementById('water-lbl').textContent=document.querySelectorAll('.wg.filled').length+' / 8';}
