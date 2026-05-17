@@ -1265,11 +1265,15 @@ async function submitCI(){
   if(energyBtn) answers['Energy level'] = energyBtn.textContent;
 
   if(activeClientId){
-    await SB.post('checkins', {
+    const { data, error } = await SB.post('checkins', {
       client_id: activeClientId,
       week: activeClientData?.current_week || 1,
       answers,
     });
+    if(error){
+      alert('Could not save check-in: ' + error);
+      return;
+    }
   }
 
   document.getElementById('ci-content').innerHTML = `
