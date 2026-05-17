@@ -1870,13 +1870,15 @@ async function saveCIReply(checkinId, btn){
     : (ci?.coach_reply ? [{text: ci.coach_reply, sent_at: new Date().toISOString()}] : []);
   replies.push({ text: reply, sent_at: new Date().toISOString() });
 
+  const now = new Date().toISOString();
   await SB.patch('checkins', {id: checkinId}, {
     coach_replies: replies,
-    coach_reply: reply
+    coach_reply: reply,
+    last_reply_at: now
   });
 
-  // Update local data
-  if(ci){ ci.coach_replies = replies; ci.coach_reply = reply; }
+  // Update local data including last_reply_at so client re-render works
+  if(ci){ ci.coach_replies = replies; ci.coach_reply = reply; ci.last_reply_at = now; }
 
   btn.textContent='Send Reply'; btn.disabled=false;
   textarea.value = '';
@@ -2107,10 +2109,27 @@ function renderCoachReplies(checkins){
   if(withReplies.length === 0){ section.innerHTML = ''; if(readSection) readSection.innerHTML = ''; return; }
 
   const readKey = 'cbd_read_replies_' + (activeClientId||'');
-  const readIds = JSON.parse(localStorage.getItem(readKey)||'[]');
+  let readData = {};
+  try {
+    const stored = JSON.parse(localStorage.getItem(readKey)||'{}');
+    // Handle old format (array) — migrate to object
+    if(Array.isArray(stored)){
+      stored.forEach(id => { readData[id] = '2000-01-01T00:00:00.000Z'; }); // old reads set to old date
+      localStorage.setItem(readKey, JSON.stringify(readData));
+    } else {
+      readData = stored;
+    }
+  } catch(e){ readData = {}; }
 
-  const unread = withReplies.filter(ci => !readIds.includes(ci.id));
-  const read   = withReplies.filter(ci =>  readIds.includes(ci.id));
+  function isRead(ci){
+    const markedAt = readData[ci.id];
+    if(!markedAt) return false;
+    if(ci.last_reply_at && new Date(ci.last_reply_at) > new Date(markedAt)) return false;
+    return true;
+  }
+
+  const unread = withReplies.filter(ci => !isRead(ci));
+  const read   = withReplies.filter(ci =>  isRead(ci));
 
   function repliesHTML(ci){
     const replies = (ci.coach_replies && ci.coach_replies.length > 0)
@@ -2177,10 +2196,9 @@ function toggleReadReplies(){
 function markReplyRead(id, checked){
   if(!checked) return;
   const readKey = 'cbd_read_replies_' + (activeClientId||'');
-  const readIds = JSON.parse(localStorage.getItem(readKey)||'[]');
-  if(!readIds.includes(id)) readIds.push(id);
-  localStorage.setItem(readKey, JSON.stringify(readIds));
-  // Re-render to move message to read section
+  const readData = JSON.parse(localStorage.getItem(readKey)||'{}');
+  readData[id] = new Date().toISOString();
+  localStorage.setItem(readKey, JSON.stringify(readData));
   renderCoachReplies(activeClientData?.checkins||[]);
 }
 
