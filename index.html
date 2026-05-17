@@ -1821,19 +1821,53 @@ function renderCheckins(c){
       </div>
       ${Object.entries(ci.answers||{}).map(([q,a])=>`
         <div class="ci-resp-row"><div class="ci-resp-q">${q}</div><div class="ci-resp-a">${a}</div></div>`).join('')}
-      <div class="ci-reply-area">
-        <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
-        <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coach_reply||''}</textarea>
-        <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Save Reply</button>
+      <div class="ci-reply-area" id="reply-area-${ci.id}">
+        ${ci.coach_reply
+          ? `<div id="reply-sent-${ci.id}">
+               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px">✓ Reply sent</div>
+               <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic">"${ci.coach_reply}"</div>
+               <button onclick="editReply('${ci.id}')" style="margin-top:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
+             </div>
+             <div id="reply-edit-${ci.id}" style="display:none">
+               <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coach_reply}</textarea>
+               <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
+             </div>`
+          : `<div id="reply-sent-${ci.id}" style="display:none">
+               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px">✓ Reply sent</div>
+               <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic" id="reply-text-${ci.id}"></div>
+               <button onclick="editReply('${ci.id}')" style="margin-top:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
+             </div>
+             <div id="reply-edit-${ci.id}">
+               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
+               <textarea class="ci-reply-inp" placeholder="Write your coaching response…"></textarea>
+               <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
+             </div>`
+        }
       </div>
     </div>`).join('');
 }
 
 async function saveCIReply(checkinId, btn){
   const textarea = btn.previousElementSibling;
-  await SB.patch('checkins', {id: checkinId}, { coach_reply: textarea.value });
-  btn.textContent='Saved ✓'; btn.style.background='var(--sage)';
-  setTimeout(()=>{ btn.textContent='Save Reply'; btn.style.background=''; }, 2000);
+  const reply = textarea.value.trim();
+  if(!reply) return;
+  btn.textContent='Sending…'; btn.disabled=true;
+  await SB.patch('checkins', {id: checkinId}, { coach_reply: reply });
+  // Show sent state
+  const sentEl = document.getElementById('reply-sent-'+checkinId);
+  const editEl = document.getElementById('reply-edit-'+checkinId);
+  const textEl = document.getElementById('reply-text-'+checkinId);
+  if(textEl) textEl.textContent = '"'+reply+'"';
+  if(sentEl) sentEl.style.display = 'block';
+  if(editEl) editEl.style.display = 'none';
+  btn.textContent='Send Reply'; btn.disabled=false;
+}
+
+function editReply(checkinId){
+  const sentEl = document.getElementById('reply-sent-'+checkinId);
+  const editEl = document.getElementById('reply-edit-'+checkinId);
+  if(sentEl) sentEl.style.display = 'none';
+  if(editEl){ editEl.style.display = 'block'; editEl.querySelector('textarea')?.focus(); }
 }
 
 // ── ADD CLIENT MODAL ──────────────────────────────
