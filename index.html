@@ -1254,7 +1254,6 @@ function buildClientSessions(sessions, c){
 
 // Check-in submission
 async function submitCI(){
-  console.log('submitCI called, activeClientId:', activeClientId, 'activeClientData:', activeClientData?.name);
   const answers = {};
   document.querySelectorAll('#ci-content .ci-inp, #ci-content input, #ci-content textarea, #ci-content select').forEach(el => {
     const lbl = el.closest('.ci-q')?.querySelector('.ci-lbl')?.textContent;
@@ -1441,6 +1440,13 @@ function switchCDTab(tab, el){
   });
   document.querySelectorAll('.cd-tab').forEach(t=>t.classList.remove('active'));
   if(el) el.classList.add('active');
+  if(tab === 'checkins' && activeClientId) loadAndRenderCheckins();
+}
+
+async function loadAndRenderCheckins(){
+  const checkins = await SB.get('checkins', {client_id: activeClientId}, {select:'*', order:'submitted_at.desc'});
+  if(activeClientData) activeClientData.checkins = checkins || [];
+  renderCheckins(activeClientData);
 }
 
 async function savePassword(){
