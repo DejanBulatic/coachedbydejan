@@ -2037,7 +2037,7 @@ function renderCoachReplies(checkins){
   const unread = withReplies.filter(ci => !readIds.includes(ci.id));
   const read   = withReplies.filter(ci =>  readIds.includes(ci.id));
 
-  function replyCard(ci, isOpen){
+  function replyCard(ci, isOpen, isRead=false){
     return `
     <div class="coach-reply-card ${isOpen?'cr-open':''}" id="cr-${ci.id}">
       <div class="cr-header" onclick="toggleReply('${ci.id}')">
@@ -2050,10 +2050,13 @@ function renderCoachReplies(checkins){
       </div>
       <div class="cr-body">
         <div class="cr-text">"${ci.coach_reply}"</div>
-        <div class="cr-read-wrap">
-          <input type="checkbox" id="read-${ci.id}" onchange="markReplyRead('${ci.id}',this.checked)">
-          <label for="read-${ci.id}">I've read this message</label>
-        </div>
+        ${isRead
+          ? `<div style="font-size:12px;color:var(--faint);padding-top:10px;border-top:1px solid var(--border-soft)">✓ I've read this message</div>`
+          : `<div class="cr-read-wrap">
+              <input type="checkbox" id="read-${ci.id}" onchange="markReplyRead('${ci.id}',this.checked)">
+              <label for="read-${ci.id}">I've read this message</label>
+            </div>`
+        }
       </div>
     </div>`;
   }
@@ -2071,7 +2074,7 @@ function renderCoachReplies(checkins){
           Previous messages (${read.length})
         </div>
         <div class="read-replies-list">
-          ${read.map(ci => replyCard(ci, false)).join('')}
+          ${read.map(ci => replyCard(ci, false, true)).join('')}
         </div>
       </div>`;
   }
