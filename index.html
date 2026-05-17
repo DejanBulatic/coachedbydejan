@@ -88,7 +88,7 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 /* Square avatar — bigger */
 .quote-avatar{width:80px;height:110px;border-radius:10px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:26px;color:var(--white);flex-shrink:0;border:2px solid rgba(255,255,255,0.28)}
 .quote-avatar img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-.quote-text{font-family:var(--fd);font-size:20px;font-weight:300;font-style:italic;color:var(--white);line-height:1.5;text-shadow:0 1px 10px rgba(0,0,0,0.4);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.quote-text{font-family:var(--fd);font-size:20px;font-weight:300;font-style:italic;color:var(--white);line-height:1.5;text-shadow:0 1px 10px rgba(0,0,0,0.4);display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 .quote-from{font-size:13px;color:rgba(255,255,255,0.65);margin-top:10px;letter-spacing:0.1em;text-transform:uppercase}
 .quote-date-lbl{font-size:11px;color:rgba(255,255,255,0.38);margin-top:2px;letter-spacing:0.04em}
 
@@ -1117,7 +1117,18 @@ function populateClientView(c){
   if(phNums[0]) phNums[0].textContent = lost > 0 ? '−'+lost : '0';
   if(phNums[2]) phNums[2].textContent = pct+'%';
 
-  // Coach note
+  // Show coach reply in quote card if available, otherwise daily quote stays
+  const latestCheckin = (c.checkins||[]).find(ci => ci.coach_reply && ci.coach_reply.trim());
+  if(latestCheckin){
+    const quoteTxt = document.getElementById('quote-text');
+    const quoteFrom = document.querySelector('.quote-from');
+    const quoteDateLbl = document.getElementById('quote-date-lbl');
+    if(quoteTxt) quoteTxt.textContent = '"' + latestCheckin.coach_reply + '"';
+    if(quoteFrom) quoteFrom.innerHTML = 'Your coach &nbsp;·&nbsp; Week ' + (latestCheckin.week||'') + ' response';
+    if(quoteDateLbl) quoteDateLbl.textContent = '';
+  }
+
+  // Coach note on programme tab
   const cnTxt = document.querySelector('.cn-txt');
   if(cnTxt && c.coach_note) cnTxt.textContent = '"'+c.coach_note+'"';
 
