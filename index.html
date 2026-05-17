@@ -1863,23 +1863,25 @@ async function saveCIReply(checkinId, btn){
   if(!reply) return;
   btn.textContent='Sending…'; btn.disabled=true;
 
-  // Load current replies array
-  const current = await SB.get('checkins', {id: checkinId}, {select:'coach_replies,coach_reply', single:true});
-  let replies = (current?.coach_replies && current.coach_replies.length > 0)
-    ? [...current.coach_replies]
-    : (current?.coach_reply ? [{text: current.coach_reply, sent_at: new Date().toISOString()}] : []);
-
+  // Find checkin in activeClientData
+  const ci = activeClientData.checkins.find(c => c.id === checkinId);
+  let replies = (ci?.coach_replies && ci.coach_replies.length > 0)
+    ? [...ci.coach_replies]
+    : (ci?.coach_reply ? [{text: ci.coach_reply, sent_at: new Date().toISOString()}] : []);
   replies.push({ text: reply, sent_at: new Date().toISOString() });
 
   await SB.patch('checkins', {id: checkinId}, {
     coach_replies: replies,
-    coach_reply: replies[replies.length-1].text // keep for backwards compat
+    coach_reply: reply
   });
+
+  // Update local data
+  if(ci){ ci.coach_replies = replies; ci.coach_reply = reply; }
 
   btn.textContent='Send Reply'; btn.disabled=false;
   textarea.value = '';
 
-  // Update UI — show all replies
+  // Update UI
   const sentEl = document.getElementById('reply-sent-'+checkinId);
   const editEl = document.getElementById('reply-edit-'+checkinId);
   const msgsEl = document.getElementById('reply-msgs-'+checkinId);
@@ -1890,8 +1892,7 @@ async function saveCIReply(checkinId, btn){
         <div style="font-size:11px;color:var(--faint);margin-bottom:4px">${new Date(r.sent_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
         <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic">"${r.text}"</div>
       </div>`).join('');
-    // Update count label
-    const sentHeader = sentEl?.querySelector('div[style*="uppercase"]');
+    const sentHeader = sentEl?.querySelector('[style*="uppercase"]');
     if(sentHeader) sentHeader.textContent = `✓ ${replies.length} message${replies.length>1?'s':''} sent`;
   }
 
