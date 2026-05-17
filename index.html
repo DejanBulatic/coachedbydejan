@@ -2118,7 +2118,7 @@ function renderCoachReplies(checkins){
       : [{text: ci.coach_reply, sent_at: ci.submitted_at}];
     return replies.map((r,ri) => `
       <div style="${ri>0?'margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.06)':''}">
-        ${replies.length > 1 ? `<div style="font-size:10px;color:var(--faint);margin-bottom:4px">Message ${ri+1}</div>` : ''}
+        ${replies.length > 1 ? `<div style="font-size:10px;color:var(--faint);margin-bottom:4px;margin-top:14px">Message ${ri+1}</div>` : ''}
         <div class="cr-text" style="padding-top:${ri===0?'14':'0'}px;margin-bottom:0">"${r.text}"</div>
       </div>`).join('');
   }
