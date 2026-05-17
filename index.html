@@ -1813,7 +1813,13 @@ function renderCheckins(c){
     container.innerHTML=`<div class="no-checkins">🌿<br><br>No check-ins submitted yet.<br>They will appear here once the client starts checking in.</div>`;
     return;
   }
-  container.innerHTML = checkins.map((ci, idx) => `
+  container.innerHTML = checkins.map((ci, idx) => {
+    const replies = (ci.coach_replies && ci.coach_replies.length > 0)
+      ? ci.coach_replies
+      : (ci.coach_reply ? [{text: ci.coach_reply, sent_at: ci.submitted_at}] : []);
+    const hasReplies = replies.length > 0;
+
+    return `
     <div class="ci-response-card">
       <div class="ci-resp-hdr">
         <div class="ci-resp-week">Week ${ci.week||idx+1} Check-in</div>
@@ -1822,29 +1828,33 @@ function renderCheckins(c){
       ${Object.entries(ci.answers||{}).map(([q,a])=>`
         <div class="ci-resp-row"><div class="ci-resp-q">${q}</div><div class="ci-resp-a">${a}</div></div>`).join('')}
       <div class="ci-reply-area" id="reply-area-${ci.id}">
-        ${ci.coach_reply
-          ? `<div id="reply-sent-${ci.id}">
-               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px">✓ Reply sent</div>
-               <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic">"${ci.coach_reply}"</div>
-               <button onclick="editReply('${ci.id}')" style="margin-top:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
-             </div>
-             <div id="reply-edit-${ci.id}" style="display:none">
-               <textarea class="ci-reply-inp" placeholder="Write your coaching response…">${ci.coach_reply}</textarea>
-               <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
-             </div>`
-          : `<div id="reply-sent-${ci.id}" style="display:none">
-               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px">✓ Reply sent</div>
-               <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic" id="reply-text-${ci.id}"></div>
-               <button onclick="editReply('${ci.id}')" style="margin-top:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
-             </div>
-             <div id="reply-edit-${ci.id}">
-               <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
-               <textarea class="ci-reply-inp" placeholder="Write your coaching response…"></textarea>
-               <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
-             </div>`
-        }
+        ${hasReplies ? `
+          <div id="reply-sent-${ci.id}">
+            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:10px">✓ ${replies.length} message${replies.length>1?'s':''} sent</div>
+            ${replies.map((r,ri) => `
+              <div style="margin-bottom:10px;padding-bottom:10px;${ri<replies.length-1?'border-bottom:1px solid var(--border-soft)':''}">
+                <div style="font-size:11px;color:var(--faint);margin-bottom:4px">${r.sent_at ? new Date(r.sent_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : ''}</div>
+                <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic">"${r.text}"</div>
+              </div>`).join('')}
+            <button onclick="editReply('${ci.id}')" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
+          </div>
+          <div id="reply-edit-${ci.id}" style="display:none">
+            <textarea class="ci-reply-inp" placeholder="Write another message…"></textarea>
+            <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
+          </div>` : `
+          <div id="reply-sent-${ci.id}" style="display:none">
+            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:8px">✓ Reply sent</div>
+            <div id="reply-msgs-${ci.id}"></div>
+            <button onclick="editReply('${ci.id}')" style="margin-top:6px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:13px;cursor:pointer">Send another message</button>
+          </div>
+          <div id="reply-edit-${ci.id}">
+            <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px">Your Reply</div>
+            <textarea class="ci-reply-inp" placeholder="Write your coaching response…"></textarea>
+            <button class="btn-send-reply" onclick="saveCIReply('${ci.id}',this)">Send Reply</button>
+          </div>`}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 async function saveCIReply(checkinId, btn){
@@ -1852,15 +1862,41 @@ async function saveCIReply(checkinId, btn){
   const reply = textarea.value.trim();
   if(!reply) return;
   btn.textContent='Sending…'; btn.disabled=true;
-  await SB.patch('checkins', {id: checkinId}, { coach_reply: reply });
-  // Show sent state
+
+  // Load current replies array
+  const current = await SB.get('checkins', {id: checkinId}, {select:'coach_replies,coach_reply', single:true});
+  let replies = (current?.coach_replies && current.coach_replies.length > 0)
+    ? [...current.coach_replies]
+    : (current?.coach_reply ? [{text: current.coach_reply, sent_at: new Date().toISOString()}] : []);
+
+  replies.push({ text: reply, sent_at: new Date().toISOString() });
+
+  await SB.patch('checkins', {id: checkinId}, {
+    coach_replies: replies,
+    coach_reply: replies[replies.length-1].text // keep for backwards compat
+  });
+
+  btn.textContent='Send Reply'; btn.disabled=false;
+  textarea.value = '';
+
+  // Update UI — show all replies
   const sentEl = document.getElementById('reply-sent-'+checkinId);
   const editEl = document.getElementById('reply-edit-'+checkinId);
-  const textEl = document.getElementById('reply-text-'+checkinId);
-  if(textEl) textEl.textContent = '"'+reply+'"';
+  const msgsEl = document.getElementById('reply-msgs-'+checkinId);
+
+  if(msgsEl){
+    msgsEl.innerHTML = replies.map((r,ri) => `
+      <div style="margin-bottom:10px;padding-bottom:10px;${ri<replies.length-1?'border-bottom:1px solid var(--border-soft)':''}">
+        <div style="font-size:11px;color:var(--faint);margin-bottom:4px">${new Date(r.sent_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+        <div style="font-size:14px;color:var(--charcoal);line-height:1.6;font-style:italic">"${r.text}"</div>
+      </div>`).join('');
+    // Update count label
+    const sentHeader = sentEl?.querySelector('div[style*="uppercase"]');
+    if(sentHeader) sentHeader.textContent = `✓ ${replies.length} message${replies.length>1?'s':''} sent`;
+  }
+
   if(sentEl) sentEl.style.display = 'block';
   if(editEl) editEl.style.display = 'none';
-  btn.textContent='Send Reply'; btn.disabled=false;
 }
 
 function editReply(checkinId){
@@ -2061,32 +2097,49 @@ function renderCoachReplies(checkins){
   const readSection = document.getElementById('read-replies-section');
   if(!section) return;
 
-  const withReplies = (checkins||[]).filter(ci => ci.coach_reply && ci.coach_reply.trim());
+  // Build reply items from coach_replies array, falling back to coach_reply
+  const withReplies = (checkins||[]).filter(ci => {
+    const replies = ci.coach_replies && ci.coach_replies.length > 0;
+    const legacy  = ci.coach_reply && ci.coach_reply.trim();
+    return replies || legacy;
+  });
   if(withReplies.length === 0){ section.innerHTML = ''; if(readSection) readSection.innerHTML = ''; return; }
 
-  // Get read state from localStorage
   const readKey = 'cbd_read_replies_' + (activeClientId||'');
   const readIds = JSON.parse(localStorage.getItem(readKey)||'[]');
 
   const unread = withReplies.filter(ci => !readIds.includes(ci.id));
   const read   = withReplies.filter(ci =>  readIds.includes(ci.id));
 
+  function repliesHTML(ci){
+    const replies = (ci.coach_replies && ci.coach_replies.length > 0)
+      ? ci.coach_replies
+      : [{text: ci.coach_reply, sent_at: ci.submitted_at}];
+    return replies.map((r,ri) => `
+      <div style="${ri>0?'margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.06)':''}">
+        ${replies.length > 1 ? `<div style="font-size:10px;color:var(--faint);margin-bottom:4px">Message ${ri+1}</div>` : ''}
+        <div class="cr-text" style="padding-top:${ri===0?'14':'0'}px;margin-bottom:0">"${r.text}"</div>
+      </div>`).join('');
+  }
+
   function replyCard(ci, isOpen, isRead=false){
+    const replies = (ci.coach_replies && ci.coach_replies.length > 0)
+      ? ci.coach_replies : [{text: ci.coach_reply}];
     return `
     <div class="coach-reply-card ${isOpen?'cr-open':''}" id="cr-${ci.id}">
       <div class="cr-header" onclick="toggleReply('${ci.id}')">
         <div class="cr-avatar"><img src="/images/dejan-coach.jpg" alt="Dejan" onerror="this.parentElement.innerHTML='<div style=\'width:34px;height:34px;border-radius:50%;background:var(--sage-dark);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;color:white\'>D</div>'"></div>
         <div class="cr-meta">
           <div class="cr-title">From Dejan</div>
-          <div class="cr-week">Week ${ci.week||''} response</div>
+          <div class="cr-week">Week ${ci.week||''} · ${replies.length} message${replies.length>1?'s':''}</div>
         </div>
         <div class="cr-arrow">⌄</div>
       </div>
       <div class="cr-body">
-        <div class="cr-text">"${ci.coach_reply}"</div>
+        ${repliesHTML(ci)}
         ${isRead
-          ? `<div style="font-size:12px;color:var(--faint);padding-top:10px;border-top:1px solid var(--border-soft)">✓ I've read this message</div>`
-          : `<div class="cr-read-wrap">
+          ? `<div style="font-size:12px;color:var(--faint);padding-top:10px;border-top:1px solid var(--border-soft);margin-top:10px">✓ I've read this message</div>`
+          : `<div class="cr-read-wrap" style="margin-top:14px">
               <input type="checkbox" id="read-${ci.id}" onchange="markReplyRead('${ci.id}',this.checked)">
               <label for="read-${ci.id}">I've read this message</label>
             </div>`
@@ -2095,10 +2148,8 @@ function renderCoachReplies(checkins){
     </div>`;
   }
 
-  // Unread at top — newest first, open by default
   section.innerHTML = unread.map((ci,i) => replyCard(ci, i===0)).join('');
 
-  // Read at bottom under WhatsApp section
   if(readSection){
     if(read.length === 0){ readSection.innerHTML = ''; return; }
     readSection.innerHTML = `
