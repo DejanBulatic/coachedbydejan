@@ -1254,6 +1254,7 @@ function buildClientSessions(sessions, c){
 
 // Check-in submission
 async function submitCI(){
+  console.log('submitCI called, activeClientId:', activeClientId, 'activeClientData:', activeClientData?.name);
   const answers = {};
   document.querySelectorAll('#ci-content .ci-inp, #ci-content input, #ci-content textarea, #ci-content select').forEach(el => {
     const lbl = el.closest('.ci-q')?.querySelector('.ci-lbl')?.textContent;
