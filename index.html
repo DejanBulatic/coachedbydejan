@@ -153,7 +153,7 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .day-pill.today .dp-name,.day-pill.today .dp-type{color:rgba(250,248,244,0.9)}
 .dp-type{font-size:13px;color:var(--charcoal);margin-top:3px}
 
-.sess-card{border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid var(--border)}
+.sess-card{border-radius:12px;margin-bottom:16px;overflow:hidden;border:1px solid var(--border)}
 .sess-img-hdr{position:relative;height:115px;cursor:pointer;overflow:hidden}
 .sess-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
 .sess-card.open .sess-bg{transform:scale(1.04)}
@@ -188,7 +188,12 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .set-in.reps{width:64px}
 .set-in.wgt{width:72px}
 .set-unit{font-size:14px;color:var(--muted)}
-.set-done{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;flex-shrink:0}
+.set-done{border:1.5px solid var(--border);border-radius:8px;background:var(--cream);cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);font-family:var(--fb);transition:all .15s;padding:10px 14px}
+.set-done.done{background:var(--sage-xlight);border-color:var(--sage);color:var(--sage-dark)}
+.quick-chip{padding:7px 11px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);font-family:var(--fb);transition:all .1s;flex-shrink:0}
+.quick-chip.active{background:var(--sage-dark);color:var(--white);border-color:var(--sage-dark)}
+.stepper-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:18px;font-weight:300;cursor:pointer;color:var(--charcoal);display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.stepper-val{border:1.5px solid var(--border);border-radius:8px;background:var(--cream);color:var(--charcoal);font-family:var(--fb);font-size:15px;font-weight:500;outline:none}
 .set-done.done{background:var(--sage-dark);border-color:var(--sage-dark);color:var(--white)}
 .btn-complete{width:100%;background:var(--sage-dark);color:var(--white);border:none;padding:16px;font-family:var(--fb);font-size:15px;font-weight:500;cursor:pointer;letter-spacing:0.04em}
 
@@ -790,9 +795,9 @@ select.ci-inp{cursor:pointer}
     <div class="cd-tabs">
       <div class="cd-tab active" onclick="switchCDTab('overview',this)">Overview</div>
       <div class="cd-tab" onclick="switchCDTab('programme',this)">Programme</div>
+      <div class="cd-tab" onclick="switchCDTab('logs',this)">Workout Logs</div>
       <div class="cd-tab" onclick="switchCDTab('checkins',this)">Check-ins</div>
       <div class="cd-tab" onclick="switchCDTab('nutrition',this)">Nutrition</div>
-      <div class="cd-tab" onclick="switchCDTab('logs',this)">Workout Logs</div>
     </div>
     <!-- OVERVIEW TAB -->
     <div id="cd-tab-overview">
@@ -830,14 +835,16 @@ select.ci-inp{cursor:pointer}
           <div class="pse-field"><label>Current Week</label><input class="pse-input" id="pe-week" type="number" min="1" placeholder="1"></div>
           <div class="pse-field"><label>Total Weeks</label><input class="pse-input" id="pe-total-weeks" type="number" min="1" placeholder="12"></div>
         </div>
-        <button class="btn-save-note" onclick="saveProgDetails()">Save</button>
-        <span id="prog-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
       </div>
       <div class="dash-sec-hdr" style="margin-bottom:10px">
         <div class="dash-sec-lbl">Sessions</div>
         <button class="btn-add-client" onclick="addSession()" style="font-size:12px;padding:7px 12px">+ Add Session</button>
       </div>
       <div id="pe-sessions-list"></div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:10px">
+        <button class="btn-save-note" onclick="saveProgDetails()" style="flex:1;text-align:center">Save Programme Details</button>
+        <span id="prog-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s">✓ Saved</span>
+      </div>
     </div>
     <!-- CHECK-INS TAB -->
     <div id="cd-tab-checkins" style="display:none">
@@ -1283,19 +1290,37 @@ function buildClientSessions(sessions, c){
         : Array.from({length: ex.sets||3}, () => ({reps: ex.reps||'12', kg: '', rest: ex.rest_seconds||60}));
 
       const setRows = setsData.map((set, si) => `
-        <div class="set-row">
+        <div class="set-row" id="setrow-${key}-${ei}-${si}">
           <span class="set-lbl">Set ${si+1}</span>
           <div style="flex:1">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:5px;margin-top:10px">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px;margin-top:10px">
               Aim for <strong>${set.reps||'—'} reps</strong>${set.kg ? ` with <strong>${set.kg}kg</strong>` : ''}, rest for <strong>${set.rest||60} sec</strong>
             </div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <input class="set-in reps" type="number" placeholder="reps" min="0" inputmode="numeric">
-              <span class="set-unit">×</span>
-              <input class="set-in wgt" type="number" placeholder="kg" min="0" step="0.5" inputmode="decimal">
-              <span class="set-unit">kg</span>
-              <button class="set-done" onclick="markSet(this)">○</button>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div>
+                <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Reps</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  ${[6,8,10,12,15].map(r=>`<button class="quick-chip reps-chip" onclick="setChip(this,'reps-${key}-${ei}-${si}',${r})">${r}</button>`).join('')}
+                  <div style="display:flex;align-items:center;gap:4px;margin-left:4px">
+                    <button class="stepper-btn" onclick="stepVal('reps-${key}-${ei}-${si}',-1)">−</button>
+                    <input class="set-in reps stepper-val" id="reps-${key}-${ei}-${si}" type="number" inputmode="numeric" min="0" placeholder="—" style="width:44px;text-align:center;padding:8px 4px">
+                    <button class="stepper-btn" onclick="stepVal('reps-${key}-${ei}-${si}',1)">+</button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">Kg</div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  ${[10,15,20,25,30,40].map(k=>`<button class="quick-chip kg-chip" onclick="setChip(this,'kg-${key}-${ei}-${si}',${k})">${k}</button>`).join('')}
+                  <div style="display:flex;align-items:center;gap:4px;margin-left:4px">
+                    <button class="stepper-btn" onclick="stepVal('kg-${key}-${ei}-${si}',-2.5)">−</button>
+                    <input class="set-in wgt stepper-val" id="kg-${key}-${ei}-${si}" type="number" inputmode="decimal" min="0" step="2.5" placeholder="—" style="width:44px;text-align:center;padding:8px 4px">
+                    <button class="stepper-btn" onclick="stepVal('kg-${key}-${ei}-${si}',2.5)">+</button>
+                  </div>
+                </div>
+              </div>
             </div>
+            <button class="set-done" onclick="markSet(this)" style="margin-top:10px;width:100%">○ Mark set done</button>
           </div>
         </div>`).join('');
 
@@ -1649,7 +1674,7 @@ function renderSessionEditors(c){
           <div class="pse-field"><label>Session Name</label><input class="pse-input" value="${s.name||''}" onchange="updateSession('${s.id}','name',this.value)" placeholder="e.g. Full Body A — Squat Focus"></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div class="pse-field"><label>Day Label</label><input class="pse-input" value="${s.day_label||''}" onchange="updateSession('${s.id}','day_label',this.value)" placeholder="e.g. Monday"></div>
-            <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession('${s.id}','duration',parseInt(this.value))" placeholder="45"></div>
+            <div class="pse-field"><label>Duration (min)</label><input class="pse-input" type="number" value="${s.duration||45}" onchange="updateSession('${s.id}','duration',parseInt(this.value))" placeholder="45" inputmode="numeric"></div>
           </div>
           <div class="pse-field"><label>Background Image URL</label><input class="pse-input" value="${s.bg_image||''}" onchange="updateSession('${s.id}','bg_image',this.value)" placeholder="https://images.unsplash.com/…"></div>
           <div style="margin-bottom:10px">
@@ -2351,12 +2376,72 @@ async function completeSession(btn, sessionId, sessionName, key){
     exercises,
   });
 
+  // Add completed badge to header tag
+  const tagEl = card.querySelector('.sess-tag');
+  if(tagEl) tagEl.textContent = '✓ COMPLETED';
+
+  // Style the header to show completion
+  const hdr = card.querySelector('.sess-img-hdr');
+  if(hdr) hdr.style.opacity = '0.75';
+
+  // Disable all inputs
+  card.querySelectorAll('input, textarea').forEach(el => el.disabled = true);
+  card.querySelectorAll('.set-done').forEach(el => el.disabled = true);
   btn.textContent = 'Session Complete ✓';
   btn.style.background = 'var(--sage)';
   btn.disabled = true;
+
+  // Auto-fold
+  if(card.classList.contains('open')){
+    card.classList.remove('open');
+  }
+
+  // Highlight next incomplete session
+  updateNextSession();
 }
 
-function markSet(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'○';}
+function setChip(btn, inputId, val){
+  // Deactivate sibling chips of same type
+  const siblings = btn.parentElement.querySelectorAll('.quick-chip');
+  siblings.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const input = document.getElementById(inputId);
+  if(input){ input.value = val; input.dispatchEvent(new Event('change')); }
+}
+
+function stepVal(inputId, delta){
+  const input = document.getElementById(inputId);
+  if(!input) return;
+  const current = parseFloat(input.value) || 0;
+  const next = Math.max(0, +(current + delta).toFixed(1));
+  input.value = next;
+  // Deactivate chips when manually stepping
+  const wrap = input.closest('div[style]');
+  if(wrap) wrap.querySelectorAll('.quick-chip').forEach(b => b.classList.remove('active'));
+}
+
+function markSet(btn){
+  btn.classList.toggle('done');
+  btn.textContent = btn.classList.contains('done') ? '✓ Set done' : '○ Mark set done';
+}
+
+function updateNextSession(){
+  const cards = document.querySelectorAll('#programme-content .sess-card');
+  let foundNext = false;
+  cards.forEach(card => {
+    const tagEl = card.querySelector('.sess-tag');
+    if(!tagEl) return;
+    if(tagEl.textContent.includes('COMPLETED')) return;
+    if(!foundNext){
+      foundNext = true;
+      if(!tagEl.textContent.includes('Up next')) {
+        const currentText = tagEl.textContent.trim();
+        tagEl.textContent = currentText ? currentText + ' · Up next' : 'Up next';
+      }
+    }
+  });
+}
+
 function toggleSess(id){document.getElementById(id).classList.toggle('open');}
 function tw(el){el.classList.toggle('filled');document.getElementById('water-lbl').textContent=document.querySelectorAll('.wg.filled').length+' / 8';}
 function th(el){el.classList.toggle('done');el.querySelector('.hab-chk').textContent=el.classList.contains('done')?'✓':'';}
