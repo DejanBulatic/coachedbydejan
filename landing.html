@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F5F0EA">
+<title>Coached by Dejan — Feel stronger, lighter and more confident in your body again</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#F5F0EA;
+  --white:#FFFFFF;
+  --charcoal:#2F2F2F;
+  --muted:#7A7270;
+  --faint:#B5AFAA;
+  --border:rgba(47,47,47,0.1);
+
+  --foundation:#A8B8A0;
+  --foundation-light:#EEF3EE;
+  --foundation-dark:#5C7A5E;
+
+  --balanced:#E9D6D3;
+  --balanced-light:#FDF6F5;
+  --balanced-dark:#A07870;
+
+  --elevate:#C7B8A3;
+  --elevate-light:#F5EFE8;
+  --elevate-dark:#8A7560;
+
+  --gold:#C9A86A;
+  --gold-light:#F5EDD8;
+
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+}
+
+html{background:var(--cream);scroll-behavior:smooth}
+body{font-family:var(--fb);color:var(--charcoal);max-width:100%;overflow-x:hidden}
+
+/* ── NAVIGATION ─────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(245,240,234,0.92);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);letter-spacing:0.05em}
+.nav-logo em{font-style:italic;color:var(--foundation-dark)}
+.nav-cta{background:var(--charcoal);color:var(--white);border:none;border-radius:100px;padding:10px 20px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;letter-spacing:0.03em}
+
+/* ── HERO ────────────────────────────────────────── */
+.hero{
+  min-height:100svh;
+  padding:100px 24px 60px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  background:var(--cream);
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 20%, rgba(168,184,160,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 10% 80%, rgba(199,184,163,0.15) 0%, transparent 60%);
+}
+.hero-content{position:relative;z-index:1;max-width:420px}
+.hero-eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--foundation-dark);margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--foundation-dark)}
+.hero-headline{
+  font-family:var(--fd);
+  font-size:clamp(42px,10vw,64px);
+  font-weight:300;
+  line-height:1.1;
+  color:var(--charcoal);
+  margin-bottom:24px;
+  letter-spacing:-0.01em;
+}
+.hero-headline em{font-style:italic;color:var(--foundation-dark)}
+.hero-sub{
+  font-size:16px;color:var(--muted);line-height:1.75;
+  margin-bottom:36px;font-weight:300;max-width:340px;
+}
+.hero-actions{display:flex;flex-direction:column;gap:12px}
+.btn-primary{
+  background:var(--charcoal);color:var(--white);border:none;
+  border-radius:100px;padding:16px 32px;
+  font-family:var(--fb);font-size:15px;font-weight:500;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  text-align:center;letter-spacing:0.02em;
+  transition:opacity .2s;
+}
+.btn-primary:active{opacity:0.85}
+.btn-secondary{
+  background:none;color:var(--muted);border:none;
+  font-family:var(--fb);font-size:14px;cursor:pointer;
+  text-decoration:none;display:inline-block;text-align:center;
+  padding:8px 0;
+}
+.hero-scroll{
+  position:absolute;bottom:32px;left:24px;
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--faint);z-index:1;
+}
+.scroll-line{width:32px;height:1px;background:var(--faint)}
+
+/* ── INTRO SECTION ──────────────────────────────── */
+.intro{
+  padding:72px 24px;
+  background:var(--white);
+}
+.intro-label{
+  font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:20px;
+}
+.intro-text{
+  font-family:var(--fd);font-size:clamp(24px,6vw,34px);font-weight:300;
+  color:var(--charcoal);line-height:1.45;margin-bottom:24px;
+}
+.intro-text em{font-style:italic;color:var(--foundation-dark)}
+.intro-sub{font-size:15px;color:var(--muted);line-height:1.8;font-weight:300}
+
+/* ── TRUST BAR ───────────────────────────────────── */
+.trust-bar{
+  padding:32px 24px;
+  background:var(--cream);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.trust-item{text-align:center}
+.trust-num{
+  font-family:var(--fd);font-size:36px;font-weight:300;
+  color:var(--charcoal);display:block;line-height:1;margin-bottom:4px;
+}
+.trust-label{font-size:11px;color:var(--faint);letter-spacing:0.06em;text-transform:uppercase}
+
+/* ── PACKAGES ────────────────────────────────────── */
+.packages{padding:72px 24px 80px;background:var(--cream)}
+.section-label{
+  font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:12px;
+}
+.section-title{
+  font-family:var(--fd);font-size:clamp(32px,8vw,48px);font-weight:300;
+  color:var(--charcoal);line-height:1.2;margin-bottom:8px;
+}
+.section-title em{font-style:italic;color:var(--foundation-dark)}
+.section-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:40px;font-weight:300}
+
+.package-cards{display:flex;flex-direction:column;gap:16px}
+
+.pkg-card{
+  border-radius:20px;overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--white);
+  transition:transform .2s;
+}
+.pkg-card:active{transform:scale(0.99)}
+
+.pkg-header{padding:28px 24px 24px;position:relative;cursor:pointer}
+.pkg-header.foundation{background:var(--foundation-light)}
+.pkg-header.balanced{background:var(--balanced-light)}
+.pkg-header.elevate{background:var(--elevate-light)}
+
+.pkg-badge{
+  position:absolute;top:20px;right:20px;
+  font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--charcoal);color:var(--white);
+  border-radius:100px;padding:4px 10px;
+}
+
+.pkg-dot{
+  width:10px;height:10px;border-radius:50%;margin-bottom:16px;
+}
+.foundation .pkg-dot{background:var(--foundation)}
+.balanced .pkg-dot{background:var(--balanced-dark)}
+.elevate .pkg-dot{background:var(--elevate-dark)}
+
+.pkg-name{
+  font-family:var(--fd);font-size:32px;font-weight:300;
+  color:var(--charcoal);margin-bottom:8px;letter-spacing:0.02em;
+}
+.pkg-hook{
+  font-size:14px;color:var(--muted);line-height:1.6;
+  margin-bottom:20px;font-weight:300;font-style:italic;font-family:var(--fd);
+}
+.pkg-price{
+  display:flex;align-items:baseline;gap:4px;margin-bottom:20px;
+}
+.pkg-price-num{
+  font-family:var(--fd);font-size:44px;font-weight:300;color:var(--charcoal);line-height:1;
+}
+.pkg-price-unit{font-size:14px;color:var(--muted)}
+
+.pkg-cta{
+  display:block;width:100%;
+  background:var(--charcoal);color:var(--white);
+  border:none;border-radius:100px;padding:14px 24px;
+  font-family:var(--fb);font-size:14px;font-weight:500;
+  cursor:pointer;text-decoration:none;text-align:center;
+  letter-spacing:0.02em;transition:opacity .2s;
+  margin-bottom:16px;
+}
+.pkg-cta.foundation-btn{background:var(--foundation-dark)}
+.pkg-cta.balanced-btn{background:var(--balanced-dark)}
+.pkg-cta.elevate-btn{background:var(--elevate-dark)}
+.pkg-cta:active{opacity:0.85}
+
+.pkg-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;color:var(--muted);cursor:pointer;
+  padding:4px 0;user-select:none;
+}
+.pkg-toggle svg{transition:transform .3s;flex-shrink:0}
+.pkg-card.open .pkg-toggle svg{transform:rotate(180deg)}
+
+.pkg-body{
+  display:none;
+  padding:0 24px 24px;
+  border-top:1px solid var(--border);
+}
+.pkg-card.open .pkg-body{display:block}
+
+.pkg-points{list-style:none;padding:20px 0 0}
+.pkg-point{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(47,47,47,0.06);
+  font-size:14px;color:var(--charcoal);line-height:1.5;
+}
+.pkg-point:last-child{border-bottom:none}
+.pkg-point-check{
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.foundation-check{background:var(--foundation-light);color:var(--foundation-dark)}
+.balanced-check{background:var(--balanced-light);color:var(--balanced-dark)}
+.elevate-check{background:var(--elevate-light);color:var(--elevate-dark)}
+
+/* ── IN-PERSON ───────────────────────────────────── */
+.inperson{
+  margin:0 24px 24px;
+  background:var(--gold-light);
+  border:1px solid rgba(201,168,106,0.3);
+  border-radius:20px;padding:28px 24px;
+}
+.inperson-label{
+  font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.inperson-name{
+  font-family:var(--fd);font-size:28px;font-weight:300;
+  color:var(--charcoal);margin-bottom:8px;
+}
+.inperson-text{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.btn-gold{
+  display:block;width:100%;
+  background:var(--gold);color:var(--white);border:none;
+  border-radius:100px;padding:14px 24px;
+  font-family:var(--fb);font-size:14px;font-weight:500;
+  cursor:pointer;text-decoration:none;text-align:center;
+  letter-spacing:0.02em;
+}
+
+/* ── HOW IT WORKS ────────────────────────────────── */
+.how{padding:72px 24px;background:var(--white)}
+.steps{display:flex;flex-direction:column;gap:0;margin-top:40px}
+.step{
+  display:flex;gap:20px;padding:24px 0;
+  border-bottom:1px solid var(--border);
+}
+.step:last-child{border-bottom:none}
+.step-num{
+  font-family:var(--fd);font-size:42px;font-weight:300;
+  color:var(--foundation);line-height:1;flex-shrink:0;width:44px;
+}
+.step-content{}
+.step-title{font-size:16px;font-weight:500;color:var(--charcoal);margin-bottom:4px}
+.step-text{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ── QUOTE ───────────────────────────────────────── */
+.quote-section{
+  padding:72px 24px;
+  background:var(--charcoal);
+  position:relative;overflow:hidden;
+}
+.quote-section::after{
+  content:'';position:absolute;inset:0;
+  background:url('/images/quote-1.png') center/cover no-repeat;
+  opacity:0.15;z-index:0;
+}
+.quote-section::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cellipse cx='50' cy='100' rx='35' ry='15' transform='rotate(-35 50 100)' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3Cpath d='M50 100 C55 68 82 60 88 35' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3Cellipse cx='150' cy='50' rx='28' ry='12' transform='rotate(25 150 50)' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1.5'/%3E%3C/svg%3E")
+}
+.quote-mark{
+  font-family:var(--fd);font-size:80px;font-weight:300;
+  color:var(--foundation);line-height:0.8;margin-bottom:16px;
+  position:relative;z-index:2;
+}
+.quote-text{
+  font-family:var(--fd);font-size:clamp(22px,5vw,30px);font-weight:300;
+  font-style:italic;color:var(--cream);line-height:1.5;
+  margin-bottom:24px;position:relative;z-index:2;
+}
+.quote-author{
+  font-size:13px;color:rgba(245,240,234,0.5);
+  letter-spacing:0.08em;text-transform:uppercase;
+  position:relative;z-index:2;
+}
+
+/* ── FAQ ─────────────────────────────────────────── */
+.faq{padding:72px 24px;background:var(--cream)}
+.faq-items{margin-top:40px;display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 0;cursor:pointer;
+  font-size:15px;font-weight:500;color:var(--charcoal);line-height:1.4;
+  gap:16px;
+}
+.faq-q svg{flex-shrink:0;transition:transform .3s;color:var(--faint)}
+.faq-item.open .faq-q svg{transform:rotate(180deg)}
+.faq-a{
+  display:none;padding:0 0 20px;
+  font-size:14px;color:var(--muted);line-height:1.75;
+}
+.faq-item.open .faq-a{display:block}
+
+/* ── FINAL CTA ───────────────────────────────────── */
+.final-cta{
+  padding:80px 24px;
+  background:var(--white);
+  text-align:center;
+}
+.final-cta-title{
+  font-family:var(--fd);font-size:clamp(32px,8vw,52px);font-weight:300;
+  color:var(--charcoal);line-height:1.2;margin-bottom:16px;
+}
+.final-cta-title em{font-style:italic;color:var(--foundation-dark)}
+.final-cta-sub{
+  font-size:15px;color:var(--muted);line-height:1.7;
+  margin-bottom:36px;font-weight:300;max-width:320px;margin-left:auto;margin-right:auto;
+}
+
+/* ── FOOTER ──────────────────────────────────────── */
+footer{
+  padding:32px 24px;
+  background:var(--charcoal);
+  text-align:center;
+}
+.footer-logo{
+  font-family:var(--fd);font-size:18px;font-weight:300;
+  color:var(--cream);letter-spacing:0.05em;margin-bottom:12px;
+}
+.footer-logo em{font-style:italic;color:var(--foundation)}
+.footer-text{font-size:12px;color:rgba(245,240,234,0.35);line-height:1.6}
+
+/* ── HERO IMAGE ──────────────────────────────────── */
+.hero-image{
+  position:absolute;right:0;bottom:0;top:0;
+  width:55%;z-index:0;overflow:hidden;
+}
+.hero-image img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  opacity:0.35;
+  mask-image:linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image:linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+}
+
+/* ── INTRO IMAGE ─────────────────────────────────── */
+.intro-img-wrap{
+  width:100%;height:260px;border-radius:16px;overflow:hidden;margin-bottom:28px;
+}
+.intro-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.fade-up{
+  opacity:0;transform:translateY(24px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-up:nth-child(2){transition-delay:.1s}
+.fade-up:nth-child(3){transition-delay:.2s}
+.fade-up:nth-child(4){transition-delay:.3s}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">Coached <em>by</em> Dejan</div>
+  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="nav-cta">Book a call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-image"><img src="/images/quote-9.jpg" alt="Woman training"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Personal coaching for women</div>
+    <h1 class="hero-headline">Feel stronger, lighter and more <em>confident</em> in your body again.</h1>
+    <p class="hero-sub">Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.</p>
+    <div class="hero-actions">
+      <a href="#packages" class="btn-primary">See programmes</a>
+      <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-secondary">Book a free intro call →</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll to explore</div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-img-wrap"><img src="/images/quote-7.png" alt="Woman walking outdoors"></div>
+  <div class="section-label">The philosophy</div>
+  <p class="intro-text">Real change doesn't come from restriction.<br>It comes from <em>building something new.</em></p>
+  <p class="intro-sub">I work with women who are ready to stop starting over — and start building habits that actually last. No extreme diets, no punishment workouts. Just a programme built specifically for you, delivered with structure, warmth, and accountability.</p>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <span class="trust-num">12</span>
+    <span class="trust-label">Week programmes</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">100%</span>
+    <span class="trust-label">Personalised</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">3</span>
+    <span class="trust-label">Languages</span>
+  </div>
+</div>
+
+<!-- PACKAGES -->
+<section class="packages" id="packages">
+  <div class="section-label">Choose your journey</div>
+  <h2 class="section-title">Find the programme<br>that's <em>right for you</em></h2>
+  <p class="section-sub">Every programme includes a personalised workout plan and nutrition plan. What changes is how close we work together.</p>
+
+  <div class="package-cards">
+
+    <!-- FOUNDATION -->
+    <div class="pkg-card" id="card-foundation">
+      <div class="pkg-header foundation" onclick="togglePackage('card-foundation')">
+        <div class="pkg-dot"></div>
+        <div class="pkg-name">Foundation</div>
+        <div class="pkg-hook">"Your first step toward a body that feels like home again."</div>
+        <div class="pkg-price">
+          <span class="pkg-price-num">€99</span>
+          <span class="pkg-price-unit">/month</span>
+        </div>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta foundation-btn" onclick="event.stopPropagation()">Book a free intro call</a>
+        <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-foundation')">
+          <span>See what's included</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <ul class="pkg-points">
+          <li class="pkg-point"><span class="pkg-point-check foundation-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Personalised workout programme</li>
+          <li class="pkg-point"><span class="pkg-point-check foundation-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Simple & sustainable nutrition plan</li>
+          <li class="pkg-point"><span class="pkg-point-check foundation-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Weekly check-in</li>
+          <li class="pkg-point"><span class="pkg-point-check foundation-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Personal written feedback each week</li>
+          <li class="pkg-point"><span class="pkg-point-check foundation-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Adjustments based on your progress</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BALANCED -->
+    <div class="pkg-card" id="card-balanced">
+      <div class="pkg-header balanced" onclick="togglePackage('card-balanced')">
+        <div class="pkg-badge">Most popular</div>
+        <div class="pkg-dot"></div>
+        <div class="pkg-name">Balanced</div>
+        <div class="pkg-hook">"For the woman who is done starting over — this time, you finish."</div>
+        <div class="pkg-price">
+          <span class="pkg-price-num">€149</span>
+          <span class="pkg-price-unit">/month</span>
+        </div>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta balanced-btn" onclick="event.stopPropagation()">Book a free intro call</a>
+        <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-balanced')">
+          <span>See what's included</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <ul class="pkg-points">
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Personalised workout programme</li>
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Individual nutrition plan</li>
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Weekly check-in</li>
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Personal written feedback each week</li>
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Direct support via WhatsApp</li>
+          <li class="pkg-point"><span class="pkg-point-check balanced-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Option to book coaching calls</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ELEVATE -->
+    <div class="pkg-card" id="card-elevate">
+      <div class="pkg-header elevate" onclick="togglePackage('card-elevate')">
+        <div class="pkg-dot"></div>
+        <div class="pkg-name">Elevate</div>
+        <div class="pkg-hook">"For when good enough is no longer enough. Total transformation, nothing held back."</div>
+        <div class="pkg-price">
+          <span class="pkg-price-num">€229</span>
+          <span class="pkg-price-unit">/month</span>
+        </div>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta elevate-btn" onclick="event.stopPropagation()">Book a free intro call</a>
+        <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-elevate')">
+          <span>See what's included</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+        </div>
+      </div>
+      <div class="pkg-body">
+        <ul class="pkg-points">
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Personalised workout programme</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Fully personalised nutrition plan</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Weekly check-in</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Priority personal feedback</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Direct support via WhatsApp</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Option to book coaching calls</li>
+          <li class="pkg-point"><span class="pkg-point-check elevate-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>Extra support & follow-up throughout</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- IN-PERSON -->
+<div class="inperson">
+  <div class="inperson-label">Boutique experience</div>
+  <div class="inperson-name">In-Person</div>
+  <p class="inperson-text">For those who want the full personal coaching experience — face to face, fully tailored, nothing held back. Available in select locations. Enquire for pricing and availability.</p>
+  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-gold">Book a conversation</a>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-label">The process</div>
+  <h2 class="section-title">How it <em>works</em></h2>
+  <div class="steps">
+    <div class="step fade-up">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <div class="step-title">Book a free intro call</div>
+        <div class="step-text">We talk. I listen. You tell me where you are, where you want to go, and what's been in the way. No pressure, no commitment.</div>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <div class="step-title">Choose your programme</div>
+        <div class="step-text">After the call, you receive a payment link for the programme that fits you best. Once confirmed, everything begins.</div>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <div class="step-title">Fill in your intake form</div>
+        <div class="step-text">A simple form covering your goals, lifestyle, and health history. This is how I build a programme that's truly yours.</div>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <div class="step-title">Receive your programme</div>
+        <div class="step-text">Your personalised workout and nutrition plan is built and delivered directly to the app. We walk through it together on a second call.</div>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">05</div>
+      <div class="step-content">
+        <div class="step-title">Begin. Check in. Progress.</div>
+        <div class="step-text">Every week you check in, I respond with personal feedback and adjustments. You're never alone in this.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-mark">"</div>
+  <p class="quote-text">The goal is not to be perfect. The goal is to feel like yourself again — strong, energised, and at home in your own body.</p>
+  <div class="quote-author">Dejan — Coach</div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="section-label">Questions</div>
+  <h2 class="section-title">Things you might<br>be <em>wondering</em></h2>
+  <div class="faq-items">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Do I need any experience to start?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">Not at all. Most of my clients are beginners or returning after a long break. The programme is built around where you are right now — not where you think you should be.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What equipment do I need?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">Your programme is built around what you have access to — gym, home, or outdoors. You tell me, I adapt.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        How does the app work?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">After you sign up, you receive a link and login to a private app on your phone. Your workouts, nutrition plan, check-in form, and our communication all live there. I walk you through it on your onboarding call.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I do this if I have an injury or health condition?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">Yes. The intake process includes a health screening. I work around limitations, not against them. If something requires medical clearance, I'll let you know.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What happens after 12 weeks?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">We review your results together and discuss what comes next. Many clients continue with a renewed programme. There's no pressure — just an honest conversation about where you want to go.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Is coaching available in my language?
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>
+      </div>
+      <div class="faq-a">Coaching is available in English, Swedish, and Serbian. The intake form and app are available in all three languages.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2 class="final-cta-title">Ready to feel like<br><em>yourself again?</em></h2>
+  <p class="final-cta-sub">Start with a free 20-minute intro call. No commitment, no pressure. Just a conversation.</p>
+  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-primary">Book your free intro call</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Coached <em>by</em> Dejan</div>
+  <p class="footer-text">Personal coaching for women · English · Svenska · Srpski<br>© 2026 Coached by Dejan. All rights reserved.</p>
+</footer>
+
+<script>
+function togglePackage(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function toggleFaq(el){
+  const item = el.parentElement;
+  // Close others
+  document.querySelectorAll('.faq-item.open').forEach(i => {
+    if(i !== item) i.classList.remove('open');
+  });
+  item.classList.toggle('open');
+}
+
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.15});
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
