@@ -636,6 +636,72 @@ async function submitForm(){
       throw new Error('Formspree ' + res.status + ': ' + errText);
     }
 
+
+    // Save to Supabase silently (don't block success if this fails)
+    const SUPABASE_URL = 'https://rdernrouixyotkitagls.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZXJucm91aXh5b3RraXRhZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2OTUxMDQsImV4cCI6MjA5NDI3MTEwNH0.qna1Dw5I0IRj_a-lOiffxk54MiADtuhFVTR7csJkGc0';
+    try {
+      const goals = Array.from(selectedGoals).map(i => ({
+        name: goalNames[i],
+        importance: goalSliderValues[i]
+      }));
+      await fetch(SUPABASE_URL + '/rest/v1/intake_forms', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name:  lastName,
+          email:      email,
+          age:        parseInt(document.getElementById('age').value) || null,
+          current_weight: parseFloat(document.getElementById('current-weight').value) || null,
+          target_weight:  parseFloat(document.getElementById('target-weight').value) || null,
+          height:     parseFloat(document.getElementById('height').value) || null,
+          waist:      parseFloat(document.getElementById('waist').value) || null,
+          hips:       parseFloat(document.getElementById('hips').value) || null,
+          parq: {
+            heart_condition:  parqAnswers[0]||'',
+            chest_pain:       parqAnswers[1]||'',
+            dizziness:        parqAnswers[2]||'',
+            joint_problems:   parqAnswers[3]||'',
+            pregnant:         parqAnswers[4]||'',
+            medication:       parqAnswers[5]||'',
+            injuries: ynAnswers['injuries-yn']==='Yes' ? (document.getElementById('injuries').value||'') : 'No'
+          },
+          training: {
+            fitness_level:      getSelected('fitness-level')||'',
+            days_per_week:      getSelected('days-per-week')||'',
+            session_length:     getSelected('session-length')||'',
+            location:           getSelected('training-location')||'',
+            programme_history:  getSelected('programme-before')||''
+          },
+          nutrition: {
+            typical_eating:  getMultiSelected('eating-habits'),
+            food_challenges: getMultiSelected('food-challenge'),
+            allergies: ynAnswers['allergies-yn']==='Yes' ? (document.getElementById('allergies').value||'') : 'No',
+            diet_type:    getSelected('diet-type')||'',
+            water_intake: getSelected('water-intake')||'',
+            sleep:        getSelected('sleep')||'',
+            stress:       getSelected('stress')||'',
+            job_type:     getSelected('job-type')||''
+          },
+          goals: {
+            goals:        goals,
+            main_goal:    goals.map(g=>g.name).join(', '),
+            goal_why:     document.getElementById('goal-why').value.trim()||'',
+            obstacles:    document.getElementById('obstacles').value.trim()||'',
+            commitment:   getSelected('commitment')||'',
+            anything_else: document.getElementById('anything-else').value.trim()||''
+          },
+          status: 'new'
+        })
+      });
+    } catch(e){ console.log('Supabase save failed silently', e); }
+
     // Success
     document.getElementById('part-5').classList.remove('active');
     document.getElementById('success-screen').style.display='block';
