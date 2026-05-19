@@ -24,9 +24,9 @@ body{font-family:var(--fb);color:var(--charcoal);max-width:100%;overflow-x:hidde
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .nav-logo{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--charcoal);letter-spacing:0.04em;flex-shrink:0}
 .nav-logo em{font-style:italic;color:var(--foundation-dark)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.lang-switcher{display:flex;align-items:center;gap:4px}
-.lang-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-family:var(--fb);font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .15s}
+.nav-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.lang-switcher{display:flex;align-items:center;gap:3px}
+.lang-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:3px 7px;font-family:var(--fb);font-size:11px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .15s}
 .lang-btn.active{background:var(--charcoal);color:var(--white);border-color:var(--charcoal)}
 .nav-cta{background:var(--charcoal);color:var(--white);border:none;border-radius:100px;padding:11px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap}
 
@@ -169,7 +169,7 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-eyebrow" data-t="hero_eyebrow">Personal coaching for women</div>
-    <h1 class="hero-headline" data-t="hero_headline">Feel stronger, lighter and more <em data-t="hero_headline_em">confident</em> in your body again.</h1>
+    <h1 class="hero-headline"><span data-t="hero_headline_pre">Feel stronger, lighter and more </span><em data-t="hero_headline_em">confident</em><span data-t="hero_headline_post"> in your body again.</span></h1>
     <p class="hero-sub" data-t="hero_sub">Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.</p>
     <div class="hero-actions">
       <a href="#packages" class="btn-primary" data-t="hero_btn1">See programmes</a>
@@ -196,7 +196,7 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
         <div class="pkg-name" data-t="f_name">Foundation</div>
         <div class="pkg-hook" data-t="f_hook">"Your first step toward a body that feels like home again."</div>
         <div class="pkg-meta">
-          <span class="pkg-price-num">€99</span><span class="pkg-price-unit">/month</span>
+          <span class="pkg-price-num" data-t="f_price">€99</span><span class="pkg-price-unit" data-t="price_unit">/month</span>
           <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
         <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
@@ -222,7 +222,7 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
         <div class="pkg-name" data-t="b_name">Balanced</div>
         <div class="pkg-hook" data-t="b_hook">"For the woman who is done starting over — this time, you finish."</div>
         <div class="pkg-meta">
-          <span class="pkg-price-num">€149</span><span class="pkg-price-unit">/month</span>
+          <span class="pkg-price-num" data-t="b_price">€149</span><span class="pkg-price-unit" data-t="price_unit">/month</span>
           <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
         <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
@@ -248,7 +248,7 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
         <div class="pkg-name" data-t="e_name">Elevate</div>
         <div class="pkg-hook" data-t="e_hook">"For when good enough is no longer enough. Total transformation, nothing held back."</div>
         <div class="pkg-meta">
-          <span class="pkg-price-num">€229</span><span class="pkg-price-unit">/month</span>
+          <span class="pkg-price-num" data-t="e_price">€229</span><span class="pkg-price-unit" data-t="price_unit">/month</span>
           <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
         <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
@@ -329,8 +329,10 @@ const T = {
   en: {
     nav_cta:"Book a call",
     hero_eyebrow:"Personal coaching for women",
-    hero_headline:"Feel stronger, lighter and more confident in your body again.",
+    f_price:"€99",b_price:"€149",e_price:"€229",price_unit:"/month",
+    hero_headline_pre:"Feel stronger, lighter and more ",
     hero_headline_em:"confident",
+    hero_headline_post:" in your body again.",
     hero_sub:"Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.",
     hero_btn1:"See programmes",
     hero_btn2:"Book a free intro call →",
@@ -372,8 +374,10 @@ const T = {
   sv: {
     nav_cta:"Boka ett samtal",
     hero_eyebrow:"Personlig coaching för kvinnor",
-    hero_headline:"Känn dig starkare, lättare och mer självsäker i din kropp igen.",
+    f_price:"999 kr",b_price:"1299 kr",e_price:"1899 kr",price_unit:"/månad",
+    hero_headline_pre:"Känn dig starkare, lättare och mer ",
     hero_headline_em:"självsäker",
+    hero_headline_post:" i din kropp igen.",
     hero_sub:"Hållbar coaching för kvinnor som vill gå ner i vikt, tona sin kropp, få mer energi och skapa vanor som faktiskt fungerar — anpassad efter ditt liv, dina mål och ditt tempo.",
     hero_btn1:"Se programmen",
     hero_btn2:"Boka ett kostnadsfritt introsamtal →",
@@ -415,8 +419,10 @@ const T = {
   sr: {
     nav_cta:"Zakažite razgovor",
     hero_eyebrow:"Personalni coaching za žene",
-    hero_headline:"Osećajte se lakše, snažnije i sigurnije u svom telu.",
-    hero_headline_em:"sigurnije",
+    f_price:"€99",b_price:"€149",e_price:"€229",price_unit:"/mesec",
+    hero_headline_pre:"Osećajte se lakše, ",
+    hero_headline_em:"snažnije i sigurnije",
+    hero_headline_post:" u svom telu.",
     hero_sub:"Održiva transformacija kroz personalizovani coaching — prilagođen vašem životu, vašim ciljevima i vašem tempu.",
     hero_btn1:"Pogledajte programe",
     hero_btn2:"Zakažite besplatan uvodni poziv →",
@@ -481,18 +487,7 @@ function setLang(lang){
   // Update all data-t elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
-    if(t[key] !== undefined){
-      // Don't replace em tags inside headlines
-      if(el.tagName === 'H1' && key === 'hero_headline'){
-        el.childNodes.forEach(node => {
-          if(node.nodeType === 3) node.textContent = t[key].replace(t['hero_headline_em'], '');
-        });
-        const em = el.querySelector('em');
-        if(em && t['hero_headline_em']) em.textContent = t['hero_headline_em'];
-      } else {
-        el.textContent = t[key];
-      }
-    }
+    if(t[key] !== undefined) el.textContent = t[key];
   });
 
   // Update page title
