@@ -555,6 +555,10 @@ function getYN(key){return ynAnswers[key]||'';}
 
 
 
+function toggleOption(btn){
+  btn.classList.toggle('sel');
+}
+
 function getMultiSelected(groupId){
   const sels = document.querySelectorAll('#'+groupId+' .option-btn.sel');
   if(!sels.length) return '-';
