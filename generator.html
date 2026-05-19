@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Generator — Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF8F4;--white:#FFFFFF;--charcoal:#2C2C2A;--charcoal-light:#4A4A47;
+  --muted:#7A7A76;--faint:#AEAEA9;--border:rgba(44,44,42,0.1);
+  --sage:#A8B8A0;--sage-dark:#5C7A5E;--sage-light:#D4E0D4;--sage-xlight:#EEF3EE;
+  --rose:#EE9F9F;--rose-light:#FDF0F0;--rose-dark:#C97878;
+  --gold:#B8973A;--gold-light:#F0E8D0;
+  --fd:'Cormorant Garamond',Georgia,serif;--fb:'DM Sans',system-ui,sans-serif;
+}
+html,body{background:var(--cream);font-family:var(--fb);color:var(--charcoal);min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:40px 32px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-family:var(--fd);font-size:24px;font-weight:300;color:var(--charcoal);margin-bottom:8px}
+.login-logo em{font-style:italic;color:var(--sage-dark)}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.login-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:13px 14px;font-size:15px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none;margin-bottom:12px}
+.login-btn{width:100%;background:var(--charcoal);color:var(--white);border:none;border-radius:8px;padding:14px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer}
+.login-err{font-size:13px;color:var(--rose-dark);margin-top:8px}
+
+/* MAIN APP */
+.app{display:none;max-width:1100px;margin:0 auto;padding:32px 24px}
+.app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.app-logo{font-family:var(--fd);font-size:22px;font-weight:300}
+.app-logo em{font-style:italic;color:var(--sage-dark)}
+.app-title{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:0.06em;text-transform:uppercase}
+
+/* LAYOUT */
+.gen-layout{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
+
+/* LEFT PANEL */
+.panel{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px}
+.panel-title{font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.field select,.field input,.field textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:var(--fb);color:var(--charcoal);background:var(--cream);outline:none}
+.field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.client-info{background:var(--sage-xlight);border:1px solid var(--sage-light);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.7;color:var(--charcoal-light)}
+.client-info strong{color:var(--charcoal);display:block;font-size:14px;margin-bottom:4px}
+.ci-row{display:flex;justify-content:space-between;gap:8px}
+.ci-tag{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--muted);margin-top:6px;display:inline-block}
+
+/* GENERATE BUTTON */
+.btn-generate{width:100%;background:var(--sage-dark);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:opacity .2s}
+.btn-generate:disabled{opacity:0.5;cursor:not-allowed}
+.btn-send{width:100%;background:var(--charcoal);color:var(--white);border:none;border-radius:10px;padding:14px;font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;display:none}
+
+/* RIGHT PANEL — OUTPUT */
+.output-panel{display:flex;flex-direction:column;gap:16px}
+.output-empty{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:60px 40px;text-align:center;color:var(--muted)}
+.output-empty-icon{font-size:48px;margin-bottom:16px}
+.output-empty-title{font-family:var(--fd);font-size:24px;font-weight:300;color:var(--charcoal);margin-bottom:8px}
+.output-empty-sub{font-size:14px;line-height:1.6}
+
+/* PROGRAMME OUTPUT */
+.prog-output{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px}
+.prog-output-title{font-family:var(--fd);font-size:26px;font-weight:300;color:var(--charcoal);margin-bottom:4px}
+.prog-output-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.prog-section{margin-bottom:24px}
+.prog-section-title{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--sage-light)}
+
+/* SESSION CARDS */
+.sess-output{border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.sess-output-hdr{background:var(--cream);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.sess-output-name{font-size:15px;font-weight:600;color:var(--charcoal)}
+.sess-output-meta{font-size:12px;color:var(--muted)}
+.sess-output-body{padding:0 16px 16px;display:none}
+.sess-output.open .sess-output-body{display:block}
+.sess-output-arrow{font-size:14px;color:var(--faint);transition:transform .2s}
+.sess-output.open .sess-output-arrow{transform:rotate(180deg)}
+
+/* EXERCISE TABLE */
+.ex-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.ex-table th{text-align:left;padding:8px 10px;background:var(--cream);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ex-table td{padding:10px;border-bottom:1px solid rgba(44,44,42,0.05);vertical-align:top}
+.ex-table tr:last-child td{border-bottom:none}
+.ex-note{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic}
+.ex-alt{font-size:11px;color:var(--sage-dark);margin-top:2px}
+
+/* NUTRITION OUTPUT */
+.nut-output{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px}
+.macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.macro-card{background:var(--cream);border-radius:10px;padding:14px;text-align:center}
+.macro-num{font-family:var(--fd);font-size:28px;font-weight:600;color:var(--charcoal);display:block;line-height:1}
+.macro-label{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:0.06em;text-transform:uppercase}
+.meal-plan{display:flex;flex-direction:column;gap:10px}
+.meal-item{border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.meal-name{font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:4px}
+.meal-desc{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* EDITABLE FIELDS */
+.editable{border:1px solid transparent;border-radius:6px;padding:3px 6px;transition:border-color .15s;cursor:text}
+.editable:hover{border-color:var(--sage-light)}
+.editable:focus{outline:none;border-color:var(--sage-dark);background:var(--sage-xlight)}
+
+/* LOADING */
+.loading-wrap{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:60px 40px;text-align:center;display:none}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--sage-light);border-top-color:var(--sage-dark);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:8px}
+.loading-sub{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">Coached <em>by</em> Dejan</div>
+    <div class="login-sub">Programme & Nutrition Generator</div>
+    <input type="password" class="login-input" id="login-pwd" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="main-app">
+  <div class="app-header">
+    <div>
+      <div class="app-logo">Coached <em>by</em> Dejan</div>
+      <div class="app-title">Programme & Nutrition Generator</div>
+    </div>
+  </div>
+
+  <div class="gen-layout">
+
+    <!-- LEFT: CONTROLS -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Client</div>
+        <div class="field">
+          <label>Select Client</label>
+          <select id="client-select" onchange="loadClient()">
+            <option value="">— Select a client —</option>
+          </select>
+        </div>
+        <div id="client-info-wrap"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <div class="panel-title">Programme Settings</div>
+        <div class="field">
+          <label>Programme Name</label>
+          <input type="text" id="prog-name" placeholder="e.g. Foundation 12 Week">
+        </div>
+        <div class="field">
+          <label>Duration (weeks)</label>
+          <select id="prog-weeks">
+            <option value="12" selected>12 weeks</option>
+            <option value="8">8 weeks</option>
+            <option value="16">16 weeks</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Package / Level</label>
+          <select id="prog-package">
+            <option value="Foundation">Foundation</option>
+            <option value="Balanced">Balanced</option>
+            <option value="Elevate">Elevate</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Training Location</label>
+          <select id="prog-location">
+            <option value="gym">Gym (machines available)</option>
+            <option value="home">Home (dumbbells only)</option>
+            <option value="outdoors">Outdoors (bodyweight)</option>
+            <option value="mix">Mix</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Additional Coach Notes</label>
+          <textarea id="prog-notes" placeholder="Any specific focus, adjustments, or observations from your onboarding call..."></textarea>
+        </div>
+        <button class="btn-generate" id="btn-generate" onclick="generateProgramme()">✦ Generate Programme & Nutrition</button>
+        <button class="btn-send" id="btn-send" onclick="sendToApp()">→ Send to Client App</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: OUTPUT -->
+    <div class="output-panel" id="output-panel">
+      <div class="output-empty" id="output-empty">
+        <div class="output-empty-icon">🌿</div>
+        <div class="output-empty-title">Ready to generate</div>
+        <div class="output-empty-sub">Select a client, review their intake answers, adjust settings, and click Generate.</div>
+      </div>
+      <div class="loading-wrap" id="loading-wrap">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Building the programme...</div>
+        <div class="loading-sub">This takes about 20-30 seconds</div>
+      </div>
+      <div id="programme-output" style="display:none"></div>
+      <div id="nutrition-output" style="display:none"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://rdernrouixyotkitagls.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZXJucm91aXh5b3RraXRhZ2xzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2OTUxMDQsImV4cCI6MjA5NDI3MTEwNH0.qna1Dw5I0IRj_a-lOiffxk54MiADtuhFVTR7csJkGc0';
+const SB_HEADERS = {'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'};
+
+let genPassword = '';
+let currentClient = null;
+let generatedData = null;
+
+// ── LOGIN ─────────────────────────────────────────
+function doLogin(){
+  const pwd = document.getElementById('login-pwd').value;
+  if(!pwd){ document.getElementById('login-err').textContent = 'Please enter a password.'; return; }
+  genPassword = pwd;
+  document.getElementById('login-wrap').style.display = 'none';
+  document.getElementById('main-app').style.display = 'block';
+  loadClients();
+}
+
+// ── LOAD CLIENTS ──────────────────────────────────
+async function loadClients(){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/clients?select=id,name,status&order=created_at.asc`, {headers: SB_HEADERS});
+  const clients = await res.json();
+  const sel = document.getElementById('client-select');
+  clients.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name + (c.status === 'active' ? ' ✓' : '');
+    sel.appendChild(opt);
+  });
+}
+
+// ── LOAD CLIENT DATA ──────────────────────────────
+async function loadClient(){
+  const id = document.getElementById('client-select').value;
+  if(!id){ document.getElementById('client-info-wrap').innerHTML = ''; currentClient = null; return; }
+
+  // Load client + their intake form
+  const [clientRes, intakeRes] = await Promise.all([
+    fetch(`${SUPABASE_URL}/rest/v1/clients?id=eq.${id}&select=*`, {headers: SB_HEADERS}),
+    fetch(`${SUPABASE_URL}/rest/v1/intake_forms?email=eq.${encodeURIComponent('')}&select=*&order=submitted_at.desc&limit=1`, {headers: SB_HEADERS})
+  ]);
+
+  const clients = await clientRes.json();
+  const client = clients[0];
+  if(!client){ return; }
+
+  // Try to find intake form by email
+  const intakeByEmail = await fetch(`${SUPABASE_URL}/rest/v1/intake_forms?email=eq.${encodeURIComponent(client.email)}&select=*&order=submitted_at.desc&limit=1`, {headers: SB_HEADERS});
+  const intakeForms = await intakeByEmail.json();
+  const intake = intakeForms[0] || null;
+
+  currentClient = { ...client, intake };
+
+  // Auto-fill programme name
+  if(!document.getElementById('prog-name').value){
+    document.getElementById('prog-name').value = (client.programme_name || 'Foundation 12 Week');
+  }
+
+  // Auto-fill location from intake
+  if(intake?.training?.location){
+    const loc = intake.training.location.toLowerCase();
+    const locSel = document.getElementById('prog-location');
+    if(loc.includes('gym')) locSel.value = 'gym';
+    else if(loc.includes('home')) locSel.value = 'home';
+    else if(loc.includes('outdoor')) locSel.value = 'outdoors';
+    else locSel.value = 'mix';
+  }
+
+  renderClientInfo(client, intake);
+}
+
+function renderClientInfo(c, intake){
+  const t = intake?.training || {};
+  const n = intake?.nutrition || {};
+  const g = intake?.goals || {};
+  const p = intake?.parq || {};
+
+  const injuries = p.injuries && p.injuries !== 'None' && p.injuries !== 'No' ? p.injuries : 'None reported';
+
+  document.getElementById('client-info-wrap').innerHTML = `
+    <div class="client-info">
+      <strong>${c.name}</strong>
+      <div class="ci-row">
+        <span>Age: ${intake?.age || '—'}</span>
+        <span>Weight: ${c.current_weight || '—'} kg</span>
+        <span>Goal: ${c.goal_weight || '—'} kg</span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+        <div>Fitness level: <strong>${t.fitness_level || '—'}</strong></div>
+        <div>Days/week: <strong>${t.days_per_week || '—'}</strong></div>
+        <div>Session length: <strong>${t.session_length || '—'}</strong></div>
+        <div>Location: <strong>${t.location || '—'}</strong></div>
+        <div>Injuries: <strong style="color:${injuries !== 'None reported' ? 'var(--rose-dark)' : 'inherit'}">${injuries}</strong></div>
+        <div>Sleep: <strong>${n.sleep || '—'}</strong></div>
+        <div>Stress: <strong>${n.stress || '—'}</strong></div>
+        <div>Main goal: <strong>${g.main_goal || '—'}</strong></div>
+      </div>
+    </div>`;
+}
+
+// ── GENERATE ──────────────────────────────────────
+async function generateProgramme(){
+  if(!currentClient){ alert('Please select a client first.'); return; }
+
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+  document.getElementById('output-empty').style.display = 'none';
+  document.getElementById('loading-wrap').style.display = 'block';
+  document.getElementById('programme-output').style.display = 'none';
+  document.getElementById('nutrition-output').style.display = 'none';
+  document.getElementById('btn-send').style.display = 'none';
+
+  const c = currentClient;
+  const intake = c.intake || {};
+  const t = intake.training || {};
+  const n = intake.nutrition || {};
+  const g = intake.goals || {};
+  const p = intake.parq || {};
+  const weeks = document.getElementById('prog-weeks').value;
+  const location = document.getElementById('prog-location').value;
+  const pkg = document.getElementById('prog-package').value;
+  const notes = document.getElementById('prog-notes').value;
+  const progName = document.getElementById('prog-name').value;
+
+  const systemPrompt = `You are an expert personal coach working for "Coached by Dejan" — a premium women's fitness coaching brand. You create personalised 12-week programmes for women aged 30-70 who want sustainable weight loss and body toning.
+
+COACHING PHILOSOPHY:
+- Sustainable transformation over quick fixes. Never extreme, never punishing.
+- Training should feel enjoyable, especially in the beginning.
+- The goal is to build a lifestyle, not survive a programme.
+- Results come from consistency, not intensity.
+
+PROGRAMME STRUCTURE:
+- Weeks 1-3: 3 training days per week (Mon/Wed/Fri pattern)
+- Weeks 4-12: 4 training days per week (Mon/Tue/Thu/Fri pattern)
+- Week 1 is always light and fun — client must leave feeling good, not destroyed
+- Session length: 30-40 min weeks 1-3, 45-50 min weeks 4-8, 50-60 min weeks 9-12
+- No HIIT until week 4. Light cardio warmup only in weeks 1-3.
+- Weeks 4-6: introduce steady state cardio after strength
+- Weeks 7+: introduce HIIT once per week (20 sec on / 40 sec off x 8 rounds)
+
+WEEKLY SPLIT (3 days):
+- Day 1: Lower Body & Glutes
+- Day 2: Upper Body & Core
+- Day 3: Full Body (lighter, movement-based)
+
+WEEKLY SPLIT (4 days):
+- Day 1: Lower Body & Glutes (heavy)
+- Day 2: Upper Body Push
+- Day 3: Lower Body & Glutes (lighter, higher reps)
+- Day 4: Upper Body Pull & Core
+
+EXERCISE SELECTION:
+- Prioritise machines over free weights for beginners
+- Free weight alternatives always provided
+- Priority areas: glutes, posterior chain, legs, core, upper body for posture
+- Avoid: heavy barbell squats, heavy deadlifts, Olympic lifts, behind-the-neck press for beginners
+
+SETS/REPS PROGRESSION:
+- Weeks 1-3: 2-3 sets, 12-15 reps, 60-90s rest, RPE 5-6
+- Weeks 4-6: 3 sets, 10-12 reps, 60s rest, RPE 6-7
+- Weeks 7-9: 3-4 sets, 8-12 reps, supersets on isolation, RPE 7-8
+- Weeks 10-12: 3-4 sets, drop sets on final set of key exercises, RPE 8-9
+
+NUTRITION:
+- Caloric deficit 300-500 kcal/day, never below 1200 kcal
+- Protein: 1.6-2.0g per kg bodyweight
+- Carbs: 40-45% of calories
+- Fat: 25-30% of calories
+- Use Mifflin-St Jeor BMR: (10 × kg) + (6.25 × cm) - (5 × age) - 161
+- TDEE multiplier based on activity level
+
+INJURIES: Always work around limitations, never through pain.
+
+OUTPUT FORMAT: You must respond with valid JSON only. No markdown, no explanation, just the JSON object.`;
+
+  const userMessage = `Create a complete programme for this client:
+
+NAME: ${c.name}
+AGE: ${intake.age || 'unknown'}
+CURRENT WEIGHT: ${c.current_weight || 'unknown'} kg
+GOAL WEIGHT: ${c.goal_weight || 'unknown'} kg
+HEIGHT: ${intake.height || 'unknown'} cm
+WAIST: ${intake.waist || 'unknown'} cm
+HIPS: ${intake.hips || 'unknown'} cm
+
+FITNESS LEVEL: ${t.fitness_level || 'beginner'}
+DAYS AVAILABLE: ${t.days_per_week || '3'}
+SESSION LENGTH: ${t.session_length || '45 min'}
+TRAINING LOCATION: ${location}
+PROGRAMME: ${weeks} weeks — ${pkg} package
+
+INJURIES/LIMITATIONS: ${p.injuries || 'None'}
+EATING HABITS: ${n.typical_eating || 'unknown'}
+ALLERGIES: ${n.allergies || 'None'}
+DIET TYPE: ${n.diet_type || 'No restrictions'}
+SLEEP: ${n.sleep || 'unknown'}
+STRESS: ${n.stress || 'unknown'}
+JOB TYPE: ${n.job_type || 'unknown'}
+WATER INTAKE: ${n.water_intake || 'unknown'}
+
+GOALS: ${g.main_goal || 'weight loss and toning'}
+WHY: ${g.goal_why || ''}
+OBSTACLES: ${g.obstacles || ''}
+COMMITMENT: ${g.commitment || '8'}/10
+
+COACH NOTES: ${notes || 'None'}
+
+Respond with this exact JSON structure:
+{
+  "programme_name": "string",
+  "overview": "2-3 sentence overview of the approach for this specific client",
+  "weeks": ${weeks},
+  "phase_1": {
+    "weeks": "1-3",
+    "days_per_week": 3,
+    "focus": "string",
+    "sessions": [
+      {
+        "name": "string",
+        "day_label": "string (e.g. Monday)",
+        "duration_minutes": number,
+        "focus": "string",
+        "exercises": [
+          {
+            "name": "string",
+            "sets": number,
+            "reps": "string",
+            "rest_seconds": number,
+            "machine_alternative": "string or null",
+            "free_weight_alternative": "string or null",
+            "coaching_note": "string"
+          }
+        ],
+        "cardio": "string or null"
+      }
+    ]
+  },
+  "phase_2": {
+    "weeks": "4-12",
+    "days_per_week": 4,
+    "focus": "string",
+    "sessions": [
+      {
+        "name": "string",
+        "day_label": "string",
+        "duration_minutes": number,
+        "focus": "string",
+        "exercises": [
+          {
+            "name": "string",
+            "sets": number,
+            "reps": "string",
+            "rest_seconds": number,
+            "machine_alternative": "string or null",
+            "free_weight_alternative": "string or null",
+            "coaching_note": "string"
+          }
+        ],
+        "cardio": "string or null"
+      }
+    ]
+  },
+  "nutrition": {
+    "daily_calories": number,
+    "protein_g": number,
+    "carbs_g": number,
+    "fat_g": number,
+    "calculation_notes": "string explaining the calculation",
+    "meal_plan": [
+      {
+        "meal": "Breakfast",
+        "description": "string",
+        "protein_focus": "string"
+      },
+      {
+        "meal": "Lunch",
+        "description": "string",
+        "protein_focus": "string"
+      },
+      {
+        "meal": "Dinner",
+        "description": "string",
+        "protein_focus": "string"
+      },
+      {
+        "meal": "Snack",
+        "description": "string",
+        "protein_focus": "string"
+      }
+    ],
+    "hydration": "string",
+    "supplements": "string",
+    "coach_nutrition_note": "string"
+  },
+  "weekly_progression_notes": [
+    {"week": 1, "note": "string"},
+    {"week": 2, "note": "string"},
+    {"week": 3, "note": "string"},
+    {"week": 4, "note": "string"},
+    {"week": 6, "note": "string"},
+    {"week": 8, "note": "string"},
+    {"week": 10, "note": "string"},
+    {"week": 12, "note": "string"}
+  ]
+}`;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        password: genPassword,
+        system: systemPrompt,
+        messages: [{role: 'user', content: userMessage}]
+      })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error(data.error?.message || JSON.stringify(data.error) || 'API error');
+    }
+
+    const text = data.content[0].text;
+    const cleaned = text.replace(/```json|```/g, '').trim();
+    generatedData = JSON.parse(cleaned);
+
+    document.getElementById('loading-wrap').style.display = 'none';
+    renderOutput(generatedData);
+
+    btn.disabled = false;
+    btn.textContent = '↺ Regenerate';
+    document.getElementById('btn-send').style.display = 'block';
+
+  } catch(err){
+    document.getElementById('loading-wrap').style.display = 'none';
+    document.getElementById('output-empty').style.display = 'block';
+    document.getElementById('output-empty').innerHTML = `<div class="output-empty-icon">⚠️</div><div class="output-empty-title">Generation failed</div><div class="output-empty-sub">${err.message}</div>`;
+    btn.disabled = false;
+    btn.textContent = '✦ Generate Programme & Nutrition';
+  }
+}
+
+// ── RENDER OUTPUT ─────────────────────────────────
+function renderOutput(d){
+  // PROGRAMME
+  const progEl = document.getElementById('programme-output');
+  progEl.style.display = 'block';
+
+  let html = `<div class="prog-output">
+    <div class="prog-output-title" contenteditable="true">${d.programme_name}</div>
+    <div class="prog-output-sub">${d.weeks} weeks · ${currentClient?.name}</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px">${d.overview}</p>`;
+
+  // Phase 1
+  html += `<div class="prog-section"><div class="prog-section-title">Phase 1 — Weeks ${d.phase_1.weeks} · ${d.phase_1.days_per_week} days/week</div>`;
+  html += `<p style="font-size:13px;color:var(--muted);margin-bottom:12px">${d.phase_1.focus}</p>`;
+  d.phase_1.sessions.forEach((s, i) => {
+    html += renderSession(s, i, 1);
+  });
+  html += `</div>`;
+
+  // Phase 2
+  html += `<div class="prog-section"><div class="prog-section-title">Phase 2 — Weeks ${d.phase_2.weeks} · ${d.phase_2.days_per_week} days/week</div>`;
+  html += `<p style="font-size:13px;color:var(--muted);margin-bottom:12px">${d.phase_2.focus}</p>`;
+  d.phase_2.sessions.forEach((s, i) => {
+    html += renderSession(s, i, 2);
+  });
+  html += `</div>`;
+
+  // Weekly progression
+  html += `<div class="prog-section"><div class="prog-section-title">Weekly Progression Notes</div>`;
+  d.weekly_progression_notes.forEach(w => {
+    html += `<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><strong style="color:var(--sage-dark)">Week ${w.week}:</strong> <span contenteditable="true" class="editable">${w.note}</span></div>`;
+  });
+  html += `</div></div>`;
+
+  progEl.innerHTML = html;
+
+  // NUTRITION
+  const nutEl = document.getElementById('nutrition-output');
+  nutEl.style.display = 'block';
+  const nt = d.nutrition;
+
+  nutEl.innerHTML = `<div class="nut-output">
+    <div class="prog-output-title" style="margin-bottom:4px">Nutrition Plan</div>
+    <div class="prog-output-sub" style="margin-bottom:16px">${currentClient?.name}</div>
+    <div class="macro-grid">
+      <div class="macro-card"><span class="macro-num" contenteditable="true">${nt.daily_calories}</span><span class="macro-label">kcal / day</span></div>
+      <div class="macro-card"><span class="macro-num" contenteditable="true">${nt.protein_g}g</span><span class="macro-label">Protein</span></div>
+      <div class="macro-card"><span class="macro-num" contenteditable="true">${nt.carbs_g}g</span><span class="macro-label">Carbs</span></div>
+      <div class="macro-card"><span class="macro-num" contenteditable="true">${nt.fat_g}g</span><span class="macro-label">Fat</span></div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">${nt.calculation_notes}</p>
+    <div class="prog-section-title" style="margin-bottom:12px">Daily Meal Plan</div>
+    <div class="meal-plan">
+      ${nt.meal_plan.map(m => `
+        <div class="meal-item">
+          <div class="meal-name">${m.meal}</div>
+          <div class="meal-desc" contenteditable="true">${m.description}</div>
+          <div style="font-size:12px;color:var(--sage-dark);margin-top:4px">Protein: ${m.protein_focus}</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:var(--muted);line-height:1.6">
+      <div><strong>Hydration:</strong> ${nt.hydration}</div>
+      <div style="margin-top:6px"><strong>Supplements:</strong> ${nt.supplements}</div>
+    </div>
+    <div style="margin-top:16px;background:var(--sage-xlight);border:1px solid var(--sage-light);border-radius:8px;padding:14px;font-size:13px;color:var(--charcoal-light);line-height:1.6" contenteditable="true">${nt.coach_nutrition_note}</div>
+  </div>`;
+}
+
+function renderSession(s, i, phase){
+  const id = `sess-p${phase}-${i}`;
+  return `<div class="sess-output" id="${id}">
+    <div class="sess-output-hdr" onclick="toggleSessOutput('${id}')">
+      <div>
+        <div class="sess-output-name">${s.name}</div>
+        <div class="sess-output-meta">${s.day_label} · ${s.duration_minutes} min · ${s.exercises.length} exercises</div>
+      </div>
+      <div class="sess-output-arrow">⌄</div>
+    </div>
+    <div class="sess-output-body">
+      <table class="ex-table">
+        <tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Notes</th></tr>
+        ${s.exercises.map(ex => `
+          <tr>
+            <td>
+              <strong>${ex.name}</strong>
+              ${ex.free_weight_alternative ? `<div class="ex-alt">Alt: ${ex.free_weight_alternative}</div>` : ''}
+            </td>
+            <td contenteditable="true" class="editable">${ex.sets}</td>
+            <td contenteditable="true" class="editable">${ex.reps}</td>
+            <td>${ex.rest_seconds}s</td>
+            <td><div class="ex-note" contenteditable="true">${ex.coaching_note}</div></td>
+          </tr>`).join('')}
+      </table>
+      ${s.cardio ? `<div style="margin-top:12px;padding:10px 12px;background:var(--sage-xlight);border-radius:8px;font-size:13px;color:var(--sage-dark)">🏃 ${s.cardio}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function toggleSessOutput(id){
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── SEND TO APP ───────────────────────────────────
+async function sendToApp(){
+  if(!generatedData || !currentClient){ return; }
+  const btn = document.getElementById('btn-send');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const progName = document.querySelector('.prog-output-title')?.textContent || generatedData.programme_name;
+  const nt = generatedData.nutrition;
+
+  try {
+    // Update client with programme name and nutrition
+    await fetch(`${SUPABASE_URL}/rest/v1/clients?id=eq.${currentClient.id}`, {
+      method: 'PATCH',
+      headers: {...SB_HEADERS, 'Prefer': 'return=minimal'},
+      body: JSON.stringify({
+        programme_name: progName,
+        nutrition: {
+          kcal: nt.daily_calories,
+          protein: nt.protein_g,
+          carbs: nt.carbs_g,
+          fat: nt.fat_g,
+          meal_plan: nt.meal_plan,
+          notes: nt.coach_nutrition_note,
+          hydration: nt.hydration
+        }
+      })
+    });
+
+    // Delete existing sessions
+    await fetch(`${SUPABASE_URL}/rest/v1/sessions?client_id=eq.${currentClient.id}`, {
+      method: 'DELETE', headers: SB_HEADERS
+    });
+
+    // Insert Phase 1 sessions
+    const allSessions = [
+      ...generatedData.phase_1.sessions.map((s,i) => ({...s, sort_order: i})),
+      ...generatedData.phase_2.sessions.map((s,i) => ({...s, sort_order: generatedData.phase_1.sessions.length + i}))
+    ];
+
+    for(const s of allSessions){
+      const sessRes = await fetch(`${SUPABASE_URL}/rest/v1/sessions`, {
+        method: 'POST',
+        headers: {...SB_HEADERS, 'Prefer': 'return=representation'},
+        body: JSON.stringify({
+          client_id: currentClient.id,
+          name: s.name,
+          day_label: s.day_label,
+          duration: s.duration_minutes,
+          sort_order: s.sort_order
+        })
+      });
+      const sessData = await sessRes.json();
+      const sessId = Array.isArray(sessData) ? sessData[0].id : sessData.id;
+
+      // Insert exercises
+      for(let ei = 0; ei < s.exercises.length; ei++){
+        const ex = s.exercises[ei];
+        const sets = ex.sets || 3;
+        const repsVal = ex.reps || '12';
+        const restVal = ex.rest_seconds || 60;
+        const setsData = Array.from({length: sets}, () => ({reps: repsVal, kg: '', rest: restVal}));
+
+        await fetch(`${SUPABASE_URL}/rest/v1/exercises`, {
+          method: 'POST',
+          headers: {...SB_HEADERS, 'Prefer': 'return=minimal'},
+          body: JSON.stringify({
+            session_id: sessId,
+            name: ex.name,
+            detail: ex.coaching_note || '',
+            video_url: '',
+            sets,
+            reps: repsVal,
+            rest_seconds: restVal,
+            sets_data: setsData,
+            sort_order: ei
+          })
+        });
+      }
+    }
+
+    btn.textContent = '✓ Sent to App';
+    btn.style.background = 'var(--sage-dark)';
+    setTimeout(() => {
+      btn.textContent = '→ Send to Client App';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+
+  } catch(err){
+    btn.textContent = 'Error — try again';
+    btn.disabled = false;
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
