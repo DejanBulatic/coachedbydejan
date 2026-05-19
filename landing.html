@@ -4,41 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#F5F0EA">
-<title>Coached by Dejan — Feel stronger, lighter and more confident in your body again</title>
+<title>Coached by Dejan</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --cream:#F5F0EA;
-  --white:#FFFFFF;
-  --charcoal:#1E1E1C;
-  --charcoal-light:#2F2F2D;
-  --muted:#5A5755;
-  --faint:#9A9490;
-  --border:rgba(30,30,28,0.12);
-  --foundation-bg:#E8F0E6;
-  --foundation-dark:#3D6140;
-  --foundation-border:#7A9E7E;
-  --balanced-bg:#F5E8E6;
-  --balanced-dark:#8A3E38;
-  --balanced-border:#C07870;
-  --elevate-bg:#F0E8DC;
-  --elevate-dark:#6B4E28;
-  --elevate-border:#A88860;
-  --gold:#C9A86A;
-  --gold-bg:#F5EDD8;
-  --gold-dark:#7A5A20;
-  --fd:'Cormorant Garamond',Georgia,serif;
-  --fb:'DM Sans',system-ui,sans-serif;
+  --cream:#F5F0EA;--white:#FFFFFF;--charcoal:#1E1E1C;--charcoal-light:#2F2F2D;
+  --muted:#5A5755;--faint:#9A9490;--border:rgba(30,30,28,0.12);
+  --foundation-bg:#E8F0E6;--foundation-dark:#3D6140;--foundation-border:#7A9E7E;
+  --balanced-bg:#F5E8E6;--balanced-dark:#8A3E38;--balanced-border:#C07870;
+  --elevate-bg:#F0E8DC;--elevate-dark:#6B4E28;--elevate-border:#A88860;
+  --gold:#C9A86A;--gold-bg:#F5EDD8;--gold-dark:#7A5A20;
+  --fd:'Cormorant Garamond',Georgia,serif;--fb:'DM Sans',system-ui,sans-serif;
 }
 html{background:var(--cream);scroll-behavior:smooth}
 body{font-family:var(--fb);color:var(--charcoal);max-width:100%;overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--charcoal);letter-spacing:0.04em}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-logo{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--charcoal);letter-spacing:0.04em;flex-shrink:0}
 .nav-logo em{font-style:italic;color:var(--foundation-dark)}
-.nav-cta{background:var(--charcoal);color:var(--white);border:none;border-radius:100px;padding:11px 22px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;letter-spacing:0.02em}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-switcher{display:flex;align-items:center;gap:4px}
+.lang-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-family:var(--fb);font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .15s}
+.lang-btn.active{background:var(--charcoal);color:var(--white);border-color:var(--charcoal)}
+.nav-cta{background:var(--charcoal);color:var(--white);border:none;border-radius:100px;padding:11px 20px;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap}
 
 /* HERO */
 .hero{min-height:100svh;padding:90px 24px 60px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;background:var(--charcoal)}
@@ -49,10 +39,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,
 .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#A8B8A0;margin-bottom:16px}
 .hero-headline{font-family:var(--fd);font-size:clamp(46px,13vw,76px);font-weight:600;line-height:1.02;color:var(--white);margin-bottom:20px;letter-spacing:-0.01em}
 .hero-headline em{font-style:italic;color:#A8B8A0;font-weight:400}
-.hero-sub{font-size:17px;color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:32px;font-weight:400;max-width:340px}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:32px;font-weight:400;max-width:360px}
 .hero-actions{display:flex;flex-direction:column;gap:12px}
-.btn-primary{background:var(--white);color:var(--charcoal);border:none;border-radius:100px;padding:16px 32px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:block;text-align:center;letter-spacing:0.02em}
-.btn-ghost{background:rgba(255,255,255,0.12);color:var(--white);border:1px solid rgba(255,255,255,0.3);border-radius:100px;padding:15px 32px;font-family:var(--fb);font-size:15px;font-weight:500;cursor:pointer;text-decoration:none;display:block;text-align:center;letter-spacing:0.02em}
+.btn-primary{background:var(--white);color:var(--charcoal);border:none;border-radius:100px;padding:16px 32px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:block;text-align:center}
+.btn-ghost{background:rgba(255,255,255,0.12);color:var(--white);border:1px solid rgba(255,255,255,0.3);border-radius:100px;padding:15px 32px;font-family:var(--fb);font-size:15px;font-weight:500;cursor:pointer;text-decoration:none;display:block;text-align:center}
 
 /* INTRO */
 .intro{padding:56px 24px;background:var(--white)}
@@ -62,7 +52,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,
 .intro-text{font-family:var(--fd);font-size:clamp(26px,7vw,36px);font-weight:600;color:var(--charcoal);line-height:1.35;margin-bottom:16px}
 .intro-text em{font-style:italic;color:var(--foundation-dark);font-weight:400}
 .intro-sub{font-size:15px;color:var(--muted);line-height:1.75;font-weight:400}
-.intro-tag{display:inline-block;margin-top:20px;background:var(--foundation-bg);color:var(--foundation-dark);border:1px solid var(--foundation-border);border-radius:100px;padding:8px 16px;font-size:13px;font-weight:600;letter-spacing:0.02em}
+.intro-tag{display:inline-block;margin-top:20px;background:var(--foundation-bg);color:var(--foundation-dark);border:1px solid var(--foundation-border);border-radius:100px;padding:8px 16px;font-size:13px;font-weight:600}
 
 /* PACKAGES */
 .packages{padding:56px 24px 64px;background:var(--cream)}
@@ -92,7 +82,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,
 #card-foundation .pkg-weeks{background:var(--foundation-bg);color:var(--foundation-dark);border:1px solid var(--foundation-border)}
 #card-balanced .pkg-weeks{background:var(--balanced-bg);color:var(--balanced-dark);border:1px solid var(--balanced-border)}
 #card-elevate .pkg-weeks{background:var(--elevate-bg);color:var(--elevate-dark);border:1px solid var(--elevate-border)}
-.pkg-cta{display:block;width:100%;border:none;border-radius:12px;padding:15px 24px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;letter-spacing:0.02em;margin-bottom:14px;color:var(--white)}
+.pkg-cta{display:block;width:100%;border:none;border-radius:12px;padding:15px 24px;font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;margin-bottom:14px;color:var(--white)}
 #card-foundation .pkg-cta{background:var(--foundation-dark)}
 #card-balanced .pkg-cta{background:var(--balanced-dark)}
 #card-elevate .pkg-cta{background:var(--elevate-dark)}
@@ -148,7 +138,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,234,
 .final-cta-title{font-family:var(--fd);font-size:clamp(36px,9vw,56px);font-weight:600;color:var(--white);line-height:1.1;margin-bottom:16px}
 .final-cta-title em{font-style:italic;color:#A8B8A0;font-weight:400}
 .final-cta-sub{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:32px;font-weight:400}
-.btn-primary-light{background:var(--white);color:var(--charcoal);border:none;border-radius:100px;padding:17px 36px;font-family:var(--fb);font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;text-align:center;letter-spacing:0.02em}
+.btn-primary-light{background:var(--white);color:var(--charcoal);border:none;border-radius:100px;padding:17px 36px;font-family:var(--fb);font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
 
 /* FOOTER */
 footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:center;border-top:1px solid rgba(255,255,255,0.08)}
@@ -156,7 +146,6 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
 .footer-logo em{font-style:italic;color:#A8B8A0}
 .footer-text{font-size:12px;color:rgba(245,240,234,0.3);line-height:1.7}
 
-/* ANIMATIONS */
 .fade-up{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
 .fade-up.visible{opacity:1;transform:translateY(0)}
 </style>
@@ -165,111 +154,118 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
 
 <nav>
   <div class="nav-logo">Coached <em>by</em> Dejan</div>
-  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="nav-cta">Book a call</a>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('sv')">SV</button>
+      <button class="lang-btn" onclick="setLang('sr')">SR</button>
+    </div>
+    <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="nav-cta" data-t="nav_cta">Book a call</a>
+  </div>
 </nav>
 
 <section class="hero">
-  <div class="hero-img"><img src="/images/quote-9.jpg" alt="Woman training" loading="eager"></div>
+  <div class="hero-img"><img src="/images/quote-9.jpg" alt="" loading="eager"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Personal coaching for women</div>
-    <h1 class="hero-headline">Feel stronger, lighter and more <em>confident</em> in your body again.</h1>
-    <p class="hero-sub">Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.</p>
+    <div class="hero-eyebrow" data-t="hero_eyebrow">Personal coaching for women</div>
+    <h1 class="hero-headline" data-t="hero_headline">Feel stronger, lighter and more <em data-t="hero_headline_em">confident</em> in your body again.</h1>
+    <p class="hero-sub" data-t="hero_sub">Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.</p>
     <div class="hero-actions">
-      <a href="#packages" class="btn-primary">See programmes</a>
-      <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-ghost">Book a free intro call →</a>
+      <a href="#packages" class="btn-primary" data-t="hero_btn1">See programmes</a>
+      <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-ghost" data-t="hero_btn2">Book a free intro call →</a>
     </div>
   </div>
 </section>
 
 <section class="intro">
-  <div class="intro-img"><img src="/images/quote-7.png" alt="Woman walking outdoors" loading="lazy"></div>
-  <div class="intro-label">The philosophy</div>
-  <h2 class="intro-text">Real change doesn't come from restriction.<br>It comes from <em>building something new.</em></h2>
-  <p class="intro-sub">I work with women who are ready to stop starting over. No extreme diets, no punishment workouts. Just a programme built specifically for you, delivered with structure and accountability.</p>
-  <span class="intro-tag">100% personalised to you</span>
+  <div class="intro-img"><img src="/images/quote-7.png" alt="" loading="lazy"></div>
+  <div class="intro-label" data-t="intro_label">The philosophy</div>
+  <h2 class="intro-text" data-t="intro_heading">Real change doesn't come from restriction. It comes from <em>building something new.</em></h2>
+  <p class="intro-sub" data-t="intro_body">I work with women who are ready to stop starting over. No extreme diets, no punishment workouts. Just a programme built specifically for you, delivered with structure and accountability.</p>
+  <span class="intro-tag" data-t="intro_badge">100% personalised to you</span>
 </section>
 
 <section class="packages" id="packages">
-  <div class="section-eyebrow">Choose your journey</div>
-  <h2 class="section-title">Find the programme<br>that's <em>right for you</em></h2>
+  <div class="section-eyebrow" data-t="pkg_eyebrow">Choose your journey</div>
+  <h2 class="section-title" data-t="pkg_heading">Find the programme that's <em>right for you</em></h2>
   <div class="package-cards">
 
     <div class="pkg-card" id="card-foundation">
       <div class="pkg-header" onclick="togglePackage('card-foundation')">
-        <div class="pkg-name">Foundation</div>
-        <div class="pkg-hook">"Your first step toward a body that feels like home again."</div>
+        <div class="pkg-name" data-t="f_name">Foundation</div>
+        <div class="pkg-hook" data-t="f_hook">"Your first step toward a body that feels like home again."</div>
         <div class="pkg-meta">
           <span class="pkg-price-num">€99</span><span class="pkg-price-unit">/month</span>
-          <span class="pkg-weeks">12 weeks</span>
+          <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
-        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()">Book a free intro call</a>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
         <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-foundation')">
-          <span>See what's included</span>
+          <span data-t="pkg_toggle">See what's included</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
         </div>
       </div>
       <div class="pkg-body">
         <ul class="pkg-points">
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Personalised workout programme</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Simple & sustainable nutrition plan</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Weekly check-in</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Personal written feedback each week</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Adjustments based on your progress</li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="f_b1">Personalised workout programme</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="f_b2">Simple & sustainable nutrition plan</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="f_b3">Weekly check-in</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="f_b4">Personal written feedback each week</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="f_b5">Adjustments based on your progress</span></li>
         </ul>
       </div>
     </div>
 
     <div class="pkg-card" id="card-balanced">
       <div class="pkg-header" onclick="togglePackage('card-balanced')">
-        <div class="pkg-badge">Most popular</div>
-        <div class="pkg-name">Balanced</div>
-        <div class="pkg-hook">"For the woman who is done starting over — this time, you finish."</div>
+        <div class="pkg-badge" data-t="popular">Most popular</div>
+        <div class="pkg-name" data-t="b_name">Balanced</div>
+        <div class="pkg-hook" data-t="b_hook">"For the woman who is done starting over — this time, you finish."</div>
         <div class="pkg-meta">
           <span class="pkg-price-num">€149</span><span class="pkg-price-unit">/month</span>
-          <span class="pkg-weeks">12 weeks</span>
+          <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
-        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()">Book a free intro call</a>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
         <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-balanced')">
-          <span>See what's included</span>
+          <span data-t="pkg_toggle">See what's included</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
         </div>
       </div>
       <div class="pkg-body">
         <ul class="pkg-points">
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Personalised workout programme</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Individual nutrition plan</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Weekly check-in</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Personal written feedback each week</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Direct support via WhatsApp</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Option to book coaching calls</li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b1">Personalised workout programme</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b2">Individual nutrition plan</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b3">Weekly check-in</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b4">Personal written feedback each week</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b5">Direct support via WhatsApp</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="b_b6">Option to book coaching calls</span></li>
         </ul>
       </div>
     </div>
 
     <div class="pkg-card" id="card-elevate">
       <div class="pkg-header" onclick="togglePackage('card-elevate')">
-        <div class="pkg-name">Elevate</div>
-        <div class="pkg-hook">"For when good enough is no longer enough. Total transformation, nothing held back."</div>
+        <div class="pkg-name" data-t="e_name">Elevate</div>
+        <div class="pkg-hook" data-t="e_hook">"For when good enough is no longer enough. Total transformation, nothing held back."</div>
         <div class="pkg-meta">
           <span class="pkg-price-num">€229</span><span class="pkg-price-unit">/month</span>
-          <span class="pkg-weeks">12 weeks</span>
+          <span class="pkg-weeks" data-t="weeks">12 weeks</span>
         </div>
-        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()">Book a free intro call</a>
+        <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="pkg-cta" onclick="event.stopPropagation()" data-t="pkg_cta">Book a free intro call</a>
         <div class="pkg-toggle" onclick="event.stopPropagation();togglePackage('card-elevate')">
-          <span>See what's included</span>
+          <span data-t="pkg_toggle">See what's included</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
         </div>
       </div>
       <div class="pkg-body">
         <ul class="pkg-points">
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Personalised workout programme</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Fully personalised nutrition plan</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Weekly check-in</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Priority personal feedback</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Direct support via WhatsApp</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Option to book coaching calls</li>
-          <li class="pkg-point"><span class="pkg-point-dot"></span>Extra support & follow-up throughout</li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b1">Personalised workout programme</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b2">Fully personalised nutrition plan</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b3">Weekly check-in</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b4">Priority personal feedback</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b5">Direct support via WhatsApp</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b6">Option to book coaching calls</span></li>
+          <li class="pkg-point"><span class="pkg-point-dot"></span><span data-t="e_b7">Extra support & follow-up throughout</span></li>
         </ul>
       </div>
     </div>
@@ -278,21 +274,21 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
 </section>
 
 <div class="inperson">
-  <div class="inperson-label">Boutique experience</div>
-  <div class="inperson-name">In-Person</div>
-  <p class="inperson-text">Face to face, fully tailored, nothing held back. Available in select locations. Enquire for pricing and availability.</p>
-  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-gold">Book a conversation</a>
+  <div class="inperson-label" data-t="ip_label">Boutique experience</div>
+  <div class="inperson-name" data-t="ip_name">In-Person</div>
+  <p class="inperson-text" data-t="ip_body">Face to face, fully tailored, nothing held back. Available in select locations. Enquire for pricing and availability.</p>
+  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-gold" data-t="ip_btn">Book a conversation</a>
 </div>
 
 <section class="how">
-  <div class="section-eyebrow">The process</div>
-  <h2 class="section-title">How it <em>works</em></h2>
+  <div class="section-eyebrow" data-t="how_eyebrow">The process</div>
+  <h2 class="section-title" data-t="how_heading">How it <em>works</em></h2>
   <div class="steps-simple">
-    <div class="step-simple fade-up"><div class="step-num-sm">01</div><div class="step-title-sm">Book a free intro call</div></div>
-    <div class="step-simple fade-up"><div class="step-num-sm">02</div><div class="step-title-sm">Choose your programme & pay</div></div>
-    <div class="step-simple fade-up"><div class="step-num-sm">03</div><div class="step-title-sm">Fill in your intake form</div></div>
-    <div class="step-simple fade-up"><div class="step-num-sm">04</div><div class="step-title-sm">Receive your personalised programme</div></div>
-    <div class="step-simple fade-up"><div class="step-num-sm">05</div><div class="step-title-sm">Begin. Check in. Progress.</div></div>
+    <div class="step-simple fade-up"><div class="step-num-sm">01</div><div class="step-title-sm" data-t="s1">Book a free intro call</div></div>
+    <div class="step-simple fade-up"><div class="step-num-sm">02</div><div class="step-title-sm" data-t="s2">Choose your programme & pay</div></div>
+    <div class="step-simple fade-up"><div class="step-num-sm">03</div><div class="step-title-sm" data-t="s3">Fill in your intake form</div></div>
+    <div class="step-simple fade-up"><div class="step-num-sm">04</div><div class="step-title-sm" data-t="s4">Receive your personalised programme</div></div>
+    <div class="step-simple fade-up"><div class="step-num-sm">05</div><div class="step-title-sm" data-t="s5">Begin. Check in. Progress.</div></div>
   </div>
 </section>
 
@@ -300,35 +296,217 @@ footer{padding:28px 24px;background:var(--charcoal-light,#2F2F2D);text-align:cen
   <div class="quote-img"><img src="/images/dejan-coach.jpg" alt="Dejan" loading="lazy"></div>
   <div class="quote-overlay"></div>
   <div class="quote-mark">"</div>
-  <p class="quote-text">The goal is not to be perfect. The goal is to feel like yourself again — strong, energised, and at home in your own body.</p>
-  <div class="quote-author">Dejan — Coach</div>
+  <p class="quote-text" data-t="quote">The goal is not to be perfect. The goal is to feel like yourself again — strong, energised, and at home in your own body.</p>
+  <div class="quote-author" data-t="quote_author">Dejan — Coach</div>
 </section>
 
 <section class="faq">
-  <div class="section-eyebrow">Questions</div>
-  <h2 class="section-title">Things you might<br>be <em>wondering</em></h2>
+  <div class="section-eyebrow" data-t="faq_eyebrow">Questions</div>
+  <h2 class="section-title" data-t="faq_heading">Things you might be <em>wondering</em></h2>
   <div class="faq-items">
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I need any experience to start?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">Not at all. Most of my clients are beginners or returning after a long break. The programme is built around where you are right now.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What equipment do I need?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">Your programme is built around what you have access to — gym, home, or outdoors. You tell me, I adapt.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the app work?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">After you sign up, you receive a private app on your phone. Your workouts, nutrition plan, check-ins, and our communication all live there.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I do this with an injury or health condition?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">Yes. The intake process includes a health screening. I work around limitations, not against them.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What happens after 12 weeks?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">We review your results and discuss what comes next. Many clients continue. No pressure — just an honest conversation.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is coaching available in my language?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a">Coaching is available in English, Swedish, and Serbian. The intake form and app are in all three languages.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span data-t="q1">Do I need any experience to start?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a" data-t="a1">Not at all. Most of my clients are beginners or returning after a long break. The programme is built around where you are right now.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span data-t="q2">What equipment do I need?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a" data-t="a2">Your programme is built around what you have access to — gym, home, or outdoors. You tell me, I adapt.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span data-t="q3">How does the app work?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a" data-t="a3">After you sign up, you receive a private app on your phone. Your workouts, nutrition plan, check-ins, and our communication all live there.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span data-t="q4">Can I do this with an injury or health condition?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a" data-t="a4">Yes. The intake process includes a health screening. I work around limitations, not against them.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span data-t="q5">What happens after 12 weeks?</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg></div><div class="faq-a" data-t="a5">We review your results and discuss what comes next. Many clients continue. No pressure — just an honest conversation.</div></div>
   </div>
 </section>
 
 <section class="final-cta">
-  <h2 class="final-cta-title">Ready to feel like<br><em>yourself again?</em></h2>
-  <p class="final-cta-sub">Start with a free intro call. No commitment, no pressure.</p>
-  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-primary-light">Book your free intro call</a>
+  <h2 class="final-cta-title" data-t="cta_heading">Ready to feel like <em>yourself again?</em></h2>
+  <p class="final-cta-sub" data-t="cta_sub">Start with a free intro call. No commitment, no pressure.</p>
+  <a href="https://cal.eu/coachdejan/coaching-call" target="_blank" class="btn-primary-light" data-t="cta_btn">Book your free intro call</a>
 </section>
 
 <footer>
   <div class="footer-logo">Coached <em>by</em> Dejan</div>
-  <p class="footer-text">Personal coaching for women · English · Svenska · Srpski<br>© 2026 Coached by Dejan. All rights reserved.</p>
+  <p class="footer-text" data-t="footer_tag">Personal coaching for women · English · Svenska · Srpski</p>
+  <p class="footer-text" style="margin-top:4px" data-t="footer_copy">© 2026 Coached by Dejan. All rights reserved.</p>
 </footer>
 
 <script>
+const T = {
+  en: {
+    nav_cta:"Book a call",
+    hero_eyebrow:"Personal coaching for women",
+    hero_headline:"Feel stronger, lighter and more confident in your body again.",
+    hero_headline_em:"confident",
+    hero_sub:"Sustainable transformation through personalised coaching — built around your life, your goals, and your pace.",
+    hero_btn1:"See programmes",
+    hero_btn2:"Book a free intro call →",
+    intro_label:"The philosophy",
+    intro_heading:"Real change doesn't come from restriction. It comes from building something new.",
+    intro_body:"I work with women who are ready to stop starting over. No extreme diets, no punishment workouts. Just a programme built specifically for you, delivered with structure and accountability.",
+    intro_badge:"100% personalised to you",
+    pkg_eyebrow:"Choose your journey",
+    pkg_heading:"Find the programme that's right for you",
+    f_name:"Foundation",
+    f_hook:'"Your first step toward a body that feels like home again."',
+    weeks:"12 weeks",
+    pkg_cta:"Book a free intro call",
+    pkg_toggle:"See what's included",
+    f_b1:"Personalised workout programme",f_b2:"Simple & sustainable nutrition plan",f_b3:"Weekly check-in",f_b4:"Personal written feedback each week",f_b5:"Adjustments based on your progress",
+    popular:"Most popular",
+    b_name:"Balanced",
+    b_hook:'"For the woman who is done starting over — this time, you finish."',
+    b_b1:"Personalised workout programme",b_b2:"Individual nutrition plan",b_b3:"Weekly check-in",b_b4:"Personal written feedback each week",b_b5:"Direct support via WhatsApp",b_b6:"Option to book coaching calls",
+    e_name:"Elevate",
+    e_hook:'"For when good enough is no longer enough. Total transformation, nothing held back."',
+    e_b1:"Personalised workout programme",e_b2:"Fully personalised nutrition plan",e_b3:"Weekly check-in",e_b4:"Priority personal feedback",e_b5:"Direct support via WhatsApp",e_b6:"Option to book coaching calls",e_b7:"Extra support & follow-up throughout",
+    ip_label:"Boutique experience",ip_name:"In-Person",
+    ip_body:"Face to face, fully tailored, nothing held back. Available in select locations. Enquire for pricing and availability.",
+    ip_btn:"Book a conversation",
+    how_eyebrow:"The process",how_heading:"How it works",
+    s1:"Book a free intro call",s2:"Choose your programme & pay",s3:"Fill in your intake form",s4:"Receive your personalised programme",s5:"Begin. Check in. Progress.",
+    quote:"The goal is not to be perfect. The goal is to feel like yourself again — strong, energised, and at home in your own body.",
+    quote_author:"Dejan — Coach",
+    faq_eyebrow:"Questions",faq_heading:"Things you might be wondering",
+    q1:"Do I need any experience to start?",a1:"Not at all. Most of my clients are beginners or returning after a long break. The programme is built around where you are right now.",
+    q2:"What equipment do I need?",a2:"Your programme is built around what you have access to — gym, home, or outdoors. You tell me, I adapt.",
+    q3:"How does the app work?",a3:"After you sign up, you receive a private app on your phone. Your workouts, nutrition plan, check-ins, and our communication all live there.",
+    q4:"Can I do this with an injury or health condition?",a4:"Yes. The intake process includes a health screening. I work around limitations, not against them.",
+    q5:"What happens after 12 weeks?",a5:"We review your results and discuss what comes next. Many clients continue. No pressure — just an honest conversation.",
+    cta_heading:"Ready to feel like yourself again?",cta_sub:"Start with a free intro call. No commitment, no pressure.",cta_btn:"Book your free intro call",
+    footer_tag:"Personal coaching for women · English · Svenska · Srpski",footer_copy:"© 2026 Coached by Dejan. All rights reserved."
+  },
+  sv: {
+    nav_cta:"Boka ett samtal",
+    hero_eyebrow:"Personlig coaching för kvinnor",
+    hero_headline:"Känn dig starkare, lättare och mer självsäker i din kropp igen.",
+    hero_headline_em:"självsäker",
+    hero_sub:"Hållbar coaching för kvinnor som vill gå ner i vikt, tona sin kropp, få mer energi och skapa vanor som faktiskt fungerar — anpassad efter ditt liv, dina mål och ditt tempo.",
+    hero_btn1:"Se programmen",
+    hero_btn2:"Boka ett kostnadsfritt introsamtal →",
+    intro_label:"Filosofin",
+    intro_heading:"Verklig förändring kommer inte från förbud. Den kommer från att bygga något nytt.",
+    intro_body:"Jag arbetar med kvinnor som är redo att sluta börja om hela tiden. Inga extrema dieter, inga straffande träningspass. Bara ett program byggt specifikt för dig — med struktur, stöd och tydlig uppföljning.",
+    intro_badge:"100% anpassat efter dig",
+    pkg_eyebrow:"Starta din resa",
+    pkg_heading:"Välj programmet som passar dig",
+    f_name:"Foundation",
+    f_hook:'"För dig som vill komma igång i lugn takt — med stöd, struktur och hållbara vanor."',
+    weeks:"12 veckor",
+    pkg_cta:"Boka ett kostnadsfritt samtal",
+    pkg_toggle:"Se vad som ingår",
+    f_b1:"Personligt träningsprogram",f_b2:"Enkel och hållbar kostplan",f_b3:"Veckovis check-in",f_b4:"Personlig skriftlig återkoppling varje vecka",f_b5:"Anpassningar utifrån din utveckling",
+    popular:"Mest populär",
+    b_name:"Balanced",
+    b_hook:'"För dig som vill känna verklig förändring — på ett sätt som faktiskt håller."',
+    b_b1:"Personligt träningsprogram",b_b2:"Individuell kostplan",b_b3:"Veckovis check-in",b_b4:"Personlig skriftlig återkoppling varje vecka",b_b5:"Direktkontakt via WhatsApp",b_b6:"Möjlighet att boka coachingsamtal",
+    e_name:"Elevate",
+    e_hook:'"Ett mer personligt och nära coachingupplägg för dig som vill prioritera dig själv fullt ut."',
+    e_b1:"Personligt träningsprogram",e_b2:"Fullt anpassad kostplan",e_b3:"Veckovis check-in",e_b4:"Prioriterad personlig återkoppling",e_b5:"Direktkontakt via WhatsApp",e_b6:"Möjlighet att boka coachingsamtal",e_b7:"Extra stöd och uppföljning längs vägen",
+    ip_label:"Boutique-upplevelse",ip_name:"In-Person",
+    ip_body:"Personlig coaching på plats — anpassad helt efter dig och dina mål. Begränsat antal platser.",
+    ip_btn:"Boka ett samtal",
+    how_eyebrow:"Processen",how_heading:"Så fungerar det",
+    s1:"Boka ett kostnadsfritt introsamtal",s2:"Välj ditt program och genomför betalning",s3:"Fyll i ditt formulär",s4:"Få ditt personligt anpassade program",s5:"Börja. Följ upp. Utvecklas.",
+    quote:"Målet är inte perfektion. Målet är att du ska må bra i din kropp och känna dig som dig själv igen.",
+    quote_author:"Dejan — Coach",
+    faq_eyebrow:"Frågor",faq_heading:"Sånt du kanske undrar över",
+    q1:"Behöver jag någon erfarenhet för att börja?",a1:"Inte alls. De flesta av mina klienter är nybörjare eller kommer tillbaka efter ett längre uppehåll. Programmet byggs utifrån där du är just nu.",
+    q2:"Vilken utrustning behöver jag?",a2:"Ditt program anpassas efter det du har tillgång till — gym, hemma eller utomhus. Du berättar, jag anpassar.",
+    q3:"Hur fungerar appen?",a3:"När du startar får du tillgång till en privat app i mobilen. Där hittar du träningspass, kostplan, check-ins och all vår kommunikation.",
+    q4:"Kan jag göra detta om jag har en skada eller hälsoproblem?",a4:"Ja. Formuläret innehåller en hälsogenomgång och programmet anpassas efter dina förutsättningar — inte tvärtom.",
+    q5:"Vad händer efter 12 veckor?",a5:"Vi går igenom dina resultat och pratar om nästa steg. Många väljer att fortsätta. Ingen press — bara ett ärligt samtal.",
+    cta_heading:"Redo att känna dig som dig själv igen?",cta_sub:"Börja med ett kostnadsfritt introsamtal. Ingen press, inget krav.",cta_btn:"Boka ditt kostnadsfria introsamtal",
+    footer_tag:"Personlig coaching för kvinnor · English · Svenska · Srpski",footer_copy:"© 2026 Coached by Dejan. Alla rättigheter förbehållna."
+  },
+  sr: {
+    nav_cta:"Zakažite razgovor",
+    hero_eyebrow:"Personalni coaching za žene",
+    hero_headline:"Osećajte se lakše, snažnije i sigurnije u svom telu.",
+    hero_headline_em:"sigurnije",
+    hero_sub:"Održiva transformacija kroz personalizovani coaching — prilagođen vašem životu, vašim ciljevima i vašem tempu.",
+    hero_btn1:"Pogledajte programe",
+    hero_btn2:"Zakažite besplatan uvodni poziv →",
+    intro_label:"Filozofija",
+    intro_heading:"Tajna održive promene je usmeriti energiju ne na borbu protiv starog, već na izgradnju novog.",
+    intro_body:"Radim sa ženama koje žele da promene svoje telo i život. Bez ekstremnih dijeta i treninga. Program napravljen posebno za tebe — uz strukturu, podršku i odanost.",
+    intro_badge:"100% prilagođeno vama",
+    pkg_eyebrow:"Izaberite svoje putovanje",
+    pkg_heading:"Pronađite program koji odgovara vama",
+    f_name:"Foundation",
+    f_hook:'"Program koji ne traži savršenstvo — samo spremnost da krenete."',
+    weeks:"12 nedelja",
+    pkg_cta:"Zakažite besplatan uvodni poziv",
+    pkg_toggle:"Šta je uključeno",
+    f_b1:"Personalizovan plan treninga",f_b2:"Jednostavan i održiv plan ishrane",f_b3:"Nedeljni check-in",f_b4:"Lični pisani feedback svake nedelje",f_b5:"Prilagođavanja prema vašem napretku",
+    popular:"Najpopularnije",
+    b_name:"Balanced",
+    b_hook:'"Više podrške, više strukture i osećaj da niste sami u ovom procesu."',
+    b_b1:"Personalizovan plan treninga",b_b2:"Individualni plan ishrane",b_b3:"Nedeljni check-in",b_b4:"Lični pisani feedback svake nedelje",b_b5:"Direktna podrška putem WhatsApp-a",b_b6:"Mogućnost zakazivanja coaching poziva",
+    e_name:"Elevate",
+    e_hook:'"Najpersonalniji nivo coachinga za žene koje su spremne da sebe stave na prvo mesto."',
+    e_b1:"Personalizovan plan treninga",e_b2:"Potpuno personalizovan plan ishrane",e_b3:"Nedeljni check-in",e_b4:"Prioritetni lični feedback",e_b5:"Direktna podrška putem WhatsApp-a",e_b6:"Mogućnost zakazivanja coaching poziva",e_b7:"Dodatna podrška i praćenje tokom celog procesa",
+    ip_label:"Boutique iskustvo",ip_name:"In-Person",
+    ip_body:"Coaching uživo, potpuno prilagođen vama. Dostupno na odabranim lokacijama. Kontaktirajte me za cenu i dostupnost.",
+    ip_btn:"Zakažite razgovor",
+    how_eyebrow:"Proces",how_heading:"Kako funkcioniše",
+    s1:"Zakažite besplatan uvodni poziv",s2:"Izaberite program i izvršite uplatu",s3:"Popunite svoj formular",s4:"Dobijate svoj personalizovani program",s5:"Počnite. Check-in. Napredujte.",
+    quote:"Cilj nije savršenstvo. Cilj je da se ponovo osećate — snažno, energično i dobro u svom telu.",
+    quote_author:"Dejan — Coach",
+    faq_eyebrow:"Pitanja",faq_heading:"Stvari koje vas možda zanimaju",
+    q1:"Da li mi je potrebno iskustvo da bih počela?",a1:"Uopšte ne. Većina mojih klijentkinja su početnice ili se vraćaju nakon duže pauze. Program se pravi prema tome gde se trenutno nalazite.",
+    q2:"Koja oprema mi je potrebna?",a2:"Program se prilagođava onome čemu imate pristup — teretani, kući ili treningu napolju. Vi kažete, ja prilagodim.",
+    q3:"Kako funkcioniše aplikacija?",a3:"Nakon prijave dobijate privatnu aplikaciju na telefonu. Tamo se nalaze treninzi, plan ishrane, check-inovi i sva naša komunikacija.",
+    q4:"Da li mogu ovo da radim ako imam povredu ili zdravstveni problem?",a4:"Da. Formular uključuje zdravstveni upitnik, a program se prilagođava vašim mogućnostima — ne obrnuto.",
+    q5:"Šta se dešava nakon 12 nedelja?",a5:"Pregledamo vaše rezultate i razgovaramo o sledećim koracima. Mnoge klijentkinje nastavljaju dalje. Bez pritiska — samo iskren razgovor.",
+    cta_heading:"Spremni na promene?",cta_sub:"Počnite besplatnim uvodnim pozivom. Bez obaveze i bez pritiska.",cta_btn:"Zakažite besplatan uvodni poziv",
+    footer_tag:"Personalni coaching za žene · English · Svenska · Srpski",footer_copy:"© 2026 Coached by Dejan. Sva prava zadržana."
+  }
+};
+
+let currentLang = 'en';
+
+function detectLang(){
+  const lang = navigator.language || navigator.userLanguage || 'en';
+  const code = lang.toLowerCase().substring(0,2);
+  if(code === 'sv') return 'sv';
+  if(code === 'sr' || code === 'hr' || code === 'bs') return 'sr';
+  return 'en';
+}
+
+function setLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+  });
+
+  const t = T[lang];
+
+  // Update all data-t elements
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if(t[key] !== undefined){
+      // Don't replace em tags inside headlines
+      if(el.tagName === 'H1' && key === 'hero_headline'){
+        el.childNodes.forEach(node => {
+          if(node.nodeType === 3) node.textContent = t[key].replace(t['hero_headline_em'], '');
+        });
+        const em = el.querySelector('em');
+        if(em && t['hero_headline_em']) em.textContent = t['hero_headline_em'];
+      } else {
+        el.textContent = t[key];
+      }
+    }
+  });
+
+  // Update page title
+  document.title = lang === 'sv'
+    ? 'Coached by Dejan — Känn dig starkare, lättare och mer självsäker i din kropp igen'
+    : lang === 'sr'
+    ? 'Coached by Dejan — Osećajte se lakše, snažnije i sigurnije u svom telu'
+    : 'Coached by Dejan — Feel stronger, lighter and more confident in your body again';
+}
+
+// Init
+const detected = detectLang();
+setLang(detected);
+
 function togglePackage(id){document.getElementById(id).classList.toggle('open')}
 function toggleFaq(el){
   const item=el.parentElement;
