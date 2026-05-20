@@ -303,6 +303,9 @@ function renderClientInfo(c, intake){
         <div>Sleep: <strong>${n.sleep || '—'}</strong></div>
         <div>Stress: <strong>${n.stress || '—'}</strong></div>
         <div>Main goal: <strong>${g.main_goal || '—'}</strong></div>
+        ${p.heart_condition && p.heart_condition !== 'No' && p.heart_condition !== '-' ? `<div style="color:var(--rose-dark);margin-top:4px">⚠️ Heart condition: <strong>${p.heart_condition}</strong></div>` : ''}
+        ${p.medication && p.medication !== 'No' && p.medication !== '-' ? `<div style="color:var(--rose-dark)">⚠️ Medication: <strong>${p.medication}</strong></div>` : ''}
+        ${p.joint_problems && p.joint_problems !== 'No' && p.joint_problems !== '-' ? `<div style="color:var(--rose-dark)">⚠️ Joint problems: <strong>${p.joint_problems}</strong></div>` : ''}
       </div>
     </div>`;
 }
@@ -401,6 +404,12 @@ TRAINING LOCATION: ${location}
 PROGRAMME: ${weeks} weeks — ${pkg} package
 
 INJURIES/LIMITATIONS: ${p.injuries || 'None'}
+HEART CONDITION: ${p.heart_condition || 'No'}
+CHEST PAIN: ${p.chest_pain || 'No'}
+DIZZINESS: ${p.dizziness || 'No'}
+JOINT PROBLEMS: ${p.joint_problems || 'No'}
+PREGNANT/POSTPARTUM: ${p.pregnant || 'No'}
+MEDICATION: ${p.medication || 'No'}
 EATING HABITS: ${n.typical_eating || 'unknown'}
 ALLERGIES: ${n.allergies || 'None'}
 DIET TYPE: ${n.diet_type || 'No restrictions'}
