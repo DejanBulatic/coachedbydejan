@@ -385,7 +385,7 @@ NUTRITION:
 
 INJURIES: Always work around limitations, never through pain.
 
-OUTPUT FORMAT: You must respond with valid JSON only. No markdown, no explanation, just the JSON object.`;
+OUTPUT FORMAT: You must respond with valid JSON only. No markdown, no explanation, just the JSON object. CRITICAL: Do not use apostrophes or single quotes anywhere in string values - use alternative phrasing instead (e.g. "do not" instead of "don't", "she is" instead of "she's"). All strings must use double quotes.`;
 
   const userMessage = `Create a complete programme for this client:
 
@@ -542,9 +542,13 @@ Respond with this exact JSON structure:
     }
 
     const text = data.content[0].text;
-    const cleaned = text.replace(/```json|```/g, '').trim();
+    // Clean the response - remove markdown fences and fix common JSON issues
+    let cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+    // Find the JSON object boundaries
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    if(start !== -1 && end !== -1) cleaned = cleaned.substring(start, end + 1);
     generatedData = JSON.parse(cleaned);
-
     document.getElementById('loading-wrap').style.display = 'none';
     renderOutput(generatedData);
 
