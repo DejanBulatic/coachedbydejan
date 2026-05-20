@@ -1277,8 +1277,9 @@ function populateClientView(c){
     if(pbNow)   pbNow.textContent   = (c.current_weight||'—')+' kg now';
     if(pbGoal)  pbGoal.textContent  = (c.goal_weight||'—')+' kg goal';
   }
-  if(pbLbls[1]) pbLbls[1].textContent = (c.current_weight||'—')+' kg now';
-  if(pbLbls[2]) pbLbls[2].textContent = (c.goal_weight||'—')+' kg goal';
+  // upsell name
+  const upsellName = document.getElementById('upsell-name');
+  if(upsellName) upsellName.textContent = c.name;
 
   // Progress screen
   const phWlbl = document.querySelector('.ph-wlbl');
