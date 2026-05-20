@@ -97,6 +97,22 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .greet-name em{font-style:italic;color:var(--sage-dark)}
 .greet-date{font-size:14px;color:var(--muted);margin-bottom:18px}
 
+.home-prog-card{background:var(--charcoal);border-radius:14px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.hp-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);margin-bottom:4px}
+.hp-name{font-family:var(--fd);font-size:22px;font-weight:300;color:var(--cream);margin-bottom:2px}
+.hp-sub{font-size:12px;color:rgba(250,248,244,0.4);margin-bottom:14px}
+.hp-progress-top{display:flex;justify-content:space-between;font-size:12px;color:rgba(250,248,244,0.5);margin-bottom:6px}
+.hp-track{height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden}
+.hp-fill{height:100%;background:linear-gradient(90deg,var(--sage),#7A9E7E);border-radius:2px;transition:width .5s ease}
+.week-schedule{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.week-schedule::-webkit-scrollbar{display:none}
+.day-pill{flex-shrink:0;width:44px;border-radius:10px;padding:10px 4px;text-align:center;border:1.5px solid var(--border);background:var(--white)}
+.day-pill.workout{border-color:var(--sage);background:var(--sage-xlight)}
+.day-pill.today{border-color:var(--sage-dark);background:var(--sage-dark)}
+.day-pill.rest{opacity:0.5}
+.dp-name{font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)}
+.day-pill.today .dp-name,.day-pill.today .dp-type{color:var(--white)}
+.dp-type{font-size:9px;color:var(--faint);margin-top:2px}
 .today-card{position:relative;border-radius:14px;overflow:hidden;margin-bottom:12px;cursor:pointer;min-height:185px}
 .today-bg{position:absolute;inset:0;background-size:cover;background-position:center top}
 .today-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(44,44,42,0.06) 0%,rgba(44,44,42,0.72) 100%)}
@@ -475,9 +491,68 @@ select.ci-inp{cursor:pointer}
     </div>
   </div>
   <div class="app-scroll">
+
+    <!-- 1. Greeting -->
     <div class="greet-name">Hej, <em>Sarah</em></div>
     <div class="greet-date" id="today-date"></div>
 
+    <!-- 2. Programme section -->
+    <div class="home-prog-card" id="home-prog-card" style="display:none">
+      <div class="hp-label">Your Programme</div>
+      <div class="hp-name" id="hp-name">—</div>
+      <div class="hp-sub" id="hp-sub">12-week programme</div>
+      <div class="hp-progress-wrap">
+        <div class="hp-progress-top">
+          <span id="hp-week-text">Week 1 of 12</span>
+          <span id="hp-pct-text">0%</span>
+        </div>
+        <div class="hp-track"><div class="hp-fill" id="hp-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Programme not started yet -->
+    <div id="launch-banner" style="display:none;margin-bottom:16px;cursor:pointer" onclick="showTab('programme')"></div>
+
+    <!-- 3. Today's session -->
+    <div class="today-card" id="today-card" style="display:none" onclick="showTab('programme')">
+      <div class="today-bg" id="today-bg"></div>
+      <div class="today-overlay"></div>
+      <div class="today-content">
+        <div class="today-tag">Today's Session</div>
+        <div class="today-name" id="today-name">—</div>
+        <div class="today-meta" id="today-meta"></div>
+        <button class="btn-begin" onclick="event.stopPropagation();showTab('programme')">Begin session →</button>
+      </div>
+    </div>
+
+    <!-- 4. Week schedule -->
+    <div id="week-schedule-section"></div>
+
+    <!-- 5. Progress -->
+    <div class="sec-lbl">Your Progress</div>
+    <div class="stats-row">
+      <div class="stat-box"><span class="stat-num pos" id="stat-lost">—</span><span class="stat-lbl">Lost</span></div>
+      <div class="stat-box"><span class="stat-num" id="stat-current">—</span><span class="stat-lbl">Current kg</span></div>
+      <div class="stat-box"><span class="stat-num" id="stat-goal">—</span><span class="stat-lbl">Goal kg</span></div>
+    </div>
+
+    <!-- 6. Journey to goal -->
+    <div class="pb-wrap" id="pb-wrap" style="display:none">
+      <div class="pb-top"><div class="pb-title">Journey to goal</div><div class="pb-pct" id="pb-pct">0%</div></div>
+      <div class="pb-track"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
+      <div class="pb-labels"><span id="pb-start">—</span><span id="pb-now">—</span><span id="pb-goal">—</span></div>
+    </div>
+
+    <!-- 7. Check-in reminder -->
+    <div class="ci-status" onclick="showTab('checkin')">
+      <div class="ci-st-text">Weekly check-in — due Thursday noon</div>
+      <div class="ci-st-badge">Due Thu</div>
+    </div>
+
+    <!-- 8. Coach replies -->
+    <div id="coach-replies-section"></div>
+
+    <!-- 9. Quote -->
     <div class="quote-wrap" id="quote-wrap">
       <div class="quote-overlay"></div>
       <canvas id="particle-canvas"></canvas>
@@ -491,47 +566,20 @@ select.ci-inp{cursor:pointer}
       </div>
     </div>
 
-    <div id="coach-replies-section"></div>
-
-    <div class="upsell-card" id="upsell-card" style="display:none">      <div class="upsell-label">✦ Your next chapter</div>
-      <div class="upsell-title">You are nearly there, <em>Sarah</em></div>
-      <div class="upsell-text">Week 8 of 12 — you have come further than you know. Your next programme is waiting whenever you are ready.</div>
-      <button class="btn-upsell" onclick="window.open('https://coachedbydejan.primalhybrid.com','_blank')">Discover what comes next →</button>
-    </div>
-
-    <div class="today-card" onclick="beginSession()">
-      <div class="today-bg" style="background-image:url('/images/quote-7.png')"></div>
-      <div class="today-overlay"></div>
-      <div class="today-content">
-        <div class="today-tag">Today's Session</div>
-        <div class="today-name">Full Body A — Squat Focus</div>
-        <div class="today-meta"><span>45 min</span><span>5 exercises</span><span>Building gym</span></div>
-        <button class="btn-begin" onclick="event.stopPropagation();beginSession()">Begin session →</button>
-      </div>
-    </div>
-
-    <div id="launch-banner" style="display:none;margin-bottom:16px;cursor:pointer" onclick="showTab('programme')"></div>
-
-    <div class="sec-lbl">Your Progress</div>
-    <div class="stats-row">
-      <div class="stat-box"><span class="stat-num pos">−3.2 kg</span><span class="stat-lbl">Lost</span></div>
-      <div class="stat-box"><span class="stat-num">70.8</span><span class="stat-lbl">Current kg</span></div>
-      <div class="stat-box"><span class="stat-num">63</span><span class="stat-lbl">Goal kg</span></div>
-    </div>
-    <div class="pb-wrap">
-      <div class="pb-top"><div class="pb-title">Journey to goal</div><div class="pb-pct">29%</div></div>
-      <div class="pb-track"><div class="pb-fill" style="width:29%"></div></div>
-      <div class="pb-labels"><span>74 kg start</span><span>70.8 kg now</span><span>63 kg goal</span></div>
-    </div>
-    <div class="ci-status" onclick="showTab('checkin')">
-      <div class="ci-st-text">Weekly check-in — due Thursday noon</div>
-      <div class="ci-st-badge">Due Thu</div>
-    </div>
+    <!-- 10. Message Dejan -->
     <a class="wa-btn" href="https://wa.me/46700000000" target="_blank">
       <div class="wa-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
       <div class="wa-text"><strong>Message Dejan</strong><span>Priority support · Balanced &amp; Elevate</span></div>
     </a>
     <div id="read-replies-section"></div>
+
+    <div class="upsell-card" id="upsell-card" style="display:none">
+      <div class="upsell-label">✦ Your next chapter</div>
+      <div class="upsell-title">You are nearly there, <em id="upsell-name">—</em></div>
+      <div class="upsell-text">Your next programme is waiting whenever you are ready.</div>
+      <button class="btn-upsell" onclick="window.open('https://coachedbydejan.primalhybrid79.com/landing.html','_blank')">Discover what comes next →</button>
+    </div>
+
   </div>
   <div class="bottom-nav" id="nav-dashboard"></div>
 </div>
@@ -1144,20 +1192,47 @@ function populateClientView(c){
     if(el.textContent==='This Week'||el.textContent==='Sessions') el.remove();
   });
 
-  // Today card — hide if no sessions, show launch banner instead
-  const todayCard = document.querySelector('.today-card');
-  const launchBanner = document.getElementById('launch-banner');
-  if(c.sessions && c.sessions.length > 0){
-    if(todayCard) todayCard.style.display = 'block';
-    if(launchBanner) launchBanner.style.display = 'none';
+  // Programme card
+  const hasSessions = c.sessions && c.sessions.length > 0;
+  const hasStarted = c.start_date && new Date(c.start_date) <= new Date();
+
+  if(hasSessions && hasStarted){
+    const progCard = document.getElementById('home-prog-card');
+    const totalWeeks = c.total_weeks || 12;
+    const currentWeek = c.current_week || 1;
+    const pct = Math.round(((currentWeek - 1) / totalWeeks) * 100);
+    if(progCard){
+      progCard.style.display = 'block';
+      document.getElementById('hp-name').textContent = c.programme_name || 'Your Programme';
+      document.getElementById('hp-sub').textContent = `${totalWeeks}-week programme`;
+      document.getElementById('hp-week-text').textContent = `Week ${currentWeek} of ${totalWeeks}`;
+      document.getElementById('hp-pct-text').textContent = pct + '%';
+      document.getElementById('hp-fill').style.width = pct + '%';
+    }
+    // Today's session
+    const todayCard = document.getElementById('today-card');
+    const todaySession = getTodaySession(c.sessions, c.start_date);
+    if(todayCard && todaySession){
+      todayCard.style.display = 'block';
+      document.getElementById('today-name').textContent = todaySession.name;
+      document.getElementById('today-meta').innerHTML = `<span>${todaySession.duration||45} min</span><span>${(todaySession.exercises||[]).length} exercises</span>`;
+      const todayBg = document.getElementById('today-bg');
+      if(todayBg) todayBg.style.backgroundImage = `url('${todaySession.bg_image || pickImage()}')`;
+    } else if(todayCard){
+      todayCard.style.display = 'none';
+    }
+    // Week schedule
+    renderWeekSchedule(c.sessions, c.start_date);
   } else {
-    if(todayCard) todayCard.style.display = 'none';
+    document.getElementById('home-prog-card').style.display = 'none';
+    // Show launch banner if no sessions yet
+    const launchBanner = document.getElementById('launch-banner');
     if(launchBanner){
       launchBanner.style.display = 'block';
       const bgStyle = c.programme_bg ? `background-image:url('${c.programme_bg}');background-size:cover;background-position:center;` : `background-image:url('${pickImage()}');background-size:cover;background-position:center;`;
       launchBanner.innerHTML = `
         <div style="background:linear-gradient(145deg,#2A3328,#1E2820);${bgStyle}border-radius:14px;padding:24px 22px;position:relative;overflow:hidden" onclick="showTab('programme')">
-          ${bgStyle ? '<div style="position:absolute;inset:0;background:rgba(20,30,20,0.55);border-radius:14px"></div>' : ''}
+          <div style="position:absolute;inset:0;background:rgba(20,30,20,0.55);border-radius:14px"></div>
           <div style="position:relative;z-index:1">
             <div style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:8px">Your programme<br><em style="color:var(--sage)">is on its way</em></div>
             ${c.launch_date ? `<div style="font-size:13px;color:rgba(250,248,244,0.5);letter-spacing:0.04em">🗓 Launching ${c.launch_date}</div>` : '<div style="font-size:13px;color:rgba(250,248,244,0.5)">Dejan is building your personalised programme</div>'}
@@ -1167,9 +1242,8 @@ function populateClientView(c){
     }
   }
 
-  // Avatars — only update the text node, preserve inner popup HTML
+  // Avatars
   document.querySelectorAll('.client-avatar').forEach(el => {
-    // Update first text node only
     for(let node of el.childNodes){
       if(node.nodeType === 3){ node.textContent = initial; break; }
     }
@@ -1179,17 +1253,29 @@ function populateClientView(c){
   const greet = document.querySelector('.greet-name');
   if(greet) greet.innerHTML = `Hej, <em>${c.name}</em>`;
 
-  const statNums = document.querySelectorAll('#screen-dashboard .stat-num');
-  if(statNums[0]) statNums[0].textContent = lost > 0 ? '−'+lost+' kg' : '0 kg';
-  if(statNums[1]) statNums[1].textContent = c.current_weight || '—';
-  if(statNums[2]) statNums[2].textContent = c.goal_weight    || '—';
+  // Stats
+  const statLost    = document.getElementById('stat-lost');
+  const statCurrent = document.getElementById('stat-current');
+  const statGoal    = document.getElementById('stat-goal');
+  if(statLost)    statLost.textContent    = lost > 0 ? '−'+lost+' kg' : '0 kg';
+  if(statCurrent) statCurrent.textContent = c.current_weight || '—';
+  if(statGoal)    statGoal.textContent    = c.goal_weight    || '—';
 
-  const pbPct  = document.querySelector('.pb-pct');
-  const pbFill = document.querySelector('.pb-fill');
-  const pbLbls = document.querySelectorAll('.pb-labels span');
-  if(pbPct)    pbPct.textContent  = pct + '%';
-  if(pbFill)   pbFill.style.width = pct + '%';
-  if(pbLbls[0]) pbLbls[0].textContent = (c.start_weight||'—')+' kg start';
+  // Progress bar
+  const pbWrap = document.getElementById('pb-wrap');
+  const pbPct  = document.getElementById('pb-pct');
+  const pbFill = document.getElementById('pb-fill');
+  const pbStart = document.getElementById('pb-start');
+  const pbNow   = document.getElementById('pb-now');
+  const pbGoal  = document.getElementById('pb-goal');
+  if(pbWrap && c.start_weight && c.goal_weight){
+    pbWrap.style.display = 'block';
+    if(pbPct)   pbPct.textContent  = pct + '%';
+    if(pbFill)  pbFill.style.width = pct + '%';
+    if(pbStart) pbStart.textContent = (c.start_weight||'—')+' kg start';
+    if(pbNow)   pbNow.textContent   = (c.current_weight||'—')+' kg now';
+    if(pbGoal)  pbGoal.textContent  = (c.goal_weight||'—')+' kg goal';
+  }
   if(pbLbls[1]) pbLbls[1].textContent = (c.current_weight||'—')+' kg now';
   if(pbLbls[2]) pbLbls[2].textContent = (c.goal_weight||'—')+' kg goal';
 
@@ -1223,6 +1309,52 @@ function populateClientView(c){
 
   // Build sessions if client has any
   if(c.sessions && c.sessions.length > 0) buildClientSessions(c.sessions, c);
+}
+
+function getTodaySession(sessions, startDate){
+  if(!sessions || !sessions.length || !startDate) return sessions?.[0] || null;
+  const start = new Date(startDate);
+  const today = new Date();
+  const daysSinceStart = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  if(daysSinceStart < 0) return null; // Not started yet
+  const sessionIndex = daysSinceStart % sessions.length;
+  return sessions[sessionIndex] || sessions[0];
+}
+
+function renderWeekSchedule(sessions, startDate){
+  const section = document.getElementById('week-schedule-section');
+  if(!section || !sessions || !sessions.length) return;
+
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const today = new Date().getDay(); // 0=Sun, 1=Mon...
+  const todayIdx = today === 0 ? 6 : today - 1; // Convert to Mon=0
+
+  // Map sessions to days of week based on day_label
+  const dayMap = {'Monday':0,'Tuesday':1,'Wednesday':2,'Thursday':3,'Friday':4,'Saturday':5,'Sunday':6,
+                  'Måndag':0,'Tisdag':1,'Onsdag':2,'Torsdag':3,'Fredag':4,'Lördag':5,'Söndag':6};
+
+  const sessionDays = new Set();
+  sessions.forEach(s => {
+    if(s.day_label && dayMap[s.day_label] !== undefined){
+      sessionDays.add(dayMap[s.day_label]);
+    }
+  });
+
+  // If no day labels set, distribute evenly
+  if(sessionDays.size === 0){
+    const defaults = sessions.length <= 3 ? [0,2,4] : [0,1,3,4];
+    defaults.slice(0, sessions.length).forEach(d => sessionDays.add(d));
+  }
+
+  let pillsHTML = days.map((day, i) => {
+    const isWorkout = sessionDays.has(i);
+    const isToday = i === todayIdx;
+    const cls = isToday ? 'today' : isWorkout ? 'workout' : 'rest';
+    const label = isWorkout ? (isToday ? 'Today' : 'Train') : 'Rest';
+    return `<div class="day-pill ${cls}"><div class="dp-name">${day}</div><div class="dp-type">${label}</div></div>`;
+  }).join('');
+
+  section.innerHTML = `<div class="sec-lbl">This Week</div><div class="week-schedule">${pillsHTML}</div>`;
 }
 
 function renderProgrammeTab(c){

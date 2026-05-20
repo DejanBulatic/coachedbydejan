@@ -154,6 +154,10 @@ html,body{background:var(--cream);font-family:var(--fb);color:var(--charcoal);mi
           <input type="text" id="prog-name" placeholder="e.g. Foundation 12 Week">
         </div>
         <div class="field">
+          <label>Start Date</label>
+          <input type="date" id="prog-start-date" style="color:var(--charcoal)">
+        </div>
+        <div class="field">
           <label>Duration (weeks)</label>
           <select id="prog-weeks">
             <option value="12" selected>12 weeks</option>
@@ -162,7 +166,7 @@ html,body{background:var(--cream);font-family:var(--fb);color:var(--charcoal);mi
           </select>
         </div>
         <div class="field">
-          <label>Package / Level</label>
+          <label>Package</label>
           <select id="prog-package">
             <option value="Foundation">Foundation</option>
             <option value="Balanced">Balanced</option>
@@ -170,7 +174,7 @@ html,body{background:var(--cream);font-family:var(--fb);color:var(--charcoal);mi
           </select>
         </div>
         <div class="field">
-          <label>Training Location</label>
+          <label>Training Location <span style="font-size:10px;color:var(--sage-dark);font-weight:400;text-transform:none;letter-spacing:0">(auto-filled from intake form)</span></label>
           <select id="prog-location">
             <option value="gym">Gym (machines available)</option>
             <option value="home">Home (dumbbells only)</option>
@@ -675,7 +679,17 @@ async function sendToApp(){
   btn.disabled = true;
 
   const progName = document.querySelector('.prog-output-title')?.textContent || generatedData.programme_name;
+  const startDateVal = document.getElementById('prog-start-date').value;
   const nt = generatedData.nutrition;
+
+  // Calculate current week based on start date
+  let currentWeek = 1;
+  if(startDateVal){
+    const start = new Date(startDateVal);
+    const today = new Date();
+    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    currentWeek = Math.max(1, Math.min(Math.floor(diffDays / 7) + 1, parseInt(document.getElementById('prog-weeks').value)));
+  }
 
   try {
     // Update client with programme name and nutrition
@@ -684,6 +698,10 @@ async function sendToApp(){
       headers: {...SB_HEADERS, 'Prefer': 'return=minimal'},
       body: JSON.stringify({
         programme_name: progName,
+        start_date: startDateVal || null,
+        current_week: currentWeek,
+        total_weeks: parseInt(document.getElementById('prog-weeks').value),
+        status: startDateVal && new Date(startDateVal) <= new Date() ? 'active' : 'launching',
         nutrition: {
           kcal: nt.daily_calories,
           protein: nt.protein_g,
