@@ -170,6 +170,9 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .dp-type{font-size:13px;color:var(--charcoal);margin-top:3px}
 
 .sess-card{border-radius:12px;margin-bottom:16px;overflow:hidden;border:1px solid var(--border)}
+.sess-card.locked{opacity:0.45;pointer-events:none}
+.sess-card.locked .sess-img-hdr{cursor:default}
+.sess-card.active-session{border:2px solid var(--sage-dark)}
 .sess-img-hdr{position:relative;height:115px;cursor:pointer;overflow:hidden}
 .sess-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
 .sess-card.open .sess-bg{transform:scale(1.04)}
@@ -1169,8 +1172,11 @@ async function loadClientDashboard(clientId){
   console.log('Sessions loaded:', sessions_raw?.length, sessions_raw);
 
   const checkins = await SB.get('checkins', {client_id: clientId}, {select:'*', order:'submitted_at.desc', limit:10});
+  console.log('Checkins loaded:', checkins?.length);
 
-  activeClientData = { ...client, sessions: sessions_raw||[], checkins: checkins||[] };
+  const logs = await SB.get('workout_logs', {client_id: clientId}, {select:'session_id'});
+
+  activeClientData = { ...client, sessions: sessions_raw||[], checkins: checkins||[], completedSessionIds: new Set((logs||[]).map(l=>l.session_id)) };
   activeClientId   = clientId;
 
   populateClientView(activeClientData);
@@ -1400,6 +1406,9 @@ function buildClientSessions(sessions, c){
   const phase1Sessions = sessions.filter((s,i) => i < 3);
   const phase2Sessions = sessions.filter((s,i) => i >= 3);
 
+  const totalWeeks = c.total_weeks || 12;
+  let foundActive = false;
+
   function renderPhase(phaseSessions, phaseNum, weeksLabel, daysLabel){
     if(!phaseSessions.length) return;
     const phaseDiv = document.createElement('div');
@@ -1411,8 +1420,11 @@ function buildClientSessions(sessions, c){
       const globalIdx = phaseNum === 1 ? i : i + 3;
       const key = 'db' + globalIdx;
       const exercises = (s.exercises||[]).sort((a,b) => a.sort_order - b.sort_order);
+      const completed = c.completedSessionIds?.has(s.id);
+      const isActive = !completed && !foundActive;
+      if(isActive) foundActive = true;
       const card = document.createElement('div');
-      card.className = 'sess-card';
+      card.className = 'sess-card' + (completed ? '' : isActive ? ' active-session' : ' locked');
       card.id = 'sess-' + key;
     let cardHTML = `
       <div class="sess-img-hdr" onclick="toggleSess('sess-${key}')">
@@ -1501,7 +1513,6 @@ function buildClientSessions(sessions, c){
     });
   }
 
-  const totalWeeks = c.total_weeks || 12;
   renderPhase(phase1Sessions, 1, '1-3', 3);
   if(phase2Sessions.length > 0){
     renderPhase(phase2Sessions, 2, `4-${totalWeeks}`, 4);
