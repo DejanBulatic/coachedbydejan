@@ -244,6 +244,15 @@ body{font-family:var(--fb);background:#FAF8F4;color:var(--charcoal);max-width:43
 .cn-txt{font-size:15px;color:var(--charcoal-light);font-style:italic;line-height:1.6}
 
 /* NUTRITION */
+.nut-welcome{display:flex;align-items:center;gap:14px;padding:18px 0 20px}
+.nut-welcome-avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--sage-dark)}
+.nut-welcome-avatar img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.nut-welcome-title{font-family:var(--fd);font-size:20px;font-weight:300;color:var(--charcoal);margin-bottom:3px}
+.nut-welcome-sub{font-size:13px;color:var(--muted);line-height:1.55}
+.nut-meal-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px}
+.nut-meal-hdr{background:var(--cream);padding:13px 16px;font-size:13px;font-weight:600;color:var(--charcoal);letter-spacing:0.02em}
+.nut-meal-body{padding:12px 16px;font-size:14px;color:var(--charcoal-light);line-height:1.65}
+.nut-meal-protein{font-size:12px;color:var(--sage-dark);margin-top:6px;font-weight:500}
 .macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .macro-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 8px;text-align:center}
 .mb-num{font-family:var(--fd);font-size:22px;font-weight:300;display:block}
@@ -620,36 +629,48 @@ select.ci-inp{cursor:pointer}
     </div>
   </div>
   <div class="app-scroll">
-    <div class="sec-lbl">Today's Targets</div>
-    <div class="macro-grid">
-      <div class="macro-box"><span class="mb-num" style="color:var(--gold)">1,600</span><span class="mb-lbl">kcal</span><div class="mb-bar"><div class="mb-fill" style="width:68%;background:var(--gold)"></div></div></div>
-      <div class="macro-box"><span class="mb-num" style="color:var(--sage-dark)">130g</span><span class="mb-lbl">Protein</span><div class="mb-bar"><div class="mb-fill" style="width:72%;background:var(--sage-dark)"></div></div></div>
-      <div class="macro-box"><span class="mb-num" style="color:#5B8DD9">160g</span><span class="mb-lbl">Carbs</span><div class="mb-bar"><div class="mb-fill" style="width:55%;background:#5B8DD9"></div></div></div>
-      <div class="macro-box"><span class="mb-num" style="color:var(--rose-dark)">53g</span><span class="mb-lbl">Fat</span><div class="mb-bar"><div class="mb-fill" style="width:45%;background:var(--rose)"></div></div></div>
-    </div>
-    <div class="sec-lbl">Today's Meals</div>
-    <div class="card">
-      <div class="meal-item"><div><div class="meal-time">Breakfast · 08:00</div><div class="meal-name">Greek yoghurt, berries, granola</div></div><div><div class="meal-kcal">320</div><div class="meal-kcal-lbl">kcal</div></div></div>
-      <div class="meal-item"><div><div class="meal-time">Lunch · 12:30</div><div class="meal-name">Chicken breast, rice, salad</div></div><div><div class="meal-kcal">480</div><div class="meal-kcal-lbl">kcal</div></div></div>
-      <div class="meal-item meal-add"><div><div class="meal-time">Dinner</div><div class="meal-name">+ Add dinner</div></div><div><div class="meal-kcal">—</div><div class="meal-kcal-lbl">kcal</div></div></div>
-    </div>
-    <div class="sec-lbl">Hydration <span id="water-lbl" style="color:var(--sage-dark);font-weight:500">5 / 8</span></div>
-    <div class="card">
-      <div class="water-row">
-        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg filled" onclick="tw(this)">💧</div>
-        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg filled" onclick="tw(this)">💧</div>
-        <div class="wg filled" onclick="tw(this)">💧</div><div class="wg" onclick="tw(this)">💧</div>
-        <div class="wg" onclick="tw(this)">💧</div><div class="wg" onclick="tw(this)">💧</div>
+
+    <!-- Welcome message -->
+    <div class="nut-welcome" id="nut-welcome">
+      <div class="nut-welcome-avatar"><img src="/images/dejan-coach.jpg" alt="Dejan" onerror="this.parentElement.style.background='var(--sage-dark)';this.remove()"></div>
+      <div class="nut-welcome-text">
+        <div class="nut-welcome-title">Your Nutrition Plan</div>
+        <div class="nut-welcome-sub" id="nut-welcome-sub">Loading your plan...</div>
       </div>
     </div>
-    <div class="sec-lbl">Daily Habits</div>
-    <div class="card">
-      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Hit protein target every day</div></div>
-      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Drink 2 litres of water</div></div>
-      <div class="habit-item" onclick="th(this)"><div class="hab-chk"></div><div class="hab-txt">Vegetables with at least 2 meals</div></div>
-      <div class="habit-item done" onclick="th(this)"><div class="hab-chk">✓</div><div class="hab-txt">Eat breakfast</div></div>
-      <div class="habit-item" onclick="th(this)"><div class="hab-chk"></div><div class="hab-txt">Track food in MyFitnessPal</div></div>
+
+    <!-- Daily targets -->
+    <div class="sec-lbl">Daily Targets</div>
+    <div class="macro-grid" id="nut-macro-grid">
+      <div class="macro-box"><span class="mb-num" id="nut-kcal" style="color:var(--gold)">—</span><span class="mb-lbl">kcal</span></div>
+      <div class="macro-box"><span class="mb-num" id="nut-protein" style="color:var(--sage-dark)">—</span><span class="mb-lbl">Protein</span></div>
+      <div class="macro-box"><span class="mb-num" id="nut-carbs" style="color:#5B8DD9">—</span><span class="mb-lbl">Carbs</span></div>
+      <div class="macro-box"><span class="mb-num" id="nut-fat" style="color:var(--rose-dark)">—</span><span class="mb-lbl">Fat</span></div>
     </div>
+
+    <!-- Meal guide -->
+    <div class="sec-lbl">Meal Guide</div>
+    <div id="nut-meals"></div>
+
+    <!-- Hydration -->
+    <div class="sec-lbl" id="nut-hydration-lbl">Hydration</div>
+    <div class="card" id="nut-hydration-card" style="display:none">
+      <div style="font-size:14px;color:var(--muted);line-height:1.7" id="nut-hydration-text"></div>
+    </div>
+
+    <!-- Coach note -->
+    <div id="nut-coach-note-wrap" style="display:none">
+      <div class="sec-lbl">From Dejan</div>
+      <div class="card" id="nut-coach-note" style="font-size:14px;color:var(--charcoal-light);line-height:1.75;font-style:italic"></div>
+    </div>
+
+    <!-- No plan yet -->
+    <div id="nut-empty" style="display:none;text-align:center;padding:60px 24px">
+      <div style="font-size:40px;margin-bottom:16px">🌿</div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--charcoal);margin-bottom:8px">Your plan is on its way</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6">Dejan is building your personalised nutrition plan. It will appear here once it's ready.</div>
+    </div>
+
   </div>
   <div class="bottom-nav" id="nav-nutrition"></div>
 </div>
@@ -921,16 +942,8 @@ select.ci-inp{cursor:pointer}
 
     <!-- NUTRITION TAB -->
     <div id="cd-tab-nutrition" style="display:none">
-      <div class="coach-card">
-        <div class="coach-sec-lbl">Daily Targets</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="pse-field"><label>Calories (kcal)</label><input class="pse-input" id="nt-kcal" type="number" placeholder="1600"></div>
-          <div class="pse-field"><label>Protein (g)</label><input class="pse-input" id="nt-protein" type="number" placeholder="130"></div>
-          <div class="pse-field"><label>Carbs (g)</label><input class="pse-input" id="nt-carbs" type="number" placeholder="160"></div>
-          <div class="pse-field"><label>Fat (g)</label><input class="pse-input" id="nt-fat" type="number" placeholder="53"></div>
-        </div>
-        <button class="btn-save-note" onclick="saveNutrition()">Save Targets</button>
-        <span id="nut-saved-msg" style="font-size:13px;color:var(--sage);opacity:0;transition:opacity .3s;margin-left:10px">✓ Saved</span>
+      <div id="cd-nut-view">
+        <div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">Loading nutrition plan...</div>
       </div>
     </div>
   </div>
@@ -993,6 +1006,7 @@ function showTab(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   renderNav(id);
+  if(id === 'nutrition' && activeClientData) populateNutritionScreen(activeClientData);
   if(id === 'programme' && activeClientData) renderProgrammeTab(activeClientData);
   if(id === 'dashboard' && activeClientId) refreshHomeCheckins();
 }
@@ -1382,6 +1396,65 @@ function renderWeekSchedule(sessions, startDate){
   section.innerHTML = `<div class="sec-lbl">This Week</div><div class="week-schedule">${pillsHTML}</div>`;
 }
 
+function populateNutritionScreen(c){
+  const nt = c.nutrition;
+  const empty = document.getElementById('nut-empty');
+  const welcome = document.getElementById('nut-welcome');
+
+  if(!nt || !nt.kcal){
+    if(empty) empty.style.display = 'block';
+    if(welcome) welcome.style.display = 'none';
+    document.getElementById('nut-macro-grid').style.display = 'none';
+    document.querySelectorAll('#screen-nutrition .sec-lbl').forEach(el => el.style.display='none');
+    return;
+  }
+
+  // Welcome
+  const sub = document.getElementById('nut-welcome-sub');
+  if(sub) sub.textContent = `Your personalised plan · ${nt.kcal} kcal/day`;
+
+  // Macros
+  const kcalEl   = document.getElementById('nut-kcal');
+  const protEl   = document.getElementById('nut-protein');
+  const carbsEl  = document.getElementById('nut-carbs');
+  const fatEl    = document.getElementById('nut-fat');
+  if(kcalEl)  kcalEl.textContent  = nt.kcal.toLocaleString();
+  if(protEl)  protEl.textContent  = nt.protein + 'g';
+  if(carbsEl) carbsEl.textContent = nt.carbs + 'g';
+  if(fatEl)   fatEl.textContent   = nt.fat + 'g';
+
+  // Meals
+  const mealsEl = document.getElementById('nut-meals');
+  if(mealsEl && nt.meal_plan && nt.meal_plan.length){
+    mealsEl.innerHTML = nt.meal_plan.map(m => `
+      <div class="nut-meal-card">
+        <div class="nut-meal-hdr">${m.meal}</div>
+        <div class="nut-meal-body">
+          ${m.description}
+          ${m.protein_focus ? `<div class="nut-meal-protein">Protein: ${m.protein_focus}</div>` : ''}
+        </div>
+      </div>`).join('');
+  } else if(mealsEl){
+    mealsEl.innerHTML = '<div class="card" style="font-size:14px;color:var(--muted);padding:14px">Meal guide coming soon.</div>';
+  }
+
+  // Hydration
+  const hydCard = document.getElementById('nut-hydration-card');
+  const hydText = document.getElementById('nut-hydration-text');
+  if(nt.hydration && hydCard && hydText){
+    hydCard.style.display = 'block';
+    hydText.textContent = nt.hydration;
+  }
+
+  // Coach note
+  const noteWrap = document.getElementById('nut-coach-note-wrap');
+  const noteEl   = document.getElementById('nut-coach-note');
+  if(nt.notes && noteWrap && noteEl){
+    noteWrap.style.display = 'block';
+    noteEl.textContent = nt.notes;
+  }
+}
+
 function renderProgrammeTab(c){
   const phName = document.querySelector('.ph-name');
   const phDesc = document.querySelector('.ph-desc');
@@ -1723,6 +1796,64 @@ async function openClientDetail(clientId){
   switchCDTab('overview', document.querySelector('.cd-tab'));
 }
 
+function loadCoachNutritionTab(){
+  const c = currentDetailClient;
+  const container = document.getElementById('cd-nut-view');
+  if(!c || !container) return;
+
+  const nt = c.nutrition;
+  if(!nt || !nt.kcal){
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">No nutrition plan yet.<br><br>Generate one in the Programme Generator.</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="coach-card" style="margin-bottom:10px">
+      <div class="coach-sec-lbl">Daily Targets</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+        <div style="background:var(--cream);border-radius:10px;padding:12px 8px;text-align:center">
+          <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--gold)">${nt.kcal?.toLocaleString()||'—'}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">kcal</div>
+        </div>
+        <div style="background:var(--cream);border-radius:10px;padding:12px 8px;text-align:center">
+          <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--sage-dark)">${nt.protein||'—'}g</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Protein</div>
+        </div>
+        <div style="background:var(--cream);border-radius:10px;padding:12px 8px;text-align:center">
+          <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:#5B8DD9">${nt.carbs||'—'}g</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Carbs</div>
+        </div>
+        <div style="background:var(--cream);border-radius:10px;padding:12px 8px;text-align:center">
+          <div style="font-family:var(--fd);font-size:22px;font-weight:300;color:var(--rose-dark)">${nt.fat||'—'}g</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Fat</div>
+        </div>
+      </div>
+    </div>
+
+    ${nt.meal_plan?.length ? `
+    <div class="coach-card" style="margin-bottom:10px">
+      <div class="coach-sec-lbl">Meal Plan</div>
+      ${nt.meal_plan.map(m => `
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="font-size:13px;font-weight:600;color:var(--charcoal)">${m.meal}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:2px;line-height:1.5">${m.description}</div>
+          ${m.protein_focus ? `<div style="font-size:11px;color:var(--sage-dark);margin-top:3px">Protein: ${m.protein_focus}</div>` : ''}
+        </div>`).join('')}
+    </div>` : ''}
+
+    ${nt.notes ? `
+    <div class="coach-card" style="margin-bottom:10px">
+      <div class="coach-sec-lbl">Coach Nutrition Note</div>
+      <div style="font-size:13px;color:var(--charcoal-light);line-height:1.7;margin-top:8px;font-style:italic">${nt.notes}</div>
+    </div>` : ''}
+
+    ${nt.hydration ? `
+    <div class="coach-card">
+      <div class="coach-sec-lbl">Hydration</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">${nt.hydration}</div>
+    </div>` : ''}`;
+}
+
 function toggleProgEdit(cb){
   const slider = document.getElementById('prog-edit-slider');
   const knob = document.getElementById('prog-edit-knob');
@@ -1812,6 +1943,7 @@ function switchCDTab(tab, el){
   if(tab === 'checkins' && activeClientId) loadAndRenderCheckins();
   if(tab === 'logs' && activeClientId) loadAndRenderWorkoutLogs();
   if(tab === 'programme') loadCoachProgrammeTab(false);
+  if(tab === 'nutrition') loadCoachNutritionTab();
 }
 
 async function loadAndRenderWorkoutLogs(){
