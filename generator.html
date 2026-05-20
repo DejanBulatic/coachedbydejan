@@ -266,13 +266,19 @@ async function loadClient(){
   }
 
   // Auto-fill location from intake
+  const locDisplay = document.getElementById('prog-location-display');
+  const locInput = document.getElementById('prog-location');
   if(intake?.training?.location){
     const loc = intake.training.location.toLowerCase();
-    const locSel = document.getElementById('prog-location');
-    if(loc.includes('gym')) locSel.value = 'gym';
-    else if(loc.includes('home')) locSel.value = 'home';
-    else if(loc.includes('outdoor')) locSel.value = 'outdoors';
-    else locSel.value = 'mix';
+    if(locDisplay) locDisplay.textContent = intake.training.location;
+    if(locInput){
+      if(loc.includes('gym')) locInput.value = 'gym';
+      else if(loc.includes('home') || loc.includes('hemma') || loc.includes('kuci')) locInput.value = 'home';
+      else if(loc.includes('outdoor') || loc.includes('utomhus') || loc.includes('napolju')) locInput.value = 'outdoors';
+      else locInput.value = 'mix';
+    }
+  } else {
+    if(locDisplay) locDisplay.textContent = 'Not specified in intake form';
   }
 
   renderClientInfo(client, intake);
@@ -384,6 +390,8 @@ NUTRITION:
 - TDEE multiplier based on activity level
 
 INJURIES: Always work around limitations, never through pain.
+
+LANGUAGE: Always respond with exercise names, coaching notes, and all text in English regardless of the client's language or name.
 
 OUTPUT FORMAT: You must respond with valid JSON only. No markdown, no explanation, just the JSON object. CRITICAL: Do not use apostrophes or single quotes anywhere in string values - use alternative phrasing instead (e.g. "do not" instead of "don't", "she is" instead of "she's"). All strings must use double quotes.`;
 

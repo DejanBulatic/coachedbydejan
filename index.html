@@ -1194,9 +1194,9 @@ function populateClientView(c){
 
   // Programme card
   const hasSessions = c.sessions && c.sessions.length > 0;
-  const hasStarted = c.start_date && new Date(c.start_date) <= new Date();
+  const hasStarted = c.start_date ? new Date(c.start_date) <= new Date() : true; // Show if no start date set
 
-  if(hasSessions && hasStarted){
+  if(hasSessions){
     const progCard = document.getElementById('home-prog-card');
     const totalWeeks = c.total_weeks || 12;
     const currentWeek = c.current_week || 1;
