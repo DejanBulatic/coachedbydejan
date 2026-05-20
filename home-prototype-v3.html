@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Home v3 — Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#F0EEF0;
+  --white:#FFFFFF;
+  --charcoal:#1A1A1A;
+  --muted:#8A8890;
+  --faint:#C0BEC8;
+  --border:rgba(0,0,0,0.06);
+  --card-shadow:0 2px 20px rgba(0,0,0,0.07);
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+}
+html,body{height:100%;background:var(--bg);font-family:var(--fb);color:var(--charcoal);overflow-x:hidden}
+.screen{max-width:430px;margin:0 auto;min-height:100vh;position:relative;overflow:hidden;background:var(--bg)}
+
+/* ── HERO ──────────────────────────────── */
+.hero{
+  position:relative;
+  height:320px;
+  overflow:hidden;
+}
+.hero-mesh{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 80% at 0% 0%, #7BA87E 0%, transparent 50%),
+    radial-gradient(ellipse 80% 70% at 100% 0%, #B8A0C8 0%, transparent 50%),
+    radial-gradient(ellipse 70% 60% at 55% 100%, #C8946A 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 10% 80%, #6A9E8A 0%, transparent 50%);
+  background-color:#8EA898;
+  animation:meshMove 12s ease-in-out infinite alternate;
+}
+@keyframes meshMove{
+  0%{filter:brightness(1) saturate(1)}
+  100%{filter:brightness(1.06) saturate(1.08)}
+}
+.hero-noise{
+  position:absolute;inset:0;opacity:0.06;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.hero-vignette{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.45) 100%);
+}
+.hero-fade{
+  position:absolute;bottom:0;left:0;right:0;height:70px;
+  background:linear-gradient(to bottom,transparent,var(--bg));
+}
+
+/* ── NAV ───────────────────────────────── */
+.top-nav{
+  position:absolute;top:0;left:0;right:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:54px 22px 0;
+}
+.nav-logo{
+  font-family:var(--fd);font-size:17px;font-weight:300;
+  font-style:italic;color:rgba(255,255,255,0.75);letter-spacing:0.05em;
+}
+.nav-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:600;color:var(--white);
+}
+
+/* ── GREETING ──────────────────────────── */
+.greeting{
+  position:absolute;left:0;right:0;bottom:36px;z-index:10;
+  padding:0 22px;
+  opacity:0;animation:fadeUp .5s .1s forwards;
+}
+.greeting-date{font-size:12px;color:rgba(255,255,255,0.65);letter-spacing:0.08em;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.greeting-name{
+  font-family:var(--fd);font-size:42px;font-weight:300;
+  color:var(--white);line-height:1.0;
+  text-shadow:0 2px 20px rgba(0,0,0,0.2);
+}
+.greeting-name em{font-style:italic}
+
+/* ── WEEK STRIP ────────────────────────── */
+.week-strip{
+  padding:14px 22px 0;
+  opacity:0;animation:fadeUp .5s .2s forwards;
+}
+.week-days{display:flex;gap:6px}
+.wd{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:10px 2px;border-radius:14px;
+  background:var(--white);
+  border:1.5px solid rgba(0,0,0,0.04);
+  box-shadow:0 1px 8px rgba(0,0,0,0.05);
+}
+.wd.active{
+  background:var(--charcoal);
+  border-color:transparent;
+  box-shadow:0 4px 14px rgba(0,0,0,0.2);
+}
+.wd.has-workout{border-color:rgba(123,168,126,0.3)}
+.wd.rest{opacity:0.35;box-shadow:none}
+.wd-name{font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted)}
+.wd.active .wd-name{color:rgba(255,255,255,0.7)}
+.wd-dot{width:5px;height:5px;border-radius:50%;background:rgba(123,168,126,0.4)}
+.wd.active .wd-dot{background:rgba(255,255,255,0.5)}
+.wd.rest .wd-dot{background:var(--faint);opacity:0.3}
+.wd.has-workout .wd-dot{background:#7BA87E}
+
+/* ── SCROLL ────────────────────────────── */
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 22px 120px}
+
+/* ── GLASS CARD BASE ───────────────────── */
+.card{
+  background:var(--white);
+  border-radius:22px;
+  border:1px solid var(--border);
+  box-shadow:var(--card-shadow);
+  margin-bottom:12px;
+}
+
+/* ── PROGRAMME CARD ────────────────────── */
+.prog-card{
+  padding:18px 18px 16px;
+  opacity:0;animation:fadeUp .5s .28s forwards;
+}
+.prog-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.prog-info{}
+.prog-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.prog-name{font-family:var(--fd);font-size:21px;font-weight:300;font-style:italic;color:var(--charcoal);line-height:1.1}
+.prog-rings{display:flex;gap:10px}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ring-svg{transform:rotate(-90deg)}
+.ring-track{fill:none;stroke-width:5.5}
+.ring-fill{fill:none;stroke-width:5.5;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.ring-label{text-align:center}
+.ring-num{font-size:16px;font-weight:700;color:var(--charcoal);display:block;line-height:1}
+.ring-lbl{font-size:9px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:1px}
+.prog-bar-row{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.05)}
+.prog-bar{flex:1;height:5px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden}
+.prog-bar-fill{height:100%;width:25%;background:linear-gradient(90deg,#5C8A5E,#9EC4A0);border-radius:3px}
+.prog-bar-txt{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+
+/* ── TODAY CARD ────────────────────────── */
+.today-card{
+  height:200px;position:relative;overflow:hidden;cursor:pointer;
+  border-radius:22px;border:none;box-shadow:0 4px 28px rgba(0,0,0,0.13);
+  margin-bottom:12px;
+  opacity:0;animation:fadeUp .5s .36s forwards;
+}
+.today-img{position:absolute;inset:0;background:url('/images/quote-7.png') center/cover}
+.today-glass{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,0.0);
+  backdrop-filter:blur(0px);
+}
+.today-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,12,0.9) 0%,rgba(10,15,12,0.2) 55%,transparent 100%)}
+.today-content{position:absolute;inset:0;padding:14px 18px;display:flex;flex-direction:column;justify-content:flex-end}
+.today-tag{
+  position:absolute;top:14px;left:16px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:100px;padding:4px 12px;
+  font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--white);
+}
+.today-name{font-family:var(--fd);font-size:27px;font-weight:600;color:var(--white);line-height:1.0;margin-bottom:5px}
+.today-meta{display:flex;gap:10px;font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:12px}
+.today-btn{
+  align-self:flex-start;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1.5px solid rgba(255,255,255,0.3);
+  border-radius:100px;padding:10px 20px;
+  font-family:var(--fb);font-size:13px;font-weight:600;
+  color:var(--white);cursor:pointer;
+}
+
+/* ── 3-RING STATS ──────────────────────── */
+.rings-card{
+  padding:18px 16px 14px;
+  opacity:0;animation:fadeUp .5s .44s forwards;
+}
+.rings-row{display:flex;align-items:flex-start;justify-content:space-around}
+.ring-divider{width:1px;background:rgba(0,0,0,0.06);align-self:stretch;margin:4px 0}
+
+/* ── JOURNEY ───────────────────────────── */
+.journey-card{
+  padding:16px 18px;
+  opacity:0;animation:fadeUp .5s .5s forwards;
+}
+.journey-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.journey-title{font-size:13px;font-weight:600;color:var(--charcoal)}
+.journey-pct{font-family:var(--fd);font-size:22px;font-weight:300;color:#5C8A5E}
+.journey-track{height:7px;background:rgba(0,0,0,0.06);border-radius:4px;overflow:hidden;margin-bottom:7px}
+.journey-fill{height:100%;width:27%;background:linear-gradient(90deg,#3D6140,#7BA87E);border-radius:4px;position:relative}
+.journey-fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:11px;height:11px;border-radius:50%;background:#5C8A5E;box-shadow:0 0 0 3px var(--white),0 0 0 4.5px rgba(92,138,94,0.25)}
+.journey-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--faint)}
+
+/* ── CHECK-IN ──────────────────────────── */
+.checkin-card{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(123,168,126,0.12),rgba(123,168,126,0.04));
+  border:1.5px solid rgba(123,168,126,0.25);
+  opacity:0;animation:fadeUp .5s .56s forwards;
+}
+.ci-left{display:flex;align-items:center;gap:12px}
+.ci-icon{width:40px;height:40px;border-radius:12px;background:var(--charcoal);display:flex;align-items:center;justify-content:center}
+.ci-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
+.ci-sub{font-size:11px;color:var(--muted)}
+.ci-badge{background:var(--charcoal);color:var(--white);border-radius:100px;padding:6px 13px;font-size:11px;font-weight:600;white-space:nowrap}
+
+/* ── REPLY ─────────────────────────────── */
+.reply-card{
+  padding:15px 16px;
+  opacity:0;animation:fadeUp .5s .6s forwards;
+}
+.reply-hdr{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.reply-av{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(123,168,126,0.3)}
+.reply-av img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.reply-from{font-size:13px;font-weight:600;color:var(--charcoal)}
+.reply-when{font-size:11px;color:var(--faint)}
+.reply-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#7BA87E;margin-left:5px;vertical-align:middle}
+.reply-text{font-size:14px;color:#4A4A48;line-height:1.65}
+
+/* ── WA ────────────────────────────────── */
+.wa-card{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;text-decoration:none;
+  background:rgba(37,211,102,0.05);
+  border:1.5px solid rgba(37,211,102,0.15);
+  opacity:0;animation:fadeUp .5s .64s forwards;
+}
+.wa-ico{width:40px;height:40px;border-radius:12px;background:rgba(37,211,102,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wa-card strong{display:block;font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
+.wa-card span{font-size:11px;color:var(--muted)}
+
+/* ── SECTION LABEL ─────────────────────── */
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px}
+
+/* ── BOTTOM NAV ────────────────────────── */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;padding:0 16px 26px;z-index:100;
+}
+.nav-inner{
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(0,0,0,0.07);border-radius:26px;
+  display:flex;justify-content:space-around;
+  padding:10px 4px 8px;
+  box-shadow:0 -2px 20px rgba(0,0,0,0.08);
+}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 14px;cursor:pointer;border-radius:14px;transition:background .15s}
+.nav-item.active{background:rgba(92,138,94,0.1)}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.nav-icon svg{width:22px;height:22px;stroke:var(--faint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-item.active .nav-icon svg{stroke:#3D6140}
+.nav-lbl{font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint)}
+.nav-item.active .nav-lbl{color:#3D6140}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="screen">
+
+  <!-- Hero gradient -->
+  <div class="hero">
+    <div class="hero-mesh"></div>
+    <div class="hero-noise"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-fade"></div>
+    <div class="top-nav">
+      <div class="nav-logo">Coached by Dejan</div>
+      <div class="nav-avatar">S</div>
+    </div>
+    <div class="greeting">
+      <div class="greeting-date">Thursday, 22 May</div>
+      <div class="greeting-name">Hej, <em>Slavica</em></div>
+    </div>
+  </div>
+
+  <!-- Week strip -->
+  <div class="week-strip">
+    <div class="week-days">
+      <div class="wd has-workout"><div class="wd-name">Mon</div><div class="wd-dot"></div></div>
+      <div class="wd rest"><div class="wd-name">Tue</div><div class="wd-dot"></div></div>
+      <div class="wd has-workout"><div class="wd-name">Wed</div><div class="wd-dot"></div></div>
+      <div class="wd active"><div class="wd-name">Thu</div><div class="wd-dot"></div></div>
+      <div class="wd rest"><div class="wd-name">Fri</div><div class="wd-dot"></div></div>
+      <div class="wd has-workout"><div class="wd-name">Sat</div><div class="wd-dot"></div></div>
+      <div class="wd rest"><div class="wd-name">Sun</div><div class="wd-dot"></div></div>
+    </div>
+  </div>
+
+  <!-- Scroll -->
+  <div class="scroll">
+
+    <!-- Programme + rings -->
+    <div class="card prog-card">
+      <div class="prog-header">
+        <div class="prog-info">
+          <div class="prog-eyebrow">Your Programme</div>
+          <div class="prog-name">Foundation<br>12 Week</div>
+        </div>
+        <!-- 3 rings: Week, Progress, Goal -->
+        <div class="prog-rings">
+          <div class="ring-wrap">
+            <svg class="ring-svg" width="56" height="56" viewBox="0 0 56 56">
+              <circle class="ring-track" cx="28" cy="28" r="22" stroke="#F0EEF0"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22" stroke="#E8A87C"
+                stroke-dasharray="138" stroke-dashoffset="104"/>
+            </svg>
+            <div class="ring-label"><span class="ring-num">3</span><span class="ring-lbl">week</span></div>
+          </div>
+          <div class="ring-divider"></div>
+          <div class="ring-wrap">
+            <svg class="ring-svg" width="56" height="56" viewBox="0 0 56 56">
+              <circle class="ring-track" cx="28" cy="28" r="22" stroke="#F0EEF0"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22" stroke="#7BA87E"
+                stroke-dasharray="138" stroke-dashoffset="104"/>
+            </svg>
+            <div class="ring-label"><span class="ring-num">25%</span><span class="ring-lbl">done</span></div>
+          </div>
+          <div class="ring-divider"></div>
+          <div class="ring-wrap">
+            <svg class="ring-svg" width="56" height="56" viewBox="0 0 56 56">
+              <circle class="ring-track" cx="28" cy="28" r="22" stroke="#F0EEF0"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22" stroke="#9B8EC4"
+                stroke-dasharray="138" stroke-dashoffset="100"/>
+            </svg>
+            <div class="ring-label"><span class="ring-num">−2.1</span><span class="ring-lbl">kg lost</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="prog-bar-row">
+        <div class="prog-bar"><div class="prog-bar-fill"></div></div>
+        <span class="prog-bar-txt">Week 3 of 12 · 25% complete</span>
+      </div>
+    </div>
+
+    <!-- Today's session -->
+    <div class="today-card">
+      <div class="today-img"></div>
+      <div class="today-overlay"></div>
+      <div class="today-content">
+        <div class="today-tag">Today's Session</div>
+        <div class="today-name">Lower Body<br>& Glutes</div>
+        <div class="today-meta"><span>40 min</span><span>·</span><span>6 exercises</span></div>
+        <button class="today-btn">Begin session →</button>
+      </div>
+    </div>
+
+    <!-- Journey -->
+    <div class="card journey-card">
+      <div class="journey-top">
+        <div class="journey-title">Journey to goal</div>
+        <div class="journey-pct">27%</div>
+      </div>
+      <div class="journey-track"><div class="journey-fill"></div></div>
+      <div class="journey-labels"><span>63 kg start</span><span>60.9 kg now</span><span>53 kg goal</span></div>
+    </div>
+
+    <!-- Check-in -->
+    <div class="card checkin-card">
+      <div class="ci-left">
+        <div class="ci-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+        </div>
+        <div><div class="ci-title">Weekly Check-in</div><div class="ci-sub">Due today · takes 2 min</div></div>
+      </div>
+      <div class="ci-badge">Due Today</div>
+    </div>
+
+    <!-- Reply -->
+    <div class="sec-lbl">From Dejan</div>
+    <div class="card reply-card">
+      <div class="reply-hdr">
+        <div class="reply-av"><img src="/images/dejan-coach.jpg" alt="Dejan" onerror="this.style.display='none'"></div>
+        <div>
+          <div class="reply-from">Dejan <span class="reply-dot"></span></div>
+          <div class="reply-when">2 hours ago</div>
+        </div>
+      </div>
+      <div class="reply-text">Great work this week Slavica — I can see you're building real consistency. Keep the pace steady, don't rush the weights. You're doing beautifully. 🌿</div>
+    </div>
+
+    <!-- WhatsApp -->
+    <a class="card wa-card" href="#">
+      <div class="wa-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D166"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+      <div><strong>Message Dejan</strong><span>Balanced & Elevate · Priority support</span></div>
+    </a>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <div class="nav-inner">
+      <div class="nav-item active">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
+        <div class="nav-lbl">Home</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
+        <div class="nav-lbl">Train</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 4 6 4 10c0 5 3 8 8 10 5-2 8-5 8-10 0-4-4-8-8-8z"/><path d="M12 2v20"/></svg></div>
+        <div class="nav-lbl">Nutrition</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V14M9 20V10M13 20V6M17 20V4"/></svg></div>
+        <div class="nav-lbl">Progress</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+        <div class="nav-lbl">Check-in</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
