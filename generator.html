@@ -719,15 +719,17 @@ async function sendToApp(){
     });
 
     // Delete existing sessions
-    await fetch(`${SUPABASE_URL}/rest/v1/sessions?client_id=eq.${currentClient.id}`, {
+    const delRes = await fetch(`${SUPABASE_URL}/rest/v1/sessions?client_id=eq.${currentClient.id}`, {
       method: 'DELETE', headers: SB_HEADERS
     });
+    console.log('Delete sessions:', delRes.status);
 
-    // Insert Phase 1 sessions
+    // Insert sessions
     const allSessions = [
       ...generatedData.phase_1.sessions.map((s,i) => ({...s, sort_order: i})),
       ...generatedData.phase_2.sessions.map((s,i) => ({...s, sort_order: generatedData.phase_1.sessions.length + i}))
     ];
+    console.log('Sessions to insert:', allSessions.length);
 
     for(const s of allSessions){
       const sessRes = await fetch(`${SUPABASE_URL}/rest/v1/sessions`, {
@@ -742,7 +744,9 @@ async function sendToApp(){
         })
       });
       const sessData = await sessRes.json();
-      const sessId = Array.isArray(sessData) ? sessData[0].id : sessData.id;
+      console.log('Session insert:', sessRes.status, sessData);
+      const sessId = Array.isArray(sessData) ? sessData[0]?.id : sessData.id;
+      if(!sessId){ console.error('No session ID returned!', sessData); continue; }
 
       // Insert exercises
       for(let ei = 0; ei < s.exercises.length; ei++){
@@ -779,9 +783,9 @@ async function sendToApp(){
     }, 3000);
 
   } catch(err){
-    btn.textContent = 'Error — try again';
+    console.error('sendToApp error:', err);
+    btn.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    console.error(err);
   }
 }
 </script>
