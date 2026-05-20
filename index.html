@@ -1432,6 +1432,9 @@ function buildClientSessions(sessions, c){
         <button class="btn-complete" onclick="completeSession(this,'${s.id}','${s.name||'Session '+(globalIdx+1)}','${key}')">Mark Session Complete ✓</button>
       </div>`;
 
+    card.innerHTML = cardHTML;
+    phaseDiv.appendChild(card);
+
     const exList = card.querySelector('#ex-list-'+key);
     exList.innerHTML = exercises.map((ex, ei) => {
       const setsData = (ex.sets_data && ex.sets_data.length > 0)
@@ -1495,8 +1498,6 @@ function buildClientSessions(sessions, c){
         </div>`;
     }).join('');
 
-      card.innerHTML = cardHTML;
-      phaseDiv.appendChild(card);
     });
   }
 
