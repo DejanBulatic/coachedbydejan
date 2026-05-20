@@ -174,13 +174,9 @@ html,body{background:var(--cream);font-family:var(--fb);color:var(--charcoal);mi
           </select>
         </div>
         <div class="field">
-          <label>Training Location <span style="font-size:10px;color:var(--sage-dark);font-weight:400;text-transform:none;letter-spacing:0">(auto-filled from intake form)</span></label>
-          <select id="prog-location">
-            <option value="gym">Gym (machines available)</option>
-            <option value="home">Home (dumbbells only)</option>
-            <option value="outdoors">Outdoors (bodyweight)</option>
-            <option value="mix">Mix</option>
-          </select>
+          <label>Training Location</label>
+          <div id="prog-location-display" style="font-size:14px;color:var(--muted);padding:10px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px">— Select a client first —</div>
+          <input type="hidden" id="prog-location" value="gym">
         </div>
         <div class="field">
           <label>Additional Coach Notes</label>
@@ -581,7 +577,7 @@ function renderOutput(d){
     <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px">${d.overview}</p>`;
 
   // Phase 1
-  html += `<div class="prog-section"><div class="prog-section-title">Phase 1 — Weeks ${d.phase_1.weeks} · ${d.phase_1.days_per_week} days/week</div>`;
+  html += `<div class="prog-section"><div class="prog-section-title">Phase 1 — Weeks <span contenteditable="true" class="editable">${d.phase_1.weeks}</span> · <span contenteditable="true" class="editable">${d.phase_1.days_per_week}</span> days/week</div>`;
   html += `<p style="font-size:13px;color:var(--muted);margin-bottom:12px">${d.phase_1.focus}</p>`;
   d.phase_1.sessions.forEach((s, i) => {
     html += renderSession(s, i, 1);
@@ -589,7 +585,7 @@ function renderOutput(d){
   html += `</div>`;
 
   // Phase 2
-  html += `<div class="prog-section"><div class="prog-section-title">Phase 2 — Weeks ${d.phase_2.weeks} · ${d.phase_2.days_per_week} days/week</div>`;
+  html += `<div class="prog-section"><div class="prog-section-title">Phase 2 — Weeks <span contenteditable="true" class="editable">${d.phase_2.weeks}</span> · <span contenteditable="true" class="editable">${d.phase_2.days_per_week}</span> days/week</div>`;
   html += `<p style="font-size:13px;color:var(--muted);margin-bottom:12px">${d.phase_2.focus}</p>`;
   d.phase_2.sessions.forEach((s, i) => {
     html += renderSession(s, i, 2);

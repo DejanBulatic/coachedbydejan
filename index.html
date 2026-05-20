@@ -1307,8 +1307,11 @@ function populateClientView(c){
   const ciWeekEl = document.querySelector('.ci-week');
   if(ciWeekEl) ciWeekEl.textContent = `Week ${c.current_week||1} Check-in`;
 
-  // Build sessions if client has any
-  if(c.sessions && c.sessions.length > 0) buildClientSessions(c.sessions, c);
+  // Build sessions and week schedule
+  if(c.sessions && c.sessions.length > 0){
+    buildClientSessions(c.sessions, c);
+    renderWeekSchedule(c.sessions, c.start_date);
+  }
 }
 
 function getTodaySession(sessions, startDate){
@@ -1390,20 +1393,33 @@ function buildClientSessions(sessions, c){
   if(!content) return;
   content.innerHTML = '';
 
-  sessions.forEach((s, i) => {
-    const key = 'db'+i;
-    const exercises = (s.exercises||[]).sort((a,b) => a.sort_order - b.sort_order);
-    const card = document.createElement('div');
-    card.className = 'sess-card';
-    card.id = 'sess-'+key;
-    card.innerHTML = `
+  // Determine phase split — phase 1 = first 3 sessions, phase 2 = rest
+  // This matches the generator output structure
+  const phase1Sessions = sessions.filter((s,i) => i < 3);
+  const phase2Sessions = sessions.filter((s,i) => i >= 3);
+
+  function renderPhase(phaseSessions, phaseNum, weeksLabel, daysLabel){
+    if(!phaseSessions.length) return;
+    const phaseDiv = document.createElement('div');
+    phaseDiv.style.cssText = 'margin-bottom:20px';
+    phaseDiv.innerHTML = `<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--sage-light)">Phase ${phaseNum} — Weeks ${weeksLabel} · ${daysLabel} days/week</div>`;
+    content.appendChild(phaseDiv);
+
+    phaseSessions.forEach((s, i) => {
+      const globalIdx = phaseNum === 1 ? i : i + 3;
+      const key = 'db' + globalIdx;
+      const exercises = (s.exercises||[]).sort((a,b) => a.sort_order - b.sort_order);
+      const card = document.createElement('div');
+      card.className = 'sess-card';
+      card.id = 'sess-' + key;
+    let cardHTML = `
       <div class="sess-img-hdr" onclick="toggleSess('sess-${key}')">
         <div class="sess-bg" style="background-image:url('${s.bg_image||pickImage()}')"></div>
         <div class="sess-overlay"></div>
         <div class="sess-hdr-content">
           <div>
             <div class="sess-tag">${s.day_label||''}</div>
-            <div class="sess-name">${s.name||'Session '+(i+1)}</div>
+            <div class="sess-name">${s.name||'Session '+(globalIdx+1)}</div>
             <div class="sess-meta">${exercises.length} exercises · ${s.duration||45} min</div>
           </div>
           <div class="sess-arrow">⌄</div>
@@ -1411,9 +1427,8 @@ function buildClientSessions(sessions, c){
       </div>
       <div class="sess-body">
         <div id="ex-list-${key}"></div>
-        <button class="btn-complete" onclick="completeSession(this,'${s.id}','${s.name||'Session '+(i+1)}','${key}')">Mark Session Complete ✓</button>
+        <button class="btn-complete" onclick="completeSession(this,'${s.id}','${s.name||'Session '+(globalIdx+1)}','${key}')">Mark Session Complete ✓</button>
       </div>`;
-    content.appendChild(card);
 
     const exList = card.querySelector('#ex-list-'+key);
     exList.innerHTML = exercises.map((ex, ei) => {
@@ -1477,9 +1492,19 @@ function buildClientSessions(sessions, c){
           </div>
         </div>`;
     }).join('');
-  });
 
-  // Re-add coach note
+      card.innerHTML = cardHTML;
+      phaseDiv.appendChild(card);
+    });
+  }
+
+  const totalWeeks = c.total_weeks || 12;
+  renderPhase(phase1Sessions, 1, '1-3', 3);
+  if(phase2Sessions.length > 0){
+    renderPhase(phase2Sessions, 2, `4-${totalWeeks}`, 4);
+  }
+
+  // Coach note
   if(c.coach_note){
     const noteEl = document.createElement('div');
     noteEl.className = 'coach-note';
