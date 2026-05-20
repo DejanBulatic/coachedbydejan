@@ -1170,7 +1170,7 @@ async function loadClientDashboard(clientId){
 
   const checkins = await SB.get('checkins', {client_id: clientId}, {select:'*', order:'submitted_at.desc', limit:10});
 
-  activeClientData = { ...client, sessions: sessions||[], checkins: checkins||[] };
+  activeClientData = { ...client, sessions: sessions_raw||[], checkins: checkins||[] };
   activeClientId   = clientId;
 
   populateClientView(activeClientData);
