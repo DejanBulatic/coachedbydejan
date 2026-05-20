@@ -1162,10 +1162,11 @@ async function loadClientDashboard(clientId){
   document.querySelector('.greet-name') && (document.querySelector('.greet-name').innerHTML = 'Loading…');
 
   const client = await SB.get('clients', {id: clientId}, {select:'*', single:true});
+  console.log('Client:', client?.name, 'status:', client?.status);
   if(!client) return;
 
   const sessions_raw = await SB.get('sessions', {client_id: clientId}, {select:'*,exercises(*)', order:'sort_order.asc'});
-  const sessions = sessions_raw;
+  console.log('Sessions loaded:', sessions_raw?.length, sessions_raw);
 
   const checkins = await SB.get('checkins', {client_id: clientId}, {select:'*', order:'submitted_at.desc', limit:10});
 
