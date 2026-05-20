@@ -1020,7 +1020,7 @@ const SB = {
     'Content-Type': 'application/json',
   },
   async get(table, filters={}, opts={}){
-    let url = `${SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(opts.select||'*')}`;
+    let url = `${SUPABASE_URL}/rest/v1/${table}?select=${opts.select||'*'}`;
     Object.entries(filters).forEach(([k,v]) => url += `&${k}=eq.${encodeURIComponent(v)}`);
     if(opts.order) url += `&order=${opts.order}`;
     if(opts.limit) url += `&limit=${opts.limit}`;
