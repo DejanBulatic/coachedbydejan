@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circles Test</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%;background:#000;display:flex;align-items:center;justify-content:center;padding:40px 20px;font-family:system-ui,sans-serif}
+.circle-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.circle-label{font-size:16px;font-weight:400;letter-spacing:0.04em;color:rgba(255,255,255,0.55)}
+</style>
+</head>
+<body>
+<div class="circle-wrap">
+  <svg width="200" height="200" viewBox="0 0 200 200" id="workouts-svg"></svg>
+  <div class="circle-label">Workouts</div>
+</div>
+
+<script>
+function lerpColor(c1, c2, t){
+  return `rgb(${Math.round(c1.r+(c2.r-c1.r)*t)},${Math.round(c1.g+(c2.g-c1.g)*t)},${Math.round(c1.b+(c2.b-c1.b)*t)})`;
+}
+
+const topColor    = {r:197, g:236, b:255}; // #c5ecff — top
+const bottomColor = {r:65,  g:64,  b:204}; // #4140cc — bottom
+
+function buildTickRing(svgId, number){
+  const svg = document.getElementById(svgId);
+  const cx = 100, cy = 100;
+  const totalTicks = 48;
+  const tickInner  = 68;
+  const tickOuter  = 88;
+
+  // Black background
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx', cx); bg.setAttribute('cy', cy); bg.setAttribute('r', 98);
+  bg.setAttribute('fill','#000');
+  svg.appendChild(bg);
+
+  for(let i = 0; i < totalTicks; i++){
+    const theta = (i / totalTicks) * 2 * Math.PI - Math.PI / 2; // 0 = top
+
+    // Color factor: 0 at top → topColor, 1 at bottom → bottomColor
+    const t = (1 - Math.cos(theta + Math.PI/2)) / 2;
+    const color = lerpColor(topColor, bottomColor, t);
+
+    const x1 = cx + tickInner * Math.cos(theta);
+    const y1 = cy + tickInner * Math.sin(theta);
+    const x2 = cx + tickOuter * Math.cos(theta);
+    const y2 = cy + tickOuter * Math.sin(theta);
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', x1.toFixed(2));
+    line.setAttribute('y1', y1.toFixed(2));
+    line.setAttribute('x2', x2.toFixed(2));
+    line.setAttribute('y2', y2.toFixed(2));
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', '3');
+    line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+  }
+
+  // Number
+  const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x', cx); text.setAttribute('y', cy);
+  text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','central');
+  text.setAttribute('fill','white');
+  text.setAttribute('font-family','Georgia,serif');
+  text.setAttribute('font-size','58');
+  text.setAttribute('font-weight','600');
+  text.textContent = number;
+  svg.appendChild(text);
+}
+
+buildTickRing('workouts-svg', 1);
+</script>
+</body>
+</html>
