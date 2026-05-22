@@ -205,15 +205,17 @@ body {
   flex: 1;
   background: #ffffff;
   border-radius: 24px;
-  padding: 8px 6px;
+  padding: 8px 4px;
   box-shadow: 0 4px 20px rgba(160,140,180,0.12);
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: 2px;
   align-items: flex-start;
+  overflow: hidden;
+  min-width: 0;
 }
-.col-left, .col-right { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-.date-block { text-align: center; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; height: 90px; }
+.col-left, .col-right { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+.date-block { text-align: center; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 76px; height: 76px; }
 .date-day   { font-size: 10px; font-weight: 500; color: #c0b8cc; letter-spacing: 0.08em; text-transform: uppercase; }
 .date-month { font-size: 13px; font-weight: 600; color: #1e1a26; }
 .date-num   { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: #1e1a26; line-height: 1; }
@@ -512,7 +514,7 @@ body {
           <div class="date-month">Jun</div>
           <div class="date-num">9</div>
         </div>
-        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
           <defs>
             <filter id="sh1" x="-25%" y="-25%" width="150%" height="150%">
               <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
@@ -530,7 +532,7 @@ body {
         </svg>
       </div>
       <div class="col-right">
-        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
           <defs>
             <filter id="sh2" x="-25%" y="-25%" width="150%" height="150%">
               <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
@@ -546,7 +548,7 @@ body {
           <text class="rn" x="45" y="41" font-size="13">72.8</text>
           <text class="rl" x="45" y="55" font-size="9">current</text>
         </svg>
-        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
           <defs>
             <filter id="sh3" x="-25%" y="-25%" width="150%" height="150%">
               <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
@@ -585,7 +587,7 @@ body {
   <!-- 5. SESSION CARD -->
   <div class="section reveal">
     <div class="session-card tappable">
-      <div class="session-bg"></div>
+      <div class="session-bg" id="session-bg"></div>
       <div class="glass">
         <div>
           <div class="s-eyebrow">Today's Workout · Fri 9 Jun</div>
@@ -603,8 +605,8 @@ body {
   <!-- 6. MOTIVATIONAL -->
   <div class="section reveal">
     <div class="mot-card">
-      <div class="mot-photo">
-        <div class="mot-photo-inner">
+      <div class="mot-photo" id="mot-photo">
+        <div class="mot-photo-inner" id="mot-photo-inner" style="display:none">
           <div class="mot-photo-text">Dejan's<br>photo</div>
         </div>
       </div>
@@ -680,7 +682,49 @@ body {
 </div><!-- end page -->
 
 <script>
-// ── INTERSECTION OBSERVER — scroll reveal ──
+// ── IMAGE LOADING with fallbacks ──
+function loadBg(elId, localSrc, unsplashSrc) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${localSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  };
+  img.onerror = () => {
+    el.style.backgroundImage = `url('${unsplashSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  };
+  img.src = localSrc;
+}
+
+function loadMotPhoto(localSrc, unsplashSrc) {
+  const el = document.getElementById('mot-photo');
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${localSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'top center';
+  };
+  img.onerror = () => {
+    el.style.backgroundImage = `url('${unsplashSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'top center';
+  };
+  img.src = localSrc;
+}
+
+loadBg('session-bg',
+  'images/bg-5.jpg',
+  'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop'
+);
+loadMotPhoto(
+  'images/dejan-coach.jpg',
+  'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=600&fit=crop'
+);
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
