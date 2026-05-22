@@ -1288,8 +1288,18 @@ function openPeek(key) {
 }
 
 function closePeek() {
-  document.getElementById('peek-backdrop').classList.remove('active');
-  document.getElementById('peek-card').classList.remove('active');
+  const card = document.getElementById('peek-card');
+  const backdrop = document.getElementById('peek-backdrop');
+  card.style.transition = 'transform 0.2s cubic-bezier(0.4,0,1,1), opacity 0.18s ease';
+  card.style.transform = 'translate(-50%, -50%) scale(0.88)';
+  card.style.opacity = '0';
+  setTimeout(() => {
+    backdrop.classList.remove('active');
+    card.classList.remove('active');
+    card.style.transition = '';
+    card.style.transform = '';
+    card.style.opacity = '';
+  }, 200);
   peekOpen = false;
 }
 
@@ -1301,15 +1311,25 @@ function closePeek() {
   if (!pill) return;
 
   pill.addEventListener('touchstart', (e) => {
-    pressTimer = setTimeout(() => openPeek(key), 400);
+    // Scale pill down on press
+    pill.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
+    pill.style.transform = 'scale(0.97)';
+
+    pressTimer = setTimeout(() => {
+      // Double buzz
+      if (navigator.vibrate) navigator.vibrate([12, 60, 12]);
+      openPeek(key);
+    }, 300);
   }, { passive: true });
 
   pill.addEventListener('touchend', () => {
     clearTimeout(pressTimer);
+    pill.style.transform = 'scale(1)';
   });
 
   pill.addEventListener('touchmove', () => {
     clearTimeout(pressTimer);
+    pill.style.transform = 'scale(1)';
   });
 });
 
