@@ -256,39 +256,63 @@ body {
   padding: 0 2px;
 }
 .day-pill {
+  position: relative;
+  width: 104px;
+  height: 160px;
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  transition: transform 0.12s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.day-pill:active { transform: scale(0.96); }
+.day-pill.today {
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.3);
+}
+.day-pill-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #2a2436;
+}
+.day-pill-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.6) 100%);
+}
+.day-pill-content {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 10px;
-  border-radius: 20px;
-  width: 104px;
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: transform 0.12s ease;
-  cursor: pointer;
-  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 10px 10px 12px;
 }
-.day-pill:active { transform: scale(0.95); }
-.day-pill.today {
-  background: #1e1a26;
-  border-color: #1e1a26;
+.day-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
-.day-pill.train {
-  background: rgba(240,250,242,0.75);
-  border-color: rgba(122,186,136,0.3);
+.day-pill.today .day-name { color: #ffffff; }
+.day-workout-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
-.day-name  { font-size: 11px; font-weight: 600; color: #b0a8bc; letter-spacing: 0.06em; text-transform: uppercase; }
-.day-pill.today .day-name  { color: rgba(255,255,255,0.55); }
-.day-pill.train .day-name  { color: #7aba88; }
-.day-dot   { width: 8px; height: 8px; border-radius: 50%; background: #ddd8ea; }
-.day-pill.today .day-dot   { background: rgba(255,255,255,0.35); }
-.day-pill.train .day-dot   { background: #7aba88; }
-.day-lbl   { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #c0b8cc; }
-.day-pill.today .day-lbl   { color: rgba(255,255,255,0.85); }
-.day-pill.train .day-lbl   { color: #5aa868; }
+.day-duration {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.04em;
+}
 
 /* ═══════════════════════════════
    5. SESSION CARD
@@ -618,13 +642,91 @@ body {
   <div class="section reveal">
     <div class="week-scroll-wrap" id="week-scroll">
       <div class="days-row">
-        <div class="day-pill rest">  <div class="day-name">Mon</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
-        <div class="day-pill train"> <div class="day-name">Tue</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
-        <div class="day-pill train"> <div class="day-name">Wed</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
-        <div class="day-pill rest">  <div class="day-name">Thu</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
-        <div class="day-pill today" id="today-pill"> <div class="day-name">Fri</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
-        <div class="day-pill rest">  <div class="day-name">Sat</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
-        <div class="day-pill train"> <div class="day-name">Sun</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-mon"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Mon</div>
+            <div>
+              <div class="day-workout-name">Rest Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-tue"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Tue</div>
+            <div>
+              <div class="day-workout-name">Upper Body</div>
+              <div class="day-duration">40 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-wed"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Wed</div>
+            <div>
+              <div class="day-workout-name">Cardio & Core</div>
+              <div class="day-duration">35 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-thu"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Thu</div>
+            <div>
+              <div class="day-workout-name">Rest Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill today" id="today-pill">
+          <div class="day-pill-bg" id="bg-fri"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Fri ·  Today</div>
+            <div>
+              <div class="day-workout-name">Full Body Strength</div>
+              <div class="day-duration">45 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-sat"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Sat</div>
+            <div>
+              <div class="day-workout-name">Rest Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-sun"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Sun</div>
+            <div>
+              <div class="day-workout-name">Lower Body</div>
+              <div class="day-duration">45 min</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -727,6 +829,34 @@ body {
 </div><!-- end page -->
 
 <script>
+// ── DAY PILL IMAGES ──
+const restImg    = 'images/bg-8.jpg';
+const restFb     = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=200&h=320&fit=crop';
+const workoutImg = ['images/bg-5.jpg','images/bg-6.jpg','images/bg-7.jpg','images/bg-9.jpg'];
+const workoutFb  = [
+  'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=200&h=320&fit=crop'
+];
+
+function setPillBg(elId, local, fallback) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => { el.style.backgroundImage = `url('${local}')`; };
+  img.onerror = () => { el.style.backgroundImage = `url('${fallback}')`; };
+  img.src = local;
+}
+
+setPillBg('bg-mon', restImg, restFb);
+setPillBg('bg-thu', restImg, restFb);
+setPillBg('bg-sat', restImg, restFb);
+setPillBg('bg-tue', workoutImg[0], workoutFb[0]);
+setPillBg('bg-wed', workoutImg[1], workoutFb[1]);
+setPillBg('bg-fri', workoutImg[2], workoutFb[2]);
+setPillBg('bg-sun', workoutImg[3], workoutFb[3]);
+
 // ── SCROLL TO TODAY ──
 const weekScroll = document.getElementById('week-scroll');
 if (weekScroll) {
