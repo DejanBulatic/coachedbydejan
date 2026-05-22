@@ -446,8 +446,8 @@ body {
                 <stop offset="100%" stop-color="#FF9020"/>
               </linearGradient>
             </defs>
-            <circle cx="40" cy="40" r="38" fill="#0A0A0C"/>
-            <circle cx="40" cy="40" r="30" fill="#1A1A1E"/>
+            <circle cx="40" cy="40" r="38" fill="#1a1624"/>
+            <circle cx="40" cy="40" r="30" fill="#1a1624"/>
             <rect x="10" y="10" width="60" height="60" fill="url(#cal-grad)" clip-path="url(#cal-clip)"/>
             <rect x="10" y="10" width="60" height="30" fill="url(#cal-top)" clip-path="url(#cal-clip)"/>
             <circle cx="40" cy="40" r="34" fill="none" stroke="url(#ring-grad)" stroke-width="3" opacity="0.7"/>
@@ -473,7 +473,7 @@ body {
                   0    0    0    1 0"/>
               </filter>
             </defs>
-            <circle cx="40" cy="40" r="38" fill="#0A0A0C"/>
+            <circle cx="40" cy="40" r="38" fill="#1a1624"/>
             <circle cx="40" cy="40" r="33" fill="none" stroke="url(#badge-grad)" stroke-width="3"/>
             <text x="40" y="36" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Georgia,serif" font-size="22" font-weight="600">8</text>
             <text x="40" y="69" text-anchor="middle" dominant-baseline="central" font-size="21" filter="url(#pinkify)">👏</text>
@@ -704,9 +704,9 @@ function buildWorkouts(svgId,number){
   const svg=document.getElementById(svgId);
   const cx=40,cy=40,totalTicks=48,tickInner=27,tickOuter=35;
   const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#0A0A0C');svg.appendChild(bg);
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#1a1624');svg.appendChild(bg);
   const bg2=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg2.setAttribute('cx',cx);bg2.setAttribute('cy',cy);bg2.setAttribute('r',25);bg2.setAttribute('fill','#0A0A0C');svg.appendChild(bg2);
+  bg2.setAttribute('cx',cx);bg2.setAttribute('cy',cy);bg2.setAttribute('r',25);bg2.setAttribute('fill','#1a1624');svg.appendChild(bg2);
   for(let i=0;i<totalTicks;i++){
     const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
     const t=(1-Math.cos(theta+Math.PI/2))/2;
@@ -730,7 +730,7 @@ function buildWeeks(svgId,number){
   const svg=document.getElementById(svgId);
   const cx=40,cy=40,totalTicks=60;
   const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#0A0A0C');svg.appendChild(bg);
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#1a1624');svg.appendChild(bg);
   for(let i=0;i<totalTicks;i++){
     const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
     const isCardinal=(i===0||i===15||i===30||i===45);
