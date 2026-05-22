@@ -260,9 +260,9 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 14px 10px;
+  padding: 16px 10px;
   border-radius: 20px;
-  width: 88px;
+  width: 104px;
   background: rgba(255,255,255,0.55);
   border: 1px solid rgba(255,255,255,0.7);
   backdrop-filter: blur(8px);
@@ -616,13 +616,13 @@ body {
 
   <!-- 4. WEEK SCHEDULE -->
   <div class="section reveal">
-    <div class="week-scroll-wrap">
+    <div class="week-scroll-wrap" id="week-scroll">
       <div class="days-row">
         <div class="day-pill rest">  <div class="day-name">Mon</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
         <div class="day-pill train"> <div class="day-name">Tue</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
         <div class="day-pill train"> <div class="day-name">Wed</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
         <div class="day-pill rest">  <div class="day-name">Thu</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
-        <div class="day-pill today"> <div class="day-name">Fri</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
+        <div class="day-pill today" id="today-pill"> <div class="day-name">Fri</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
         <div class="day-pill rest">  <div class="day-name">Sat</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
         <div class="day-pill train"> <div class="day-name">Sun</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
       </div>
@@ -727,6 +727,14 @@ body {
 </div><!-- end page -->
 
 <script>
+// ── SCROLL TO TODAY ──
+const weekScroll = document.getElementById('week-scroll');
+if (weekScroll) {
+  const tabWidth = 104 + 8;
+  const todayIndex = 4; // Friday
+  weekScroll.scrollLeft = (todayIndex - 1) * tabWidth - (tabWidth / 2);
+}
+
 // ── IMAGE LOADING with fallbacks ──
 function loadBg(elId, localSrc, unsplashSrc) {
   const el = document.getElementById(elId);
