@@ -455,7 +455,7 @@ body {
             <circle cx="40" cy="40" r="34" fill="none" stroke="url(#ring-grad)" stroke-width="3" opacity="0.7"/>
             <ellipse cx="40" cy="62" rx="12" ry="5" fill="#FF6010" opacity="0.35"/>
             <path d="M10 46C16 43,22 50,28 45C32 41,36 47,40 44C44 41,48 48,52 44C56 41,62 48,70 45L70 80L10 80Z" fill="url(#cal-grad)" clip-path="url(#cal-clip)" opacity="0.5"/>
-            <text x="40" y="41" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Georgia,serif" font-size="22" font-weight="600">0</text>
+            <text x="40" y="41" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Inter" font-size="22" font-weight="600">0</text>
           </svg>
           <div class="gam-label">Calories</div>
         </div>
@@ -477,7 +477,7 @@ body {
             </defs>
             <circle cx="40" cy="40" r="38" fill="#1a1624"/>
             <circle cx="40" cy="40" r="33" fill="none" stroke="url(#badge-grad)" stroke-width="3"/>
-            <text x="40" y="36" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Georgia,serif" font-size="22" font-weight="600">8</text>
+            <text x="40" y="36" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Inter" font-size="22" font-weight="600">8</text>
             <text x="40" y="69" text-anchor="middle" dominant-baseline="central" font-size="21" filter="url(#pinkify)">👏</text>
           </svg>
           <div class="gam-label">Badges</div>
@@ -766,7 +766,7 @@ function buildWorkouts(svgId,number){
   const text=document.createElementNS('http://www.w3.org/2000/svg','text');
   text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
   text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
-  text.setAttribute('font-family','Georgia,serif');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.setAttribute('font-family','Inter');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
   text.textContent=number;svg.appendChild(text);
 }
 
@@ -792,7 +792,7 @@ function buildWeeks(svgId,number){
   const text=document.createElementNS('http://www.w3.org/2000/svg','text');
   text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
   text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
-  text.setAttribute('font-family','Georgia,serif');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.setAttribute('font-family','Inter');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
   text.textContent=number;svg.appendChild(text);
 }
 
