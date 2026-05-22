@@ -20,7 +20,30 @@ body {
   -webkit-touch-callout: none;
 }
 
-/* ─── BACKGROUND MESH ─── */
+/* ─── LOGO ─── */
+.app-logo {
+  text-align: center;
+  padding: 48px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b0a0c8;
+}
+
+/* ─── SECTION HEADLINE ─── */
+.section-headline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b0a0c8;
+  padding: 0 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-headline i { font-size: 13px; color: #c0b0d8; }
 .bg-mesh {
   position: fixed;
   inset: 0;
@@ -150,7 +173,7 @@ body {
   flex: 1;
 }
 .gam-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.06em;
   color: rgba(255,255,255,0.4);
@@ -158,9 +181,9 @@ body {
 }
 .gam-bar-wrap {
   margin-top: 16px;
-  height: 4px;
+  height: 7px;
   background: rgba(255,255,255,0.08);
-  border-radius: 2px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .gam-bar-fill {
@@ -401,6 +424,7 @@ body {
   flex-direction: row;
   min-height: 200px;
   box-shadow: 0 4px 20px rgba(160,140,180,0.10);
+  border: 1px solid #e8e2f0;
 }
 .mot-photo {
   width: 42%;
@@ -468,13 +492,13 @@ body {
 .checkin-title { font-size: 14px; font-weight: 600; color: #1e1a26; }
 .checkin-sub   { font-size: 12px; font-weight: 400; color: #b0a8bc; margin-top: 2px; }
 .checkin-btn   { background: #1e1a26; color: #ffffff; border: none; border-radius: 12px; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-.wa-card       { background: #25d366; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; box-shadow: 0 4px 20px rgba(37,211,102,0.25); cursor: pointer; }
+.wa-card       { background: transparent; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 2px solid #25d366; cursor: pointer; }
 .wa-left       { display: flex; align-items: center; gap: 14px; }
-.wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.wa-icon i     { font-size: 24px; color: #ffffff; }
-.wa-title      { font-size: 14px; font-weight: 600; color: #ffffff; }
-.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: 2px; }
-.wa-arrow      { color: rgba(255,255,255,0.7); font-size: 20px; }
+.wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(37,211,102,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wa-icon i     { font-size: 24px; color: #25d366; }
+.wa-title      { font-size: 14px; font-weight: 600; color: #25d366; }
+.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(37,211,102,0.7); margin-top: 2px; }
+.wa-arrow      { color: #25d366; font-size: 20px; }
 </style>
 </head>
 <body>
@@ -483,14 +507,22 @@ body {
 
 <div class="page">
 
+  <!-- LOGO -->
+  <div class="app-logo reveal">Coached by Dejan</div>
+
   <!-- 1. HERO -->
   <div class="hero reveal">
     <div class="hero-avatar-wrap">
-      <div class="hero-avatar"><i class="ti ti-user"></i></div>
+      <div class="hero-avatar">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <i class="ti ti-camera" style="font-size:22px;color:rgba(255,255,255,0.7)"></i>
+          <span style="font-size:9px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase">Upload</span>
+        </div>
+      </div>
       <div class="hero-avatar-ring"></div>
     </div>
     <div class="hero-name">Sarah</div>
-    <div class="hero-programme">Balanced · 12 Week</div>
+    <div class="hero-programme">Level — Balanced · 12 Week</div>
   </div>
 
   <!-- 2. GAMIFICATION -->
@@ -563,6 +595,10 @@ body {
         </div>
 
       </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:4px">
+        <span style="font-size:10px;font-weight:500;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase">Programme Completion</span>
+        <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.4)">47%</span>
+      </div>
       <div class="gam-bar-wrap">
         <div class="gam-bar-fill" id="gam-bar"></div>
       </div>
@@ -570,11 +606,13 @@ body {
   </div>
 
   <!-- 3. PROGRESS ROW -->
-  <div class="section reveal progress-row">
+  <div class="section reveal">
+    <div class="section-headline"><i class="ti ti-trending-up"></i>Your Progress</div>
+  <div class="progress-row">
 
     <!-- Programme -->
     <div class="prog-card tappable">
-      <div class="prog-name">12-Week Strength & Burn</div>
+      <div class="prog-name"><i class="ti ti-barbell" style="font-size:18px;margin-right:6px;vertical-align:-2px;opacity:0.8"></i>12-Week Strength & Burn</div>
       <div class="prog-duration">Personalised Programme</div>
       <div class="prog-pct" id="prog-pct">0%</div>
       <div class="prog-week">Week 6 of 12</div>
@@ -587,7 +625,7 @@ body {
 
     <!-- KG Rings -->
     <div class="kg-card">
-      <div class="kg-headline">Weight Progress</div>
+      <div class="kg-headline"><i class="ti ti-scale" style="font-size:16px;margin-right:5px;vertical-align:-1px;color:#b0a8bc"></i>Weight Progress</div>
       <div class="kg-circles-row">
       <div class="col-left">
         <div class="date-block">
@@ -649,10 +687,12 @@ body {
       </div><!-- end kg-circles-row -->
     </div>
 
-  </div>
+  </div><!-- end progress-row -->
+  </div><!-- end section -->
 
   <!-- 4. WEEK SCHEDULE -->
   <div class="section reveal">
+    <div class="section-headline"><i class="ti ti-calendar-week"></i>This Week</div>
     <div class="week-scroll-wrap" id="week-scroll">
       <div class="days-row">
 
@@ -764,6 +804,7 @@ body {
 
   <!-- 6. MOTIVATIONAL -->
   <div class="section reveal">
+    <div class="section-headline"><i class="ti ti-message-circle"></i>From Dejan</div>
     <div class="mot-card">
       <div class="mot-photo" id="mot-photo">
         <div class="mot-photo-inner" id="mot-photo-inner" style="display:none">
@@ -813,6 +854,7 @@ body {
 
   <!-- 8. CHECK-IN -->
   <div class="section reveal">
+    <div class="section-headline"><i class="ti ti-heart-handshake"></i>Stay Connected</div>
     <div class="checkin-card tappable">
       <div class="checkin-left">
         <div class="checkin-icon"><i class="ti ti-clipboard-list"></i></div>
