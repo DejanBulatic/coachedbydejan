@@ -2,662 +2,778 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Home v4 — Coached by Dejan</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Coached by Dejan — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#F2F0F5;
-  --white:#FFFFFF;
-  --charcoal:#1A1A1E;
-  --muted:#8A8896;
-  --faint:#C0BEC8;
-  --border:rgba(0,0,0,0.06);
-  --shadow:0 2px 20px rgba(0,0,0,0.08);
-  --sage:#7BA87E;
-  --sage-dark:#3D6140;
-  --gold:#E8A87C;
-  --purple:#9B8EC4;
-  --rose:#D4829A;
-  --fd:'Cormorant Garamond',Georgia,serif;
-  --fb:'DM Sans',system-ui,sans-serif;
+/* ─── RESET & BASE ─── */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f0ebf8;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-html,body{height:100%;background:var(--bg);font-family:var(--fb);color:var(--charcoal);overflow-x:hidden}
-.screen{max-width:430px;margin:0 auto;min-height:100vh;position:relative;overflow:hidden;background:var(--bg)}
 
-/* ── GRADIENT HERO ──────────────────────── */
-.hero{position:relative;height:280px;overflow:hidden}
-.hero-mesh{
-  position:absolute;inset:0;
+/* ─── BACKGROUND MESH ─── */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   background:
-    radial-gradient(ellipse 100% 90% at 0% 5%, rgba(139,186,143,0.75) 0%, transparent 48%),
-    radial-gradient(ellipse 80% 70% at 100% 0%, rgba(171,148,206,0.65) 0%, transparent 48%),
-    radial-gradient(ellipse 70% 65% at 60% 100%, rgba(232,168,124,0.55) 0%, transparent 50%),
-    radial-gradient(ellipse 55% 50% at 5% 95%, rgba(100,168,192,0.4) 0%, transparent 50%);
-  background-color:#A8C4AC;
-  animation:meshPulse 14s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color: #f5f0fa;
 }
-.hero-noise{position:absolute;inset:0;opacity:0.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero-vignette{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.3) 70%,rgba(242,240,245,1) 100%)}
-@keyframes meshPulse{0%{filter:brightness(1) saturate(1)}100%{filter:brightness(1.05) saturate(1.1)}}
 
-/* ── TOP BAR ────────────────────────────── */
-.top-bar{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:52px 22px 0}
-.top-logo{font-family:var(--fd);font-size:16px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.8);letter-spacing:0.06em}
+/* ─── PAGE ─── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
 
-/* ── PROFILE SECTION ────────────────────── */
-.profile-section{position:absolute;bottom:10px;left:0;right:0;z-index:10;padding:0 22px;display:flex;align-items:flex-end;gap:16px}
-.profile-avatar{
-  width:76px;height:76px;border-radius:50%;
-  border:3px solid rgba(255,255,255,0.9);
-  background:rgba(255,255,255,0.25);
-  backdrop-filter:blur(8px);
-  overflow:hidden;flex-shrink:0;
-  cursor:pointer;position:relative;
-  box-shadow:0 4px 20px rgba(0,0,0,0.2);
-  opacity:0;animation:fadeUp .5s .1s forwards;
+/* ─── SCROLL ANIMATION ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
-.profile-avatar-upload{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,0.3);opacity:0;transition:opacity .2s;
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
-.profile-avatar:hover .profile-avatar-upload{opacity:1}
-.profile-info{padding-bottom:4px;opacity:0;animation:fadeUp .5s .18s forwards}
-.profile-name{font-family:var(--fd);font-size:28px;font-weight:400;color:var(--white);line-height:1.0;text-shadow:0 2px 12px rgba(0,0,0,0.2)}
-.profile-prog{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px;font-weight:500;letter-spacing:0.02em}
 
-/* ── SCROLL ─────────────────────────────── */
-.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px 120px}
+/* ─── TOUCH STATES ─── */
+.tappable {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+}
+.tappable:active { transform: scale(0.97); }
 
-/* ── DARK GAMIFICATION CARD ─────────────── */
-.game-card{
-  background:var(--charcoal);
-  border-radius:24px;padding:18px 16px;
-  margin-bottom:12px;
-  box-shadow:0 4px 24px rgba(0,0,0,0.18);
-  opacity:0;animation:fadeUp .5s .22s forwards;
+.btn-tappable {
+  transition: transform 0.1s ease, filter 0.1s ease;
+  cursor: pointer;
 }
-.game-circles{display:flex;justify-content:space-around;align-items:center;gap:4px;margin-bottom:14px}
-.gc-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
-.gc-ring{position:relative;width:64px;height:64px}
-.gc-svg{transform:rotate(-90deg)}
-.gc-track{fill:none;stroke:#2A2A2E;stroke-width:6}
-.gc-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
-.gc-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.gc-num{font-family:var(--fd);font-size:18px;font-weight:600;color:var(--white);line-height:1}
-.gc-label{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:2px}
-.gc-divider{width:1px;height:50px;background:rgba(255,255,255,0.06);align-self:center}
+.btn-tappable:active { transform: scale(0.95); filter: brightness(0.92); }
 
-/* Progress bar inside game card */
-.game-prog{margin-top:2px}
-.gp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.gp-name{font-family:var(--fd);font-size:16px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.85)}
-.gp-week{font-size:12px;color:var(--muted)}
-.gp-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:5px}
-.gp-fill{height:100%;width:25%;background:linear-gradient(90deg,#5C8A5E,#9EC4A0);border-radius:3px}
-.gp-labels{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.3)}
+/* ─── SECTION SPACING ─── */
+.section { margin-top: 14px; }
+.section:first-child { margin-top: 0; }
 
-/* ── PROGRESS RINGS CARD ────────────────── */
-.rings-card{
-  background:var(--white);border-radius:24px;
-  padding:16px 16px;margin-bottom:12px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-  opacity:0;animation:fadeUp .5s .3s forwards;
+/* ═══════════════════════════════
+   1. HERO
+═══════════════════════════════ */
+.hero {
+  padding: 56px 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
-.rings-row{display:flex;align-items:center;justify-content:space-around}
-.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px}
-.ring-svg{transform:rotate(-90deg)}
-.ring-track{fill:none;stroke-width:7}
-.ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-num{font-family:var(--fd);font-size:17px;font-weight:600;color:var(--charcoal);line-height:1;display:block}
-.ring-unit{font-size:9px;color:var(--muted);margin-top:1px}
-.ring-label{font-size:11px;font-weight:600;color:var(--muted);text-align:center}
-.ring-pos-wrap{position:relative;width:72px;height:72px}
-.rings-divider{width:1px;height:60px;background:rgba(0,0,0,0.06)}
+.hero-avatar-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.hero-avatar-wrap:active { transform: scale(0.94); }
+.hero-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c8b8e8, #e8c8d0);
+  border: 3px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(160,130,200,0.25);
+}
+.hero-avatar i { font-size: 32px; color: rgba(255,255,255,0.8); }
+.hero-avatar-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(200,180,230,0.4);
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 0.2; }
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1e1a26;
+  letter-spacing: 0.01em;
+}
+.hero-programme {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a898c0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
-/* ── WEEK SCHEDULE ──────────────────────── */
-.week-card{
-  background:var(--white);border-radius:20px;
-  padding:14px 14px;margin-bottom:12px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-  opacity:0;animation:fadeUp .5s .36s forwards;
+/* ═══════════════════════════════
+   2. GAMIFICATION CARD
+═══════════════════════════════ */
+.gam-card {
+  background: #1a1624;
+  border-radius: 28px;
+  padding: 20px 18px;
+  box-shadow: 0 8px 32px rgba(20,14,40,0.22);
 }
-.week-days{display:flex;gap:5px}
-.wd{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
-  padding:10px 3px;border-radius:14px;
-  border:1.5px solid transparent;
-  transition:all .15s;
+.gam-circles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
 }
-.wd.active{background:var(--charcoal);box-shadow:0 3px 12px rgba(0,0,0,0.2)}
-.wd.workout{border-color:rgba(123,168,126,0.35);background:rgba(123,168,126,0.06)}
-.wd.rest{opacity:0.35}
-.wd-day{font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted)}
-.wd.active .wd-day{color:rgba(255,255,255,0.7)}
-.wd.workout .wd-day{color:var(--sage-dark)}
-.wd-type{font-size:8px;color:var(--faint);font-weight:500}
-.wd.active .wd-type{color:rgba(255,255,255,0.45)}
-.wd.workout .wd-type{color:var(--sage)}
-.wd-dot{width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,0.1)}
-.wd.active .wd-dot{background:rgba(255,255,255,0.4)}
-.wd.workout .wd-dot{background:var(--sage)}
+.gam-circle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+.gam-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.gam-bar-wrap {
+  margin-top: 16px;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.gam-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #c5ecff, #4140cc);
+  border-radius: 2px;
+  transition: width 1.4s cubic-bezier(0.4,0,0.2,1) 0.6s;
+}
 
-/* ── NEXT SESSION CARD ──────────────────── */
-.session-card{
-  height:190px;position:relative;overflow:hidden;
-  border-radius:22px;margin-bottom:12px;cursor:pointer;
-  box-shadow:0 6px 30px rgba(0,0,0,0.15);
-  opacity:0;animation:fadeUp .5s .42s forwards;
+/* ═══════════════════════════════
+   3. PROGRESS ROW (Programme + KG)
+═══════════════════════════════ */
+.progress-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
 }
-.session-img{position:absolute;inset:0;background:url('/images/quote-7.png') center/cover}
-.session-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,14,12,0.92) 0%,rgba(10,14,12,0.18) 55%,transparent 100%)}
-.session-content{position:absolute;inset:0;padding:14px 18px;display:flex;flex-direction:column;justify-content:flex-end}
-.session-chip{
-  position:absolute;top:14px;left:16px;
-  background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.25);border-radius:100px;
-  padding:4px 12px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);
-}
-.session-day{font-size:11px;color:rgba(255,255,255,0.5);font-weight:500;margin-bottom:3px;letter-spacing:0.04em}
-.session-name{font-family:var(--fd);font-size:26px;font-weight:600;color:var(--white);line-height:1.05;margin-bottom:6px}
-.session-meta{display:flex;gap:10px;font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:11px}
-.session-btn{
-  align-self:flex-start;
-  background:rgba(255,255,255,0.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1.5px solid rgba(255,255,255,0.28);border-radius:100px;
-  padding:10px 20px;font-family:var(--fb);font-size:13px;font-weight:600;color:var(--white);cursor:pointer;
-  transition:background .15s;
-}
-.session-btn:active{background:rgba(255,255,255,0.28)}
 
-/* ── MOTIVATIONAL MESSAGE ───────────────── */
-.motivation-card{
-  background:var(--white);border-radius:20px;
-  padding:15px 16px;margin-bottom:12px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-  display:flex;align-items:flex-start;gap:12px;
-  opacity:0;animation:fadeUp .5s .48s forwards;
+/* Programme card */
+.prog-card {
+  flex: 1;
+  background: linear-gradient(to bottom, #47b86b 0%, #8dd4a0 45%, #fbfefb 100%);
+  border-radius: 24px;
+  padding: 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 20px rgba(60,160,90,0.18);
 }
-.motivation-av{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(123,168,126,0.3)}
-.motivation-av img{width:100%;height:100%;object-fit:cover;object-position:center top}
-.motivation-content{}
-.motivation-from{font-size:12px;font-weight:600;color:var(--sage-dark);margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.motivation-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.motivation-text{font-size:14px;color:#4A4A50;line-height:1.6}
+.prog-name     { font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.95); line-height: 1.15; letter-spacing: -0.01em; }
+.prog-duration { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: -2px; }
+.prog-pct      { font-size: 42px; font-weight: 600; color: #ffffff; line-height: 1.0; margin-top: 4px; letter-spacing: -0.02em; }
+.prog-week     { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.82); }
+.bar-wrap      { margin-top: 8px; background: #f4f3fa; border-radius: 10px; padding: 6px 7px; display: flex; gap: 5px; align-items: center; }
+.tick          { flex: 1; height: 20px; border-radius: 4px; background: #e8e6f4; }
+.tick.filled   { background: var(--tc); }
+.bar-stats     { display: flex; justify-content: space-between; margin-top: 4px; padding: 0 2px; }
+.stat          { font-size: 18px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #f1fbf3; letter-spacing: 0.08em; }
+.stat-done     { color: #09b43a; }
+.stat-left     { color: #ea4137; }
 
-/* ── BADGES ─────────────────────────────── */
-.badges-card{
-  background:var(--white);border-radius:20px;
-  padding:16px 16px 14px;margin-bottom:12px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-  opacity:0;animation:fadeUp .5s .54s forwards;
+/* KG card */
+.kg-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 8px 6px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.12);
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: flex-start;
 }
-.badges-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.badges-title{font-size:14px;font-weight:600;color:var(--charcoal)}
-.badges-count{font-size:12px;color:var(--muted);background:var(--bg);border-radius:100px;padding:3px 10px}
-.badges-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.badges-row::-webkit-scrollbar{display:none}
-.badge-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;width:64px}
-.badge-circle{
-  width:54px;height:54px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;position:relative;
-  transition:transform .15s;
-}
-.badge-circle:active{transform:scale(0.93)}
-.badge-circle.earned{box-shadow:0 2px 12px rgba(0,0,0,0.1)}
-.badge-circle.locked{filter:grayscale(1);opacity:0.3}
-.badge-circle.earned::after{
-  content:'';position:absolute;inset:-3px;border-radius:50%;
-  border:2px solid transparent;
-  background:linear-gradient(135deg,var(--gold),var(--purple)) border-box;
-  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:destination-out;mask-composite:exclude;
-}
-.badge-name{font-size:9px;font-weight:600;color:var(--muted);text-align:center;line-height:1.3;letter-spacing:0.02em}
-.badge-circle.earned + .badge-name{color:var(--charcoal)}
+.col-left, .col-right { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.date-block { text-align: center; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; height: 90px; }
+.date-day   { font-size: 10px; font-weight: 500; color: #c0b8cc; letter-spacing: 0.08em; text-transform: uppercase; }
+.date-month { font-size: 13px; font-weight: 600; color: #1e1a26; }
+.date-num   { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: #1e1a26; line-height: 1; }
+.kg-track { fill: none; stroke-linecap: round; }
+.kg-arc { fill: none; stroke-linecap: round; transform-origin: 50% 50%; transform: rotate(-90deg); stroke-dashoffset: 999; transition: stroke-dashoffset 1.3s cubic-bezier(0.35,0,0.25,1); }
+.rn { font-family: 'DM Sans', sans-serif; font-weight: 600; fill: #1e1a26; text-anchor: middle; dominant-baseline: middle; }
+.rl { font-family: 'DM Sans', sans-serif; font-weight: 400; fill: #c0b8cc; text-anchor: middle; dominant-baseline: middle; }
 
-/* ── CHECK-IN ───────────────────────────── */
-.checkin-card{
-  background:var(--white);border-radius:20px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;margin-bottom:12px;cursor:pointer;
-  box-shadow:var(--shadow);
-  border:1.5px solid rgba(123,168,126,0.25);
-  background:linear-gradient(135deg,rgba(123,168,126,0.08),rgba(123,168,126,0.02));
-  opacity:0;animation:fadeUp .5s .6s forwards;
+/* ═══════════════════════════════
+   4. WEEK SCHEDULE
+═══════════════════════════════ */
+.week-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 14px 12px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.10);
 }
-.ci-left{display:flex;align-items:center;gap:12px}
-.ci-icon{width:40px;height:40px;border-radius:12px;background:var(--charcoal);display:flex;align-items:center;justify-content:center}
-.ci-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
-.ci-sub{font-size:11px;color:var(--muted)}
-.ci-badge{background:var(--charcoal);color:var(--white);border-radius:100px;padding:6px 14px;font-size:11px;font-weight:600}
+.days-row { display: flex; gap: 5px; }
+.day-pill { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px 4px; border-radius: 16px; background: #f6f4fb; transition: transform 0.12s ease; cursor: pointer; }
+.day-pill:active { transform: scale(0.93); }
+.day-pill.today  { background: #1e1a26; }
+.day-pill.train  { background: #f0faf2; }
+.day-name  { font-size: 10px; font-weight: 500; color: #b0a8bc; letter-spacing: 0.04em; text-transform: uppercase; }
+.day-pill.today .day-name  { color: rgba(255,255,255,0.6); }
+.day-pill.train .day-name  { color: #7aba88; }
+.day-dot   { width: 7px; height: 7px; border-radius: 50%; background: #ddd8ea; }
+.day-pill.today .day-dot   { background: rgba(255,255,255,0.4); }
+.day-pill.train .day-dot   { background: #7aba88; }
+.day-lbl   { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #c0b8cc; }
+.day-pill.today .day-lbl   { color: rgba(255,255,255,0.85); }
+.day-pill.train .day-lbl   { color: #5aa868; }
 
-/* ── WA ─────────────────────────────────── */
-.wa-card{
-  background:var(--white);border-radius:20px;
-  display:flex;align-items:center;gap:14px;
-  padding:14px 16px;text-decoration:none;margin-bottom:12px;
-  box-shadow:var(--shadow);
-  border:1.5px solid rgba(37,211,102,0.15);
-  background:rgba(37,211,102,0.04);
-  opacity:0;animation:fadeUp .5s .64s forwards;
+/* ═══════════════════════════════
+   5. SESSION CARD
+═══════════════════════════════ */
+.session-card {
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
-.wa-ico{width:40px;height:40px;border-radius:12px;background:rgba(37,211,102,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.wa-card strong{display:block;font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
-.wa-card span{font-size:11px;color:var(--muted)}
+.session-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #2a1a0e 0%, #5c3820 40%, #8b6040 70%, #c49070 100%);
+}
+.session-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%);
+}
+.glass {
+  position: relative;
+  z-index: 2;
+  margin: 12px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 20px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.s-eyebrow { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.65); letter-spacing: 0.12em; text-transform: uppercase; }
+.s-title   { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: #ffffff; line-height: 1.1; }
+.s-meta    { display: flex; gap: 14px; }
+.s-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.80); }
+.s-dot     { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+.btn-session {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: #ffffff;
+  color: #1e1a26;
+  animation: sessionPulse 2.8s ease-in-out infinite;
+}
+@keyframes sessionPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+}
 
-/* ── SECTION LABEL ──────────────────────── */
-.sec-lbl{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin:4px 0 10px;padding:0 2px}
+/* ═══════════════════════════════
+   6. MOTIVATIONAL
+═══════════════════════════════ */
+.mot-card {
+  background: #faf8f5;
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.10);
+}
+.mot-photo {
+  width: 42%;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(160deg, #3a2a1a 0%, #7a5a3a 50%, #b89070 100%);
+  overflow: hidden;
+}
+.mot-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 70%, #faf8f5 100%);
+}
+.mot-photo-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.mot-photo-text  { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; text-align: center; line-height: 1.6; }
+.mot-content { flex: 1; padding: 22px 18px 22px 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+.mot-from    { font-size: 10px; font-weight: 500; color: #c0a888; letter-spacing: 0.12em; text-transform: uppercase; }
+.mot-message { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; font-weight: 500; color: #2a2018; line-height: 1.45; flex: 1; }
+.mot-divider { width: 28px; height: 2px; background: linear-gradient(to right, #c9a86a, transparent); border-radius: 2px; }
+.mot-name    { font-size: 12px; font-weight: 500; color: #a89880; letter-spacing: 0.04em; margin-top: 8px; }
 
-/* ── BOTTOM NAV ─────────────────────────── */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;padding:0 14px 24px;z-index:100;
+/* ═══════════════════════════════
+   7. BADGES
+═══════════════════════════════ */
+.badges-card {
+  background: #1a1624;
+  border-radius: 24px;
+  padding: 18px 0;
+  box-shadow: 0 4px 28px rgba(0,0,0,0.18);
 }
-.nav-inner{
-  background:rgba(255,255,255,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(0,0,0,0.07);border-radius:26px;
-  display:flex;justify-content:space-around;
-  padding:10px 4px 8px;
-  box-shadow:0 -2px 24px rgba(0,0,0,0.08);
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 14px;cursor:pointer;border-radius:14px;transition:background .15s}
-.nav-item.active{background:rgba(61,97,64,0.1)}
-.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
-.nav-icon svg{width:22px;height:22px;stroke:var(--faint);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.nav-item.active .nav-icon svg{stroke:var(--sage-dark)}
-.nav-lbl{font-size:9px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--faint)}
-.nav-item.active .nav-lbl{color:var(--sage-dark)}
+.badges-header { display: flex; align-items: center; justify-content: space-between; padding: 0 18px 14px; }
+.badges-title  { font-size: 15px; font-weight: 600; color: #ffffff; }
+.badges-count  { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); }
+.scroll-row    { display: flex; gap: 12px; overflow-x: auto; padding: 4px 18px; scrollbar-width: none; }
+.scroll-row::-webkit-scrollbar { display: none; }
+.badge         { display: flex; flex-direction: column; align-items: center; gap: 7px; flex-shrink: 0; width: 64px; }
+.badge-circle  { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.15s ease; cursor: pointer; }
+.badge-circle:active { transform: scale(0.88); }
+.badge-circle.unlocked:active { transform: scale(0.88); filter: brightness(1.1); }
+.badge-circle i { font-size: 22px; color: #fff; }
+.badge-circle.locked { background: #2a2436; }
+.badge-circle.locked i { color: #4a4460; }
+.lock-overlay  { position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; background: #2e2840; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #1a1624; }
+.lock-overlay i { font-size: 10px; color: #5a5470; }
+.badge-name    { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.28); text-align: center; line-height: 1.3; letter-spacing: 0.02em; }
+.badge-name.unlocked { color: rgba(255,255,255,0.75); }
 
-/* ── WORKOUT COMPLETE POPUP ─────────────── */
-.popup-overlay{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  display:flex;align-items:flex-end;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .3s;
+/* ═══════════════════════════════
+   8. CHECK-IN + WHATSAPP
+═══════════════════════════════ */
+.checkin-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.10);
 }
-.popup-overlay.show{opacity:1;pointer-events:all}
-.popup-sheet{
-  background:var(--white);border-radius:28px 28px 0 0;
-  width:100%;max-width:430px;padding:24px 24px 40px;
-  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,0,.67,0);
-}
-.popup-overlay.show .popup-sheet{transform:translateY(0);transition:transform .35s cubic-bezier(.33,1,.68,1)}
-.popup-handle{width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,0.12);margin:0 auto 20px}
-.popup-emoji{font-size:52px;text-align:center;margin-bottom:8px;animation:bounceIn .5s .1s both}
-@keyframes bounceIn{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
-.popup-title{font-family:var(--fd);font-size:28px;font-weight:600;text-align:center;color:var(--charcoal);margin-bottom:4px}
-.popup-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px}
-.popup-section{margin-bottom:20px}
-.popup-sec-lbl{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.popup-chips{display:flex;flex-wrap:wrap;gap:8px}
-.popup-chip{
-  padding:9px 16px;border-radius:100px;
-  border:1.5px solid var(--border);background:var(--bg);
-  font-family:var(--fb);font-size:13px;font-weight:500;color:var(--charcoal);
-  cursor:pointer;transition:all .15s;
-}
-.popup-chip.sel{background:var(--charcoal);border-color:var(--charcoal);color:var(--white)}
-.popup-slider-wrap{padding:0 4px}
-.popup-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--sage) 40%,var(--bg) 40%);outline:none;margin:8px 0 4px}
-.popup-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--charcoal);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
-.popup-slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--faint)}
-.popup-cta{
-  width:100%;background:var(--charcoal);color:var(--white);
-  border:none;border-radius:16px;padding:16px;
-  font-family:var(--fb);font-size:16px;font-weight:600;cursor:pointer;
-  margin-top:8px;transition:transform .1s;
-}
-.popup-cta:active{transform:scale(0.98)}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.checkin-left  { display: flex; align-items: center; gap: 14px; }
+.checkin-icon  { width: 46px; height: 46px; border-radius: 14px; background: #fff4e6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.checkin-icon i { font-size: 22px; color: #e8922a; }
+.checkin-title { font-size: 14px; font-weight: 600; color: #1e1a26; }
+.checkin-sub   { font-size: 12px; font-weight: 400; color: #b0a8bc; margin-top: 2px; }
+.checkin-btn   { background: #1e1a26; color: #ffffff; border: none; border-radius: 12px; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.wa-card       { background: #25d366; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; box-shadow: 0 4px 20px rgba(37,211,102,0.25); cursor: pointer; }
+.wa-left       { display: flex; align-items: center; gap: 14px; }
+.wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wa-icon i     { font-size: 24px; color: #ffffff; }
+.wa-title      { font-size: 14px; font-weight: 600; color: #ffffff; }
+.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: 2px; }
+.wa-arrow      { color: rgba(255,255,255,0.7); font-size: 20px; }
 </style>
 </head>
 <body>
-<div class="screen">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-mesh"></div>
-    <div class="hero-noise"></div>
-    <div class="hero-vignette"></div>
-    <div class="top-bar">
-      <div class="top-logo">Coached by Dejan</div>
+<div class="bg-mesh"></div>
+
+<div class="page">
+
+  <!-- 1. HERO -->
+  <div class="hero reveal">
+    <div class="hero-avatar-wrap">
+      <div class="hero-avatar"><i class="ti ti-user"></i></div>
+      <div class="hero-avatar-ring"></div>
     </div>
-    <div class="profile-section">
-      <div class="profile-avatar" onclick="document.getElementById('avatar-upload').click()">
-        <img src="/images/quote-1.png" alt="Profile" id="avatar-img">
-        <div class="profile-avatar-upload">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+    <div class="hero-name">Sarah</div>
+    <div class="hero-programme">Balanced · 12 Week</div>
+  </div>
+
+  <!-- 2. GAMIFICATION -->
+  <div class="section reveal">
+    <div class="gam-card tappable">
+      <div class="gam-circles">
+
+        <!-- Workouts -->
+        <div class="gam-circle-wrap">
+          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+            <defs>
+              <linearGradient id="gw" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#c5ecff"/>
+                <stop offset="100%" stop-color="#4140cc"/>
+              </linearGradient>
+            </defs>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gw)" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
+              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s"
+              class="gam-arc" data-pct="0.6" id="arc-workouts"/>
+            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">18</text>
+            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">done</text>
+          </svg>
+          <div class="gam-label">Workouts</div>
         </div>
-        <input type="file" id="avatar-upload" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+
+        <!-- Weeks -->
+        <div class="gam-circle-wrap">
+          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="#4140cc" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
+              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.4s"
+              id="arc-weeks"/>
+            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">6</text>
+            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">of 12</text>
+          </svg>
+          <div class="gam-label">Weeks</div>
+        </div>
+
+        <!-- Calories -->
+        <div class="gam-circle-wrap">
+          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+            <defs>
+              <linearGradient id="gc" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffb347"/>
+                <stop offset="100%" stop-color="#e05a00"/>
+              </linearGradient>
+            </defs>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gc)" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
+              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.5s"
+              id="arc-cals"/>
+            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="11" fill="#ffffff">1840</text>
+            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">kcal</text>
+          </svg>
+          <div class="gam-label">Calories</div>
+        </div>
+
+        <!-- Badges -->
+        <div class="gam-circle-wrap">
+          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+            <defs>
+              <linearGradient id="gb" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#F5DCEA"/>
+                <stop offset="100%" stop-color="#C080BC"/>
+              </linearGradient>
+            </defs>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
+            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gb)" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
+              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.6s"
+              id="arc-badges"/>
+            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">8</text>
+            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">earned</text>
+          </svg>
+          <div class="gam-label">Badges</div>
+        </div>
+
       </div>
-      <div class="profile-info">
-        <div class="profile-name">Slavica</div>
-        <div class="profile-prog">Foundation · 12 Weeks</div>
+      <div class="gam-bar-wrap">
+        <div class="gam-bar-fill" id="gam-bar"></div>
       </div>
     </div>
   </div>
 
-  <!-- SCROLL -->
-  <div class="scroll">
+  <!-- 3. PROGRESS ROW -->
+  <div class="section reveal progress-row">
 
-    <!-- DARK GAMIFICATION CARD -->
-    <div class="game-card">
-      <div class="game-circles">
-        <div class="gc-wrap">
-          <div class="gc-ring">
-            <svg class="gc-svg" width="64" height="64" viewBox="0 0 64 64">
-              <circle class="gc-track" cx="32" cy="32" r="26"/>
-              <circle class="gc-fill" cx="32" cy="32" r="26" stroke="#E8A87C"
-                stroke-dasharray="163" stroke-dashoffset="130"/>
-            </svg>
-            <div class="gc-inner"><span class="gc-num">1</span></div>
-          </div>
-          <div class="gc-label">Workouts</div>
-        </div>
-        <div class="gc-divider"></div>
-        <div class="gc-wrap">
-          <div class="gc-ring">
-            <svg class="gc-svg" width="64" height="64" viewBox="0 0 64 64">
-              <circle class="gc-track" cx="32" cy="32" r="26"/>
-              <circle class="gc-fill" cx="32" cy="32" r="26" stroke="#7BA87E"
-                stroke-dasharray="163" stroke-dashoffset="122"/>
-            </svg>
-            <div class="gc-inner"><span class="gc-num">3</span></div>
-          </div>
-          <div class="gc-label">Weeks</div>
-        </div>
-        <div class="gc-divider"></div>
-        <div class="gc-wrap">
-          <div class="gc-ring">
-            <svg class="gc-svg" width="64" height="64" viewBox="0 0 64 64">
-              <circle class="gc-track" cx="32" cy="32" r="26"/>
-              <circle class="gc-fill" cx="32" cy="32" r="26" stroke="#9B8EC4"
-                stroke-dasharray="163" stroke-dashoffset="100"/>
-            </svg>
-            <div class="gc-inner"><span class="gc-num" style="font-size:14px">2,840</span></div>
-          </div>
-          <div class="gc-label">Calories</div>
-        </div>
-        <div class="gc-divider"></div>
-        <div class="gc-wrap">
-          <div class="gc-ring">
-            <svg class="gc-svg" width="64" height="64" viewBox="0 0 64 64">
-              <circle class="gc-track" cx="32" cy="32" r="26"/>
-              <circle class="gc-fill" cx="32" cy="32" r="26" stroke="#D4829A"
-                stroke-dasharray="163" stroke-dashoffset="148"/>
-            </svg>
-            <div class="gc-inner"><span class="gc-num">1</span></div>
-          </div>
-          <div class="gc-label">Badges</div>
-        </div>
-      </div>
-
-      <!-- Programme progress -->
-      <div class="game-prog">
-        <div class="gp-top">
-          <div class="gp-name">Foundation 12 Week</div>
-          <div class="gp-week">Week 3 of 12</div>
-        </div>
-        <div class="gp-bar"><div class="gp-fill"></div></div>
-        <div class="gp-labels"><span>3 weeks done</span><span>9 weeks left</span></div>
+    <!-- Programme -->
+    <div class="prog-card tappable">
+      <div class="prog-name">Balanced</div>
+      <div class="prog-duration">12-Week</div>
+      <div class="prog-pct" id="prog-pct">0%</div>
+      <div class="prog-week">Week 6 of 12</div>
+      <div class="bar-wrap" id="ticker-bar"></div>
+      <div class="bar-stats">
+        <div class="stat stat-done">+47%</div>
+        <div class="stat stat-left">-53%</div>
       </div>
     </div>
 
-    <!-- PROGRESS RINGS — KG -->
-    <div class="rings-card">
-      <div class="rings-row">
-        <div class="ring-wrap">
-          <div class="ring-pos-wrap">
-            <svg class="ring-svg" width="72" height="72" viewBox="0 0 72 72">
-              <circle class="ring-track" cx="36" cy="36" r="28" stroke="#FFF0E8"/>
-              <circle class="ring-fill" cx="36" cy="36" r="28" stroke="#E8A87C"
-                stroke-dasharray="176" stroke-dashoffset="128"/>
-            </svg>
-            <div class="ring-center">
-              <span class="ring-num" style="color:#C07840">−2.1</span>
-              <span class="ring-unit">kg lost</span>
-            </div>
-          </div>
-          <div class="ring-label">Lost</div>
+    <!-- KG Rings -->
+    <div class="kg-card">
+      <div class="col-left">
+        <div class="date-block">
+          <div class="date-day">Mon</div>
+          <div class="date-month">Jun</div>
+          <div class="date-num">9</div>
         </div>
-        <div class="rings-divider"></div>
-        <div class="ring-wrap">
-          <div class="ring-pos-wrap">
-            <svg class="ring-svg" width="72" height="72" viewBox="0 0 72 72">
-              <circle class="ring-track" cx="36" cy="36" r="28" stroke="#EAF0EA"/>
-              <circle class="ring-fill" cx="36" cy="36" r="28" stroke="#7BA87E"
-                stroke-dasharray="176" stroke-dashoffset="88"/>
-            </svg>
-            <div class="ring-center">
-              <span class="ring-num">60.9</span>
-              <span class="ring-unit">current</span>
-            </div>
-          </div>
-          <div class="ring-label">Current</div>
-        </div>
-        <div class="rings-divider"></div>
-        <div class="ring-wrap">
-          <div class="ring-pos-wrap">
-            <svg class="ring-svg" width="72" height="72" viewBox="0 0 72 72">
-              <circle class="ring-track" cx="36" cy="36" r="28" stroke="#EAE8F4"/>
-              <circle class="ring-fill" cx="36" cy="36" r="28" stroke="#9B8EC4"
-                stroke-dasharray="176" stroke-dashoffset="66"/>
-            </svg>
-            <div class="ring-center">
-              <span class="ring-num" style="color:#7060A0">53</span>
-              <span class="ring-unit">goal</span>
-            </div>
-          </div>
-          <div class="ring-label">Goal</div>
-        </div>
+        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh1" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00dd00"/>
+              <stop offset="100%" stop-color="#e8ff00"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh1)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#edfce8" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-lost" cx="45" cy="45" r="34" stroke="url(#kg1)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="42" font-size="16">4.2</text>
+          <text class="rl" x="45" y="57" font-size="9">kg lost</text>
+        </svg>
+      </div>
+      <div class="col-right">
+        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh2" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff9900"/>
+              <stop offset="100%" stop-color="#ffe600"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh2)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#fdf5e0" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-current" cx="45" cy="45" r="34" stroke="url(#kg2)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="41" font-size="13">72.8</text>
+          <text class="rl" x="45" y="55" font-size="9">current</text>
+        </svg>
+        <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh3" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5500ff"/>
+              <stop offset="100%" stop-color="#00ccff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh3)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#eae8fc" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-goal" cx="45" cy="45" r="34" stroke="url(#kg3)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="42" font-size="16">68</text>
+          <text class="rl" x="45" y="57" font-size="9">goal</text>
+        </svg>
       </div>
     </div>
 
-    <!-- WEEK SCHEDULE -->
+  </div>
+
+  <!-- 4. WEEK SCHEDULE -->
+  <div class="section reveal">
     <div class="week-card">
-      <div class="week-days">
-        <div class="wd workout"><div class="wd-day">Mon</div><div class="wd-dot"></div><div class="wd-type">Train</div></div>
-        <div class="wd rest"><div class="wd-day">Tue</div><div class="wd-dot"></div><div class="wd-type">Rest</div></div>
-        <div class="wd workout"><div class="wd-day">Wed</div><div class="wd-dot"></div><div class="wd-type">Train</div></div>
-        <div class="wd active"><div class="wd-day">Thu</div><div class="wd-dot"></div><div class="wd-type">Train</div></div>
-        <div class="wd rest"><div class="wd-day">Fri</div><div class="wd-dot"></div><div class="wd-type">Rest</div></div>
-        <div class="wd workout"><div class="wd-day">Sat</div><div class="wd-dot"></div><div class="wd-type">Train</div></div>
-        <div class="wd rest"><div class="wd-day">Sun</div><div class="wd-dot"></div><div class="wd-type">Rest</div></div>
+      <div class="days-row">
+        <div class="day-pill rest">  <div class="day-name">Mon</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
+        <div class="day-pill train"> <div class="day-name">Tue</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
+        <div class="day-pill train"> <div class="day-name">Wed</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
+        <div class="day-pill rest">  <div class="day-name">Thu</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
+        <div class="day-pill today"> <div class="day-name">Fri</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
+        <div class="day-pill rest">  <div class="day-name">Sat</div><div class="day-dot"></div><div class="day-lbl">Rest</div>  </div>
+        <div class="day-pill train"> <div class="day-name">Sun</div><div class="day-dot"></div><div class="day-lbl">Train</div> </div>
       </div>
     </div>
+  </div>
 
-    <!-- NEXT SESSION -->
-    <div class="sec-lbl">Today's Session</div>
-    <div class="session-card" onclick="showPopup()">
-      <div class="session-img"></div>
-      <div class="session-overlay"></div>
-      <div class="session-content">
-        <div class="session-chip">Today · Thursday 22 May</div>
-        <div class="session-name">Lower Body<br>& Glutes</div>
-        <div class="session-meta"><span>40 min</span><span>·</span><span>6 exercises</span></div>
-        <button class="session-btn">Begin session →</button>
-      </div>
-    </div>
-
-    <!-- MOTIVATIONAL MESSAGE -->
-    <div class="motivation-card">
-      <div class="motivation-av">
-        <img src="/images/dejan-coach.jpg" alt="Dejan" onerror="this.style.display='none'">
-      </div>
-      <div class="motivation-content">
-        <div class="motivation-from">
-          <span class="motivation-dot"></span>
-          Dejan · 2 hours ago
+  <!-- 5. SESSION CARD -->
+  <div class="section reveal">
+    <div class="session-card tappable">
+      <div class="session-bg"></div>
+      <div class="glass">
+        <div>
+          <div class="s-eyebrow">Today's Workout · Fri 9 Jun</div>
+          <div class="s-title">Full Body Strength</div>
         </div>
-        <div class="motivation-text">Great work this week Slavica — I can see you're building real consistency. Keep the pace steady, don't rush the weights. You're doing beautifully. 🌿</div>
+        <div class="s-meta">
+          <div class="s-meta-item"><div class="s-dot"></div>45 min</div>
+          <div class="s-meta-item"><div class="s-dot"></div>8 exercises</div>
+        </div>
+        <button class="btn-session btn-tappable">Begin Session</button>
       </div>
     </div>
+  </div>
 
-    <!-- BADGES -->
+  <!-- 6. MOTIVATIONAL -->
+  <div class="section reveal">
+    <div class="mot-card">
+      <div class="mot-photo">
+        <div class="mot-photo-inner">
+          <div class="mot-photo-text">Dejan's<br>photo</div>
+        </div>
+      </div>
+      <div class="mot-content">
+        <div class="mot-from">From your coach</div>
+        <div class="mot-message">"You showed up again. That's not nothing — that's everything."</div>
+        <div>
+          <div class="mot-divider"></div>
+          <div class="mot-name">— Dejan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. BADGES -->
+  <div class="section reveal">
     <div class="badges-card">
       <div class="badges-header">
         <div class="badges-title">Your Badges</div>
-        <div class="badges-count">1 of 10 earned</div>
+        <div class="badges-count">8 of 34 earned</div>
       </div>
-      <div class="badges-row">
-        <div class="badge-item">
-          <div class="badge-circle earned" style="background:#FFF4E8">🏅</div>
-          <div class="badge-name">First Workout</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">🔥</div>
-          <div class="badge-name">3 in a Row</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">⚡</div>
-          <div class="badge-name">7 Streak</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">📅</div>
-          <div class="badge-name">Week 1 Done</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">💪</div>
-          <div class="badge-name">10 Workouts</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">⚖️</div>
-          <div class="badge-name">First kg Lost</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">🎯</div>
-          <div class="badge-name">5 kg Lost</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">🌿</div>
-          <div class="badge-name">Halfway</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">📋</div>
-          <div class="badge-name">First Check-in</div>
-        </div>
-        <div class="badge-item">
-          <div class="badge-circle locked" style="background:#F5F5F5">🏆</div>
-          <div class="badge-name">Programme Done</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CHECK-IN -->
-    <div class="checkin-card">
-      <div class="ci-left">
-        <div class="ci-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
-        <div><div class="ci-title">Weekly Check-in</div><div class="ci-sub">Due today · takes 2 min</div></div>
-      </div>
-      <div class="ci-badge">Due Today</div>
-    </div>
-
-    <!-- WHATSAPP -->
-    <a class="wa-card" href="#">
-      <div class="wa-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D166"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
-      <div><strong>Message Dejan</strong><span>Balanced & Elevate · Priority support</span></div>
-    </a>
-
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-    <div class="nav-inner">
-      <div class="nav-item active">
-        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
-        <div class="nav-lbl">Home</div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-        <div class="nav-lbl">Train</div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8 2 4 6 4 10c0 5 3 8 8 10 5-2 8-5 8-10 0-4-4-8-8-8z"/><path d="M12 2v20"/></svg></div>
-        <div class="nav-lbl">Nutrition</div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V14M9 20V10M13 20V6M17 20V4"/></svg></div>
-        <div class="nav-lbl">Progress</div>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
-        <div class="nav-lbl">Check-in</div>
+      <div class="scroll-row">
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#f9a825,#f57f17)"><i class="ti ti-star"></i></div><div class="badge-name unlocked">First Workout</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ff7043,#e53935)"><i class="ti ti-flame"></i></div><div class="badge-name unlocked">3 in a Row</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#fdd835,#f9a825)"><i class="ti ti-bolt"></i></div><div class="badge-name unlocked">7 in a Row</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#66bb6a,#2e7d32)"><i class="ti ti-calendar-check"></i></div><div class="badge-name unlocked">First Week</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#42a5f5,#1565c0)"><i class="ti ti-activity"></i></div><div class="badge-name unlocked">10 Workouts</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ab47bc,#6a1b9a)"><i class="ti ti-scale"></i></div><div class="badge-name unlocked">First kg Lost</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#26c6da,#00838f)"><i class="ti ti-clipboard-check"></i></div><div class="badge-name unlocked">First Check-in</div></div>
+        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ec407a,#ad1457)"><i class="ti ti-calendar-event"></i></div><div class="badge-name unlocked">First Month</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-target"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">5 kg Lost</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-flag"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Halfway There</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-trophy"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Programme Done</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-crown"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">30 in a Row</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-award"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">50 Workouts</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-diamond"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">100 Workouts</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-sun"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Early Bird</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-moon"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Night Owl</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-star"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Goal Reached</div></div>
+        <div class="badge"><div class="badge-circle locked"><i class="ti ti-refresh"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Second Round</div></div>
       </div>
     </div>
   </div>
 
-  <!-- WORKOUT COMPLETE POPUP -->
-  <div class="popup-overlay" id="popup" onclick="e=>{if(e.target===this)hidePopup()}">
-    <div class="popup-sheet" onclick="event.stopPropagation()">
-      <div class="popup-handle"></div>
-      <div class="popup-emoji">🎉</div>
-      <div class="popup-title">Session Complete!</div>
-      <div class="popup-sub">Lower Body & Glutes · 40 min</div>
-
-      <div class="popup-section">
-        <div class="popup-sec-lbl">How did the weights feel?</div>
-        <div class="popup-chips">
-          <div class="popup-chip" onclick="selectChip(this,'weights')">Too light</div>
-          <div class="popup-chip sel" onclick="selectChip(this,'weights')">Just right</div>
-          <div class="popup-chip" onclick="selectChip(this,'weights')">Too heavy</div>
+  <!-- 8. CHECK-IN -->
+  <div class="section reveal">
+    <div class="checkin-card tappable">
+      <div class="checkin-left">
+        <div class="checkin-icon"><i class="ti ti-clipboard-list"></i></div>
+        <div>
+          <div class="checkin-title">Weekly Check-in</div>
+          <div class="checkin-sub">Due Friday · 2 days away</div>
         </div>
       </div>
-
-      <div class="popup-section">
-        <div class="popup-sec-lbl">Overall workout feel</div>
-        <div class="popup-slider-wrap">
-          <input type="range" class="popup-slider" min="1" max="5" value="3" oninput="updateSlider(this)">
-          <div class="popup-slider-labels"><span>Easy</span><span>Perfect</span><span>Very hard</span></div>
-        </div>
-      </div>
-
-      <button class="popup-cta" onclick="claimBadge()">Claim your badge 🏅</button>
+      <button class="checkin-btn btn-tappable">Check in</button>
     </div>
   </div>
 
-</div>
+  <!-- 9. WHATSAPP -->
+  <div class="section reveal">
+    <div class="wa-card tappable">
+      <div class="wa-left">
+        <div class="wa-icon"><i class="ti ti-brand-whatsapp"></i></div>
+        <div>
+          <div class="wa-title">Message Dejan</div>
+          <div class="wa-sub">Questions? I'm here for you</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right wa-arrow"></i>
+    </div>
+  </div>
+
+</div><!-- end page -->
 
 <script>
-function previewAvatar(input){
-  if(input.files && input.files[0]){
-    const reader = new FileReader();
-    reader.onload = e => document.getElementById('avatar-img').src = e.target.result;
-    reader.readAsDataURL(input.files[0]);
-  }
-}
+// ── INTERSECTION OBSERVER — scroll reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.transitionDelay = '0.05s';
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
 
-function showPopup(){
-  const p = document.getElementById('popup');
-  p.classList.add('show');
-}
-function hidePopup(){
-  document.getElementById('popup').classList.remove('show');
-}
-document.getElementById('popup').addEventListener('click', function(e){
-  if(e.target === this) hidePopup();
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.07) + 's';
+  observer.observe(el);
 });
 
-function selectChip(el, group){
-  el.closest('.popup-chips').querySelectorAll('.popup-chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');
+// ── GAM ARCS ──
+function setArc(id, da, frac) {
+  const el = document.getElementById(id);
+  if (el) el.style.strokeDashoffset = da * (1 - frac);
 }
 
-function updateSlider(input){
-  const pct = ((input.value-1)/(input.max-1))*100;
-  input.style.background = `linear-gradient(90deg, var(--sage) ${pct}%, var(--bg) ${pct}%)`;
+// ── KG ARCS ──
+function setKgArc(id, frac) {
+  const el = document.getElementById(id);
+  if (el) el.style.strokeDashoffset = 213.6 * (1 - frac);
 }
 
-function claimBadge(){
-  hidePopup();
-  // Badge earned animation would go here
+// ── PROG TICKER ──
+function buildTicker() {
+  const TOTAL = 18, PROGRESS = 0.47;
+  const filled = Math.round(TOTAL * PROGRESS);
+  const bar = document.getElementById('ticker-bar');
+  for (let i = 0; i < TOTAL; i++) {
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    if (i < filled) {
+      tick.classList.add('filled');
+      const t = filled > 1 ? i / (filled - 1) : 0;
+      const r = Math.round(0x9d + (0x32 - 0x9d) * t);
+      const g = Math.round(0xe7 + (0xcb - 0xe7) * t);
+      const b = Math.round(0x24 + (0x19 - 0x24) * t);
+      tick.style.setProperty('--tc', `rgb(${r},${g},${b})`);
+      tick.style.opacity = '0';
+      tick.style.transition = `opacity 0.12s ease ${0.5 + i * 0.05}s`;
+    }
+    bar.appendChild(tick);
+  }
 }
+buildTicker();
+
+// ── PROG COUNTER ──
+function countUp(id, target, duration) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start) + '%';
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+// ── FIRE ALL ANIMATIONS after short delay ──
+setTimeout(() => {
+  // Gam arcs
+  setArc('arc-workouts', 188.5, 0.60);
+  setArc('arc-weeks',    188.5, 0.50);
+  setArc('arc-cals',     188.5, 0.72);
+  setArc('arc-badges',   188.5, 0.24);
+  document.getElementById('gam-bar').style.width = '60%';
+
+  // KG arcs
+  setKgArc('kg-lost',    0.59);
+  setKgArc('kg-current', 0.82);
+  setKgArc('kg-goal',    0.47);
+
+  // Ticker
+  document.querySelectorAll('.tick.filled').forEach(t => t.style.opacity = '1');
+
+  // Prog counter
+  countUp('prog-pct', 47, 1000);
+}, 200);
 </script>
 </body>
 </html>
