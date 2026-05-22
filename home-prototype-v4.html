@@ -139,19 +139,19 @@ body {
   align-items: center;
   gap: 6px;
 }
-.gam-circle-wrap {
+.cw {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   flex: 1;
 }
 .gam-label {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
+  letter-spacing: 0.06em;
   color: rgba(255,255,255,0.4);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  text-align: center;
 }
 .gam-bar-wrap {
   margin-top: 16px;
@@ -417,76 +417,66 @@ body {
     <div class="gam-card tappable">
       <div class="gam-circles">
 
-        <!-- Workouts -->
-        <div class="gam-circle-wrap">
-          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
-            <defs>
-              <linearGradient id="gw" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#c5ecff"/>
-                <stop offset="100%" stop-color="#4140cc"/>
-              </linearGradient>
-            </defs>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gw)" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
-              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s"
-              class="gam-arc" data-pct="0.6" id="arc-workouts"/>
-            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">18</text>
-            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">done</text>
-          </svg>
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80" id="workouts-svg"></svg>
           <div class="gam-label">Workouts</div>
         </div>
 
-        <!-- Weeks -->
-        <div class="gam-circle-wrap">
-          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
-            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="#4140cc" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
-              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.4s"
-              id="arc-weeks"/>
-            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">6</text>
-            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">of 12</text>
-          </svg>
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80" id="weeks-svg"></svg>
           <div class="gam-label">Weeks</div>
         </div>
 
-        <!-- Calories -->
-        <div class="gam-circle-wrap">
-          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80">
             <defs>
-              <linearGradient id="gc" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#ffb347"/>
-                <stop offset="100%" stop-color="#e05a00"/>
+              <radialGradient id="cal-grad" cx="50%" cy="85%" r="70%">
+                <stop offset="0%" stop-color="#FF7A20"/>
+                <stop offset="40%" stop-color="#E85A00"/>
+                <stop offset="100%" stop-color="#1A1A00" stop-opacity="0.3"/>
+              </radialGradient>
+              <radialGradient id="cal-top" cx="50%" cy="20%" r="60%">
+                <stop offset="0%" stop-color="#2A2A2E"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </radialGradient>
+              <clipPath id="cal-clip"><circle cx="40" cy="40" r="30"/></clipPath>
+              <linearGradient id="ring-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#C85000"/>
+                <stop offset="50%" stop-color="#E87000"/>
+                <stop offset="100%" stop-color="#FF9020"/>
               </linearGradient>
             </defs>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gc)" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
-              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.5s"
-              id="arc-cals"/>
-            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="11" fill="#ffffff">1840</text>
-            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">kcal</text>
+            <circle cx="40" cy="40" r="38" fill="#0A0A0C"/>
+            <circle cx="40" cy="40" r="30" fill="#1A1A1E"/>
+            <rect x="10" y="10" width="60" height="60" fill="url(#cal-grad)" clip-path="url(#cal-clip)"/>
+            <rect x="10" y="10" width="60" height="30" fill="url(#cal-top)" clip-path="url(#cal-clip)"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="url(#ring-grad)" stroke-width="3" opacity="0.7"/>
+            <ellipse cx="40" cy="62" rx="12" ry="5" fill="#FF6010" opacity="0.35"/>
+            <path d="M10 46C16 43,22 50,28 45C32 41,36 47,40 44C44 41,48 48,52 44C56 41,62 48,70 45L70 80L10 80Z" fill="url(#cal-grad)" clip-path="url(#cal-clip)" opacity="0.5"/>
+            <text x="40" y="41" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Georgia,serif" font-size="22" font-weight="600">0</text>
           </svg>
           <div class="gam-label">Calories</div>
         </div>
 
-        <!-- Badges -->
-        <div class="gam-circle-wrap">
-          <svg width="72" height="72" viewBox="0 0 72 72" style="overflow:visible">
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80">
             <defs>
-              <linearGradient id="gb" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#F5DCEA"/>
+              <linearGradient id="badge-grad" x1="6" y1="6" x2="74" y2="74" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#F5DCEA"/>
                 <stop offset="100%" stop-color="#C080BC"/>
               </linearGradient>
+              <filter id="pinkify" color-interpolation-filters="sRGB">
+                <feColorMatrix type="matrix" values="
+                  0.18 0.61 0.06 0 0.15
+                  0.13 0.43 0.04 0 0.05
+                  0.17 0.58 0.06 0 0.15
+                  0    0    0    1 0"/>
+              </filter>
             </defs>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/>
-            <circle cx="36" cy="36" r="30" fill="none" stroke="url(#gb)" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"
-              style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.6s"
-              id="arc-badges"/>
-            <text x="36" y="33" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="600" font-size="14" fill="#ffffff">8</text>
-            <text x="36" y="47" text-anchor="middle" dominant-baseline="middle" font-family="DM Sans" font-weight="400" font-size="8" fill="rgba(255,255,255,0.45)">earned</text>
+            <circle cx="40" cy="40" r="38" fill="#0A0A0C"/>
+            <circle cx="40" cy="40" r="33" fill="none" stroke="url(#badge-grad)" stroke-width="3"/>
+            <text x="40" y="36" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Georgia,serif" font-size="22" font-weight="600">8</text>
+            <text x="40" y="69" text-anchor="middle" dominant-baseline="central" font-size="21" filter="url(#pinkify)">👏</text>
           </svg>
           <div class="gam-label">Badges</div>
         </div>
@@ -706,11 +696,64 @@ document.querySelectorAll('.reveal').forEach((el, i) => {
   observer.observe(el);
 });
 
-// ── GAM ARCS ──
-function setArc(id, da, frac) {
-  const el = document.getElementById(id);
-  if (el) el.style.strokeDashoffset = da * (1 - frac);
+// ── GAM CIRCLES ──
+function lerpColor(c1,c2,t){return `rgb(${Math.round(c1.r+(c2.r-c1.r)*t)},${Math.round(c1.g+(c2.g-c1.g)*t)},${Math.round(c1.b+(c2.b-c1.b)*t)})`}
+const topColor={r:197,g:236,b:255},bottomColor={r:65,g:64,b:204};
+
+function buildWorkouts(svgId,number){
+  const svg=document.getElementById(svgId);
+  const cx=40,cy=40,totalTicks=48,tickInner=27,tickOuter=35;
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#0A0A0C');svg.appendChild(bg);
+  const bg2=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg2.setAttribute('cx',cx);bg2.setAttribute('cy',cy);bg2.setAttribute('r',25);bg2.setAttribute('fill','#0A0A0C');svg.appendChild(bg2);
+  for(let i=0;i<totalTicks;i++){
+    const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
+    const t=(1-Math.cos(theta+Math.PI/2))/2;
+    const color=lerpColor(topColor,bottomColor,t);
+    const x1=cx+tickInner*Math.cos(theta),y1=cy+tickInner*Math.sin(theta);
+    const x2=cx+tickOuter*Math.cos(theta),y2=cy+tickOuter*Math.sin(theta);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x1.toFixed(2));line.setAttribute('y1',y1.toFixed(2));
+    line.setAttribute('x2',x2.toFixed(2));line.setAttribute('y2',y2.toFixed(2));
+    line.setAttribute('stroke',color);line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-linecap','round');
+    svg.appendChild(line);
+  }
+  const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
+  text.setAttribute('font-family','Georgia,serif');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.textContent=number;svg.appendChild(text);
 }
+
+function buildWeeks(svgId,number){
+  const svg=document.getElementById(svgId);
+  const cx=40,cy=40,totalTicks=60;
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#0A0A0C');svg.appendChild(bg);
+  for(let i=0;i<totalTicks;i++){
+    const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
+    const isCardinal=(i===0||i===15||i===30||i===45);
+    const isWhite=(i%5===0);
+    const tickOuter=35,tickInner=isCardinal?27:isWhite?29:31;
+    const x1=cx+tickInner*Math.cos(theta),y1=cy+tickInner*Math.sin(theta);
+    const x2=cx+tickOuter*Math.cos(theta),y2=cy+tickOuter*Math.sin(theta);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x1.toFixed(2));line.setAttribute('y1',y1.toFixed(2));
+    line.setAttribute('x2',x2.toFixed(2));line.setAttribute('y2',y2.toFixed(2));
+    line.setAttribute('stroke',isWhite?'#ffffff':'#4140cc');
+    line.setAttribute('stroke-width',isCardinal?'1.5':'1');line.setAttribute('stroke-linecap','round');
+    svg.appendChild(line);
+  }
+  const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
+  text.setAttribute('font-family','Georgia,serif');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.textContent=number;svg.appendChild(text);
+}
+
+buildWorkouts('workouts-svg', 18);
+buildWeeks('weeks-svg', 6);
 
 // ── KG ARCS ──
 function setKgArc(id, frac) {
@@ -756,11 +799,7 @@ function countUp(id, target, duration) {
 
 // ── FIRE ALL ANIMATIONS after short delay ──
 setTimeout(() => {
-  // Gam arcs
-  setArc('arc-workouts', 188.5, 0.60);
-  setArc('arc-weeks',    188.5, 0.50);
-  setArc('arc-cals',     188.5, 0.72);
-  setArc('arc-badges',   188.5, 0.24);
+  // Gam progress bar
   document.getElementById('gam-bar').style.width = '60%';
 
   // KG arcs
