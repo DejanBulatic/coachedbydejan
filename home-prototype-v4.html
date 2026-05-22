@@ -1048,5 +1048,273 @@ setTimeout(() => {
   countUp('prog-pct', 47, 1000);
 }, 200);
 </script>
+
+<!-- ── PEEK & POP OVERLAY ── -->
+<style>
+.peek-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 100;
+  display: none;
+  transition: background 0.25s ease, backdrop-filter 0.25s ease;
+}
+.peek-backdrop.active {
+  display: block;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.peek-card {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.88);
+  width: 310px;
+  background: #ffffff;
+  border-radius: 28px;
+  overflow: hidden;
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
+  z-index: 101;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+}
+.peek-card.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.peek-photo {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.peek-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+}
+.peek-photo-title {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+}
+.peek-photo-day {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.peek-photo-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.peek-body {
+  padding: 16px 18px 20px;
+}
+.peek-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.peek-exercise {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.peek-ex-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e1a26;
+}
+.peek-ex-detail {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #a098b8;
+}
+.peek-divider {
+  height: 1px;
+  background: #f0eef8;
+  margin: 0 0 16px;
+}
+.peek-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: #1e1a26;
+  color: #ffffff;
+}
+.peek-btn.disabled {
+  background: #f0eef8;
+  color: #a098b8;
+}
+</style>
+
+<div class="peek-backdrop" id="peek-backdrop">
+  <div class="peek-card" id="peek-card">
+    <div class="peek-photo" id="peek-photo">
+      <div class="peek-photo-overlay"></div>
+      <div class="peek-photo-title">
+        <div class="peek-photo-day" id="peek-day"></div>
+        <div class="peek-photo-name" id="peek-name"></div>
+      </div>
+    </div>
+    <div class="peek-body">
+      <div class="peek-exercises" id="peek-exercises"></div>
+      <div class="peek-divider"></div>
+      <button class="peek-btn" id="peek-btn">Begin Session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const workouts = {
+  tue: {
+    day: 'Tuesday',
+    name: 'Upper Body',
+    bgId: 'bg-tue',
+    isToday: false,
+    exercises: [
+      { name: 'Push-ups',        detail: '3 × 15 reps' },
+      { name: 'Dumbbell Row',    detail: '3 × 12 reps · 8kg' },
+      { name: 'Shoulder Press',  detail: '3 × 10 reps · 6kg' },
+      { name: 'Tricep Dips',     detail: '3 × 12 reps' },
+      { name: 'Bicep Curls',     detail: '3 × 12 reps · 5kg' },
+    ]
+  },
+  wed: {
+    day: 'Wednesday',
+    name: 'Cardio & Core',
+    bgId: 'bg-wed',
+    isToday: false,
+    exercises: [
+      { name: 'Running',         detail: '20 min' },
+      { name: 'Plank',           detail: '3 × 45 sec' },
+      { name: 'Mountain Climbers', detail: '3 × 30 reps' },
+      { name: 'Bicycle Crunches', detail: '3 × 20 reps' },
+    ]
+  },
+  fri: {
+    day: 'Friday · Today',
+    name: 'Full Body Strength',
+    bgId: 'bg-fri',
+    isToday: true,
+    exercises: [
+      { name: 'Squats',          detail: '4 × 12 reps · 20kg' },
+      { name: 'Push-ups',        detail: '3 × 15 reps' },
+      { name: 'Deadlift',        detail: '3 × 10 reps · 30kg' },
+      { name: 'Dumbbell Row',    detail: '3 × 12 reps · 8kg' },
+      { name: 'Lunges',          detail: '3 × 10 each · 10kg' },
+    ]
+  },
+  sun: {
+    day: 'Sunday',
+    name: 'Lower Body',
+    bgId: 'bg-sun',
+    isToday: false,
+    exercises: [
+      { name: 'Squats',          detail: '4 × 12 reps · 20kg' },
+      { name: 'Leg Press',       detail: '3 × 15 reps · 40kg' },
+      { name: 'Lunges',          detail: '3 × 10 each · 10kg' },
+      { name: 'Calf Raises',     detail: '3 × 20 reps' },
+      { name: 'Glute Bridge',    detail: '3 × 15 reps' },
+    ]
+  }
+};
+
+let pressTimer = null;
+let peekOpen = false;
+
+function openPeek(key) {
+  const w = workouts[key];
+  if (!w) return;
+  if (navigator.vibrate) navigator.vibrate(10);
+
+  // Photo background
+  const bgEl = document.getElementById(w.bgId);
+  const bgUrl = bgEl ? bgEl.style.backgroundImage : '';
+  document.getElementById('peek-photo').style.backgroundImage = bgUrl;
+
+  document.getElementById('peek-day').textContent = w.day;
+  document.getElementById('peek-name').textContent = w.name;
+
+  // Exercises
+  const exList = document.getElementById('peek-exercises');
+  exList.innerHTML = w.exercises.map(e => `
+    <div class="peek-exercise">
+      <div class="peek-ex-name">${e.name}</div>
+      <div class="peek-ex-detail">${e.detail}</div>
+    </div>
+  `).join('');
+
+  // Button
+  const btn = document.getElementById('peek-btn');
+  if (w.isToday) {
+    btn.textContent = 'Begin Session';
+    btn.className = 'peek-btn';
+  } else {
+    btn.textContent = 'Not Today';
+    btn.className = 'peek-btn disabled';
+  }
+
+  document.getElementById('peek-backdrop').classList.add('active');
+  document.getElementById('peek-card').classList.add('active');
+  peekOpen = true;
+}
+
+function closePeek() {
+  document.getElementById('peek-backdrop').classList.remove('active');
+  document.getElementById('peek-card').classList.remove('active');
+  peekOpen = false;
+}
+
+// Attach long press to each workout pill
+['tue','wed','fri','sun'].forEach(key => {
+  const bgEl = document.getElementById('bg-' + key);
+  if (!bgEl) return;
+  const pill = bgEl.closest('.day-pill');
+  if (!pill) return;
+
+  pill.addEventListener('touchstart', (e) => {
+    pressTimer = setTimeout(() => openPeek(key), 400);
+  }, { passive: true });
+
+  pill.addEventListener('touchend', () => {
+    clearTimeout(pressTimer);
+  });
+
+  pill.addEventListener('touchmove', () => {
+    clearTimeout(pressTimer);
+  });
+});
+
+// Close on backdrop tap
+document.getElementById('peek-backdrop').addEventListener('touchstart', (e) => {
+  if (!document.getElementById('peek-card').contains(e.target)) closePeek();
+});
+
+document.getElementById('peek-backdrop').addEventListener('click', (e) => {
+  if (!document.getElementById('peek-card').contains(e.target)) closePeek();
+});
+</script>
 </body>
 </html>
