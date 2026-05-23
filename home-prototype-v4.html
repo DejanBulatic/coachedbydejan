@@ -496,28 +496,73 @@ body {
 /* ═══════════════════════════════
    7. BADGES
 ═══════════════════════════════ */
-.badges-card {
-  background: #1a1624;
-  border-radius: 24px;
-  padding: 18px 0;
-  box-shadow: 0 4px 28px rgba(0,0,0,0.18);
+.badges-section { padding: 0; }
+.badges-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c4bdd0;
+  padding: 0 16px 14px;
 }
-.badges-header { display: flex; align-items: center; justify-content: space-between; padding: 0 18px 14px; }
-.badges-title  { font-size: 15px; font-weight: 600; color: #ffffff; }
-.badges-count  { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); }
-.scroll-row    { display: flex; gap: 12px; overflow-x: auto; padding: 4px 18px; scrollbar-width: none; }
+.badges-count-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #ccc6d8;
+  letter-spacing: 0.06em;
+}
+.badges-header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 14px; }
+.scroll-row { display: flex; gap: 18px; overflow-x: auto; padding: 4px 16px 12px; scrollbar-width: none; }
 .scroll-row::-webkit-scrollbar { display: none; }
-.badge         { display: flex; flex-direction: column; align-items: center; gap: 7px; flex-shrink: 0; width: 64px; }
-.badge-circle  { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.15s ease; cursor: pointer; }
-.badge-circle:active { transform: scale(0.88); }
-.badge-circle.unlocked:active { transform: scale(0.88); filter: brightness(1.1); }
-.badge-circle i { font-size: 22px; color: #fff; }
-.badge-circle.locked { background: #2a2436; }
-.badge-circle.locked i { color: #4a4460; }
-.lock-overlay  { position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; background: #2e2840; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #1a1624; }
-.lock-overlay i { font-size: 10px; color: #5a5470; }
-.badge-name    { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.28); text-align: center; line-height: 1.3; letter-spacing: 0.02em; }
-.badge-name.unlocked { color: rgba(255,255,255,0.75); }
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 60px;
+}
+
+/* UNLOCKED — floating SVG icon, colorful, joyful */
+.badge-icon-wrap {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+.badge-icon-wrap:active { transform: scale(0.85); }
+.badge-icon-wrap.unlocked i {
+  font-size: 34px;
+}
+.badge-icon-wrap.locked i {
+  font-size: 28px;
+  color: #c8c0d4;
+  opacity: 0.5;
+}
+
+/* Pop-in animation for unlocked */
+.badge-icon-wrap.unlocked {
+  animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes badgePop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.badge-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9088a0;
+  text-align: center;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.badge-name.unlocked { color: #3a3050; }
 
 /* ═══════════════════════════════
    8. CHECK-IN + WHATSAPP
@@ -869,32 +914,146 @@ body {
   </div>
 
   <!-- 7. BADGES -->
-  <div class="section reveal">
-    <div class="badges-card">
-      <div class="badges-header">
-        <div class="badges-title">Your Badges</div>
-        <div class="badges-count">8 of 34 earned</div>
+  <div class="section reveal badges-section">
+    <div class="badges-header">
+      <div class="badges-heading">Your Badges</div>
+      <div class="badges-count-label">8 of 34 earned</div>
+    </div>
+    <div class="scroll-row">
+
+      <!-- UNLOCKED -->
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.05s">
+          <i class="ti ti-star" style="color:#f9a825"></i>
+        </div>
+        <div class="badge-name unlocked">First Workout</div>
       </div>
-      <div class="scroll-row">
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#f9a825,#f57f17)"><i class="ti ti-star"></i></div><div class="badge-name unlocked">First Workout</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ff7043,#e53935)"><i class="ti ti-flame"></i></div><div class="badge-name unlocked">3 in a Row</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#fdd835,#f9a825)"><i class="ti ti-bolt"></i></div><div class="badge-name unlocked">7 in a Row</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#66bb6a,#2e7d32)"><i class="ti ti-calendar-check"></i></div><div class="badge-name unlocked">First Week</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#42a5f5,#1565c0)"><i class="ti ti-activity"></i></div><div class="badge-name unlocked">10 Workouts</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ab47bc,#6a1b9a)"><i class="ti ti-scale"></i></div><div class="badge-name unlocked">First kg Lost</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#26c6da,#00838f)"><i class="ti ti-clipboard-check"></i></div><div class="badge-name unlocked">First Check-in</div></div>
-        <div class="badge"><div class="badge-circle unlocked" style="background:linear-gradient(135deg,#ec407a,#ad1457)"><i class="ti ti-calendar-event"></i></div><div class="badge-name unlocked">First Month</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-target"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">5 kg Lost</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-flag"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Halfway There</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-trophy"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Programme Done</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-crown"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">30 in a Row</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-award"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">50 Workouts</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-diamond"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">100 Workouts</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-sun"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Early Bird</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-moon"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Night Owl</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-star"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Goal Reached</div></div>
-        <div class="badge"><div class="badge-circle locked"><i class="ti ti-refresh"></i><div class="lock-overlay"><i class="ti ti-lock"></i></div></div><div class="badge-name">Second Round</div></div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.10s">
+          <i class="ti ti-flame" style="color:#ff5722"></i>
+        </div>
+        <div class="badge-name unlocked">3 in a Row</div>
       </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.15s">
+          <i class="ti ti-bolt" style="color:#fdd835"></i>
+        </div>
+        <div class="badge-name unlocked">7 in a Row</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.20s">
+          <i class="ti ti-calendar-check" style="color:#43a047"></i>
+        </div>
+        <div class="badge-name unlocked">First Week</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.25s">
+          <i class="ti ti-activity" style="color:#1e88e5"></i>
+        </div>
+        <div class="badge-name unlocked">10 Workouts</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.30s">
+          <i class="ti ti-scale" style="color:#ab47bc"></i>
+        </div>
+        <div class="badge-name unlocked">First kg Lost</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.35s">
+          <i class="ti ti-clipboard-check" style="color:#00acc1"></i>
+        </div>
+        <div class="badge-name unlocked">First Check-in</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="animation-delay:0.40s">
+          <i class="ti ti-calendar-event" style="color:#e91e63"></i>
+        </div>
+        <div class="badge-name unlocked">First Month</div>
+      </div>
+
+      <!-- LOCKED -->
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-target"></i></div>
+        <div class="badge-name">5 kg Lost</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-flag"></i></div>
+        <div class="badge-name">Halfway There</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-trophy"></i></div>
+        <div class="badge-name">Programme Done</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-calendar-event"></i></div>
+        <div class="badge-name">Second Month</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-bolt"></i></div>
+        <div class="badge-name">14 in a Row</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-crown"></i></div>
+        <div class="badge-name">30 in a Row</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-award"></i></div>
+        <div class="badge-name">50 Workouts</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-sun"></i></div>
+        <div class="badge-name">Early Bird</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-moon"></i></div>
+        <div class="badge-name">Night Owl</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-diamond"></i></div>
+        <div class="badge-name">100 Workouts</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-star"></i></div>
+        <div class="badge-name">Goal Reached</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-refresh"></i></div>
+        <div class="badge-name">Second Round</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-heart"></i></div>
+        <div class="badge-name">3 Rest Days</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-camera"></i></div>
+        <div class="badge-name">Progress Photo</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-chart-line"></i></div>
+        <div class="badge-name">Personal Best</div>
+      </div>
+
     </div>
   </div>
 
