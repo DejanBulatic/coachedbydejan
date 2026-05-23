@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Coached by Dejan — Your Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
+
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color:#f5f0fa;
+}
+
+/* ── WELCOME ── */
+#welcome {
+  position:fixed; inset:0; z-index:20;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:40px 28px 56px;
+  text-align:center;
+}
+.w-logo {
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+  letter-spacing:0.16em; text-transform:uppercase; color:#b0a0c8; margin-bottom:44px;
+}
+.w-title {
+  font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:600;
+  color:#1e1a26; line-height:1.15; margin-bottom:10px;
+}
+.w-sub { font-size:17px; color:#9088a0; line-height:1.6; margin-bottom:36px; }
+.w-items { display:flex; flex-direction:column; gap:10px; margin-bottom:44px; width:100%; max-width:300px; }
+.w-item {
+  display:flex; align-items:center; gap:14px;
+  background:rgba(255,255,255,0.75); border-radius:14px; padding:14px 18px;
+  backdrop-filter:blur(10px);
+}
+.w-item-icon { font-size:20px; flex-shrink:0; }
+.w-item-text { font-size:16px; font-weight:500; color:#2a2040; text-align:left; }
+.w-btn {
+  width:100%; max-width:320px; padding:20px;
+  background:#1e1a26; color:white; border:none; border-radius:18px;
+  font-family:'Inter',sans-serif; font-size:18px; font-weight:700;
+  cursor:pointer; letter-spacing:0.01em; transition:transform 0.12s;
+}
+.w-btn:active { transform:scale(0.97); }
+
+/* ── SHELL ── */
+#shell {
+  position:fixed; inset:0; z-index:10;
+  display:none; flex-direction:column;
+}
+#prog-bar { height:3px; background:rgba(0,0,0,0.07); flex-shrink:0; }
+#prog-fill { height:100%; background:linear-gradient(to right,#A8B8A0,#1e1a26); border-radius:0 2px 2px 0; transition:width 0.35s ease; }
+
+#hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 20px 6px; flex-shrink:0;
+}
+#back-btn {
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,0.75); border:none; cursor:pointer;
+  font-size:20px; color:#1e1a26; display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(8px); transition:transform 0.1s; flex-shrink:0;
+}
+#back-btn:active { transform:scale(0.9); }
+.hdr-right { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
+#section-lbl { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:#A8B8A0; }
+#step-ctr { font-size:12px; font-weight:600; color:#c0b8cc; letter-spacing:0.04em; }
+
+#content {
+  flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  padding:12px 20px 0;
+}
+#content::-webkit-scrollbar { display:none; }
+
+#footer { padding:14px 20px 36px; flex-shrink:0; }
+#cont-btn {
+  width:100%; padding:19px;
+  background:#1e1a26; color:white; border:none; border-radius:18px;
+  font-family:'Inter',sans-serif; font-size:17px; font-weight:700;
+  cursor:pointer; transition:transform 0.1s, opacity 0.15s;
+}
+#cont-btn:active { transform:scale(0.98); }
+#cont-btn:disabled { opacity:0.35; }
+
+/* ── CONTENT ELEMENTS ── */
+.sec-lbl {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:17px; color:#A8B8A0; display:block; margin-bottom:6px;
+}
+.q {
+  font-family:'Inter',sans-serif; font-size:30px; font-weight:800;
+  color:#1e1a26; line-height:1.2; letter-spacing:-0.02em; margin-bottom:6px;
+}
+.hint { font-size:16px; color:#b8b0c8; margin-bottom:24px; line-height:1.5; }
+.spacer { height:24px; }
+
+/* Single-select rows */
+.opt-row {
+  display:flex; align-items:center; gap:16px;
+  background:rgba(255,255,255,0.88); border-radius:17px;
+  padding:19px 20px; margin-bottom:10px; cursor:pointer;
+  border:2px solid transparent; backdrop-filter:blur(8px);
+  transition:all 0.15s ease;
+}
+.opt-row.sel { background:#1e1a26; border-color:#1e1a26; }
+.opt-row:active { transform:scale(0.98); }
+.opt-badge {
+  width:36px; height:36px; border-radius:50%;
+  background:#f0eef8; display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:#9088a0; flex-shrink:0;
+}
+.opt-row.sel .opt-badge { background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.75); }
+.opt-text { font-size:19px; font-weight:500; color:#1e1a26; line-height:1.3; }
+.opt-row.sel .opt-text { color:#ffffff; }
+
+/* Multi-select pills */
+.pill-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-top:4px; }
+.pill {
+  padding:15px 22px; background:rgba(255,255,255,0.88);
+  border-radius:40px; border:2px solid transparent;
+  font-size:17px; font-weight:500; color:#1e1a26;
+  cursor:pointer; transition:all 0.15s; backdrop-filter:blur(8px);
+}
+.pill.sel { background:#1e1a26; color:#ffffff; }
+.pill:active { transform:scale(0.96); }
+
+/* Text inputs */
+.inp-group { margin-bottom:18px; }
+.inp-lbl {
+  font-size:13px; font-weight:600; color:#b8b0c8;
+  letter-spacing:0.09em; text-transform:uppercase;
+  display:block; margin-bottom:8px;
+}
+.big-inp {
+  width:100%; background:rgba(255,255,255,0.92);
+  border:2px solid rgba(200,190,220,0.35); border-radius:16px;
+  padding:18px 20px; font-family:'Inter',sans-serif;
+  font-size:20px; font-weight:500; color:#1e1a26;
+  outline:none; -webkit-appearance:none;
+  user-select:auto; -webkit-user-select:auto;
+  transition:border-color 0.15s;
+}
+.big-inp::placeholder { color:#d0c8dc; }
+.big-inp:focus { border-color:#A8B8A0; }
+.inp-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.big-ta {
+  width:100%; background:rgba(255,255,255,0.92);
+  border:2px solid rgba(200,190,220,0.35); border-radius:16px;
+  padding:18px 20px; font-family:'Inter',sans-serif;
+  font-size:18px; font-weight:400; color:#1e1a26;
+  outline:none; resize:none; min-height:150px; line-height:1.6;
+  -webkit-appearance:none; user-select:auto; -webkit-user-select:auto;
+  transition:border-color 0.15s;
+}
+.big-ta::placeholder { color:#d0c8dc; }
+.big-ta:focus { border-color:#A8B8A0; }
+
+/* PAR-Q */
+.parq-item {
+  background:rgba(255,255,255,0.88); border-radius:18px;
+  padding:20px 18px; margin-bottom:12px; backdrop-filter:blur(8px);
+}
+.parq-q { font-size:17px; font-weight:500; color:#1e1a26; line-height:1.5; margin-bottom:14px; }
+.parq-btns { display:flex; gap:10px; }
+.parq-btn {
+  flex:1; padding:14px; border-radius:12px;
+  border:2px solid rgba(200,190,220,0.35);
+  background:rgba(255,255,255,0.7);
+  font-family:'Inter',sans-serif; font-size:17px; font-weight:600;
+  color:#9088a0; cursor:pointer; transition:all 0.15s; text-align:center;
+}
+.parq-btn.sel-yes { background:#c07070; border-color:#c07070; color:white; }
+.parq-btn.sel-no  { background:#5c8c5c; border-color:#5c8c5c; color:white; }
+
+/* Yes/No toggle */
+.yn-row { display:flex; gap:12px; margin-top:4px; margin-bottom:16px; }
+.yn-btn {
+  flex:1; padding:20px; border-radius:16px;
+  border:2px solid rgba(200,190,220,0.35);
+  background:rgba(255,255,255,0.88);
+  font-family:'Inter',sans-serif; font-size:20px; font-weight:700;
+  color:#9088a0; cursor:pointer; transition:all 0.15s; text-align:center;
+}
+.yn-btn.sel { background:#1e1a26; border-color:#1e1a26; color:white; }
+.yn-btn:active { transform:scale(0.97); }
+.cond-inp { display:none; margin-top:10px; }
+.cond-inp.on { display:block; }
+
+/* Goal cards */
+.goal-card {
+  background:rgba(255,255,255,0.88); border-radius:18px;
+  padding:18px; margin-bottom:10px; cursor:pointer;
+  border:2px solid transparent; transition:all 0.15s; backdrop-filter:blur(8px);
+}
+.goal-card.sel { background:#1e1a26; border-color:#1e1a26; }
+.goal-card:active { transform:scale(0.98); }
+.gc-hdr { display:flex; align-items:center; gap:14px; margin-bottom:5px; }
+.gc-check {
+  width:28px; height:28px; border-radius:8px;
+  border:2px solid #d8d0e8; background:white;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; color:white; flex-shrink:0; transition:all 0.15s;
+}
+.goal-card.sel .gc-check { background:rgba(255,255,255,0.2); border-color:rgba(255,255,255,0.3); }
+.gc-title { font-size:18px; font-weight:700; color:#1e1a26; line-height:1.3; }
+.goal-card.sel .gc-title { color:white; }
+.gc-desc { font-size:14px; color:#9088a0; line-height:1.5; margin-left:42px; }
+.goal-card.sel .gc-desc { color:rgba(255,255,255,0.6); }
+.gc-slider-wrap { margin-top:14px; margin-left:42px; display:none; }
+.goal-card.sel .gc-slider-wrap { display:block; }
+.gc-slider-lbl {
+  font-size:12px; font-weight:600; color:rgba(255,255,255,0.65);
+  letter-spacing:0.06em; text-transform:uppercase;
+  display:flex; justify-content:space-between; margin-bottom:8px;
+}
+.gc-slider {
+  width:100%; -webkit-appearance:none; appearance:none;
+  height:4px; border-radius:2px; background:rgba(255,255,255,0.2); outline:none;
+}
+.gc-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+  background:white; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Scale 1-10 */
+.scale-wrap { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:4px; }
+.sc-btn {
+  aspect-ratio:1; border-radius:14px;
+  background:rgba(255,255,255,0.88); border:2px solid transparent;
+  font-family:'Inter',sans-serif; font-size:22px; font-weight:700;
+  color:#1e1a26; cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; justify-content:center;
+}
+.sc-btn.sel { background:#1e1a26; color:white; }
+.sc-btn:active { transform:scale(0.94); }
+.scale-labels { display:flex; justify-content:space-between; margin-top:10px; padding:0 2px; }
+.scale-label { font-size:13px; color:#c0b8cc; }
+
+/* Transitions */
+.slide-r { animation:slideR 0.28s cubic-bezier(0.4,0,0.2,1) both; }
+.slide-l { animation:slideL 0.28s cubic-bezier(0.4,0,0.2,1) both; }
+@keyframes slideR { from { transform:translateX(36px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes slideL { from { transform:translateX(-36px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+/* ── SUCCESS ── */
+#success {
+  position:fixed; inset:0; z-index:30;
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  padding:40px 28px; text-align:center; overflow-y:auto;
+}
+.suc-emoji { font-size:64px; margin-bottom:20px; }
+.suc-title { font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:600; color:#1e1a26; margin-bottom:10px; }
+.suc-sub { font-size:16px; color:#9088a0; line-height:1.7; margin-bottom:28px; }
+.suc-card { background:rgba(255,255,255,0.85); border-radius:20px; padding:24px; text-align:left; width:100%; backdrop-filter:blur(12px); }
+.suc-step { display:flex; gap:14px; align-items:flex-start; margin-bottom:16px; font-size:16px; color:#2a2040; line-height:1.5; }
+.suc-step:last-child { margin-bottom:0; }
+.suc-num { width:28px; height:28px; border-radius:50%; background:#1e1a26; color:white; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- WELCOME -->
+<div id="welcome">
+  <div class="w-logo">Coached by Dejan</div>
+  <div class="w-title">Let's get to know you</div>
+  <div class="w-sub">A few questions so Dejan can build your perfect programme</div>
+  <div class="w-items">
+    <div class="w-item"><div class="w-item-icon">⏱</div><div class="w-item-text">Takes about 5 minutes</div></div>
+    <div class="w-item"><div class="w-item-icon">🔒</div><div class="w-item-text">Everything stays private</div></div>
+    <div class="w-item"><div class="w-item-icon">✨</div><div class="w-item-text">No right or wrong answers</div></div>
+  </div>
+  <button class="w-btn" onclick="startForm()">Let's get started →</button>
+</div>
+
+<!-- SHELL -->
+<div id="shell">
+  <div id="prog-bar"><div id="prog-fill" style="width:0%"></div></div>
+  <div id="hdr">
+    <button id="back-btn" onclick="goBack()">←</button>
+    <div class="hdr-right">
+      <span id="section-lbl"></span>
+      <span id="step-ctr"></span>
+    </div>
+  </div>
+  <div id="content"></div>
+  <div id="footer"><button id="cont-btn" onclick="goForward()">Continue →</button></div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success">
+  <div class="suc-emoji">🌿</div>
+  <div class="suc-title">Form received</div>
+  <div class="suc-sub">Dejan will review your answers and be in touch within 48 hours to schedule your onboarding call.</div>
+  <div class="suc-card">
+    <div class="suc-step"><div class="suc-num">1</div><div>Dejan reviews your intake form</div></div>
+    <div class="suc-step"><div class="suc-num">2</div><div>You receive a message to schedule your onboarding call</div></div>
+    <div class="suc-step"><div class="suc-num">3</div><div>Your personalised programme is built</div></div>
+    <div class="suc-step"><div class="suc-num">4</div><div>You receive your login and start your journey</div></div>
+  </div>
+</div>
+
+<script>
+const d = {};
+const parqAns = new Array(6).fill(null);
+const selGoals = new Set();
+const goalSliders = [5,5,5,5,5];
+const multiSel = {};
+
+let cur = 0;
+const TOTAL = 26;
+
+const goalNames = [
+  'Lose weight & feel more comfortable',
+  'Build strength & feel more toned',
+  'Improve fitness & energy levels',
+  'Improve mobility & feel less stiff',
+  'Feel stronger for everyday life'
+];
+const goalDescs = [
+  'Sustainable fat loss, more energy, feeling lighter in everyday life',
+  'Shape your body, feel stronger and more confident',
+  'Better endurance, energy, and overall fitness',
+  'Move more freely, improve flexibility and feel better',
+  'Strength, posture and movement for healthy ageing'
+];
+
+const SCREENS = [
+  { s:'Personal Information', type:'name',    q:"What's your name?" },
+  { s:'Personal Information', type:'age',     q:'How old are you?' },
+  { s:'Personal Information', type:'contact', q:'How can Dejan reach you?' },
+  { s:'Body Metrics',   type:'body1',  q:'What are your weight goals?' },
+  { s:'Body Metrics',   type:'body2',  q:'Height and measurements', hint:'Waist: narrowest point · Hips: widest point' },
+  { s:'Health & Safety', type:'parq', q:'A few health questions', hint:'Please answer honestly — there are no wrong answers',
+    qs:[
+      {i:0, t:'Has a doctor ever told you that you have a heart condition or high blood pressure?'},
+      {i:1, t:'Do you feel pain or discomfort in your chest during rest or exercise?'},
+      {i:2, t:'Have you experienced dizziness, balance issues, or fainting in the last 12 months?'}
+    ]
+  },
+  { s:'Health & Safety', type:'parq', q:'A few more health questions',
+    qs:[
+      {i:3, t:'Do you have any joint, back, knee, or hip issues that exercise could make worse?'},
+      {i:4, t:'Are you currently pregnant or have you given birth in the last 6 months?'},
+      {i:5, t:'Do you take any medication or have a condition that could affect safe training?'}
+    ]
+  },
+  { s:'Health & Safety', type:'yn-text', q:'Any injuries or pain I should know about?', k:'injuries-yn', fid:'injuries', fp:'Describe your injuries or limitations...' },
+  { s:'Training Profile', type:'single', q:'How would you describe your fitness level?', g:'fitness-level',   opts:['Complete beginner','Some experience','Intermediate','Advanced'] },
+  { s:'Training Profile', type:'single', q:'How many days per week can you train?',       g:'days-per-week',  opts:['2 days','3 days','4 days','5 days','6+ days'] },
+  { s:'Training Profile', type:'single', q:'How long can each session be?',               g:'session-length', opts:['30 min','45 min','60 min','75+ min'] },
+  { s:'Training Profile', type:'single', q:'Where will you be training?',                 g:'training-location', opts:['Gym','Home','Outdoors','Mix of everything'] },
+  { s:'Training Profile', type:'single', q:'Have you followed a structured programme before?', g:'programme-before', opts:['Yes','No'] },
+  { s:'Nutrition', type:'multi', q:'How would you describe your eating habits?', hint:'Select all that apply', g:'eating-habits',
+    opts:['Quite balanced','A mix of good and bad','A lot of processed food','I often skip meals','I eat late at night','I snack often'] },
+  { s:'Nutrition', type:'multi', q:"What's most challenging with food right now?", hint:'Select all that apply', g:'food-challenge',
+    opts:['Portion sizes','Sugar cravings','Emotional eating','No time to cook','Eating out too often','No major challenge'] },
+  { s:'Nutrition', type:'yn-text', q:'Any food allergies or intolerances?', k:'allergies-yn', fid:'allergies', fp:'Describe your allergies or intolerances...' },
+  { s:'Nutrition', type:'single', q:'Do you follow any specific way of eating?',   g:'diet-type',    opts:['No restrictions','Vegetarian','Vegan','Other'] },
+  { s:'Nutrition', type:'single', q:'How much water do you drink daily?',          g:'water-intake', opts:['Less than 1L','1–1.5L','1.5–2L','2L+'] },
+  { s:'Lifestyle', type:'single', q:'How much sleep do you get per night?',        g:'sleep',        opts:['Under 6 hours','6–7 hours','7–8 hours','8+ hours'] },
+  { s:'Lifestyle', type:'single', q:'How are your stress levels lately?',          g:'stress',       opts:['Low','Moderate','High','Very high'] },
+  { s:'Lifestyle', type:'single', q:'What type of work do you do?',                g:'job-type',     opts:['Mostly sitting','Mix of sitting and moving','Mostly on my feet','Physical work','Retired'] },
+  { s:'Your Goals', type:'goals', q:'What are your main goals?', hint:'Choose up to 2' },
+  { s:'Your Goals', type:'ta', q:"What's driving you to make this change?", fid:'goal-why', fp:'What will change in your life when you achieve this?' },
+  { s:'Your Goals', type:'ta', q:'What has held you back before?', fid:'obstacles', fp:"Be honest — this helps Dejan support you better" },
+  { s:'Your Goals', type:'scale', q:'How committed are you right now?', hint:'1 = not quite ready yet  ·  10 = fully ready to change', g:'commitment' },
+  { s:'Your Goals', type:'ta', q:'Anything else Dejan should know?', fid:'anything-else', fp:'Anything at all...', optional:true }
+];
+
+// ── NAVIGATION ──
+function startForm() {
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('shell').style.display = 'flex';
+  cur = 1; render(cur, 'r');
+}
+
+function goForward() {
+  saveCur();
+  if (cur < TOTAL) { cur++; render(cur, 'r'); }
+  else { submitForm(); }
+}
+
+function goBack() {
+  saveCur();
+  if (cur > 1) { cur--; render(cur, 'l'); }
+  else {
+    document.getElementById('shell').style.display = 'none';
+    document.getElementById('welcome').style.display = 'flex';
+  }
+}
+
+function render(n, dir) {
+  const sc = SCREENS[n-1];
+  document.getElementById('prog-fill').style.width = ((n-1)/TOTAL*100).toFixed(0) + '%';
+  document.getElementById('step-ctr').textContent = n + ' / ' + TOTAL;
+  document.getElementById('section-lbl').textContent = sc.s;
+  const btn = document.getElementById('cont-btn');
+  btn.textContent = n === TOTAL ? 'Submit →' : 'Continue →';
+  const el = document.getElementById('content');
+  el.innerHTML = buildHTML(sc, n);
+  el.className = dir === 'r' ? 'slide-r' : 'slide-l';
+  restore(sc);
+  el.scrollTop = 0;
+}
+
+// ── BUILD HTML ──
+const LETTERS = 'ABCDE';
+function buildHTML(sc, n) {
+  let h = `
+    <span class="sec-lbl">${sc.s}</span>
+    <div class="q">${sc.q}</div>
+    ${sc.hint ? `<div class="hint">${sc.hint}</div>` : '<div class="spacer"></div>'}
+  `;
+
+  if (sc.type === 'name') {
+    h += field('First name','first-name','First name','text','given-name') + field('Last name','last-name','Last name','text','family-name');
+  }
+  else if (sc.type === 'age') {
+    h += field('Age','age','34','number','');
+  }
+  else if (sc.type === 'contact') {
+    h += field('Email address','email','you@email.com','email','email') + field('WhatsApp (including country code)','whatsapp','+46 70 000 00 00','tel','tel');
+  }
+  else if (sc.type === 'body1') {
+    h += field('Current weight (kg)','current-weight','72','number','') + field('Goal weight (kg)','target-weight','62','number','');
+  }
+  else if (sc.type === 'body2') {
+    h += field('Height (cm)','height','165','number','');
+    h += `<div class="inp-row">
+      ${field('Waist (cm)','waist','78','number','')}
+      ${field('Hips (cm)','hips','96','number','')}
+    </div>`;
+  }
+  else if (sc.type === 'parq') {
+    sc.qs.forEach(q => {
+      h += `<div class="parq-item">
+        <div class="parq-q">${q.t}</div>
+        <div class="parq-btns">
+          <button class="parq-btn" id="pq${q.i}y" onclick="selParq(${q.i},'Yes')">Yes</button>
+          <button class="parq-btn" id="pq${q.i}n" onclick="selParq(${q.i},'No')">No</button>
+        </div>
+      </div>`;
+    });
+  }
+  else if (sc.type === 'yn-text') {
+    h += `<div class="yn-row">
+      <button class="yn-btn" id="yn-y" onclick="selYN('${sc.k}','Yes')">Yes</button>
+      <button class="yn-btn" id="yn-n" onclick="selYN('${sc.k}','No')">No</button>
+    </div>
+    <div class="cond-inp" id="cond">
+      <textarea class="big-ta" id="${sc.fid}" placeholder="${sc.fp}" rows="3" style="min-height:90px"></textarea>
+    </div>`;
+  }
+  else if (sc.type === 'single') {
+    sc.opts.forEach((o, i) => {
+      h += `<div class="opt-row" id="opt${i}" onclick="selOpt('${sc.g}',${i},'${o}')">
+        <div class="opt-badge">${LETTERS[i]||i+1}</div>
+        <div class="opt-text">${o}</div>
+      </div>`;
+    });
+  }
+  else if (sc.type === 'multi') {
+    if (!multiSel[sc.g]) multiSel[sc.g] = new Set();
+    h += '<div class="pill-wrap">';
+    sc.opts.forEach((o,i) => { h += `<div class="pill" id="pill${i}" onclick="togPill('${sc.g}',${i},'${o}')">${o}</div>`; });
+    h += '</div>';
+  }
+  else if (sc.type === 'goals') {
+    goalNames.forEach((name, i) => {
+      h += `<div class="goal-card" id="gc${i}" onclick="togGoal(${i})">
+        <div class="gc-hdr">
+          <div class="gc-check" id="gck${i}"></div>
+          <div class="gc-title">${name}</div>
+        </div>
+        <div class="gc-desc">${goalDescs[i]}</div>
+        <div class="gc-slider-wrap" id="gsw${i}">
+          <div class="gc-slider-lbl"><span>How important?</span><span id="gv${i}">${goalSliders[i]}</span>/10</div>
+          <input type="range" class="gc-slider" min="1" max="10" value="${goalSliders[i]}"
+            oninput="goalSliders[${i}]=this.value;document.getElementById('gv${i}').textContent=this.value"
+            onclick="event.stopPropagation()">
+        </div>
+      </div>`;
+    });
+  }
+  else if (sc.type === 'ta') {
+    h += `<textarea class="big-ta" id="${sc.fid}" placeholder="${sc.fp}"></textarea>`;
+    if (sc.optional) h += `<div style="font-size:15px;color:#c8c0d4;text-align:center;margin-top:10px">Optional — skip if you prefer</div>`;
+  }
+  else if (sc.type === 'scale') {
+    h += '<div class="scale-wrap">';
+    for (let i=1; i<=10; i++) {
+      h += `<button class="sc-btn" id="sc${i}" onclick="selScale('${sc.g}',${i})">${i}</button>`;
+    }
+    h += '</div>';
+    h += `<div class="scale-labels"><span class="scale-label">Not ready yet</span><span class="scale-label">Fully committed</span></div>`;
+  }
+
+  h += '<div class="spacer"></div>';
+  return h;
+}
+
+function field(label, id, ph, type, ac) {
+  return `<div class="inp-group">
+    <span class="inp-lbl">${label}</span>
+    <input class="big-inp" type="${type}" id="${id}" placeholder="${ph}" ${ac?`autocomplete="${ac}"`:''}
+      ${type==='number'?'inputmode="decimal"':''}>
+  </div>`;
+}
+
+// ── RESTORE ──
+function restore(sc) {
+  if (sc.type==='name') { setV('first-name'); setV('last-name'); }
+  else if (sc.type==='age') { setV('age'); }
+  else if (sc.type==='contact') { setV('email'); setV('whatsapp'); }
+  else if (sc.type==='body1') { setV('current-weight'); setV('target-weight'); }
+  else if (sc.type==='body2') { setV('height'); setV('waist'); setV('hips'); }
+  else if (sc.type==='parq') {
+    sc.qs.forEach(q => {
+      const a = parqAns[q.i];
+      if (a==='Yes') document.getElementById(`pq${q.i}y`).classList.add('sel-yes');
+      if (a==='No')  document.getElementById(`pq${q.i}n`).classList.add('sel-no');
+    });
+  }
+  else if (sc.type==='yn-text') {
+    const a = d[sc.k];
+    if (a==='Yes') { document.getElementById('yn-y').classList.add('sel'); document.getElementById('cond').classList.add('on'); }
+    if (a==='No')  document.getElementById('yn-n').classList.add('sel');
+    if (d[sc.fid] && document.getElementById(sc.fid)) document.getElementById(sc.fid).value = d[sc.fid];
+  }
+  else if (sc.type==='single') {
+    const val = d[sc.g];
+    if (val !== undefined) { const i = sc.opts.indexOf(val); if (i>=0) document.getElementById(`opt${i}`).classList.add('sel'); }
+  }
+  else if (sc.type==='multi') {
+    const sel = multiSel[sc.g];
+    if (sel) sc.opts.forEach((o,i) => { if (sel.has(o)) document.getElementById(`pill${i}`).classList.add('sel'); });
+  }
+  else if (sc.type==='goals') {
+    selGoals.forEach(i => { document.getElementById(`gc${i}`).classList.add('sel'); document.getElementById(`gck${i}`).textContent='✓'; });
+  }
+  else if (sc.type==='ta') { if (d[sc.fid] && document.getElementById(sc.fid)) document.getElementById(sc.fid).value = d[sc.fid]; }
+  else if (sc.type==='scale') { const v = d[sc.g]; if (v) document.getElementById(`sc${v}`).classList.add('sel'); }
+}
+function setV(id) { const el = document.getElementById(id); if (el && d[id]) el.value = d[id]; }
+
+// ── SAVE ──
+function saveCur() {
+  const sc = SCREENS[cur-1];
+  if (sc.type==='name') { d['first-name']=gv('first-name'); d['last-name']=gv('last-name'); }
+  else if (sc.type==='age') { d['age']=gv('age'); }
+  else if (sc.type==='contact') { d['email']=gv('email'); d['whatsapp']=gv('whatsapp'); }
+  else if (sc.type==='body1') { d['current-weight']=gv('current-weight'); d['target-weight']=gv('target-weight'); }
+  else if (sc.type==='body2') { d['height']=gv('height'); d['waist']=gv('waist'); d['hips']=gv('hips'); }
+  else if (sc.type==='yn-text') { if (document.getElementById(sc.fid)) d[sc.fid]=document.getElementById(sc.fid).value.trim(); }
+  else if (sc.type==='ta') { if (document.getElementById(sc.fid)) d[sc.fid]=document.getElementById(sc.fid).value.trim(); }
+}
+function gv(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+// ── INTERACTIONS ──
+function selOpt(g, idx, val) {
+  document.querySelectorAll('.opt-row').forEach(r => r.classList.remove('sel'));
+  document.getElementById(`opt${idx}`).classList.add('sel');
+  d[g] = val;
+}
+function togPill(g, idx, val) {
+  if (!multiSel[g]) multiSel[g] = new Set();
+  const el = document.getElementById(`pill${idx}`);
+  if (multiSel[g].has(val)) { multiSel[g].delete(val); el.classList.remove('sel'); }
+  else { multiSel[g].add(val); el.classList.add('sel'); }
+}
+function selParq(idx, val) {
+  parqAns[idx] = val;
+  document.getElementById(`pq${idx}y`).className = 'parq-btn' + (val==='Yes'?' sel-yes':'');
+  document.getElementById(`pq${idx}n`).className = 'parq-btn' + (val==='No' ?' sel-no' :'');
+}
+function selYN(key, val) {
+  d[key] = val;
+  document.getElementById('yn-y').className = 'yn-btn' + (val==='Yes'?' sel':'');
+  document.getElementById('yn-n').className = 'yn-btn' + (val==='No' ?' sel':'');
+  document.getElementById('cond').classList.toggle('on', val==='Yes');
+}
+function togGoal(idx) {
+  if (selGoals.has(idx)) {
+    selGoals.delete(idx);
+    document.getElementById(`gc${idx}`).classList.remove('sel');
+    document.getElementById(`gck${idx}`).textContent = '';
+  } else {
+    if (selGoals.size >= 2) {
+      const el = document.getElementById(`gc${idx}`);
+      el.style.transform='translateX(5px)';
+      setTimeout(()=>el.style.transform='',150);
+      return;
+    }
+    selGoals.add(idx);
+    document.getElementById(`gc${idx}`).classList.add('sel');
+    document.getElementById(`gck${idx}`).textContent = '✓';
+  }
+}
+function selScale(g, val) {
+  document.querySelectorAll('.sc-btn').forEach(b => b.classList.remove('sel'));
+  document.getElementById(`sc${val}`).classList.add('sel');
+  d[g] = val;
+}
+
+// ── SUBMIT ──
+async function submitForm() {
+  saveCur();
+  const btn = document.getElementById('cont-btn');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+  const getM = g => { const s=multiSel[g]; return s&&s.size>0?Array.from(s).join(', '):'-'; };
+  const goalsText = Array.from(selGoals).map(i=>`${goalNames[i]} (importance: ${goalSliders[i]}/10)`).join(' | ')||'-';
+  const payload = {
+    _subject: `New intake - ${d['first-name']||''} ${d['last-name']||''}`,
+    _replyto: d['email']||'',
+    '01_Name':           `${d['first-name']||''} ${d['last-name']||''}`.trim(),
+    '02_Email':          d['email']||'-',
+    '03_WhatsApp':       d['whatsapp']||'-',
+    '04_Age':            d['age']||'-',
+    '05_Weight_now':     (d['current-weight']||'-')+' kg',
+    '06_Weight_target':  (d['target-weight']||'-')+' kg',
+    '07_Height':         (d['height']||'-')+' cm',
+    '08_Waist':          (d['waist']||'-')+' cm',
+    '09_Hips':           (d['hips']||'-')+' cm',
+    '10_Heart':          parqAns[0]||'-',
+    '11_Chest_pain':     parqAns[1]||'-',
+    '12_Dizziness':      parqAns[2]||'-',
+    '13_Joints':         parqAns[3]||'-',
+    '14_Pregnant':       parqAns[4]||'-',
+    '15_Medication':     parqAns[5]||'-',
+    '16_Injuries':       d['injuries-yn']==='Yes'?(d['injuries']||'-'):'No',
+    '17_Fitness_level':  d['fitness-level']||'-',
+    '18_Days_per_week':  d['days-per-week']||'-',
+    '19_Session_length': d['session-length']||'-',
+    '20_Location':       d['training-location']||'-',
+    '21_Programme_before': d['programme-before']||'-',
+    '22_Eating_habits':  getM('eating-habits'),
+    '23_Food_challenge': getM('food-challenge'),
+    '24_Allergies':      d['allergies-yn']==='Yes'?(d['allergies']||'-'):'No',
+    '25_Diet_type':      d['diet-type']||'-',
+    '26_Water':          d['water-intake']||'-',
+    '27_Sleep':          d['sleep']||'-',
+    '28_Stress':         d['stress']||'-',
+    '29_Job_type':       d['job-type']||'-',
+    '30_Goals':          goalsText,
+    '31_Why':            d['goal-why']||'-',
+    '32_Obstacles':      d['obstacles']||'-',
+    '33_Commitment':     (d['commitment']||'-')+'/10',
+    '34_Anything_else':  d['anything-else']||'-',
+  };
+  try {
+    const res = await fetch('https://formspree.io/f/xvzlnzkd', {
+      method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      document.getElementById('shell').style.display = 'none';
+      document.getElementById('success').style.display = 'flex';
+    } else { btn.textContent='Submit →'; btn.disabled=false; alert('Submission failed. Please try again.'); }
+  } catch(e) { btn.textContent='Submit →'; btn.disabled=false; alert('Connection error. Please try again.'); }
+}
+</script>
+</body>
+</html>
