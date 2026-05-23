@@ -696,7 +696,7 @@ const WORKOUTS = [
     exercises: [
       { name:'Hip Flexor Stretch', sets:2, reps:'60', weight:'0', unit:'sec', rest:15, instructions:'Kneeling lunge position. Push hips forward gently. Each side 60 sec.', desc:'Stretches the hip flexors, commonly tight from sitting.' },
       { name:'Cat-Cow', sets:2, reps:'10', weight:'0', unit:'reps', rest:15, instructions:'Slow and controlled. Full range through the spine.', desc:'Spinal mobility exercise relieving lower back tension.' },
-      { name:'World's Greatest Stretch', sets:2, reps:'5', weight:'0', unit:'reps', rest:15, instructions:'Slow and deliberate. Each side. Reach tall on the rotation.', desc:'Full body mobility movement targeting hips, thoracic spine and hamstrings.' },
+      { name:'Worlds Greatest Stretch', sets:2, reps:'5', weight:'0', unit:'reps', rest:15, instructions:'Slow and deliberate. Each side. Reach tall on the rotation.', desc:'Full body mobility movement targeting hips, thoracic spine and hamstrings.' },
       { name:'Foam Roll — Quads', sets:1, reps:'60', weight:'0', unit:'sec', rest:0, instructions:'Slow rolls. Pause on tender spots for 5–10 seconds.', desc:'Self-myofascial release for the quadriceps.' },
     ]
   }
@@ -717,14 +717,19 @@ const CARD_IMAGES = [
   { local:'images/bg-7.jpg', fb:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=260&fit=crop' },
   { local:'images/bg-8.jpg', fb:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=260&fit=crop' },
 ];
-CARD_IMAGES.forEach((img, i) => {
-  const el = document.getElementById('wc-bg-' + i);
+
+function loadCardBg(elId, imgObj) {
+  const el = document.getElementById(elId);
   if (!el) return;
   const t = new Image();
-  t.onload = () => { el.style.backgroundImage = `url('${img.local}')`; };
-  t.onerror = () => { el.style.backgroundImage = `url('${img.fb}')`; };
-  t.src = img.local;
-});
+  t.onload = () => { el.style.backgroundImage = `url('${imgObj.local}')`; };
+  t.onerror = () => { el.style.backgroundImage = `url('${imgObj.fb}')`; };
+  t.src = imgObj.local;
+  // Immediate Unsplash fallback for non-deployed environments
+  el.style.backgroundImage = `url('${imgObj.fb}')`;
+}
+
+CARD_IMAGES.forEach((img, i) => loadCardBg('wc-bg-' + i, img));
 
 // ── SCREEN NAVIGATION ──
 function showScreen(id, dir) {
@@ -750,9 +755,11 @@ function openPreview(idx) {
   const hero = document.getElementById('preview-hero');
   const img = CARD_IMAGES[idx];
   if (img) {
+    hero.style.backgroundImage = `url('${img.fb}')`;
+    hero.style.backgroundSize = 'cover';
+    hero.style.backgroundPosition = 'center';
     const t = new Image();
-    t.onload = () => { hero.style.backgroundImage = `url('${img.local}')`; hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center'; };
-    t.onerror = () => { hero.style.backgroundImage = `url('${img.fb}')`; hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center'; };
+    t.onload = () => { hero.style.backgroundImage = `url('${img.local}')`; };
     t.src = img.local;
   }
 
