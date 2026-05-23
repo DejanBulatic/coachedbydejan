@@ -73,8 +73,7 @@ html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
 }
 #back-btn:active { transform:scale(0.9); }
 .hdr-right { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
-#section-lbl { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:#A8B8A0; }
-#step-ctr { font-size:12px; font-weight:600; color:#c0b8cc; letter-spacing:0.04em; }
+#section-lbl { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:19px; color:#5a5070; font-weight:600; }
 
 #content {
   flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
@@ -92,10 +91,16 @@ html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
 #cont-btn:active { transform:scale(0.98); }
 #cont-btn:disabled { opacity:0.35; }
 
+/* ── BG TINT per section ── */
+#bg-tint {
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  opacity:0.45; transition:background-color 0.7s ease;
+}
+
 /* ── CONTENT ELEMENTS ── */
 .sec-lbl {
   font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:17px; color:#A8B8A0; display:block; margin-bottom:6px;
+  font-size:20px; font-weight:600; color:#5a5070; display:block; margin-bottom:6px;
 }
 .q {
   font-family:'Inter',sans-serif; font-size:30px; font-weight:800;
@@ -103,6 +108,21 @@ html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
 }
 .hint { font-size:16px; color:#b8b0c8; margin-bottom:24px; line-height:1.5; }
 .spacer { height:24px; }
+
+/* Phone / country code */
+.phone-wrap { display:flex; gap:10px; align-items:stretch; }
+.cc-sel {
+  background:rgba(255,255,255,0.92); border:2px solid rgba(200,190,220,0.35);
+  border-radius:16px; padding:0 14px; font-family:'Inter',sans-serif;
+  font-size:18px; font-weight:500; color:#1e1a26; outline:none;
+  -webkit-appearance:none; appearance:none; cursor:pointer;
+  flex-shrink:0; min-width:110px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239088a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position: right 12px center;
+  padding-right:32px; user-select:auto; -webkit-user-select:auto;
+}
+.cc-sel:focus { border-color:#A8B8A0; }
+.phone-inp { flex:1; user-select:auto; -webkit-user-select:auto; }
 
 /* Single-select rows */
 .opt-row {
@@ -270,6 +290,7 @@ html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
 <body>
 
 <div class="bg"></div>
+<div id="bg-tint"></div>
 
 <!-- WELCOME -->
 <div id="welcome">
@@ -291,7 +312,6 @@ html, body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; }
     <button id="back-btn" onclick="goBack()">←</button>
     <div class="hdr-right">
       <span id="section-lbl"></span>
-      <span id="step-ctr"></span>
     </div>
   </div>
   <div id="content"></div>
@@ -401,11 +421,23 @@ function goBack() {
   }
 }
 
+const SECTION_TINTS = {
+  'Personal Information': '#e8d8f8',
+  'Body Metrics':         '#f8d8cc',
+  'Health & Safety':      '#c8e4f0',
+  'Training Profile':     '#c8e8cc',
+  'Nutrition':            '#f0e4c0',
+  'Lifestyle':            '#c0e4e4',
+  'Your Goals':           '#e4c8f0',
+};
+
 function render(n, dir) {
   const sc = SCREENS[n-1];
   document.getElementById('prog-fill').style.width = ((n-1)/TOTAL*100).toFixed(0) + '%';
-  document.getElementById('step-ctr').textContent = n + ' / ' + TOTAL;
   document.getElementById('section-lbl').textContent = sc.s;
+  // Update background tint
+  const tint = SECTION_TINTS[sc.s] || '#e8d8f8';
+  document.getElementById('bg-tint').style.backgroundColor = tint;
   const btn = document.getElementById('cont-btn');
   btn.textContent = n === TOTAL ? 'Submit →' : 'Continue →';
   const el = document.getElementById('content');
@@ -431,7 +463,45 @@ function buildHTML(sc, n) {
     h += field('Age','age','34','number','');
   }
   else if (sc.type === 'contact') {
-    h += field('Email address','email','you@email.com','email','email') + field('WhatsApp (including country code)','whatsapp','+46 70 000 00 00','tel','tel');
+    h += field('Email address','email','you@email.com','email','email');
+    h += `<div class="inp-group">
+      <span class="inp-lbl">WhatsApp number</span>
+      <div class="phone-wrap">
+        <select class="cc-sel big-inp" id="country-code" style="padding:18px 32px 18px 14px" onchange="d['country-code']=this.value">
+          <option value="+46">🇸🇪 +46</option>
+          <option value="+382">🇲🇪 +382</option>
+          <option value="+381">🇷🇸 +381</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+31">🇳🇱 +31</option>
+          <option value="+47">🇳🇴 +47</option>
+          <option value="+45">🇩🇰 +45</option>
+          <option value="+358">🇫🇮 +358</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+351">🇵🇹 +351</option>
+          <option value="+41">🇨🇭 +41</option>
+          <option value="+43">🇦🇹 +43</option>
+          <option value="+32">🇧🇪 +32</option>
+          <option value="+48">🇵🇱 +48</option>
+          <option value="+420">🇨🇿 +420</option>
+          <option value="+36">🇭🇺 +36</option>
+          <option value="+385">🇭🇷 +385</option>
+          <option value="+386">🇸🇮 +386</option>
+          <option value="+387">🇧🇦 +387</option>
+          <option value="+389">🇲🇰 +389</option>
+          <option value="+355">🇦🇱 +355</option>
+          <option value="+30">🇬🇷 +30</option>
+          <option value="+90">🇹🇷 +90</option>
+          <option value="+7">🇷🇺 +7</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+971">🇦🇪 +971</option>
+        </select>
+        <input class="big-inp phone-inp" type="tel" id="whatsapp" placeholder="70 000 00 00" inputmode="tel">
+      </div>
+    </div>`;
   }
   else if (sc.type === 'body1') {
     h += field('Current weight (kg)','current-weight','72','number','') + field('Goal weight (kg)','target-weight','62','number','');
@@ -523,7 +593,18 @@ function field(label, id, ph, type, ac) {
 function restore(sc) {
   if (sc.type==='name') { setV('first-name'); setV('last-name'); }
   else if (sc.type==='age') { setV('age'); }
-  else if (sc.type==='contact') { setV('email'); setV('whatsapp'); }
+  else if (sc.type==='contact') {
+    setV('email');
+    if (d['country-code'] && document.getElementById('country-code')) {
+      document.getElementById('country-code').value = d['country-code'];
+    }
+    // Restore just the number part (without country code)
+    const wa = d['whatsapp'] || '';
+    const cc = d['country-code'] || '+46';
+    const num = wa.startsWith(cc) ? wa.slice(cc.length).trim() : wa;
+    const el = document.getElementById('whatsapp');
+    if (el && num) el.value = num;
+  }
   else if (sc.type==='body1') { setV('current-weight'); setV('target-weight'); }
   else if (sc.type==='body2') { setV('height'); setV('waist'); setV('hips'); }
   else if (sc.type==='parq') {
@@ -560,7 +641,13 @@ function saveCur() {
   const sc = SCREENS[cur-1];
   if (sc.type==='name') { d['first-name']=gv('first-name'); d['last-name']=gv('last-name'); }
   else if (sc.type==='age') { d['age']=gv('age'); }
-  else if (sc.type==='contact') { d['email']=gv('email'); d['whatsapp']=gv('whatsapp'); }
+  else if (sc.type==='contact') {
+    d['email']=gv('email');
+    const cc = document.getElementById('country-code');
+    const ccVal = cc ? cc.value : '+46';
+    d['country-code'] = ccVal;
+    d['whatsapp']= gv('whatsapp') ? ccVal + ' ' + gv('whatsapp') : '';
+  }
   else if (sc.type==='body1') { d['current-weight']=gv('current-weight'); d['target-weight']=gv('target-weight'); }
   else if (sc.type==='body2') { d['height']=gv('height'); d['waist']=gv('waist'); d['hips']=gv('hips'); }
   else if (sc.type==='yn-text') { if (document.getElementById(sc.fid)) d[sc.fid]=document.getElementById(sc.fid).value.trim(); }
