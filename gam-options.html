@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gam Card Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #e8e0f0 0%, #f5ede8 40%, #faf6ee 65%, #eef0f8 100%);
+  min-height: 100vh;
+  padding: 32px 12px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.opt-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9088a0;
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.card {
+  border-radius: 28px;
+  padding: 20px 16px;
+}
+
+.circles {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 4px;
+}
+
+.cw {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.lbl {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.bar-wrap { margin-top: 14px; }
+.bar-track { height: 7px; border-radius: 4px; overflow: hidden; }
+.bar-fill  { height: 100%; width: 47%; border-radius: 4px; background: linear-gradient(to right, #c5ecff, #4140cc); }
+
+/* ── Option 1: Frosted Glass ── */
+.opt1 {
+  background: rgba(18,14,30,0.45);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
+.opt1 .lbl        { color: rgba(255,255,255,0.45); }
+.opt1 .bar-track  { background: rgba(255,255,255,0.1); }
+
+/* ── Option 2: Deep Dark + Inner Glow ── */
+.opt2 {
+  background: #1a1624;
+  box-shadow:
+    inset 0 0 60px rgba(100,70,200,0.18),
+    0 0 0 1px rgba(140,100,220,0.35),
+    0 8px 32px rgba(0,0,0,0.35);
+}
+.opt2 .lbl        { color: rgba(255,255,255,0.4); }
+.opt2 .bar-track  { background: rgba(255,255,255,0.08); }
+
+/* ── Option 3: Dark Gradient ── */
+.opt3 {
+  background: linear-gradient(160deg, #2e1e44 0%, #1a1228 50%, #0c0a16 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+.opt3 .lbl        { color: rgba(255,255,255,0.4); }
+.opt3 .bar-track  { background: rgba(255,255,255,0.08); }
+
+/* ── Option 4: Dark + Accent Top Bar ── */
+.opt4 {
+  background: #1a1624;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  overflow: hidden;
+  position: relative;
+}
+.opt4::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c5ecff, #4140cc, #c080bc);
+}
+.opt4 .lbl        { color: rgba(255,255,255,0.4); }
+.opt4 .bar-track  { background: rgba(255,255,255,0.08); }
+
+/* ── Option 5: Neumorphic ── */
+.opt5 {
+  background: #eceaf4;
+  box-shadow:
+    6px 6px 18px rgba(170,155,200,0.45),
+    -4px -4px 14px rgba(255,255,255,0.92),
+    inset 1px 1px 2px rgba(255,255,255,0.7);
+}
+.opt5 .lbl        { color: #9888b8; }
+.opt5 .bar-track  { background: rgba(0,0,0,0.07); }
+.opt5 .bar-fill   { background: linear-gradient(to right, #b0a0d0, #4140cc); }
+</style>
+</head>
+<body>
+
+<div>
+  <div class="opt-label">Option 1 — Frosted Glass</div>
+  <div class="card opt1">
+    <div class="circles" id="c1"></div>
+    <div class="bar-wrap"><div class="bar-track"><div class="bar-fill"></div></div></div>
+  </div>
+</div>
+
+<div>
+  <div class="opt-label">Option 2 — Deep Dark + Glow</div>
+  <div class="card opt2">
+    <div class="circles" id="c2"></div>
+    <div class="bar-wrap"><div class="bar-track"><div class="bar-fill"></div></div></div>
+  </div>
+</div>
+
+<div>
+  <div class="opt-label">Option 3 — Dark Gradient</div>
+  <div class="card opt3">
+    <div class="circles" id="c3"></div>
+    <div class="bar-wrap"><div class="bar-track"><div class="bar-fill"></div></div></div>
+  </div>
+</div>
+
+<div>
+  <div class="opt-label">Option 4 — Dark + Accent Bar</div>
+  <div class="card opt4">
+    <div class="circles" id="c4"></div>
+    <div class="bar-wrap"><div class="bar-track"><div class="bar-fill"></div></div></div>
+  </div>
+</div>
+
+<div>
+  <div class="opt-label">Option 5 — Neumorphic</div>
+  <div class="card opt5">
+    <div class="circles" id="c5"></div>
+    <div class="bar-wrap"><div class="bar-track"><div class="bar-fill"></div></div></div>
+  </div>
+</div>
+
+<script>
+function lerpColor(c1,c2,t){
+  return `rgb(${Math.round(c1.r+(c2.r-c1.r)*t)},${Math.round(c1.g+(c2.g-c1.g)*t)},${Math.round(c1.b+(c2.b-c1.b)*t)})`;
+}
+const topColor={r:197,g:236,b:255}, bottomColor={r:65,g:64,b:204};
+const labels=['Workouts','Weeks','Calories','Badges'];
+const values=['18','6','1840','8'];
+
+function buildSet(containerId, bgFill) {
+  const container = document.getElementById(containerId);
+  labels.forEach((label, idx) => {
+    const cw = document.createElement('div');
+    cw.className = 'cw';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('width','76'); svg.setAttribute('height','76');
+    svg.setAttribute('viewBox','0 0 80 80');
+    const cx=40, cy=40;
+
+    const bg = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    bg.setAttribute('cx',cx); bg.setAttribute('cy',cy); bg.setAttribute('r',38);
+    bg.setAttribute('fill', bgFill); svg.appendChild(bg);
+
+    if (idx === 0) {
+      const inner = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      inner.setAttribute('cx',cx); inner.setAttribute('cy',cy); inner.setAttribute('r',25);
+      inner.setAttribute('fill', bgFill); svg.appendChild(inner);
+      for(let i=0;i<48;i++){
+        const theta=(i/48)*2*Math.PI-Math.PI/2;
+        const t=(1-Math.cos(theta+Math.PI/2))/2;
+        const x1=cx+27*Math.cos(theta), y1=cy+27*Math.sin(theta);
+        const x2=cx+35*Math.cos(theta), y2=cy+35*Math.sin(theta);
+        const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1',x1.toFixed(2)); line.setAttribute('y1',y1.toFixed(2));
+        line.setAttribute('x2',x2.toFixed(2)); line.setAttribute('y2',y2.toFixed(2));
+        line.setAttribute('stroke',lerpColor(topColor,bottomColor,t));
+        line.setAttribute('stroke-width','1.5'); line.setAttribute('stroke-linecap','round');
+        svg.appendChild(line);
+      }
+    } else if (idx === 1) {
+      for(let i=0;i<60;i++){
+        const theta=(i/60)*2*Math.PI-Math.PI/2;
+        const isCardinal=(i===0||i===15||i===30||i===45);
+        const isWhite=(i%5===0);
+        const tI=isCardinal?27:isWhite?29:31;
+        const x1=cx+tI*Math.cos(theta), y1=cy+tI*Math.sin(theta);
+        const x2=cx+35*Math.cos(theta), y2=cy+35*Math.sin(theta);
+        const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1',x1.toFixed(2)); line.setAttribute('y1',y1.toFixed(2));
+        line.setAttribute('x2',x2.toFixed(2)); line.setAttribute('y2',y2.toFixed(2));
+        line.setAttribute('stroke',isWhite?'#ffffff':'#4140cc');
+        line.setAttribute('stroke-width',isCardinal?'1.5':'1');
+        line.setAttribute('stroke-linecap','round');
+        svg.appendChild(line);
+      }
+    } else if (idx === 2) {
+      const uid = containerId + idx;
+      const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+      defs.innerHTML = `
+        <radialGradient id="cg${uid}" cx="50%" cy="85%" r="70%">
+          <stop offset="0%" stop-color="#FF7A20"/>
+          <stop offset="40%" stop-color="#E85A00"/>
+          <stop offset="100%" stop-color="#1A1A00" stop-opacity="0.3"/>
+        </radialGradient>
+        <radialGradient id="ct${uid}" cx="50%" cy="20%" r="60%">
+          <stop offset="0%" stop-color="#2A2A2E"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <clipPath id="cc${uid}"><circle cx="40" cy="40" r="30"/></clipPath>
+        <linearGradient id="rg${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#C85000"/>
+          <stop offset="50%" stop-color="#E87000"/>
+          <stop offset="100%" stop-color="#FF9020"/>
+        </linearGradient>`;
+      svg.appendChild(defs);
+      const inner2=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      inner2.setAttribute('cx','40');inner2.setAttribute('cy','40');inner2.setAttribute('r','30');
+      inner2.setAttribute('fill',bgFill); svg.appendChild(inner2);
+      const r1=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      r1.setAttribute('x','10');r1.setAttribute('y','10');r1.setAttribute('width','60');r1.setAttribute('height','60');
+      r1.setAttribute('fill',`url(#cg${uid})`);r1.setAttribute('clip-path',`url(#cc${uid})`);svg.appendChild(r1);
+      const r2=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      r2.setAttribute('x','10');r2.setAttribute('y','10');r2.setAttribute('width','60');r2.setAttribute('height','30');
+      r2.setAttribute('fill',`url(#ct${uid})`);r2.setAttribute('clip-path',`url(#cc${uid})`);svg.appendChild(r2);
+      const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      ring.setAttribute('cx','40');ring.setAttribute('cy','40');ring.setAttribute('r','34');
+      ring.setAttribute('fill','none');ring.setAttribute('stroke',`url(#rg${uid})`);
+      ring.setAttribute('stroke-width','3');ring.setAttribute('opacity','0.7');svg.appendChild(ring);
+      const wave=document.createElementNS('http://www.w3.org/2000/svg','path');
+      wave.setAttribute('d','M10 46C16 43,22 50,28 45C32 41,36 47,40 44C44 41,48 48,52 44C56 41,62 48,70 45L70 80L10 80Z');
+      wave.setAttribute('fill',`url(#cg${uid})`);wave.setAttribute('clip-path',`url(#cc${uid})`);wave.setAttribute('opacity','0.5');
+      svg.appendChild(wave);
+    } else {
+      const uid2 = containerId + idx;
+      const defs3=document.createElementNS('http://www.w3.org/2000/svg','defs');
+      defs3.innerHTML=`<linearGradient id="bg${uid2}" x1="6" y1="6" x2="74" y2="74" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F5DCEA"/><stop offset="100%" stop-color="#C080BC"/></linearGradient>
+      <filter id="pf${uid2}" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.18 0.61 0.06 0 0.15 0.13 0.43 0.04 0 0.05 0.17 0.58 0.06 0 0.15 0 0 0 1 0"/></filter>`;
+      svg.appendChild(defs3);
+      const ring3=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      ring3.setAttribute('cx','40');ring3.setAttribute('cy','40');ring3.setAttribute('r','33');
+      ring3.setAttribute('fill','none');ring3.setAttribute('stroke',`url(#bg${uid2})`);ring3.setAttribute('stroke-width','3');
+      svg.appendChild(ring3);
+      const emoji=document.createElementNS('http://www.w3.org/2000/svg','text');
+      emoji.setAttribute('x','40');emoji.setAttribute('y','69');emoji.setAttribute('text-anchor','middle');
+      emoji.setAttribute('dominant-baseline','central');emoji.setAttribute('font-size','21');
+      emoji.setAttribute('filter',`url(#pf${uid2})`);emoji.textContent='👏';svg.appendChild(emoji);
+    }
+
+    const num=document.createElementNS('http://www.w3.org/2000/svg','text');
+    num.setAttribute('x','40'); num.setAttribute('y', idx===3?'36':'40');
+    num.setAttribute('text-anchor','middle'); num.setAttribute('dominant-baseline','central');
+    num.setAttribute('fill','white'); num.setAttribute('font-family','Inter,sans-serif');
+    num.setAttribute('font-size','20'); num.setAttribute('font-weight','600');
+    num.textContent = values[idx];
+    svg.appendChild(num);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'lbl';
+    lbl.textContent = label;
+    cw.appendChild(svg);
+    cw.appendChild(lbl);
+    container.appendChild(cw);
+  });
+}
+
+buildSet('c1','rgba(18,14,30,0.0)');
+buildSet('c2','#1a1624');
+buildSet('c3','rgba(46,30,68,0.0)');
+buildSet('c4','#1a1624');
+buildSet('c5','#eceaf4');
+</script>
+</body>
+</html>
