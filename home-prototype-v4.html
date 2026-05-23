@@ -200,10 +200,10 @@ body {
    2. GAMIFICATION CARD
 ═══════════════════════════════ */
 .gam-card {
-  background: transparent;
+  background: linear-gradient(160deg, #2e1e44 0%, #1a1228 50%, #0c0a16 100%);
   border-radius: 28px;
   padding: 20px 18px;
-  box-shadow: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
 }
 .gam-circles {
   display: flex;
@@ -222,13 +222,13 @@ body {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: #b0a8bc;
+  color: rgba(255,255,255,0.4);
   text-align: center;
 }
 .gam-bar-wrap {
   margin-top: 16px;
   height: 7px;
-  background: rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.08);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -715,8 +715,8 @@ body {
 
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:4px">
-        <span style="font-size:10px;font-weight:500;color:rgba(0,0,0,0.35);letter-spacing:0.1em;text-transform:uppercase">Programme Completion</span>
-        <span style="font-size:10px;font-weight:600;color:rgba(0,0,0,0.4)">47%</span>
+        <span style="font-size:10px;font-weight:500;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase">Programme Completion</span>
+        <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.4)">47%</span>
       </div>
       <div class="gam-bar-wrap">
         <div class="gam-bar-fill" id="gam-bar"></div>
@@ -1223,7 +1223,7 @@ function buildWorkouts(svgId,number){
   const svg=document.getElementById(svgId);
   const cx=40,cy=40,totalTicks=48,tickInner=27,tickOuter=35;
   const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#1a1624');svg.appendChild(bg);
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','rgba(46,30,68,0.0)');svg.appendChild(bg);
   const bg2=document.createElementNS('http://www.w3.org/2000/svg','circle');
   bg2.setAttribute('cx',cx);bg2.setAttribute('cy',cy);bg2.setAttribute('r',25);bg2.setAttribute('fill','#1a1624');svg.appendChild(bg2);
   for(let i=0;i<totalTicks;i++){
@@ -1249,7 +1249,7 @@ function buildWeeks(svgId,number){
   const svg=document.getElementById(svgId);
   const cx=40,cy=40,totalTicks=60;
   const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','#1a1624');svg.appendChild(bg);
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','rgba(46,30,68,0.0)');svg.appendChild(bg);
   for(let i=0;i<totalTicks;i++){
     const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
     const isCardinal=(i===0||i===15||i===30||i===45);
