@@ -29,84 +29,112 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 /* ── PROGRAMME OVERVIEW ── */
 #screen-overview {
   overflow-y:auto;
-  padding-bottom:90px;
+  padding-bottom:100px;
 }
 #screen-overview::-webkit-scrollbar { display:none; }
 
 .overview-header {
-  padding:56px 20px 20px;
+  padding:56px 16px 8px;
 }
 .overview-title {
   font-family:'Cormorant Garamond',serif;
   font-size:36px; font-weight:600; color:#1e1a26;
-  letter-spacing:-0.01em; margin-bottom:4px;
+  letter-spacing:-0.01em; margin-bottom:3px;
 }
 .overview-sub {
-  font-size:14px; font-weight:500; color:#a898b8;
-  letter-spacing:0.04em; text-transform:uppercase;
+  font-size:13px; font-weight:500; color:#a898b8;
+  letter-spacing:0.06em; text-transform:uppercase;
 }
 
-/* Phase cards */
-.phase-section { padding:0 16px 8px; }
+.phase-section { padding:0 16px 4px; }
 .phase-label {
   font-size:11px; font-weight:700; color:#b0a8bc;
   letter-spacing:0.14em; text-transform:uppercase;
-  padding:16px 4px 10px;
+  padding:18px 2px 10px; display:flex; align-items:center; gap:8px;
 }
+
+/* Image-backed workout cards — like the week schedule */
 .workout-card {
-  background:rgba(255,255,255,0.88); border-radius:20px;
-  padding:16px 18px; margin-bottom:10px;
-  display:flex; align-items:center; gap:14px;
-  cursor:pointer; transition:transform 0.12s ease;
-  backdrop-filter:blur(8px);
-  box-shadow:0 2px 12px rgba(160,140,180,0.10);
+  width:100%; height:130px;
+  border-radius:22px; overflow:hidden;
+  position:relative; cursor:pointer;
+  margin-bottom:10px;
+  transition:transform 0.12s ease;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12);
 }
 .workout-card:active { transform:scale(0.98); }
-.workout-card.done { opacity:0.6; }
-.wc-icon {
-  width:48px; height:48px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:22px; flex-shrink:0;
+.wc-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  background-color:#2a2436;
+  transition:transform 0.3s ease;
 }
-.wc-icon.strength { background:linear-gradient(135deg,#f9a825,#e07830); }
-.wc-icon.cardio   { background:linear-gradient(135deg,#42a5f5,#1565c0); }
-.wc-icon.mobility { background:linear-gradient(135deg,#66bb6a,#2e7d32); }
-.wc-icon.rest     { background:linear-gradient(135deg,#ce93d8,#7b1fa2); }
-.wc-body { flex:1; min-width:0; }
-.wc-name { font-size:17px; font-weight:700; color:#1e1a26; margin-bottom:3px; }
-.wc-meta { font-size:13px; font-weight:400; color:#a898b8; }
-.wc-status { flex-shrink:0; }
-.wc-done-badge {
-  width:28px; height:28px; border-radius:50%;
-  background:#5c8c5c; display:flex; align-items:center; justify-content:center;
+.wc-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.62) 100%);
 }
-.wc-chevron { color:#c8c0d4; font-size:18px; }
-.wc-today-badge {
+.wc-overlay.done-overlay {
+  background:linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(20,60,30,0.75) 100%);
+}
+.wc-overlay.locked-overlay {
+  background:rgba(26,22,36,0.65);
+}
+.wc-content {
+  position:absolute; inset:0;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:14px 16px;
+}
+.wc-info {}
+.wc-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:600; color:white;
+  line-height:1.15; margin-bottom:4px;
+}
+.wc-meta { font-size:13px; font-weight:500; color:rgba(255,255,255,0.7); }
+.wc-badge {
+  flex-shrink:0; align-self:flex-start;
+  display:flex; gap:6px;
+}
+.badge-today {
   font-size:10px; font-weight:700; color:#A8B8A0;
   letter-spacing:0.08em; text-transform:uppercase;
-  background:rgba(168,184,160,0.15); border-radius:6px;
-  padding:3px 7px; margin-left:8px;
+  background:rgba(168,184,160,0.25); border:1px solid rgba(168,184,160,0.4);
+  border-radius:8px; padding:4px 8px;
+}
+.badge-done {
+  width:30px; height:30px; border-radius:50%;
+  background:rgba(92,140,92,0.9);
+  display:flex; align-items:center; justify-content:center;
+}
+.badge-lock {
+  width:30px; height:30px; border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  display:flex; align-items:center; justify-content:center;
+}
+.unlock-label {
+  position:absolute; top:14px; left:16px;
+  font-size:11px; font-weight:600; color:rgba(255,255,255,0.5);
+  letter-spacing:0.06em;
 }
 
 /* ── WORKOUT PREVIEW ── */
 #screen-preview {
-  overflow-y:auto;
-  padding-bottom:120px;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
 }
-#screen-preview::-webkit-scrollbar { display:none; }
+#screen-preview.active { display:flex; }
 
 .preview-hero {
-  height:220px; position:relative;
+  height:200px; position:relative; flex-shrink:0;
   background:linear-gradient(160deg,#2a1a0e,#5c3820,#8b6040);
-  flex-shrink:0;
 }
 .preview-hero-overlay {
   position:absolute; inset:0;
   background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
 }
 .preview-hero-content {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:20px;
+  position:absolute; bottom:0; left:0; right:0; padding:20px;
 }
 .preview-back {
   position:absolute; top:56px; left:16px;
@@ -117,26 +145,22 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 }
 .preview-workout-name {
   font-family:'Cormorant Garamond',serif;
-  font-size:32px; font-weight:600; color:white; line-height:1.1;
-  margin-bottom:6px;
+  font-size:30px; font-weight:600; color:white; line-height:1.1; margin-bottom:6px;
 }
 .preview-meta { font-size:14px; color:rgba(255,255,255,0.75); display:flex; gap:16px; }
 .preview-meta-item { display:flex; align-items:center; gap:5px; }
 
-.start-btn-wrap { padding:16px 16px 8px; }
-.start-btn {
-  width:100%; padding:18px;
-  background:#1e1a26; color:white; border:none; border-radius:18px;
-  font-family:'Inter',sans-serif; font-size:17px; font-weight:700;
-  cursor:pointer; letter-spacing:0.02em; transition:transform 0.1s;
+/* Exercises scroll area */
+.preview-scroll {
+  flex:1; overflow-y:auto; padding:0 16px;
+  -webkit-overflow-scrolling:touch;
 }
-.start-btn:active { transform:scale(0.98); }
-
-.exercises-list { padding:0 16px; }
+.preview-scroll::-webkit-scrollbar { display:none; }
+.exercises-list { padding-bottom:8px; }
 .ex-preview-label {
   font-size:11px; font-weight:700; color:#b0a8bc;
   letter-spacing:0.14em; text-transform:uppercase;
-  padding:12px 4px 10px;
+  padding:14px 2px 10px;
 }
 .ex-preview-item {
   background:rgba(255,255,255,0.88); border-radius:16px;
@@ -151,6 +175,21 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 }
 .ex-preview-name { font-size:16px; font-weight:600; color:#1e1a26; margin-bottom:2px; }
 .ex-preview-meta { font-size:13px; color:#a898b8; }
+
+/* Begin session pinned at bottom */
+.preview-footer {
+  padding:14px 16px 100px; flex-shrink:0;
+  background:linear-gradient(to bottom, transparent, rgba(245,240,250,0.95) 30%);
+}
+.start-btn {
+  width:100%; padding:19px;
+  background:#1e1a26; color:white; border:none; border-radius:18px;
+  font-family:'Inter',sans-serif; font-size:17px; font-weight:700;
+  cursor:pointer; letter-spacing:0.02em; transition:transform 0.1s;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.start-btn:active { transform:scale(0.98); }
+.start-btn i { font-size:18px; }
 
 /* ── WORKOUT MODE ── */
 #screen-workout {
@@ -402,74 +441,98 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   <div class="phase-section">
     <div class="phase-label">Phase 1 — Foundation · Weeks 1–4</div>
 
-    <div class="workout-card done" onclick="openPreview(0)">
-      <div class="wc-icon strength">💪</div>
-      <div class="wc-body">
-        <div class="wc-name">Full Body Strength A</div>
-        <div class="wc-meta">6 exercises · 45 min</div>
+    <div class="workout-card" onclick="openPreview(0)">
+      <div class="wc-bg" id="wc-bg-0"></div>
+      <div class="wc-overlay done-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Full Body Strength A</div>
+          <div class="wc-meta">6 exercises · 45 min</div>
+        </div>
+        <div class="wc-badge"><div class="badge-done"><i class="ti ti-check" style="color:white;font-size:14px"></i></div></div>
       </div>
-      <div class="wc-status"><div class="wc-done-badge"><i class="ti ti-check" style="color:white;font-size:14px"></i></div></div>
     </div>
 
     <div class="workout-card" onclick="openPreview(1)">
-      <div class="wc-icon cardio">🏃</div>
-      <div class="wc-body">
-        <div class="wc-name">Cardio & Core <span class="wc-today-badge">Today</span></div>
-        <div class="wc-meta">5 exercises · 35 min</div>
+      <div class="wc-bg" id="wc-bg-1"></div>
+      <div class="wc-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Cardio & Core</div>
+          <div class="wc-meta">5 exercises · 35 min</div>
+        </div>
+        <div class="wc-badge"><div class="badge-today">Today</div></div>
       </div>
-      <div class="wc-status"><i class="ti ti-chevron-right wc-chevron"></i></div>
     </div>
 
     <div class="workout-card" onclick="openPreview(2)">
-      <div class="wc-icon strength">💪</div>
-      <div class="wc-body">
-        <div class="wc-name">Full Body Strength B</div>
-        <div class="wc-meta">6 exercises · 45 min</div>
+      <div class="wc-bg" id="wc-bg-2"></div>
+      <div class="wc-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Full Body Strength B</div>
+          <div class="wc-meta">6 exercises · 45 min</div>
+        </div>
+        <div class="wc-badge"><i class="ti ti-chevron-right" style="color:rgba(255,255,255,0.6);font-size:20px"></i></div>
       </div>
-      <div class="wc-status"><i class="ti ti-chevron-right wc-chevron"></i></div>
     </div>
 
     <div class="workout-card" onclick="openPreview(3)">
-      <div class="wc-icon mobility">🧘</div>
-      <div class="wc-body">
-        <div class="wc-name">Mobility & Recovery</div>
-        <div class="wc-meta">4 exercises · 25 min</div>
+      <div class="wc-bg" id="wc-bg-3"></div>
+      <div class="wc-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Mobility & Recovery</div>
+          <div class="wc-meta">4 exercises · 25 min</div>
+        </div>
+        <div class="wc-badge"><i class="ti ti-chevron-right" style="color:rgba(255,255,255,0.6);font-size:20px"></i></div>
       </div>
-      <div class="wc-status"><i class="ti ti-chevron-right wc-chevron"></i></div>
     </div>
   </div>
 
   <div class="phase-section">
     <div class="phase-label">Phase 2 — Build · Weeks 5–8</div>
 
-    <div class="workout-card" style="opacity:0.5;pointer-events:none">
-      <div class="wc-icon strength">💪</div>
-      <div class="wc-body">
-        <div class="wc-name">Upper Body Focus</div>
-        <div class="wc-meta">6 exercises · 50 min · Unlocks Week 5</div>
+    <div class="workout-card" style="pointer-events:none">
+      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
+      <div class="wc-overlay locked-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Upper Body Focus</div>
+          <div class="wc-meta">6 exercises · 50 min</div>
+        </div>
+        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
       </div>
-      <div class="wc-status"><i class="ti ti-lock" style="color:#c8c0d4;font-size:18px"></i></div>
+      <div class="unlock-label">Unlocks Week 5</div>
     </div>
 
-    <div class="workout-card" style="opacity:0.5;pointer-events:none">
-      <div class="wc-icon strength">💪</div>
-      <div class="wc-body">
-        <div class="wc-name">Lower Body & Glutes</div>
-        <div class="wc-meta">6 exercises · 50 min · Unlocks Week 5</div>
+    <div class="workout-card" style="pointer-events:none">
+      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
+      <div class="wc-overlay locked-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Lower Body & Glutes</div>
+          <div class="wc-meta">6 exercises · 50 min</div>
+        </div>
+        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
       </div>
-      <div class="wc-status"><i class="ti ti-lock" style="color:#c8c0d4;font-size:18px"></i></div>
+      <div class="unlock-label">Unlocks Week 5</div>
     </div>
   </div>
 
   <div class="phase-section">
     <div class="phase-label">Phase 3 — Peak · Weeks 9–12</div>
-    <div class="workout-card" style="opacity:0.5;pointer-events:none">
-      <div class="wc-icon strength">💪</div>
-      <div class="wc-body">
-        <div class="wc-name">Advanced Full Body</div>
-        <div class="wc-meta">Unlocks Week 9</div>
+    <div class="workout-card" style="pointer-events:none">
+      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
+      <div class="wc-overlay locked-overlay"></div>
+      <div class="wc-content">
+        <div class="wc-info">
+          <div class="wc-name">Advanced Full Body</div>
+          <div class="wc-meta">7 exercises · 60 min</div>
+        </div>
+        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
       </div>
-      <div class="wc-status"><i class="ti ti-lock" style="color:#c8c0d4;font-size:18px"></i></div>
+      <div class="unlock-label">Unlocks Week 9</div>
     </div>
   </div>
 </div>
@@ -488,13 +551,17 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
     </div>
   </div>
 
-  <div class="start-btn-wrap">
-    <button class="start-btn" onclick="startWorkout()">▶ Begin Session</button>
+  <div class="preview-scroll">
+    <div class="exercises-list">
+      <div class="ex-preview-label">Exercises</div>
+      <div id="preview-exercise-list"></div>
+    </div>
   </div>
 
-  <div class="exercises-list">
-    <div class="ex-preview-label">Exercises</div>
-    <div id="preview-exercise-list"></div>
+  <div class="preview-footer">
+    <button class="start-btn" onclick="startWorkout()">
+      <i class="ti ti-player-play"></i> Begin Session
+    </button>
   </div>
 </div>
 
@@ -643,6 +710,22 @@ let restTimer = null;
 let restSeconds = 0;
 let restTotal = 0;
 
+// ── WORKOUT CARD IMAGES ──
+const CARD_IMAGES = [
+  { local:'images/bg-5.jpg', fb:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=260&fit=crop' },
+  { local:'images/bg-6.jpg', fb:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=260&fit=crop' },
+  { local:'images/bg-7.jpg', fb:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=260&fit=crop' },
+  { local:'images/bg-8.jpg', fb:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=260&fit=crop' },
+];
+CARD_IMAGES.forEach((img, i) => {
+  const el = document.getElementById('wc-bg-' + i);
+  if (!el) return;
+  const t = new Image();
+  t.onload = () => { el.style.backgroundImage = `url('${img.local}')`; };
+  t.onerror = () => { el.style.backgroundImage = `url('${img.fb}')`; };
+  t.src = img.local;
+});
+
 // ── SCREEN NAVIGATION ──
 function showScreen(id, dir) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -662,6 +745,16 @@ function openPreview(idx) {
   document.getElementById('preview-name').textContent = w.name;
   document.getElementById('preview-duration').textContent = w.duration;
   document.getElementById('preview-excount').textContent = w.exercises.length + ' exercises';
+
+  // Set hero background from same image
+  const hero = document.getElementById('preview-hero');
+  const img = CARD_IMAGES[idx];
+  if (img) {
+    const t = new Image();
+    t.onload = () => { hero.style.backgroundImage = `url('${img.local}')`; hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center'; };
+    t.onerror = () => { hero.style.backgroundImage = `url('${img.fb}')`; hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center'; };
+    t.src = img.local;
+  }
 
   const list = document.getElementById('preview-exercise-list');
   list.innerHTML = w.exercises.map((ex, i) => `
