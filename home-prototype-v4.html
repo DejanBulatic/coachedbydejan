@@ -49,11 +49,11 @@ body {
 /* ─── BOTTOM NAV ─── */
 .bottom-nav {
   position: fixed;
-  bottom: 24px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 358px;
+  width: calc(100% - 16px);
+  max-width: 374px;
   background: #e8e4df;
   border-radius: 40px;
   display: flex;
@@ -69,7 +69,7 @@ body {
   align-items: center;
   gap: 3px;
   cursor: pointer;
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: 32px;
   transition: background 0.18s ease, transform 0.12s ease;
   flex: 1;
@@ -85,8 +85,9 @@ body {
   font-size: 9px;
   font-weight: 600;
   color: #9e9890;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 .nav-item.active .nav-label { color: #1e1a26; }
 .bg-mesh {
@@ -199,10 +200,10 @@ body {
    2. GAMIFICATION CARD
 ═══════════════════════════════ */
 .gam-card {
-  background: #1a1624;
+  background: transparent;
   border-radius: 28px;
   padding: 20px 18px;
-  box-shadow: 0 8px 32px rgba(20,14,40,0.22);
+  box-shadow: none;
 }
 .gam-circles {
   display: flex;
@@ -221,13 +222,13 @@ body {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.4);
+  color: #b0a8bc;
   text-align: center;
 }
 .gam-bar-wrap {
   margin-top: 16px;
   height: 7px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.08);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -588,7 +589,29 @@ body {
 .checkin-title { font-size: 14px; font-weight: 600; color: #1e1a26; }
 .checkin-sub   { font-size: 12px; font-weight: 400; color: #b0a8bc; margin-top: 2px; }
 .checkin-btn   { background: #1e1a26; color: #ffffff; border: none; border-radius: 12px; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-.wa-card       { background: transparent; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 2px solid #2a2436; cursor: pointer; }
+.wa-card {
+  background: transparent;
+  border-radius: 24px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  cursor: pointer;
+  position: relative;
+}
+.wa-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(135deg, #000000, #00c853, #00ff88);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
 .wa-left       { display: flex; align-items: center; gap: 14px; }
 .wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(37,211,102,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .wa-icon i     { font-size: 24px; color: #25d366; }
@@ -692,8 +715,8 @@ body {
 
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;margin-bottom:4px">
-        <span style="font-size:10px;font-weight:500;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase">Programme Completion</span>
-        <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.4)">47%</span>
+        <span style="font-size:10px;font-weight:500;color:rgba(0,0,0,0.35);letter-spacing:0.1em;text-transform:uppercase">Programme Completion</span>
+        <span style="font-size:10px;font-weight:600;color:rgba(0,0,0,0.4)">47%</span>
       </div>
       <div class="gam-bar-wrap">
         <div class="gam-bar-fill" id="gam-bar"></div>
@@ -788,7 +811,7 @@ body {
 
   <!-- 4. WEEK SCHEDULE -->
   <div class="section reveal">
-    <div class="section-headline">This Week</div>
+    <div class="section-headline">This Week <span style="font-size:9px;font-weight:400;font-style:italic;color:#ccc6d8;letter-spacing:0.04em">· hold to preview</span></div>
     <div class="week-scroll-wrap" id="week-scroll">
       <div class="days-row">
 
