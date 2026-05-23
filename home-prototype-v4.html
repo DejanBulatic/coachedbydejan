@@ -49,34 +49,45 @@ body {
 /* ─── BOTTOM NAV ─── */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  max-width: 390px;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(200,190,220,0.3);
+  width: calc(100% - 32px);
+  max-width: 358px;
+  background: #e8e4df;
+  border-radius: 40px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 0 28px;
+  padding: 6px 6px;
   z-index: 50;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08);
 }
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   cursor: pointer;
-  padding: 4px 16px;
-  transition: transform 0.12s ease;
+  padding: 8px 14px;
+  border-radius: 32px;
+  transition: background 0.18s ease, transform 0.12s ease;
+  flex: 1;
 }
-.nav-item:active { transform: scale(0.9); }
-.nav-item i { font-size: 24px; color: #c0b8cc; }
+.nav-item:active { transform: scale(0.92); }
+.nav-item.active {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.nav-item i { font-size: 20px; color: #9e9890; }
 .nav-item.active i { color: #1e1a26; }
-.nav-label { font-size: 10px; font-weight: 500; color: #c0b8cc; letter-spacing: 0.04em; text-transform: uppercase; }
+.nav-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #9e9890;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 .nav-item.active .nav-label { color: #1e1a26; }
 .bg-mesh {
   position: fixed;
@@ -1425,19 +1436,19 @@ document.getElementById('peek-backdrop').addEventListener('click', (e) => {
   </div>
   <div class="nav-item">
     <i class="ti ti-barbell"></i>
-    <div class="nav-label">Workouts</div>
+    <div class="nav-label">Train</div>
   </div>
   <div class="nav-item">
-    <i class="ti ti-chart-line"></i>
+    <i class="ti ti-apple"></i>
+    <div class="nav-label">Nutrition</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-chart-bar"></i>
     <div class="nav-label">Progress</div>
   </div>
   <div class="nav-item">
     <i class="ti ti-clipboard-list"></i>
     <div class="nav-label">Check-in</div>
-  </div>
-  <div class="nav-item">
-    <i class="ti ti-user"></i>
-    <div class="nav-label">Profile</div>
   </div>
 </div>
 
