@@ -23,10 +23,11 @@ body {
 /* ─── LOGO ─── */
 .app-logo {
   text-align: center;
-  padding: 48px 0 0;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  padding: 48px 0 48px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #b0a0c8;
 }
@@ -44,6 +45,39 @@ body {
   gap: 6px;
 }
 .section-headline i { font-size: 13px; color: #c0b0d8; }
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 390px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(200,190,220,0.3);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0 28px;
+  z-index: 50;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 16px;
+  transition: transform 0.12s ease;
+}
+.nav-item:active { transform: scale(0.9); }
+.nav-item i { font-size: 24px; color: #c0b8cc; }
+.nav-item.active i { color: #1e1a26; }
+.nav-label { font-size: 10px; font-weight: 500; color: #c0b8cc; letter-spacing: 0.04em; text-transform: uppercase; }
+.nav-item.active .nav-label { color: #1e1a26; }
 .bg-mesh {
   position: fixed;
   inset: 0;
@@ -63,7 +97,7 @@ body {
   z-index: 1;
   max-width: 390px;
   margin: 0 auto;
-  padding: 0 0 48px;
+  padding: 0 0 100px;
 }
 
 /* ─── SCROLL ANIMATION ─── */
@@ -98,7 +132,7 @@ body {
    1. HERO
 ═══════════════════════════════ */
 .hero {
-  padding: 56px 0 24px;
+  padding: 0 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -217,7 +251,7 @@ body {
 }
 .prog-name     { font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.95); line-height: 1.15; letter-spacing: -0.01em; }
 .prog-duration { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: -2px; white-space: nowrap; }
-.prog-pct      { font-size: 42px; font-weight: 600; color: #ffffff; line-height: 1.0; margin-top: 4px; letter-spacing: -0.02em; }
+.prog-pct      { font-size: 32px; font-weight: 600; color: #ffffff; line-height: 1.0; margin-top: 4px; letter-spacing: -0.02em; }
 .prog-week     { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.82); }
 .bar-wrap      { margin-top: 8px; background: #f4f3fa; border-radius: 10px; padding: 6px 7px; display: flex; gap: 5px; align-items: center; }
 .tick          { flex: 1; height: 20px; border-radius: 4px; background: #e8e6f4; }
@@ -284,8 +318,8 @@ body {
 }
 .day-pill {
   position: relative;
-  width: 104px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   border-radius: 20px;
   overflow: hidden;
   flex-shrink: 0;
@@ -493,13 +527,13 @@ body {
 .checkin-title { font-size: 14px; font-weight: 600; color: #1e1a26; }
 .checkin-sub   { font-size: 12px; font-weight: 400; color: #b0a8bc; margin-top: 2px; }
 .checkin-btn   { background: #1e1a26; color: #ffffff; border: none; border-radius: 12px; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-.wa-card       { background: transparent; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 2px solid #25d366; cursor: pointer; }
+.wa-card       { background: transparent; border-radius: 24px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 2px solid #2a2436; cursor: pointer; }
 .wa-left       { display: flex; align-items: center; gap: 14px; }
 .wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(37,211,102,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .wa-icon i     { font-size: 24px; color: #25d366; }
-.wa-title      { font-size: 14px; font-weight: 600; color: #25d366; }
-.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(37,211,102,0.7); margin-top: 2px; }
-.wa-arrow      { color: #25d366; font-size: 20px; }
+.wa-title      { font-size: 14px; font-weight: 600; color: #2a2436; }
+.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(42,36,54,0.5); margin-top: 2px; }
+.wa-arrow      { color: #2a2436; font-size: 20px; }
 </style>
 </head>
 <body>
@@ -608,7 +642,7 @@ body {
 
   <!-- 3. PROGRESS ROW -->
   <div class="section reveal">
-    <div class="section-headline"><i class="ti ti-trending-up"></i>Your Progress</div>
+    <div class="section-headline">Your Progress</div>
   <div class="progress-row">
 
     <!-- Programme -->
@@ -693,7 +727,7 @@ body {
 
   <!-- 4. WEEK SCHEDULE -->
   <div class="section reveal">
-    <div class="section-headline"><i class="ti ti-calendar-week"></i>This Week</div>
+    <div class="section-headline">This Week</div>
     <div class="week-scroll-wrap" id="week-scroll">
       <div class="days-row">
 
@@ -805,7 +839,7 @@ body {
 
   <!-- 6. MOTIVATIONAL -->
   <div class="section reveal">
-    <div class="section-headline"><i class="ti ti-message-circle"></i>From Dejan</div>
+    <div class="section-headline">From Dejan</div>
     <div class="mot-card">
       <div class="mot-photo" id="mot-photo">
         <div class="mot-photo-inner" id="mot-photo-inner" style="display:none">
@@ -855,7 +889,7 @@ body {
 
   <!-- 8. CHECK-IN -->
   <div class="section reveal">
-    <div class="section-headline"><i class="ti ti-heart-handshake"></i>Stay Connected</div>
+    <div class="section-headline">Stay Connected</div>
     <div class="checkin-card tappable">
       <div class="checkin-left">
         <div class="checkin-icon"><i class="ti ti-clipboard-list"></i></div>
@@ -916,7 +950,7 @@ setPillBg('bg-sun', workoutImg[3], workoutFb[3]);
 // ── SCROLL TO TODAY ──
 const weekScroll = document.getElementById('week-scroll');
 if (weekScroll) {
-  const tabWidth = 104 + 8;
+  const tabWidth = 160 + 8;
   const todayIndex = 4; // Friday
   weekScroll.scrollLeft = (todayIndex - 1) * tabWidth - (tabWidth / 2);
 }
@@ -1384,5 +1418,28 @@ document.getElementById('peek-backdrop').addEventListener('click', (e) => {
   if (!document.getElementById('peek-card').contains(e.target)) closePeek();
 });
 </script>
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <i class="ti ti-home"></i>
+    <div class="nav-label">Home</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-barbell"></i>
+    <div class="nav-label">Workouts</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-chart-line"></i>
+    <div class="nav-label">Progress</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-clipboard-list"></i>
+    <div class="nav-label">Check-in</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-user"></i>
+    <div class="nav-label">Profile</div>
+  </div>
+</div>
+
 </body>
 </html>
