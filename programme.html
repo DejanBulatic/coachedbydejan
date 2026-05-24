@@ -32,10 +32,7 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   padding-bottom:100px;
 }
 #screen-overview::-webkit-scrollbar { display:none; }
-
-.overview-header {
-  padding:56px 16px 8px;
-}
+.overview-header { padding:56px 16px 8px; }
 .overview-title {
   font-family:'Cormorant Garamond',serif;
   font-size:36px; font-weight:600; color:#1e1a26;
@@ -45,77 +42,42 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   font-size:13px; font-weight:500; color:#a898b8;
   letter-spacing:0.06em; text-transform:uppercase;
 }
-
-.phase-section { padding:0 16px 4px; }
-.phase-label {
-  font-size:11px; font-weight:700; color:#b0a8bc;
-  letter-spacing:0.14em; text-transform:uppercase;
-  padding:18px 2px 10px; display:flex; align-items:center; gap:8px;
+.week-section { padding:0 0 4px; }
+.week-label { display:flex; align-items:center; gap:8px; padding:14px 16px 8px; }
+.week-num { font-size:15px; font-weight:700; color:#1e1a26; letter-spacing:-0.01em; }
+.week-phase { font-size:12px; font-weight:500; color:#b0a8bc; letter-spacing:0.04em; }
+.week-badge-done { font-size:10px; font-weight:700; color:#5c8c5c; background:rgba(92,140,92,0.12); border-radius:6px; padding:3px 8px; letter-spacing:0.04em; margin-left:auto; }
+.week-badge-current { font-size:10px; font-weight:700; color:#A8B8A0; background:rgba(168,184,160,0.18); border:1px solid rgba(168,184,160,0.35); border-radius:6px; padding:3px 8px; letter-spacing:0.04em; margin-left:auto; }
+.week-badge-locked { font-size:10px; font-weight:600; color:#c0b8cc; background:rgba(200,190,220,0.12); border-radius:6px; padding:3px 8px; letter-spacing:0.04em; margin-left:auto; }
+.week-scroll { overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding:0 16px 10px; }
+.week-scroll::-webkit-scrollbar { display:none; }
+.week-row { display:flex; gap:8px; width:max-content; }
+.wt {
+  position:relative; width:120px; height:150px;
+  border-radius:18px; overflow:hidden; flex-shrink:0;
+  cursor:pointer; transition:transform 0.12s ease;
+  box-shadow:0 3px 12px rgba(0,0,0,0.14);
+  border:1.5px solid rgba(255,255,255,0.5);
 }
-
-/* Image-backed workout cards — like the week schedule */
-.workout-card {
-  width:100%; height:130px;
-  border-radius:22px; overflow:hidden;
-  position:relative; cursor:pointer;
-  margin-bottom:10px;
-  transition:transform 0.12s ease;
-  box-shadow:0 4px 16px rgba(0,0,0,0.12);
-}
-.workout-card:active { transform:scale(0.98); }
-.wc-bg {
+.wt:active { transform:scale(0.96); }
+.wt.today-card { border:2px solid #ffffff; box-shadow:0 4px 18px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.3); }
+.wt.locked { border-color:rgba(255,255,255,0.15); }
+.wt-bg { position:absolute; inset:0; background-size:cover; background-position:center; background-color:#2a2436; }
+.wt-overlay {
   position:absolute; inset:0;
-  background-size:cover; background-position:center;
-  background-color:#2a2436;
-  transition:transform 0.3s ease;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.65) 100%);
 }
-.wc-overlay {
-  position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.62) 100%);
-}
-.wc-overlay.done-overlay {
-  background:linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(20,60,30,0.75) 100%);
-}
-.wc-overlay.locked-overlay {
-  background:rgba(26,22,36,0.65);
-}
-.wc-content {
-  position:absolute; inset:0;
-  display:flex; align-items:flex-end; justify-content:space-between;
-  padding:14px 16px;
-}
-.wc-info {}
-.wc-name {
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px; font-weight:600; color:white;
-  line-height:1.15; margin-bottom:4px;
-}
-.wc-meta { font-size:13px; font-weight:500; color:rgba(255,255,255,0.7); }
-.wc-badge {
-  flex-shrink:0; align-self:flex-start;
-  display:flex; gap:6px;
-}
-.badge-today {
-  font-size:10px; font-weight:700; color:#A8B8A0;
-  letter-spacing:0.08em; text-transform:uppercase;
-  background:rgba(168,184,160,0.25); border:1px solid rgba(168,184,160,0.4);
-  border-radius:8px; padding:4px 8px;
-}
-.badge-done {
-  width:30px; height:30px; border-radius:50%;
-  background:rgba(92,140,92,0.9);
-  display:flex; align-items:center; justify-content:center;
-}
-.badge-lock {
-  width:30px; height:30px; border-radius:50%;
-  background:rgba(255,255,255,0.12);
-  display:flex; align-items:center; justify-content:center;
-}
-.unlock-label {
-  position:absolute; top:14px; left:16px;
-  font-size:11px; font-weight:600; color:rgba(255,255,255,0.5);
-  letter-spacing:0.06em;
-}
+.wt-overlay.done-overlay { background:linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(20,50,25,0.3) 50%, rgba(20,60,25,0.72) 100%); }
+.wt-overlay.locked-overlay { background:rgba(18,14,26,0.60); }
+.wt-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:10px 10px 11px; }
+.wt-day { font-size:10px; font-weight:700; color:rgba(255,255,255,0.75); letter-spacing:0.08em; text-transform:uppercase; line-height:1.3; }
+.wt-name { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:white; line-height:1.2; letter-spacing:-0.01em; }
+.wt-meta { font-size:11px; font-weight:500; color:rgba(255,255,255,0.6); }
+.wt-check { position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(92,140,92,0.9); display:flex; align-items:center; justify-content:center; }
+.wt-check i { font-size:11px; color:white; }
+.wt-lock { position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; }
+.wt-lock i { font-size:11px; color:rgba(255,255,255,0.5); }
+.week-divider { height:1px; background:rgba(0,0,0,0.06); margin:4px 16px 0; }
 
 /* ── WORKOUT PREVIEW ── */
 #screen-preview {
@@ -438,103 +400,171 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
     <div class="overview-sub">Balanced · 12-Week Strength & Burn</div>
   </div>
 
-  <div class="phase-section">
-    <div class="phase-label">Phase 1 — Foundation · Weeks 1–4</div>
-
-    <div class="workout-card" onclick="openPreview(0)">
-      <div class="wc-bg" id="wc-bg-0"></div>
-      <div class="wc-overlay done-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Full Body Strength A</div>
-          <div class="wc-meta">6 exercises · 45 min</div>
-        </div>
-        <div class="wc-badge"><div class="badge-done"><i class="ti ti-check" style="color:white;font-size:14px"></i></div></div>
-      </div>
+  <!-- WEEK 1 -->
+  <div class="week-section">
+    <div class="week-label">
+      <span class="week-num">Week 1</span>
+      <span class="week-phase">Foundation</span>
+      <span class="week-badge-done">✓ Complete</span>
     </div>
-
-    <div class="workout-card" onclick="openPreview(1)">
-      <div class="wc-bg" id="wc-bg-1"></div>
-      <div class="wc-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Cardio & Core</div>
-          <div class="wc-meta">5 exercises · 35 min</div>
+    <div class="week-scroll">
+      <div class="week-row">
+        <div class="wt" onclick="openPreview(0)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Mon</div>
+            <div class="wt-name">Full Body<br>Strength A</div>
+            <div class="wt-meta">45 min</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
         </div>
-        <div class="wc-badge"><div class="badge-today">Today</div></div>
-      </div>
-    </div>
-
-    <div class="workout-card" onclick="openPreview(2)">
-      <div class="wc-bg" id="wc-bg-2"></div>
-      <div class="wc-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Full Body Strength B</div>
-          <div class="wc-meta">6 exercises · 45 min</div>
+        <div class="wt rest-day">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Tue</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
         </div>
-        <div class="wc-badge"><i class="ti ti-chevron-right" style="color:rgba(255,255,255,0.6);font-size:20px"></i></div>
-      </div>
-    </div>
-
-    <div class="workout-card" onclick="openPreview(3)">
-      <div class="wc-bg" id="wc-bg-3"></div>
-      <div class="wc-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Mobility & Recovery</div>
-          <div class="wc-meta">4 exercises · 25 min</div>
+        <div class="wt" onclick="openPreview(1)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Wed</div>
+            <div class="wt-name">Cardio<br>& Core</div>
+            <div class="wt-meta">35 min</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
         </div>
-        <div class="wc-badge"><i class="ti ti-chevron-right" style="color:rgba(255,255,255,0.6);font-size:20px"></i></div>
+        <div class="wt rest-day">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Thu</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
+        </div>
+        <div class="wt" onclick="openPreview(2)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Fri</div>
+            <div class="wt-name">Full Body<br>Strength B</div>
+            <div class="wt-meta">45 min</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
+        </div>
+        <div class="wt rest-day">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Sat</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
+        </div>
+        <div class="wt" onclick="openPreview(3)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Sun</div>
+            <div class="wt-name">Mobility<br>& Recovery</div>
+            <div class="wt-meta">25 min</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="phase-section">
-    <div class="phase-label">Phase 2 — Build · Weeks 5–8</div>
-
-    <div class="workout-card" style="pointer-events:none">
-      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
-      <div class="wc-overlay locked-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Upper Body Focus</div>
-          <div class="wc-meta">6 exercises · 50 min</div>
-        </div>
-        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
-      </div>
-      <div class="unlock-label">Unlocks Week 5</div>
+  <!-- WEEK 2 -->
+  <div class="week-section">
+    <div class="week-label">
+      <span class="week-num">Week 2</span>
+      <span class="week-phase">Foundation</span>
+      <span class="week-badge-current">Current</span>
     </div>
-
-    <div class="workout-card" style="pointer-events:none">
-      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
-      <div class="wc-overlay locked-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Lower Body & Glutes</div>
-          <div class="wc-meta">6 exercises · 50 min</div>
+    <div class="week-scroll" id="week2-scroll">
+      <div class="week-row">
+        <div class="wt" onclick="openPreview(0)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay done-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Mon</div>
+            <div class="wt-name">Full Body<br>Strength A</div>
+            <div class="wt-meta">45 min</div>
+          </div>
+          <div class="wt-check"><i class="ti ti-check"></i></div>
         </div>
-        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
+        <div class="wt rest-day">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Tue</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+        </div>
+        <div class="wt today-card" onclick="openPreview(1)">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Wed · Today</div>
+            <div class="wt-name">Cardio<br>& Core</div>
+            <div class="wt-meta">35 min</div>
+          </div>
+        </div>
+        <div class="wt rest-day">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay locked-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Thu</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+        </div>
+        <div class="wt locked" style="pointer-events:none">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay locked-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Fri</div>
+            <div class="wt-name">Full Body<br>Strength B</div>
+            <div class="wt-meta">45 min</div>
+          </div>
+          <div class="wt-lock"><i class="ti ti-lock"></i></div>
+        </div>
+        <div class="wt rest-day locked" style="pointer-events:none">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay locked-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Sat</div>
+            <div class="wt-name">Rest<br>Day</div>
+            <div class="wt-meta">Recovery</div>
+          </div>
+        </div>
+        <div class="wt locked" style="pointer-events:none">
+          <div class="wt-bg" style="background-image:url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop')"></div>
+          <div class="wt-overlay locked-overlay"></div>
+          <div class="wt-content">
+            <div class="wt-day">Sun</div>
+            <div class="wt-name">Mobility<br>& Recovery</div>
+            <div class="wt-meta">25 min</div>
+          </div>
+          <div class="wt-lock"><i class="ti ti-lock"></i></div>
+        </div>
       </div>
-      <div class="unlock-label">Unlocks Week 5</div>
     </div>
   </div>
 
-  <div class="phase-section">
-    <div class="phase-label">Phase 3 — Peak · Weeks 9–12</div>
-    <div class="workout-card" style="pointer-events:none">
-      <div class="wc-bg" style="background:linear-gradient(135deg,#2a1e3a,#1a1228)"></div>
-      <div class="wc-overlay locked-overlay"></div>
-      <div class="wc-content">
-        <div class="wc-info">
-          <div class="wc-name">Advanced Full Body</div>
-          <div class="wc-meta">7 exercises · 60 min</div>
-        </div>
-        <div class="wc-badge"><div class="badge-lock"><i class="ti ti-lock" style="color:rgba(255,255,255,0.4);font-size:14px"></i></div></div>
-      </div>
-      <div class="unlock-label">Unlocks Week 9</div>
-    </div>
-  </div>
+  <!-- WEEKS 3–12 (locked) -->
+  <div class="week-section locked-week" id="weeks-future"></div>
+
 </div>
 
 <!-- ══ SCREEN: PREVIEW ══ -->
@@ -709,6 +739,53 @@ let setsDone = [];
 let restTimer = null;
 let restSeconds = 0;
 let restTotal = 0;
+
+// ── GENERATE WEEKS 3–12 ──
+const FUTURE_WORKOUTS = [
+  { name:'Full Body\nStrength A', meta:'45 min', img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop' },
+  { name:'Rest\nDay',             meta:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop' },
+  { name:'Cardio\n& Core',        meta:'35 min', img:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop' },
+  { name:'Rest\nDay',             meta:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop' },
+  { name:'Full Body\nStrength B', meta:'45 min', img:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop' },
+  { name:'Rest\nDay',             meta:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop' },
+  { name:'Mobility\n& Recovery',  meta:'25 min', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop' },
+];
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const PHASES = ['','','Foundation','Foundation','Build','Build','Build','Build','Peak','Peak','Peak','Peak'];
+
+const futureContainer = document.getElementById('weeks-future');
+let html = '';
+for (let w = 3; w <= 12; w++) {
+  const phase = PHASES[w] || 'Build';
+  html += `<div class="week-divider"></div>
+  <div class="week-section">
+    <div class="week-label">
+      <span class="week-num">Week ${w}</span>
+      <span class="week-phase">${phase}</span>
+      <span class="week-badge-locked">Unlocks Week ${w}</span>
+    </div>
+    <div class="week-scroll">
+      <div class="week-row">`;
+  FUTURE_WORKOUTS.forEach((wo, di) => {
+    const name = wo.name.replace('\n', '<br>');
+    html += `<div class="wt locked" style="pointer-events:none">
+        <div class="wt-bg" style="background-image:url('${wo.img}')"></div>
+        <div class="wt-overlay locked-overlay"></div>
+        <div class="wt-content">
+          <div class="wt-day">${DAYS[di]}</div>
+          <div class="wt-name">${name}</div>
+          <div class="wt-meta">${wo.meta}</div>
+        </div>
+        ${wo.meta !== 'Recovery' ? '<div class="wt-lock"><i class="ti ti-lock"></i></div>' : ''}
+      </div>`;
+  });
+  html += `</div></div></div>`;
+}
+futureContainer.innerHTML = html;
+
+// Scroll week 2 to today (Wed = index 2)
+const w2 = document.getElementById('week2-scroll');
+if (w2) { setTimeout(() => { w2.scrollLeft = 2 * (120 + 8) - 60; }, 100); }
 
 // ── WORKOUT CARD IMAGES ──
 const CARD_IMAGES = [
