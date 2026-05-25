@@ -35,13 +35,6 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 .prog-hero {
   flex-shrink:0; padding:52px 20px 20px;
   display:flex; flex-direction:column; align-items:center;
-  background:
-    radial-gradient(ellipse at 20% 20%, #a8c8a0 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 10%, #d4a8c0 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 60%, #c8b8e8 0%, transparent 55%),
-    radial-gradient(ellipse at 10% 80%, #f5ddd8 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 80%, #c8e4f0 0%, transparent 45%);
-  background-color:#d8ccec;
   position:relative;
 }
 .prog-hero-title {
@@ -97,21 +90,20 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 .week-tabs-wrap {
   overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
   padding:14px 16px 10px; flex-shrink:0;
-  background:rgba(245,240,250,0.6);
   border-bottom:1px solid rgba(200,190,220,0.2);
 }
 .week-tabs-wrap::-webkit-scrollbar { display:none; }
 .week-tabs-row { display:flex; gap:6px; width:max-content; }
 
 .week-tab {
-  width:42px; height:42px; border-radius:50%;
+  padding:10px 14px; border-radius:30px;
   display:flex; align-items:center; justify-content:center;
-  font-family:'Inter',sans-serif; font-size:13px; font-weight:700;
+  font-family:'Inter',sans-serif; font-size:12px; font-weight:700;
   cursor:pointer; flex-shrink:0;
   transition:all 0.15s ease; border:2px solid transparent;
-  position:relative;
+  white-space:nowrap;
 }
-.week-tab:active { transform:scale(0.9); }
+.week-tab:active { transform:scale(0.93); }
 
 /* Phase colours */
 .tab-foundation { background:rgba(168,184,160,0.25); color:#4a6a4a; }
@@ -122,11 +114,7 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 .week-tab.active.tab-build      { background:#8a5a1a; color:white; border-color:#8a5a1a; }
 .week-tab.active.tab-peak       { background:#8a3a5a; color:white; border-color:#8a3a5a; }
 
-.week-tab.done-tab::after {
-  content:''; position:absolute; bottom:1px; right:1px;
-  width:10px; height:10px; border-radius:50%;
-  background:#5c8c5c; border:2px solid white;
-}
+.week-tab.done-tab { border-color:rgba(92,140,92,0.35); }
 
 /* ── WEEK CARD ── */
 .week-card {
@@ -719,7 +707,7 @@ function buildTabs() {
     const isDone = wk.status === 'done';
     const isActive = wNum === activeWeek;
     return `<div class="week-tab ${cls} ${isDone?'done-tab':''} ${isActive?'active':''}"
-      id="tab-${wNum}" onclick="selectWeek(${wNum})">${wNum}</div>`;
+      id="tab-${wNum}" onclick="selectWeek(${wNum})">Week ${wNum}</div>`;
   }).join('');
 }
 
