@@ -28,143 +28,157 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 
 /* ── PROGRAMME OVERVIEW ── */
 #screen-overview {
-  display:flex; flex-direction:column;
-  overflow:hidden;
-  padding-bottom:0;
-}
-.overview-header { padding:56px 16px 14px; flex-shrink:0; }
-.overview-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:36px; font-weight:600; color:#1e1a26; letter-spacing:-0.01em; margin-bottom:3px;
-}
-.overview-sub {
-  font-size:13px; font-weight:500; color:#a898b8;
-  letter-spacing:0.06em; text-transform:uppercase;
+  display:flex; flex-direction:column; overflow:hidden;
 }
 
-/* Week tab row */
+/* ── HERO ── */
+.prog-hero {
+  flex-shrink:0; padding:52px 20px 20px;
+  display:flex; flex-direction:column; align-items:center;
+  background:
+    radial-gradient(ellipse at 20% 20%, #a8c8a0 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 10%, #d4a8c0 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 60%, #c8b8e8 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 80%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, #c8e4f0 0%, transparent 45%);
+  background-color:#d8ccec;
+  position:relative;
+}
+.prog-hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:600; color:rgba(30,26,38,0.6);
+  letter-spacing:0.12em; text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+/* Stats row */
+.hero-stats { display:flex; align-items:center; justify-content:center; gap:0; width:100%; }
+.hero-stat {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.hero-stat-val {
+  font-family:'Inter',sans-serif; font-size:26px; font-weight:800;
+  color:#1e1a26; letter-spacing:-0.02em; line-height:1;
+}
+.hero-stat-lbl {
+  font-size:10px; font-weight:600; color:rgba(30,26,38,0.5);
+  letter-spacing:0.1em; text-transform:uppercase; text-align:center;
+}
+
+/* Circle progress */
+.hero-circle-wrap {
+  width:140px; height:140px; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.hero-circle-wrap svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.hc-track { fill:none; stroke:rgba(255,255,255,0.35); stroke-width:8; }
+.hc-fill  { fill:none; stroke:white; stroke-width:8; stroke-linecap:round;
+  stroke-dasharray:376.99; stroke-dashoffset:376.99;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  transition:stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1) 0.3s; }
+.hero-circle-inner {
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  position:relative; z-index:1;
+}
+.hci-pct {
+  font-family:'Inter',sans-serif; font-size:36px; font-weight:800;
+  color:#1e1a26; letter-spacing:-0.03em; line-height:1;
+}
+.hci-lbl {
+  font-size:10px; font-weight:600; color:rgba(30,26,38,0.55);
+  letter-spacing:0.1em; text-transform:uppercase;
+}
+.hci-prog {
+  font-size:11px; font-weight:500; color:rgba(30,26,38,0.45);
+  margin-top:1px;
+}
+
+/* ── WEEK TABS ── */
 .week-tabs-wrap {
-  overflow-x:auto; scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-  padding:0 16px 14px; flex-shrink:0;
+  overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  padding:14px 16px 10px; flex-shrink:0;
+  background:rgba(245,240,250,0.6);
+  border-bottom:1px solid rgba(200,190,220,0.2);
 }
 .week-tabs-wrap::-webkit-scrollbar { display:none; }
-.week-tabs-row { display:flex; gap:7px; width:max-content; }
+.week-tabs-row { display:flex; gap:6px; width:max-content; }
 
 .week-tab {
-  padding:9px 16px; border-radius:20px;
-  background:rgba(255,255,255,0.7); border:1.5px solid rgba(200,190,220,0.3);
-  backdrop-filter:blur(8px);
-  font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
-  color:#a898b8; cursor:pointer; flex-shrink:0;
-  transition:all 0.15s ease; white-space:nowrap;
-  display:flex; flex-direction:column; align-items:center; gap:2px;
+  width:42px; height:42px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Inter',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; flex-shrink:0;
+  transition:all 0.15s ease; border:2px solid transparent;
+  position:relative;
 }
-.week-tab:active { transform:scale(0.95); }
-.week-tab.active {
-  background:#1e1a26; border-color:#1e1a26; color:#ffffff;
-}
-.week-tab.done-tab { border-color:rgba(92,140,92,0.4); }
-.week-tab.done-tab.active { background:#3d6e3d; border-color:#3d6e3d; }
-.week-tab-num { font-size:13px; font-weight:700; }
-.week-tab-phase { font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; opacity:0.65; }
-.week-tab-dot {
-  width:5px; height:5px; border-radius:50%;
-  background:rgba(92,140,92,0.7); margin-top:1px;
-  display:none;
-}
-.week-tab.done-tab .week-tab-dot { display:block; }
-.week-tab.active .week-tab-dot { background:rgba(255,255,255,0.5); }
+.week-tab:active { transform:scale(0.9); }
 
-/* Week content card */
+/* Phase colours */
+.tab-foundation { background:rgba(168,184,160,0.25); color:#4a6a4a; }
+.tab-build      { background:rgba(201,168,106,0.25); color:#6a4a1a; }
+.tab-peak       { background:rgba(212,168,160,0.25); color:#6a2a3a; }
+
+.week-tab.active.tab-foundation { background:#4a6a4a; color:white; border-color:#4a6a4a; }
+.week-tab.active.tab-build      { background:#8a5a1a; color:white; border-color:#8a5a1a; }
+.week-tab.active.tab-peak       { background:#8a3a5a; color:white; border-color:#8a3a5a; }
+
+.week-tab.done-tab::after {
+  content:''; position:absolute; bottom:1px; right:1px;
+  width:10px; height:10px; border-radius:50%;
+  background:#5c8c5c; border:2px solid white;
+}
+
+/* ── WEEK CARD ── */
 .week-card {
-  flex:1; overflow-y:auto; padding:0 16px 100px;
+  flex:1; overflow-y:auto; padding:12px 16px 100px;
   -webkit-overflow-scrolling:touch;
 }
 .week-card::-webkit-scrollbar { display:none; }
 
-/* Day banner */
-.day-banner {
-  display:flex; align-items:stretch; gap:0;
-  background:rgba(255,255,255,0.88); border-radius:20px;
-  margin-bottom:10px; overflow:hidden;
-  backdrop-filter:blur(8px);
-  box-shadow:0 2px 10px rgba(160,140,180,0.10);
-  cursor:pointer; transition:transform 0.12s ease;
-}
-.day-banner:active { transform:scale(0.98); }
-.day-banner.rest-banner { cursor:default; opacity:0.75; }
-.day-banner.rest-banner:active { transform:none; }
-.day-banner.done-banner { }
-.day-banner.today-banner {
-  box-shadow:0 4px 18px rgba(0,0,0,0.14);
-  border:2px solid #1e1a26;
-}
-
-/* Thumbnail left */
-.db-thumb {
-  width:90px; height:90px; flex-shrink:0;
-  position:relative; overflow:hidden;
-}
-.db-thumb-bg {
-  position:absolute; inset:0;
-  background-size:cover; background-position:center;
-  background-color:#2a2436;
-}
-.db-thumb-ov {
-  position:absolute; inset:0;
-  background:linear-gradient(to right, rgba(0,0,0,0.0) 60%, rgba(255,255,255,0.88) 100%);
-}
-.db-thumb-ov.done-ov {
-  background:linear-gradient(135deg, rgba(10,45,15,0.35) 0%, rgba(255,255,255,0.88) 100%);
-}
-.db-thumb-ov.lock-ov {
-  background:linear-gradient(to right, rgba(16,12,24,0.55) 0%, rgba(255,255,255,0.88) 100%);
-}
-.db-tick {
-  position:absolute; bottom:6px; left:6px;
-  width:20px; height:20px; border-radius:50%;
-  background:rgba(80,160,80,0.88);
-  display:flex; align-items:center; justify-content:center;
-}
-.db-tick i { font-size:10px; color:white; }
-.db-lock {
-  position:absolute; bottom:6px; left:6px;
-  width:20px; height:20px; border-radius:50%;
-  background:rgba(200,190,220,0.6);
-  display:flex; align-items:center; justify-content:center;
-}
-.db-lock i { font-size:10px; color:#9088a0; }
-
-/* Info right */
-.db-info {
-  flex:1; padding:14px 14px 14px 12px;
-  display:flex; flex-direction:column; justify-content:center; gap:4px;
-}
-.db-day {
-  font-size:10px; font-weight:700; color:#b0a8bc;
-  letter-spacing:0.1em; text-transform:uppercase;
-}
-.db-day.today-lbl { color:#1e1a26; }
-.db-name {
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px; font-weight:600; color:#1e1a26; line-height:1.2;
-}
-.db-meta {
-  font-size:12px; font-weight:400; color:#a898b8;
-  display:flex; align-items:center; gap:8px;
-}
-.db-chevron { color:#c8c0d4; font-size:16px; margin-left:auto; align-self:center; flex-shrink:0; }
-
-/* Phase divider */
+/* Phase label */
 .phase-divider {
   font-size:11px; font-weight:700; color:#b0a8bc;
   letter-spacing:0.14em; text-transform:uppercase;
-  padding:4px 2px 8px; display:flex; align-items:center; gap:8px;
+  padding:0 2px 10px; display:flex; align-items:center; gap:8px;
 }
-.phase-divider::after {
-  content:''; flex:1; height:1px; background:rgba(0,0,0,0.07);
+.phase-divider::after { content:''; flex:1; height:1px; background:rgba(0,0,0,0.07); }
+
+/* Day banner */
+.day-banner {
+  display:flex; align-items:stretch;
+  background:rgba(255,255,255,0.88); border-radius:18px;
+  margin-bottom:9px; overflow:hidden;
+  backdrop-filter:blur(8px);
+  box-shadow:0 2px 10px rgba(160,140,180,0.10);
+  cursor:pointer; transition:transform 0.12s ease;
+  -webkit-user-select:none; user-select:none;
 }
+.day-banner:active { transform:scale(0.98); }
+.day-banner.rest-banner { cursor:default; opacity:0.72; }
+.day-banner.rest-banner:active { transform:none; }
+.day-banner.today-banner { border:2px solid #1e1a26; box-shadow:0 4px 16px rgba(0,0,0,0.13); }
+
+.db-thumb {
+  width:88px; flex-shrink:0; position:relative; overflow:hidden;
+}
+.db-thumb-bg { position:absolute; inset:0; background-size:cover; background-position:center; background-color:#2a2436; }
+.db-thumb-ov {
+  position:absolute; inset:0;
+  background:linear-gradient(to right, transparent 55%, rgba(255,255,255,0.88) 100%);
+}
+.db-thumb-ov.done-ov  { background:linear-gradient(to right, rgba(10,45,15,0.2) 0%, rgba(255,255,255,0.88) 100%); }
+.db-thumb-ov.lock-ov  { background:linear-gradient(to right, rgba(16,12,24,0.5) 0%, rgba(255,255,255,0.88) 100%); }
+.db-tick { position:absolute; bottom:7px; left:7px; width:20px; height:20px; border-radius:50%; background:rgba(80,160,80,0.9); display:flex; align-items:center; justify-content:center; }
+.db-tick i { font-size:10px; color:white; }
+.db-lock { position:absolute; bottom:7px; left:7px; width:20px; height:20px; border-radius:50%; background:rgba(200,190,220,0.7); display:flex; align-items:center; justify-content:center; }
+.db-lock i { font-size:10px; color:#9088a0; }
+
+.db-info { flex:1; padding:13px 12px 13px 12px; display:flex; flex-direction:column; justify-content:center; gap:3px; }
+.db-day { font-size:10px; font-weight:700; color:#b0a8bc; letter-spacing:0.1em; text-transform:uppercase; }
+.db-day.today-lbl { color:#1e1a26; }
+.db-name { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:#1e1a26; line-height:1.15; }
+.db-meta { font-size:12px; color:#a898b8; }
+.db-chevron { color:#c8c0d4; font-size:16px; margin-left:auto; align-self:center; padding-right:12px; flex-shrink:0; }
 
 
 /* ── WORKOUT PREVIEW ── */
@@ -483,12 +497,39 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 
 <!-- ══ SCREEN: OVERVIEW ══ -->
 <div class="screen active" id="screen-overview">
-  <div class="overview-header">
-    <div class="overview-title">Your Programme</div>
-    <div class="overview-sub">Balanced · 12-Week Strength &amp; Burn</div>
+
+  <!-- Hero -->
+  <div class="prog-hero">
+    <div class="prog-hero-title">Your Programme</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">18</div>
+        <div class="hero-stat-lbl">Workouts</div>
+      </div>
+      <div class="hero-circle-wrap">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="hc-track" cx="70" cy="70" r="60"/>
+          <circle class="hc-fill" id="hc-fill" cx="70" cy="70" r="60"/>
+        </svg>
+        <div class="hero-circle-inner">
+          <div class="hci-pct" id="hci-pct">0%</div>
+          <div class="hci-lbl">Complete</div>
+          <div class="hci-prog">Wk 2 of 12</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">1840</div>
+        <div class="hero-stat-lbl">Calories</div>
+      </div>
+    </div>
   </div>
+
+  <!-- Week tabs -->
   <div class="week-tabs-wrap"><div class="week-tabs-row" id="week-tabs"></div></div>
+
+  <!-- Week content -->
   <div class="week-card" id="week-card"></div>
+
 </div>
 
 <!-- ══ SCREEN: PREVIEW ══ -->
@@ -613,127 +654,73 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 
 <script>
 // ── DATA ──
-const WORKOUTS = [
-  {
-    name: 'Full Body Strength A', duration: '45 min', type: 'strength',
-    exercises: [
-      { name:'Squats', sets:4, reps:'12', weight:'20', unit:'kg', rest:60, instructions:'Keep chest up and knees tracking over toes. Aim for full depth.', desc:'A compound lower body exercise targeting quads, glutes and hamstrings.' },
-      { name:'Push-ups', sets:3, reps:'15', weight:'0', unit:'bw', rest:45, instructions:'Hands shoulder-width apart. Lower chest to floor. Full range of motion.', desc:'Upper body push exercise targeting chest, triceps and shoulders.' },
-      { name:'Dumbbell Row', sets:3, reps:'12', weight:'8', unit:'kg', rest:45, instructions:'Keep back flat, pull elbow back past your hip. Control the lowering.', desc:'A pulling exercise targeting the back, biceps and rear deltoid.' },
-      { name:'Lunges', sets:3, reps:'10', weight:'10', unit:'kg', rest:60, instructions:'Step forward, lower back knee toward floor. Keep torso upright.', desc:'Unilateral lower body exercise for quads, glutes and balance.' },
-      { name:'Plank', sets:3, reps:'45', weight:'0', unit:'sec', rest:30, instructions:'Hips level with shoulders. Squeeze glutes and core. Breathe normally.', desc:'Core stability exercise targeting the deep abdominals and lower back.' },
-      { name:'Glute Bridge', sets:3, reps:'15', weight:'0', unit:'bw', rest:30, instructions:'Drive hips up through your heels. Squeeze glutes hard at the top.', desc:'Isolation exercise for glutes and hamstrings.' },
-    ]
-  },
-  {
-    name: 'Cardio & Core', duration: '35 min', type: 'cardio',
-    exercises: [
-      { name:'Jump Rope', sets:3, reps:'45', weight:'0', unit:'sec', rest:60, instructions:'Stay on your toes, relaxed shoulders. Aim for a steady rhythm.', desc:'Cardio exercise improving coordination, endurance and calorie burn.' },
-      { name:'Mountain Climbers', sets:3, reps:'20', weight:'0', unit:'reps', rest:45, instructions:'Keep hips low and core tight. Drive knees alternately toward chest.', desc:'Dynamic core and cardio exercise targeting the abs and hip flexors.' },
-      { name:'Bicycle Crunches', sets:3, reps:'20', weight:'0', unit:'reps', rest:30, instructions:'Slow and controlled. Opposite elbow to knee. Keep lower back pressed down.', desc:'Rotational core exercise targeting the obliques and rectus abdominis.' },
-      { name:'Burpees', sets:3, reps:'10', weight:'0', unit:'reps', rest:60, instructions:'Controlled pace. Land softly. Full hip extension at the top.', desc:'Full body conditioning exercise combining squat, plank and jump.' },
-      { name:'Dead Bug', sets:3, reps:'10', weight:'0', unit:'reps', rest:30, instructions:'Lower opposite arm and leg slowly. Press lower back into floor throughout.', desc:'Deep core stabilisation exercise protecting the lower back.' },
-    ]
-  },
-  {
-    name: 'Full Body Strength B', duration: '45 min', type: 'strength',
-    exercises: [
-      { name:'Deadlift', sets:4, reps:'10', weight:'30', unit:'kg', rest:90, instructions:'Hip hinge movement. Bar close to shins. Drive through your heels.', desc:'Compound posterior chain exercise targeting glutes, hamstrings and back.' },
-      { name:'Shoulder Press', sets:3, reps:'10', weight:'6', unit:'kg', rest:60, instructions:'Press directly overhead. Avoid arching your lower back.', desc:'Upper body push exercise targeting the deltoids and triceps.' },
-      { name:'Goblet Squat', sets:3, reps:'12', weight:'12', unit:'kg', rest:60, instructions:'Hold weight at chest. Wide stance. Elbows inside knees at the bottom.', desc:'Squat variation with counterbalance improving depth and posture.' },
-      { name:'Bent Over Row', sets:3, reps:'12', weight:'10', unit:'kg', rest:45, instructions:'Hinge at hips 45°. Pull bar to lower chest. Squeeze shoulder blades.', desc:'Compound pulling exercise for the back and biceps.' },
-      { name:'Side Plank', sets:3, reps:'30', weight:'0', unit:'sec', rest:30, instructions:'Stack feet or stagger them. Keep hips lifted. 30 sec each side.', desc:'Lateral core stability exercise targeting the obliques and hip abductors.' },
-    ]
-  },
-  {
-    name: 'Mobility & Recovery', duration: '25 min', type: 'mobility',
-    exercises: [
-      { name:'Hip Flexor Stretch', sets:2, reps:'60', weight:'0', unit:'sec', rest:15, instructions:'Kneeling lunge position. Push hips forward gently. Each side 60 sec.', desc:'Stretches the hip flexors, commonly tight from sitting.' },
-      { name:'Cat-Cow', sets:2, reps:'10', weight:'0', unit:'reps', rest:15, instructions:'Slow and controlled. Full range through the spine.', desc:'Spinal mobility exercise relieving lower back tension.' },
-      { name:'Worlds Greatest Stretch', sets:2, reps:'5', weight:'0', unit:'reps', rest:15, instructions:'Slow and deliberate. Each side. Reach tall on the rotation.', desc:'Full body mobility movement targeting hips, thoracic spine and hamstrings.' },
-      { name:'Foam Roll — Quads', sets:1, reps:'60', weight:'0', unit:'sec', rest:0, instructions:'Slow rolls. Pause on tender spots for 5–10 seconds.', desc:'Self-myofascial release for the quadriceps.' },
-    ]
-  }
-];
-
-let currentWorkoutIdx = 1;
-let currentExIdx = 0;
-let currentSetIdx = 0;
-let setsDone = [];
-let restTimer = null;
-let restSeconds = 0;
-let restTotal = 0;
-
-// ── DATA ──
 const IMGS = {
   strength: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop',
   cardio:   'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=300&h=300&fit=crop',
   strengthB:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=300&fit=crop',
   mobility: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop',
   rest:     'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=300&h=300&fit=crop',
-  upper:    'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&h=300&fit=crop',
-  lower:    'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=300&h=300&fit=crop',
 };
-
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-// 12 weeks of programme data
-const PROGRAMME = [
-  // Week 1 — done
-  { phase:'Foundation', status:'done', days:[
-    { name:'Full Body Strength A', dur:'45 min', exs:'6 exercises', img:IMGS.strength, wIdx:0 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Cardio & Core',        dur:'35 min', exs:'5 exercises', img:IMGS.cardio, wIdx:1 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Full Body Strength B', dur:'45 min', exs:'6 exercises', img:IMGS.strengthB, wIdx:2 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Mobility & Recovery',  dur:'25 min', exs:'4 exercises', img:IMGS.mobility, wIdx:3 },
-  ]},
-  // Week 2 — current
-  { phase:'Foundation', status:'current', today:2, doneDays:[0,1], days:[
-    { name:'Full Body Strength A', dur:'45 min', exs:'6 exercises', img:IMGS.strength, wIdx:0 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Cardio & Core',        dur:'35 min', exs:'5 exercises', img:IMGS.cardio, wIdx:1 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Full Body Strength B', dur:'45 min', exs:'6 exercises', img:IMGS.strengthB, wIdx:2 },
-    { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-    { name:'Mobility & Recovery',  dur:'25 min', exs:'4 exercises', img:IMGS.mobility, wIdx:3 },
-  ]},
-  // Weeks 3–12 — locked
-  ...Array.from({length:10}, (_,i) => ({
-    phase: i < 2 ? 'Foundation' : i < 6 ? 'Build' : 'Peak',
-    status:'locked', days:[
-      { name:'Full Body Strength A', dur:'45 min', exs:'6 exercises', img:IMGS.strength, wIdx:0 },
-      { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-      { name:'Cardio & Core',        dur:'35 min', exs:'5 exercises', img:IMGS.cardio, wIdx:1 },
-      { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-      { name:'Full Body Strength B', dur:'45 min', exs:'6 exercises', img:IMGS.strengthB, wIdx:2 },
-      { name:'Rest Day',             dur:'Recovery', exs:'', img:IMGS.rest, wIdx:-1 },
-      { name:'Mobility & Recovery',  dur:'25 min', exs:'4 exercises', img:IMGS.mobility, wIdx:3 },
-    ]
-  }))
+const BASE_WEEK = [
+  { name:'Full Body Strength A', dur:'45 min', exs:'6 exercises', img:IMGS.strength,  wIdx:0 },
+  { name:'Rest Day',             dur:'Recovery', exs:'',           img:IMGS.rest,      wIdx:-1 },
+  { name:'Cardio & Core',        dur:'35 min', exs:'5 exercises', img:IMGS.cardio,    wIdx:1 },
+  { name:'Rest Day',             dur:'Recovery', exs:'',           img:IMGS.rest,      wIdx:-1 },
+  { name:'Full Body Strength B', dur:'45 min', exs:'6 exercises', img:IMGS.strengthB, wIdx:2 },
+  { name:'Rest Day',             dur:'Recovery', exs:'',           img:IMGS.rest,      wIdx:-1 },
+  { name:'Mobility & Recovery',  dur:'25 min', exs:'4 exercises', img:IMGS.mobility,  wIdx:3 },
 ];
 
-let activeWeek = 1; // 1-indexed
+const PROGRAMME = [
+  { phase:'Foundation', status:'done',    days: BASE_WEEK },
+  { phase:'Foundation', status:'current', today:2, doneDays:[0,1], days: BASE_WEEK },
+  { phase:'Foundation', status:'locked',  days: BASE_WEEK },
+  { phase:'Foundation', status:'locked',  days: BASE_WEEK },
+  { phase:'Build',      status:'locked',  days: BASE_WEEK },
+  { phase:'Build',      status:'locked',  days: BASE_WEEK },
+  { phase:'Build',      status:'locked',  days: BASE_WEEK },
+  { phase:'Build',      status:'locked',  days: BASE_WEEK },
+  { phase:'Peak',       status:'locked',  days: BASE_WEEK },
+  { phase:'Peak',       status:'locked',  days: BASE_WEEK },
+  { phase:'Peak',       status:'locked',  days: BASE_WEEK },
+  { phase:'Peak',       status:'locked',  days: BASE_WEEK },
+];
 
-// ── BUILD WEEK TABS ──
+const PHASE_CLASS = { Foundation:'tab-foundation', Build:'tab-build', Peak:'tab-peak' };
+
+let activeWeek = 2;
+
+// ── HERO ANIMATION ──
+function animateHero() {
+  const PROGRESS = 0.14; // 2/12 weeks ≈ 14%
+  const CIRC = 2 * Math.PI * 60; // 376.99
+  document.getElementById('hc-fill').style.strokeDashoffset = CIRC * (1 - PROGRESS);
+
+  // count up pct
+  let cur = 0;
+  const target = 14;
+  const el = document.getElementById('hci-pct');
+  const iv = setInterval(() => {
+    cur++;
+    el.textContent = cur + '%';
+    if (cur >= target) clearInterval(iv);
+  }, 40);
+}
+setTimeout(animateHero, 200);
+
+// ── BUILD TABS ──
 function buildTabs() {
   const row = document.getElementById('week-tabs');
-  let html = '';
-  let lastPhase = '';
-  PROGRAMME.forEach((wk, i) => {
+  row.innerHTML = PROGRAMME.map((wk, i) => {
     const wNum = i + 1;
+    const cls = PHASE_CLASS[wk.phase] || 'tab-foundation';
     const isDone = wk.status === 'done';
-    const isCurrent = wk.status === 'current';
     const isActive = wNum === activeWeek;
-    html += `<div class="week-tab ${isDone?'done-tab':''} ${isActive?'active':''}"
-      id="tab-${wNum}" onclick="selectWeek(${wNum})">
-      <div class="week-tab-num">W${wNum}</div>
-      <div class="week-tab-phase">${wk.phase.split(' ')[0]}</div>
-      <div class="week-tab-dot"></div>
-    </div>`;
-  });
-  row.innerHTML = html;
+    return `<div class="week-tab ${cls} ${isDone?'done-tab':''} ${isActive?'active':''}"
+      id="tab-${wNum}" onclick="selectWeek(${wNum})">${wNum}</div>`;
+  }).join('');
 }
 
 // ── BUILD WEEK CARD ──
@@ -750,7 +737,7 @@ function buildWeekCard(wNum) {
     const ovClass  = isDone ? 'done-ov' : isLocked ? 'lock-ov' : '';
     const click    = (!isRest && !isLocked) ? `onclick="openPreview(${day.wIdx})"` : '';
 
-    html += `<div class="day-banner ${isRest?'rest-banner':''} ${isDone?'done-banner':''} ${isToday?'today-banner':''}" ${click}>
+    html += `<div class="day-banner ${isRest?'rest-banner':''} ${isToday?'today-banner':''}" ${click}>
       <div class="db-thumb">
         <div class="db-thumb-bg" style="background-image:url('${day.img}')"></div>
         <div class="db-thumb-ov ${ovClass}"></div>
@@ -770,7 +757,6 @@ function buildWeekCard(wNum) {
 }
 
 function selectWeek(wNum) {
-  // Update tab active state
   document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
   const tab = document.getElementById('tab-' + wNum);
   if (tab) {
@@ -782,15 +768,12 @@ function selectWeek(wNum) {
   if (navigator.vibrate) navigator.vibrate(6);
 }
 
-// Init
 buildTabs();
 buildWeekCard(activeWeek);
-
-// Scroll tabs to current week
 setTimeout(() => {
-  const t = document.getElementById('tab-2');
+  const t = document.getElementById('tab-' + activeWeek);
   if (t) t.scrollIntoView({ behavior:'instant', block:'nearest', inline:'center' });
-}, 50);
+}, 60);
 
 // ── SCREEN NAVIGATION ──
 // ── WORKOUT CARD IMAGES ──
