@@ -35,90 +35,89 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
 .overview-header { padding:56px 16px 16px; }
 .overview-title {
   font-family:'Cormorant Garamond',serif;
-  font-size:36px; font-weight:600; color:#1e1a26;
-  letter-spacing:-0.01em; margin-bottom:3px;
+  font-size:36px; font-weight:600; color:#1e1a26; letter-spacing:-0.01em; margin-bottom:3px;
 }
 .overview-sub {
-  font-size:13px; font-weight:500; color:#a898b8;
-  letter-spacing:0.06em; text-transform:uppercase;
+  font-size:13px; font-weight:500; color:#a898b8; letter-spacing:0.06em; text-transform:uppercase;
 }
 
 /* Phase card */
 .phase-card {
-  margin:0 16px 14px;
-  background:rgba(255,255,255,0.88);
-  border-radius:24px;
-  overflow:hidden;
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 20px rgba(160,140,180,0.12);
+  position:relative; margin:0 16px 16px;
+  border-radius:28px; overflow:hidden; min-height:200px;
 }
-.phase-card-header {
-  padding:16px 18px;
-  display:flex; align-items:center; gap:10px;
+.phase-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  background-color:#2a2436;
 }
-.phase-card-color {
-  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+.phase-bg-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.55) 100%);
 }
-.phase-card-name {
+.phase-inner {
+  position:relative; z-index:2; padding:20px 16px 16px;
+}
+.phase-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.phase-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.phase-name {
   font-family:'Cormorant Garamond',serif;
-  font-size:20px; font-weight:600; color:#1e1a26;
-  flex:1;
+  font-size:22px; font-weight:600; color:white; flex:1;
 }
-.phase-card-weeks {
-  font-size:12px; font-weight:500; color:#b0a8bc;
-}
+.phase-wks { font-size:12px; font-weight:500; color:rgba(255,255,255,0.6); }
 
-/* Week banner */
-.week-banner {
-  border-top:1px solid rgba(200,190,220,0.2);
-  cursor:pointer;
+/* Week glass banner */
+.week-glass {
+  background:rgba(255,255,255,0.14);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:18px;
+  margin-bottom:8px;
+  overflow:hidden;
   transition:background 0.15s;
 }
-.week-banner:active { background:rgba(0,0,0,0.02); }
-.week-banner-row {
-  display:flex; align-items:center; gap:12px;
-  padding:13px 18px;
-}
-.week-banner-arrow {
-  font-size:12px; color:#c0b8cc; flex-shrink:0;
-  transition:transform 0.25s ease;
-}
-.week-banner.open .week-banner-arrow { transform:rotate(90deg); }
-.week-banner-num {
-  font-size:14px; font-weight:700; color:#1e1a26;
-  flex-shrink:0; width:56px;
-}
-.week-banner-status {
-  font-size:12px; font-weight:500; color:#b0a8bc;
-  flex:1;
-}
-.week-status-done {
-  font-size:11px; font-weight:700; color:#5c8c5c;
-  background:rgba(92,140,92,0.1); border-radius:6px;
-  padding:3px 8px; flex-shrink:0;
-}
-.week-status-current {
-  font-size:11px; font-weight:700; color:#A8B8A0;
-  background:rgba(168,184,160,0.15);
-  border:1px solid rgba(168,184,160,0.3);
-  border-radius:6px; padding:3px 8px; flex-shrink:0;
-}
-.week-status-lock {
-  font-size:14px; color:#d8d0e8; flex-shrink:0;
-}
+.week-glass:last-child { margin-bottom:0; }
 
-/* Accordion content */
-.week-accordion {
+.week-glass-row {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; cursor:pointer;
+}
+.week-glass-arrow {
+  font-size:12px; color:rgba(255,255,255,0.6);
+  transition:transform 0.25s ease; flex-shrink:0;
+}
+.week-glass.open .week-glass-arrow { transform:rotate(90deg); }
+.week-glass.locked-week .week-glass-arrow { opacity:0; }
+.week-glass-num {
+  font-size:15px; font-weight:700; color:white; width:60px; flex-shrink:0;
+}
+.week-glass-info { flex:1; font-size:13px; color:rgba(255,255,255,0.6); }
+.wg-badge-done {
+  font-size:10px; font-weight:700; color:#7bcf7b;
+  background:rgba(100,180,100,0.2); border-radius:6px; padding:3px 8px;
+}
+.wg-badge-current {
+  font-size:10px; font-weight:700; color:rgba(255,255,255,0.9);
+  background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3);
+  border-radius:6px; padding:3px 8px;
+}
+.wg-badge-lock { color:rgba(255,255,255,0.3); font-size:14px; }
+
+/* Accordion */
+.week-accord {
   max-height:0; overflow:hidden;
   transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1);
 }
-.week-accordion.open { max-height:260px; }
+.week-accord.open { max-height:220px; }
 
-/* Thumbnail scroll inside accordion */
+/* Thumbnail scroll */
 .wt-scroll {
   overflow-x:auto; scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
-  padding:0 16px 14px;
+  padding:0 12px 14px;
 }
 .wt-scroll::-webkit-scrollbar { display:none; }
 .wt-row { display:flex; gap:7px; width:max-content; }
@@ -128,27 +127,28 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   position:relative; width:110px; height:140px;
   border-radius:16px; overflow:hidden; flex-shrink:0;
   cursor:pointer; transition:transform 0.12s ease;
-  box-shadow:0 3px 10px rgba(0,0,0,0.14);
-  border:1.5px solid rgba(255,255,255,0.5);
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+  border:1.5px solid rgba(255,255,255,0.4);
+  -webkit-user-select:none; user-select:none;
 }
 .wt:active { transform:scale(0.96); }
-.wt.today-wt { border:2px solid #1e1a26; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+.wt.today-wt { border:2px solid #fff; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .wt.locked-wt { pointer-events:none; }
 .wt-bg { position:absolute; inset:0; background-size:cover; background-position:center; background-color:#2a2436; }
 .wt-ov {
   position:absolute; inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.6) 100%);
+  background:linear-gradient(to bottom, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.62) 100%);
 }
-.wt-ov.done-ov  { background:linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(15,45,20,0.35) 50%, rgba(15,50,20,0.75) 100%); }
-.wt-ov.lock-ov  { background:rgba(18,14,26,0.62); }
+.wt-ov.done-ov  { background:linear-gradient(to bottom, rgba(0,0,0,0.38) 0%, rgba(10,40,15,0.35) 50%, rgba(10,45,15,0.78) 100%); }
+.wt-ov.lock-ov  { background:rgba(16,12,24,0.65); }
 .wt-inner { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-between; padding:9px 9px 10px; }
-.wt-day  { font-size:9px; font-weight:700; color:rgba(255,255,255,0.72); letter-spacing:0.08em; text-transform:uppercase; }
+.wt-day  { font-size:9px; font-weight:700; color:rgba(255,255,255,0.72); letter-spacing:0.08em; text-transform:uppercase; line-height:1.3; }
 .wt-name { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:600; color:white; line-height:1.2; }
 .wt-dur  { font-size:10px; font-weight:500; color:rgba(255,255,255,0.6); }
-.wt-tick { position:absolute; top:7px; right:7px; width:20px; height:20px; border-radius:50%; background:rgba(92,140,92,0.9); display:flex; align-items:center; justify-content:center; }
+.wt-tick { position:absolute; top:7px; right:7px; width:20px; height:20px; border-radius:50%; background:rgba(80,160,80,0.88); display:flex; align-items:center; justify-content:center; }
 .wt-tick i { font-size:10px; color:white; }
 .wt-lk   { position:absolute; top:7px; right:7px; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; }
-.wt-lk i { font-size:10px; color:rgba(255,255,255,0.45); }
+.wt-lk i { font-size:10px; color:rgba(255,255,255,0.4); }
 
 
 /* ── WORKOUT PREVIEW ── */
@@ -647,45 +647,61 @@ let restTimer = null;
 let restSeconds = 0;
 let restTotal = 0;
 
-// ── PHASE / WEEK DATA ──
-const PHASE_DATA = [
+// ── PHASE DATA ──
+const IMGS = {
+  strength: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
+  cardio:   'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop',
+  strengthB:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop',
+  mobility: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop',
+  rest:     'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop',
+  upper:    'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400&h=400&fit=crop',
+  lower:    'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=400&h=400&fit=crop',
+};
+
+const WK_TEMPLATE_1 = [
+  { day:'Mon', name:'Full Body\nStrength A', dur:'45 min', img:IMGS.strength,  wIdx:0 },
+  { day:'Tue', name:'Rest Day',              dur:'Recovery', img:IMGS.rest,    wIdx:-1 },
+  { day:'Wed', name:'Cardio\n& Core',        dur:'35 min', img:IMGS.cardio,    wIdx:1 },
+  { day:'Thu', name:'Rest Day',              dur:'Recovery', img:IMGS.rest,    wIdx:-1 },
+  { day:'Fri', name:'Full Body\nStrength B', dur:'45 min', img:IMGS.strengthB, wIdx:2 },
+  { day:'Sat', name:'Rest Day',              dur:'Recovery', img:IMGS.rest,    wIdx:-1 },
+  { day:'Sun', name:'Mobility\n& Recovery',  dur:'25 min', img:IMGS.mobility,  wIdx:3 },
+];
+const WK_TEMPLATE_2 = [
+  { day:'Mon', name:'Upper Body\nFocus',     dur:'50 min', img:IMGS.upper,     wIdx:0 },
+  { day:'Tue', name:'Rest Day',              dur:'Recovery', img:IMGS.rest,    wIdx:-1 },
+  { day:'Wed', name:'Lower Body\n& Glutes',  dur:'50 min', img:IMGS.lower,     wIdx:1 },
+  { day:'Thu', name:'Rest Day',              dur:'Recovery', img:IMGS.rest,    wIdx:-1 },
+  { day:'Fri', name:'Full Body\nStrength',   dur:'50 min', img:IMGS.strength,  wIdx:2 },
+  { day:'Sat', name:'Cardio\n& Core',        dur:'35 min', img:IMGS.cardio,    wIdx:1 },
+  { day:'Sun', name:'Mobility\n& Recovery',  dur:'25 min', img:IMGS.mobility,  wIdx:3 },
+];
+
+const PHASES = [
   {
-    name: 'Phase 1 — Foundation', color: '#A8B8A0', weeks: '1–4',
-    weeks: [
-      { num:1, status:'done', workouts:[
-        { day:'Mon', name:'Full Body\nStrength A', dur:'45 min', img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop', wIdx:0 },
-        { day:'Tue', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1 },
-        { day:'Wed', name:'Cardio\n& Core', dur:'35 min', img:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop', wIdx:1 },
-        { day:'Thu', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1 },
-        { day:'Fri', name:'Full Body\nStrength B', dur:'45 min', img:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', wIdx:2 },
-        { day:'Sat', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1 },
-        { day:'Sun', name:'Mobility\n& Recovery', dur:'25 min', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop', wIdx:3 },
-      ]},
-      { num:2, status:'current', workouts:[
-        { day:'Mon', name:'Full Body\nStrength A', dur:'45 min', img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop', wIdx:0, done:true },
-        { day:'Tue', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1, done:true },
-        { day:'Wed', name:'Cardio\n& Core', dur:'35 min', img:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop', wIdx:1, today:true },
-        { day:'Thu', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1 },
-        { day:'Fri', name:'Full Body\nStrength B', dur:'45 min', img:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', wIdx:2 },
-        { day:'Sat', name:'Rest Day', dur:'Recovery', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=400&fit=crop', wIdx:-1 },
-        { day:'Sun', name:'Mobility\n& Recovery', dur:'25 min', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop', wIdx:3 },
-      ]},
+    name:'Phase 1 — Foundation', color:'#A8B8A0',
+    bg:'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=800&h=400&fit=crop',
+    weeks:[
+      { num:1, status:'done',    workouts: WK_TEMPLATE_1.map(w=>({...w, done:true})) },
+      { num:2, status:'current', workouts: WK_TEMPLATE_1.map((w,i)=>({...w, done:i<1, today:i===2})) },
       { num:3, status:'locked' },
       { num:4, status:'locked' },
     ]
   },
   {
-    name: 'Phase 2 — Build', color: '#C9A86A', weeks: '5–8',
-    weeks: [
-      { num:5, status:'locked' },
-      { num:6, status:'locked' },
-      { num:7, status:'locked' },
-      { num:8, status:'locked' },
+    name:'Phase 2 — Build', color:'#C9A86A',
+    bg:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=400&fit=crop',
+    weeks:[
+      { num:5,  status:'locked' },
+      { num:6,  status:'locked' },
+      { num:7,  status:'locked' },
+      { num:8,  status:'locked' },
     ]
   },
   {
-    name: 'Phase 3 — Peak', color: '#D4A8A0', weeks: '9–12',
-    weeks: [
+    name:'Phase 3 — Peak', color:'#D4A8A0',
+    bg:'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&h=400&fit=crop',
+    weeks:[
       { num:9,  status:'locked' },
       { num:10, status:'locked' },
       { num:11, status:'locked' },
@@ -694,93 +710,97 @@ const PHASE_DATA = [
   }
 ];
 
-// ── BUILD PHASE CARDS ──
+// ── BUILD ──
 function buildPhases() {
   const container = document.getElementById('phases-container');
   let html = '';
 
-  PHASE_DATA.forEach((phase, pi) => {
-    html += `<div class="phase-card">
-      <div class="phase-card-header">
-        <div class="phase-card-color" style="background:${phase.color}"></div>
-        <div class="phase-card-name">${phase.name}</div>
-        <div class="phase-card-weeks">Weeks ${phase.weeks}</div>
-      </div>`;
+  PHASES.forEach((phase, pi) => {
+    html += `
+    <div class="phase-card">
+      <div class="phase-bg" style="background-image:url('${phase.bg}')"></div>
+      <div class="phase-bg-overlay"></div>
+      <div class="phase-inner">
+        <div class="phase-header">
+          <div class="phase-dot" style="background:${phase.color}"></div>
+          <div class="phase-name">${phase.name}</div>
+          <div class="phase-wks">Weeks ${phase.weeks[0].num}–${phase.weeks[phase.weeks.length-1].num}</div>
+        </div>`;
 
     phase.weeks.forEach((week, wi) => {
-      const bannerId = `banner-${pi}-${wi}`;
-      const accordId = `accord-${pi}-${wi}`;
-      const isOpen = week.status === 'current' || week.status === 'done';
+      const bid = `b${pi}-${wi}`, aid = `a${pi}-${wi}`, sid = `s${pi}-${wi}`;
+      const isOpen = week.status === 'done' || week.status === 'current';
       const isLocked = week.status === 'locked';
+      const doneCt = week.workouts ? week.workouts.filter(w=>w.done&&w.wIdx>=0).length : 0;
+      const totalCt = week.workouts ? week.workouts.filter(w=>w.wIdx>=0).length : 0;
+      const info = week.workouts ? `${doneCt} of ${totalCt} workouts` : '';
 
-      let statusBadge = '';
-      if (week.status === 'done')    statusBadge = `<span class="week-status-done">✓ Done</span>`;
-      if (week.status === 'current') statusBadge = `<span class="week-status-current">Current</span>`;
-      if (week.status === 'locked')  statusBadge = `<i class="ti ti-lock week-status-lock"></i>`;
+      let badge = '';
+      if (week.status==='done')    badge = `<span class="wg-badge-done">✓ Done</span>`;
+      if (week.status==='current') badge = `<span class="wg-badge-current">Current</span>`;
+      if (week.status==='locked')  badge = `<i class="ti ti-lock wg-badge-lock"></i>`;
 
-      html += `<div class="week-banner ${isOpen ? 'open' : ''} ${isLocked ? 'locked-banner' : ''}"
-        id="${bannerId}" onclick="${isLocked ? '' : `toggleWeek('${bannerId}','${accordId}')`}">
-        <div class="week-banner-row">
-          <i class="ti ti-chevron-right week-banner-arrow" ${isLocked ? 'style="opacity:0"' : ''}></i>
-          <div class="week-banner-num">Week ${week.num}</div>
-          <div class="week-banner-status">${week.workouts ? week.workouts.filter(w=>!w.today&&w.wIdx>=0&&w.done).length + ' of ' + week.workouts.filter(w=>w.wIdx>=0).length + ' done' : ''}</div>
-          ${statusBadge}
+      html += `
+      <div class="week-glass ${isOpen?'open':''} ${isLocked?'locked-week':''}" id="${bid}"
+        ${!isLocked ? `onclick="toggleWeek('${bid}','${aid}')"` : ''}>
+        <div class="week-glass-row">
+          <i class="ti ti-chevron-right week-glass-arrow"></i>
+          <div class="week-glass-num">Week ${week.num}</div>
+          <div class="week-glass-info">${info}</div>
+          ${badge}
         </div>
-        <div class="week-accordion ${isOpen ? 'open' : ''}" id="${accordId}">
-          ${week.workouts ? buildWeekRow(week, `scroll-${pi}-${wi}`) : ''}
+        <div class="week-accord ${isOpen?'open':''}" id="${aid}">
+          ${week.workouts ? buildRow(week, sid) : ''}
         </div>
       </div>`;
     });
 
-    html += `</div>`;
+    html += `</div></div>`;
   });
 
   container.innerHTML = html;
 
-  // Auto-scroll current week to today
+  // scroll current week (week 2) to today
   setTimeout(() => {
-    const currentScroll = document.querySelector('.wt-scroll[id^="scroll-0-1"]');
-    if (currentScroll) currentScroll.scrollLeft = 2 * (110 + 7) - 55;
-  }, 100);
+    const s = document.getElementById('s0-1');
+    if (s) s.scrollLeft = 2 * (110 + 7) - 55;
+  }, 150);
 }
 
-function buildWeekRow(week, scrollId) {
-  let h = `<div class="wt-scroll" id="${scrollId}"><div class="wt-row">`;
+function buildRow(week, sid) {
+  let h = `<div class="wt-scroll" id="${sid}"><div class="wt-row">`;
   week.workouts.forEach(wo => {
-    const isRest = wo.wIdx === -1;
-    const isDone = wo.done;
-    const isToday = wo.today;
+    const isRest   = wo.wIdx === -1;
+    const isDone   = !!wo.done;
+    const isToday  = !!wo.today;
     const isLocked = !isDone && !isToday && !isRest && week.status !== 'done';
-    const ovClass = isDone ? 'done-ov' : isLocked ? 'lock-ov' : '';
-    const clickable = !isRest && !isLocked;
-    const name = wo.name.replace('\n','<br>');
+    const ov = isDone ? 'done-ov' : isLocked ? 'lock-ov' : '';
+    const nm = wo.name.replace(/\n/g,'<br>');
+    const click = (!isRest && !isLocked) ? `onclick="openPreview(${wo.wIdx})"` : '';
 
-    h += `<div class="wt ${isToday ? 'today-wt' : ''} ${isLocked ? 'locked-wt' : ''}"
-      ${clickable ? `onclick="openPreview(${wo.wIdx})"` : ''}>
+    h += `<div class="wt ${isToday?'today-wt':''} ${isLocked?'locked-wt':''}" ${click}>
       <div class="wt-bg" style="background-image:url('${wo.img}')"></div>
-      <div class="wt-ov ${ovClass}"></div>
+      <div class="wt-ov ${ov}"></div>
       <div class="wt-inner">
-        <div class="wt-day">${wo.day}${isToday ? ' · Today' : ''}</div>
-        <div>
-          <div class="wt-name">${name}</div>
-          <div class="wt-dur">${wo.dur}</div>
-        </div>
+        <div class="wt-day">${wo.day}${isToday?' · Today':''}</div>
+        <div><div class="wt-name">${nm}</div><div class="wt-dur">${wo.dur}</div></div>
       </div>
       ${isDone ? '<div class="wt-tick"><i class="ti ti-check"></i></div>' : ''}
-      ${isLocked && !isRest ? '<div class="wt-lk"><i class="ti ti-lock"></i></div>' : ''}
+      ${isLocked&&!isRest ? '<div class="wt-lk"><i class="ti ti-lock"></i></div>' : ''}
     </div>`;
   });
   h += `</div></div>`;
   return h;
 }
 
-function toggleWeek(bannerId, accordId) {
-  const banner = document.getElementById(bannerId);
-  const accord = document.getElementById(accordId);
-  if (!banner || !accord) return;
-  const isOpen = banner.classList.contains('open');
-  banner.classList.toggle('open', !isOpen);
-  accord.classList.toggle('open', !isOpen);
+function toggleWeek(bid, aid) {
+  const b = document.getElementById(bid);
+  const a = document.getElementById(aid);
+  if (!b || !a) return;
+  const open = b.classList.contains('open');
+  b.classList.toggle('open', !open);
+  a.classList.toggle('open', !open);
+  if (navigator.vibrate) navigator.vibrate(6);
 }
 
 buildPhases();
