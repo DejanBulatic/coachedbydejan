@@ -138,12 +138,12 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   margin-bottom:9px; overflow:hidden;
   backdrop-filter:blur(8px);
   box-shadow:0 2px 10px rgba(160,140,180,0.10);
-  cursor:pointer; transition:transform 0.12s ease;
+  transition:transform 0.12s ease;
   -webkit-user-select:none; user-select:none;
+  touch-action:manipulation;
 }
 .day-banner:active { transform:scale(0.98); }
-.day-banner.rest-banner { cursor:default; opacity:0.72; }
-.day-banner.rest-banner:active { transform:none; }
+.day-banner.rest-banner { opacity:0.72; }
 .day-banner.today-banner { border:2px solid #1e1a26; box-shadow:0 4px 16px rgba(0,0,0,0.13); }
 
 .db-thumb {
@@ -239,6 +239,7 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#f5f0fa; ov
   font-family:'Inter',sans-serif; font-size:17px; font-weight:700;
   cursor:pointer; letter-spacing:0.02em; transition:transform 0.1s;
   display:flex; align-items:center; justify-content:center; gap:10px;
+  touch-action:manipulation;
 }
 .start-btn:active { transform:scale(0.98); }
 .start-btn i { font-size:18px; }
@@ -718,26 +719,28 @@ function buildWeekCard(wNum) {
   let html = `<div class="phase-divider">${wk.phase} · Week ${wNum}</div>`;
 
   wk.days.forEach((day, di) => {
-    const isRest   = day.wIdx === -1;
-    const isDone   = wk.status === 'done' || (wk.doneDays && wk.doneDays.includes(di));
-    const isToday  = wk.status === 'current' && wk.today === di;
-    const isLocked = wk.status === 'locked' && !isRest;
-    const ovClass  = isDone ? 'done-ov' : isLocked ? 'lock-ov' : '';
-    const click    = (!isRest && !isLocked) ? `onclick="openPreview(${day.wIdx})"` : '';
+    const isRest    = day.wIdx === -1;
+    const isDone    = wk.status === 'done' || (wk.doneDays && wk.doneDays.includes(di));
+    const isToday   = wk.status === 'current' && wk.today === di;
+    const isFuture  = wk.status === 'current' && !isDone && !isToday && !isRest;
+    const isLocked  = wk.status === 'locked' && !isRest;
+    const isClickable = !isRest && !isLocked && !isFuture;
+    const ovClass   = isDone ? 'done-ov' : (isLocked || isFuture) ? 'lock-ov' : '';
+    const click     = isClickable ? `onclick="openPreview(${day.wIdx})"` : '';
 
-    html += `<div class="day-banner ${isRest?'rest-banner':''} ${isToday?'today-banner':''}" ${click}>
+    html += `<div class="day-banner ${isRest?'rest-banner':''} ${isToday?'today-banner':''}" ${click} style="cursor:${isClickable?'pointer':'default'}">
       <div class="db-thumb">
         <div class="db-thumb-bg" style="background-image:url('${day.img}')"></div>
         <div class="db-thumb-ov ${ovClass}"></div>
         ${isDone ? '<div class="db-tick"><i class="ti ti-check"></i></div>' : ''}
-        ${isLocked ? '<div class="db-lock"><i class="ti ti-lock"></i></div>' : ''}
+        ${(isLocked||isFuture)&&!isRest ? '<div class="db-lock"><i class="ti ti-lock"></i></div>' : ''}
       </div>
       <div class="db-info">
         <div class="db-day ${isToday?'today-lbl':''}">${DAYS[di]}${isToday?' · Today':''}</div>
         <div class="db-name">${day.name}</div>
         <div class="db-meta">${day.dur}${day.exs ? ' · ' + day.exs : ''}</div>
       </div>
-      ${!isRest && !isLocked ? '<i class="ti ti-chevron-right db-chevron"></i>' : ''}
+      ${isClickable ? '<i class="ti ti-chevron-right db-chevron"></i>' : ''}
     </div>`;
   });
 
