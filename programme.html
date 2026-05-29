@@ -763,7 +763,6 @@ setTimeout(() => {
   if (t) t.scrollIntoView({ behavior:'instant', block:'nearest', inline:'center' });
 }, 60);
 
-// ── SCREEN NAVIGATION ──
 // ── WORKOUT CARD IMAGES ──
 const CARD_IMAGES = [
   { local:'images/bg-5.jpg', fb:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=260&fit=crop' },
@@ -790,6 +789,7 @@ function showScreen(id, dir) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const nav = document.getElementById('main-nav');
   const target = document.getElementById('screen-' + id);
+  if (!target) return;
   target.classList.add('active');
   target.className = target.className.replace(' slide-in-r','').replace(' slide-in-l','');
   void target.offsetWidth;
@@ -799,6 +799,7 @@ function showScreen(id, dir) {
 
 // ── OVERVIEW → PREVIEW ──
 function openPreview(idx) {
+  if (idx === undefined || idx === null || idx < 0 || idx >= WORKOUTS.length) return;
   currentWorkoutIdx = idx;
   const w = WORKOUTS[idx];
   document.getElementById('preview-name').textContent = w.name;
