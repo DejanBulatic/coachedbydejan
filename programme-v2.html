@@ -23,16 +23,15 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 }
 
 /* ── SCREENS ── */
-.screen { position:fixed; inset:0; z-index:10; display:none; flex-direction:column; }
+.screen { position:fixed; inset:0; z-index:10; display:none; flex-direction:column; overflow:hidden; }
 .screen.active { display:flex; }
+#screen-overview.active { display:block; overflow-y:auto; overflow-x:hidden; }
 
 /* ── PROGRAMME OVERVIEW — DIRECTION A ── */
 #screen-overview {
   overflow-y:auto;
   overflow-x:hidden;
   padding-bottom:100px;
-  display:block !important;
-  position:fixed; inset:0; z-index:10;
 }
 #screen-overview::-webkit-scrollbar { display:none; }
 
@@ -758,7 +757,7 @@ function createDrum(id, startVal, min, max, step, label, unit) {
   for (let v = min; v <= max; v = Math.round((v+step)*100)/100) vals.push(v);
   let selIdx = vals.findIndex(v => Math.abs(v-startVal) < step*0.5);
   if (selIdx < 0) selIdx = 0;
-  const ITEM_H = 52;
+  const ITEM_H = 44;
 
   const col = document.createElement('div');
   col.className = 'drum-col';
@@ -901,12 +900,23 @@ function confirmExitWorkout() { stopRestTimer(); showScreen('overview','l'); }
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
 function getAudioCtx() {
-  if (!audioCtx) audioCtx = new AudioCtx();
+  if (!audioCtx) {
+    try { audioCtx = new AudioCtx(); } catch(e) { return null; }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(()=>{});
+  }
   return audioCtx;
 }
+// Init audio context on first touch so it works on iOS
+document.addEventListener('touchstart', function initAudio() {
+  getAudioCtx();
+  document.removeEventListener('touchstart', initAudio);
+}, { passive: true, once: true });
 function playTick() {
   try {
     const ctx = getAudioCtx();
+    if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -919,6 +929,7 @@ function playTick() {
 function playRestStart() {
   try {
     const ctx = getAudioCtx();
+    if (!ctx) return;
     [440, 350].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -934,6 +945,7 @@ function playRestStart() {
 function playRestEnd() {
   try {
     const ctx = getAudioCtx();
+    if (!ctx) return;
     [350, 440, 550].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -949,6 +961,7 @@ function playRestEnd() {
 function playSetDone() {
   try {
     const ctx = getAudioCtx();
+    if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -961,6 +974,7 @@ function playSetDone() {
 function playWorkoutDone() {
   try {
     const ctx = getAudioCtx();
+    if (!ctx) return;
     [523, 659, 784, 1047].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
