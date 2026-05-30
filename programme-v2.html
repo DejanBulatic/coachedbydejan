@@ -278,19 +278,19 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; oversc
 .wm-progress-text { font-size:12px; font-weight:600; color:#b0a8bc; letter-spacing:0.06em; margin-bottom:6px; }
 .wm-prog-bar { height:4px; background:rgba(0,0,0,0.08); border-radius:2px; overflow:hidden; }
 .wm-prog-fill { height:100%; background:linear-gradient(to right,#A8B8A0,#4140cc); border-radius:2px; transition:width 0.4s ease; }
-.ex-panel { flex:1; padding:12px 20px 0; display:flex; flex-direction:column; overflow:hidden; }
+.ex-panel { flex:1; padding:16px 20px 0; display:flex; flex-direction:column; overflow:hidden; }
 .ex-name-row { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
 .ex-name { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:600; color:#1e1a26; line-height:1.1; flex:1; }
 .video-btn { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.8); border:none; color:#9088a0; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.08); touch-action:manipulation; }
 .ex-instructions { font-size:14px; color:#a898b8; font-style:italic; margin-bottom:16px; cursor:pointer; touch-action:manipulation; }
 .ex-instructions.expanded { color:#6a6080; }
-.sets-dots { display:flex; gap:6px; margin-bottom:12px; }
+.sets-dots { display:flex; gap:6px; margin-bottom:32px; }
 .set-dot { height:8px; border-radius:4px; background:rgba(0,0,0,0.08); transition:all 0.3s ease; flex:1; }
 .set-dot.done { background:#A8B8A0; }
 .set-dot.active { background:#1e1a26; }
 
 /* Drums */
-.drums-wrap { display:flex; flex-direction:column; gap:14px; margin-bottom:20px; flex-shrink:0; }
+.drums-wrap { display:flex; flex-direction:column; gap:16px; flex-shrink:0; }
 .drum-col { display:flex; flex-direction:row; align-items:center; gap:12px; flex-shrink:0; }
 .drum-label { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.1em; text-transform:uppercase; width:52px; text-align:right; flex-shrink:0; }
 .drum { flex:1; height:120px; position:relative; background:rgba(255,255,255,0.9); border-radius:18px; box-shadow:0 4px 16px rgba(160,140,180,0.15); overflow:hidden; touch-action:none; }
@@ -302,9 +302,9 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; oversc
 .drum-item.near { font-size:22px; color:#8880a0; }
 .drum-unit { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.08em; text-transform:uppercase; width:32px; flex-shrink:0; }
 
-.mark-btn { width:100%; padding:20px; background:#1e1a26; color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; flex-shrink:0; margin:0 0 10px; touch-action:manipulation; }
+.mark-btn { width:100%; padding:20px; background:#1e1a26; color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; flex-shrink:0; margin-top:auto; margin-bottom:max(20px, env(safe-area-inset-bottom)); touch-action:manipulation; }
 .mark-btn:active { transform:scale(0.98); }
-.finish-btn { display:none; width:100%; padding:20px; background:linear-gradient(135deg,#A8B8A0,#5c8c5c); color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; flex-shrink:0; margin-bottom:10px; touch-action:manipulation; }
+.finish-btn { display:none; width:100%; padding:20px; background:linear-gradient(135deg,#A8B8A0,#5c8c5c); color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; flex-shrink:0; margin-top:auto; margin-bottom:max(20px, env(safe-area-inset-bottom)); touch-action:manipulation; }
 .finish-btn:active { transform:scale(0.98); }
 
 /* Rest timer sheet */
