@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
-html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
+html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; overscroll-behavior-x:contain; }
 
 /* ── BACKGROUND ── */
 .bg {
@@ -50,7 +50,7 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 /* ── TODAY HERO ── */
 .today-hero {
   position:relative;
-  height:58vh; min-height:320px; max-height:480px;
+  height:calc(58vh - 90px); min-height:280px; max-height:400px;
   flex-shrink:0; overflow:hidden;
 }
 .today-hero-bg {
@@ -554,6 +554,7 @@ const PHASE_CLASS = { Foundation:'tab-foundation', Build:'tab-build', Peak:'tab-
 let currentWorkoutIdx = 1;
 let currentExIdx = 0, currentSetIdx = 0, setsDone = [];
 let restTimer = null, restSeconds = 0, restTotal = 0;
+let restActive = false;
 let progExpanded = false;
 let activeWeekTab = 2;
 const drumState = {};
@@ -795,28 +796,42 @@ function createDrum(id, startVal, min, max, step, label, unit) {
   }
   setTimeout(() => { list.style.transition = 'none'; snapTo(currentIdx); }, 60);
 
-  let startY=0, startOffset=0, isDragging=false, velocity=0, lastY=0, lastT=0;
+  let startY=0, startOffset=0, isDragging=false, velocity=0, lastY=0, lastT=0, lastTickIdx=currentIdx;
 
   function onStart(y) {
+    if (restActive) return;
     isDragging = true;
     startY = y; lastY = y; lastT = Date.now(); velocity = 0;
     const t = new DOMMatrix(getComputedStyle(list).transform);
     startOffset = t.m42;
     list.style.transition = 'none';
+    lastTickIdx = currentIdx;
   }
   function onMove(y) {
     if (!isDragging) return;
     const now = Date.now();
     velocity = (y - lastY) / (now - lastT + 1);
     lastY = y; lastT = now;
-    list.style.transform = `translateY(${startOffset + (y - startY)}px)`;
+    const newOffset = startOffset + (y - startY);
+    list.style.transform = `translateY(${newOffset}px)`;
+    // Determine which item is centred right now
+    const h = drumEl.offsetHeight || 120;
+    const centre = h/2 - ITEM_H/2;
+    let idx = Math.round((centre - newOffset) / ITEM_H);
+    idx = Math.max(0, Math.min(vals.length-1, idx));
+    if (idx !== lastTickIdx) {
+      lastTickIdx = idx;
+      updateItems(idx);             // live-highlight the centred value
+      playTick();                   // tick per number (synchronous)
+      if (navigator.vibrate) navigator.vibrate(3);
+    }
   }
   function onEnd() {
     if (!isDragging) return;
     isDragging = false;
     const t = new DOMMatrix(getComputedStyle(list).transform);
     const offset = t.m42;
-    const h = drumEl.offsetHeight || 200;
+    const h = drumEl.offsetHeight || 120;
     const centre = h/2 - ITEM_H/2;
     let rawIdx = (centre - offset) / ITEM_H;
     rawIdx -= velocity * 5;
@@ -860,6 +875,7 @@ function advanceSet() {
 }
 
 function startRestTimer(seconds, onComplete) {
+  restActive = true;
   restSeconds = seconds; restTotal = seconds;
   document.getElementById('rest-panel').classList.add('visible');
   updateRestDisplay(); playRestStart();
@@ -877,9 +893,9 @@ function updateRestDisplay() {
   if (arc) arc.style.strokeDashoffset = 345.4*(1-restSeconds/restTotal);
 }
 
-function stopRestTimer() { if(restTimer){clearInterval(restTimer);restTimer=null;} }
+function stopRestTimer() { if(restTimer){clearInterval(restTimer);restTimer=null;} restActive=false; }
 function addRestTime(s) { restSeconds+=s; restTotal+=s; if(navigator.vibrate)navigator.vibrate(8); }
-function skipRest() { stopRestTimer(); document.getElementById('rest-panel').classList.remove('visible'); document.getElementById('mark-btn').style.display='flex'; advanceSet(); }
+function skipRest() { stopRestTimer(); restActive=false; document.getElementById('rest-panel').classList.remove('visible'); document.getElementById('mark-btn').style.display='flex'; advanceSet(); }
 function toggleInstructions() {
   const el = document.getElementById('wm-instructions');
   const ex = WORKOUTS[currentWorkoutIdx].exercises[currentExIdx];
