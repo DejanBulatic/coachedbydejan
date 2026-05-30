@@ -14,12 +14,12 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 .bg {
   position:fixed; inset:0; z-index:0;
   background:
-    radial-gradient(ellipse at 15% 0%, #f5d8c8 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 8%, #e8d0f0 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 45%, #faf0e8 0%, transparent 55%),
-    radial-gradient(ellipse at 10% 85%, #f0e8d8 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 80%, #ead8f0 0%, transparent 45%);
-  background-color:#faf0ec;
+    radial-gradient(ellipse at 15% 0%, #e8c8b4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 8%, #d8c0e8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 45%, #f0e4d8 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 85%, #e4d8c8 0%, transparent 45%),
+    radial-gradient(ellipse at 90% 80%, #dcc8e4 0%, transparent 45%);
+  background-color:#ede4dc;
 }
 
 /* ── SCREENS ── */
@@ -29,7 +29,10 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 /* ── PROGRAMME OVERVIEW — DIRECTION A ── */
 #screen-overview {
   overflow-y:auto;
-  padding-bottom:90px;
+  overflow-x:hidden;
+  padding-bottom:100px;
+  display:block !important;
+  position:fixed; inset:0; z-index:10;
 }
 #screen-overview::-webkit-scrollbar { display:none; }
 
@@ -132,7 +135,7 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 
 .day-pill {
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
-  width:44px; height:72px; border-radius:16px;
+  width:80px; height:80px; border-radius:18px;
   background:rgba(255,255,255,0.75);
   border:1.5px solid rgba(200,190,220,0.3);
   backdrop-filter:blur(8px);
@@ -187,8 +190,8 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 .pob-sub { font-size:12px; color:#a898b8; }
 .pob-chevron { color:#c0b8cc; font-size:18px; transition:transform 0.25s ease; }
 .pob-chevron.open { transform:rotate(90deg); }
-.prog-expanded { overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1); max-height:0; }
-.prog-expanded.open { max-height:1200px; }
+.prog-expanded { display:none; }
+.prog-expanded.open { display:block; }
 .prog-expanded-inner { padding:10px 16px 16px; }
 
 /* Week tabs inside expanded */
@@ -268,7 +271,7 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 
 /* ── WORKOUT MODE ── */
 #screen-workout { overflow:hidden; position:relative; }
-#screen-workout::before { content:''; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 0% 0%, #c8e8d8 0%, transparent 50%), radial-gradient(ellipse at 100% 10%, #d8e8f8 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #f0f8f0 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, #d8f0e8 0%, transparent 45%); background-color:#eef8f4; pointer-events:none; }
+#screen-workout::before { content:''; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 0% 0%, #a8d4bc 0%, transparent 50%), radial-gradient(ellipse at 100% 10%, #b8d4ec 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #d8f0e4 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, #b4e0cc 0%, transparent 45%); background-color:#d4eee0; pointer-events:none; }
 #screen-workout > * { position:relative; z-index:1; }
 .wm-header { padding:52px 20px 10px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
 .wm-back { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.8); border:none; color:#1e1a26; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.08); touch-action:manipulation; }
@@ -276,13 +279,13 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 .wm-progress-text { font-size:12px; font-weight:600; color:#b0a8bc; letter-spacing:0.06em; margin-bottom:6px; }
 .wm-prog-bar { height:4px; background:rgba(0,0,0,0.08); border-radius:2px; overflow:hidden; }
 .wm-prog-fill { height:100%; background:linear-gradient(to right,#A8B8A0,#4140cc); border-radius:2px; transition:width 0.4s ease; }
-.ex-panel { flex:1; padding:8px 20px 0; display:flex; flex-direction:column; overflow:hidden; }
+.ex-panel { flex:1; padding:12px 20px 0; display:flex; flex-direction:column; overflow:hidden; }
 .ex-name-row { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
-.ex-name { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:600; color:#1e1a26; line-height:1.1; flex:1; }
+.ex-name { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:600; color:#1e1a26; line-height:1.1; flex:1; }
 .video-btn { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.8); border:none; color:#9088a0; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.08); touch-action:manipulation; }
 .ex-instructions { font-size:14px; color:#a898b8; font-style:italic; margin-bottom:16px; cursor:pointer; touch-action:manipulation; }
 .ex-instructions.expanded { color:#6a6080; }
-.sets-dots { display:flex; gap:6px; margin-bottom:16px; }
+.sets-dots { display:flex; gap:6px; margin-bottom:12px; }
 .set-dot { height:8px; border-radius:4px; background:rgba(0,0,0,0.08); transition:all 0.3s ease; flex:1; }
 .set-dot.done { background:#A8B8A0; }
 .set-dot.active { background:#1e1a26; }
@@ -306,14 +309,14 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
 .finish-btn:active { transform:scale(0.98); }
 
 /* Rest timer sheet */
-.rest-panel { position:absolute; bottom:0; left:0; right:0; z-index:10; background:rgba(255,255,255,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:28px 28px 0 0; border-top:1px solid rgba(200,190,220,0.3); padding:20px 20px 36px; display:flex; flex-direction:column; align-items:center; gap:16px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 -8px 32px rgba(160,140,180,0.18); }
+.rest-panel { position:absolute; bottom:0; left:0; right:0; z-index:10; background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:28px 28px 0 0; border-top:1px solid rgba(200,190,220,0.3); padding:16px 20px max(32px, env(safe-area-inset-bottom)); display:flex; flex-direction:column; align-items:center; gap:12px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 -8px 32px rgba(160,140,180,0.18); }
 .rest-panel.visible { transform:translateY(0); }
 .rest-label-top { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.12em; text-transform:uppercase; }
-.rest-ring-wrap { position:relative; width:160px; height:160px; display:flex; align-items:center; justify-content:center; }
+.rest-ring-wrap { position:relative; width:130px; height:130px; display:flex; align-items:center; justify-content:center; }
 .rest-ring-wrap svg { position:absolute; inset:0; transform:rotate(-90deg); }
 .rest-ring-track { fill:none; stroke:rgba(0,0,0,0.06); stroke-width:6; }
 .rest-ring-fill { fill:none; stroke:#A8B8A0; stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 1s linear; }
-.rest-big-time { font-family:'Inter',sans-serif; font-size:80px; font-weight:800; color:#1e1a26; letter-spacing:-0.04em; line-height:1; }
+.rest-big-time { font-family:'Inter',sans-serif; font-size:60px; font-weight:800; color:#1e1a26; letter-spacing:-0.04em; line-height:1; }
 .rest-big-time.urgent { color:#c07070; }
 .rest-actions { display:flex; gap:10px; width:100%; }
 .rest-snooze { flex:1; padding:16px; border-radius:16px; background:#f0eef8; border:none; font-family:'Inter',sans-serif; font-size:16px; font-weight:700; color:#6a5a8a; cursor:pointer; touch-action:manipulation; }
@@ -458,9 +461,9 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
   <div class="rest-panel" id="rest-panel">
     <div class="rest-label-top">Rest</div>
     <div class="rest-ring-wrap">
-      <svg viewBox="0 0 160 160" width="160" height="160">
-        <circle class="rest-ring-track" cx="80" cy="80" r="70"/>
-        <circle class="rest-ring-fill" id="rest-arc" cx="80" cy="80" r="70" stroke-dasharray="439.8" stroke-dashoffset="0"/>
+      <svg viewBox="0 0 130 130" width="130" height="130">
+        <circle class="rest-ring-track" cx="65" cy="65" r="55"/>
+        <circle class="rest-ring-fill" id="rest-arc" cx="65" cy="65" r="55" stroke-dasharray="345.4" stroke-dashoffset="0"/>
       </svg>
       <div class="rest-big-time" id="rest-time">60</div>
     </div>
@@ -654,6 +657,12 @@ function toggleProgramme() {
   progExpanded = !progExpanded;
   document.getElementById('prog-expanded').classList.toggle('open', progExpanded);
   document.getElementById('pob-chevron').classList.toggle('open', progExpanded);
+  if (progExpanded) {
+    setTimeout(() => {
+      const bar = document.getElementById('prog-bar');
+      if (bar) bar.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 50);
+  }
 }
 
 function startTodayWorkout() {
@@ -783,7 +792,7 @@ function createDrum(id, startVal, min, max, step, label, unit) {
     const val = vals[currentIdx];
     if (id==='kg') drumState.kgVal = val;
     else drumState.repsVal = val;
-    if (navigator.vibrate) navigator.vibrate(4); playTick();
+    if (navigator.vibrate) navigator.vibrate(4);
   }
   setTimeout(() => { list.style.transition = 'none'; snapTo(currentIdx); }, 60);
 
@@ -866,7 +875,7 @@ function updateRestDisplay() {
   const el = document.getElementById('rest-time');
   const arc = document.getElementById('rest-arc');
   if (el) { el.textContent = restSeconds; el.className = 'rest-big-time'+(restSeconds<=5?' urgent':''); }
-  if (arc) arc.style.strokeDashoffset = 439.8*(1-restSeconds/restTotal);
+  if (arc) arc.style.strokeDashoffset = 345.4*(1-restSeconds/restTotal);
 }
 
 function stopRestTimer() { if(restTimer){clearInterval(restTimer);restTimer=null;} }
@@ -972,10 +981,13 @@ document.addEventListener('touchstart', e => {
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
 document.addEventListener('touchend', e => {
+  // Only trigger if swipe started well inside the screen (not from edge)
+  // to avoid conflicting with iPhone native back gesture
+  if (touchStartX < 30) return;
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
   const activeScreen = document.querySelector('.screen.active');
-  if (dx > 60 && dy < 60 && activeScreen) {
+  if (dx > 80 && dy < 60 && activeScreen) {
     const id = activeScreen.id;
     if (id === 'screen-preview') showScreen('overview','l');
     else if (id === 'screen-workout') { stopRestTimer(); showScreen('overview','l'); }
