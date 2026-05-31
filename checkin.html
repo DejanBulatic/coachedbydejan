@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f0e8f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Check-in — Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
+
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color:#f5f0fa;
+}
+
+.screen { position:fixed; inset:0; z-index:10; display:flex; flex-direction:column; }
+#main { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:100px; }
+#main::-webkit-scrollbar { display:none; }
+
+/* Header — shared pattern */
+.ci-header { padding:52px 20px 4px; }
+.ci-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; color:#1e1a26; letter-spacing:-0.01em; }
+.ci-sub { font-size:13px; font-weight:500; color:#a898b8; margin-top:2px; }
+
+/* Card — shared pattern */
+.card { margin:14px 16px 0; background:rgba(255,255,255,0.85); border-radius:24px; padding:20px; backdrop-filter:blur(8px); box-shadow:0 2px 12px rgba(160,140,180,0.10); }
+.card-label { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:16px; }
+
+/* Inputs */
+.input-row { display:flex; gap:12px; }
+.input-group { flex:1; margin-bottom:16px; }
+.input-group:last-child { margin-bottom:0; }
+.input-lbl { font-size:12px; font-weight:600; color:#b8b0c8; letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:8px; }
+.big-input { width:100%; background:rgba(255,255,255,0.9); border:2px solid rgba(200,190,220,0.35); border-radius:14px; padding:16px; font-family:'Inter',sans-serif; font-size:20px; font-weight:600; color:#1e1a26; outline:none; -webkit-appearance:none; text-align:center; user-select:auto; -webkit-user-select:auto; transition:border-color 0.15s; }
+.big-input:focus { border-color:#A8B8A0; }
+.big-input::placeholder { color:#d0c8dc; }
+
+/* 1-10 scale */
+.scale-group { margin-bottom:22px; }
+.scale-group:last-child { margin-bottom:0; }
+.scale-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+.scale-name { font-size:15px; font-weight:700; color:#1e1a26; }
+.scale-val { font-size:14px; font-weight:700; color:#A8B8A0; }
+.scale-dots { display:flex; gap:5px; }
+.scale-dot { flex:1; height:36px; border-radius:10px; background:rgba(0,0,0,0.05); border:none; cursor:pointer; touch-action:manipulation; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:#c0b8cc; transition:all 0.12s; }
+.scale-dot.filled { color:white; }
+.scale-energy.filled { background:linear-gradient(135deg,#e8a860,#d4883a); }
+.scale-sleep.filled { background:linear-gradient(135deg,#8aa8d4,#6a86c0); }
+.scale-stress.filled { background:linear-gradient(135deg,#d48a9a,#c06a7a); }
+.scale-dot:active { transform:scale(0.9); }
+.scale-ends { display:flex; justify-content:space-between; margin-top:8px; }
+.scale-end { font-size:11px; color:#c0b8cc; }
+
+/* Notes */
+.notes-area { width:100%; background:rgba(255,255,255,0.9); border:2px solid rgba(200,190,220,0.35); border-radius:16px; padding:16px; font-family:'Inter',sans-serif; font-size:16px; font-weight:400; color:#1e1a26; outline:none; resize:none; min-height:110px; line-height:1.6; -webkit-appearance:none; user-select:auto; -webkit-user-select:auto; transition:border-color 0.15s; }
+.notes-area:focus { border-color:#A8B8A0; }
+.notes-area::placeholder { color:#d0c8dc; }
+
+/* Photo upload */
+.photo-upload { width:100%; aspect-ratio:16/10; border-radius:16px; background:rgba(0,0,0,0.04); border:2px dashed rgba(200,190,220,0.5); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; touch-action:manipulation; color:#b0a8bc; position:relative; overflow:hidden; }
+.photo-upload i { font-size:32px; }
+.photo-upload-text { font-size:13px; font-weight:600; }
+.photo-upload img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+/* Submit */
+.submit-btn { margin:18px 16px 0; width:calc(100% - 32px); padding:19px; background:#1e1a26; color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; touch-action:manipulation; display:flex; align-items:center; justify-content:center; gap:10px; }
+.submit-btn:active { transform:scale(0.98); }
+
+/* History */
+.history-item { background:rgba(255,255,255,0.6); border-radius:16px; padding:14px 16px; margin-bottom:8px; cursor:pointer; touch-action:manipulation; transition:background 0.15s; }
+.history-item:active { background:rgba(255,255,255,0.85); }
+.history-top { display:flex; align-items:center; justify-content:space-between; }
+.history-week { font-size:15px; font-weight:700; color:#1e1a26; }
+.history-date { font-size:12px; color:#a898b8; }
+.history-stats { display:flex; gap:14px; margin-top:8px; }
+.history-stat { font-size:12px; color:#6a6080; }
+.history-stat b { color:#1e1a26; font-weight:700; }
+.history-delta { font-size:11px; font-weight:700; color:#5c8c5c; }
+
+/* Success */
+.success-overlay { position:fixed; inset:0; z-index:100; background:rgba(245,240,250,0.98); display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px; text-align:center; }
+.success-overlay.visible { display:flex; }
+.success-emoji { font-size:64px; margin-bottom:18px; }
+.success-title { font-family:'Cormorant Garamond',serif; font-size:38px; font-weight:600; color:#1e1a26; margin-bottom:10px; }
+.success-sub { font-size:16px; color:#9088a0; line-height:1.6; margin-bottom:32px; max-width:300px; }
+.success-btn { width:100%; max-width:300px; padding:18px; background:#1e1a26; color:white; border:none; border-radius:18px; font-family:'Inter',sans-serif; font-size:17px; font-weight:800; cursor:pointer; touch-action:manipulation; }
+
+/* Bottom nav */
+.bottom-nav { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); width:calc(100% - 16px); max-width:374px; background:#e8e4df; border-radius:40px; display:flex; justify-content:space-between; align-items:center; padding:6px; z-index:50; box-shadow:0 4px 24px rgba(0,0,0,0.12); }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:8px 12px; border-radius:32px; transition:background 0.18s ease; flex:1; touch-action:manipulation; }
+.nav-item.active { background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.10); }
+.nav-item i { font-size:20px; color:#9e9890; }
+.nav-item.active i { color:#1e1a26; }
+.nav-label { font-size:9px; font-weight:600; color:#9e9890; letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; }
+.nav-item.active .nav-label { color:#1e1a26; }
+
+.hidden-file { display:none; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="screen">
+  <div id="main">
+
+    <div class="ci-header">
+      <div class="ci-title">Check-in</div>
+      <div class="ci-sub">Your weekly check-in · Week 6</div>
+    </div>
+
+    <!-- Body metrics -->
+    <div class="card">
+      <div class="card-label">This Week's Numbers</div>
+      <div class="input-group">
+        <span class="input-lbl">Weight (kg)</span>
+        <input class="big-input" type="number" inputmode="decimal" id="ci-weight" placeholder="67.8">
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <span class="input-lbl">Waist (cm)</span>
+          <input class="big-input" type="number" inputmode="decimal" id="ci-waist" placeholder="76">
+        </div>
+        <div class="input-group">
+          <span class="input-lbl">Hips (cm)</span>
+          <input class="big-input" type="number" inputmode="decimal" id="ci-hips" placeholder="98">
+        </div>
+      </div>
+    </div>
+
+    <!-- How are you feeling -->
+    <div class="card">
+      <div class="card-label">How Did This Week Feel?</div>
+
+      <div class="scale-group">
+        <div class="scale-head"><span class="scale-name">Energy</span><span class="scale-val" id="energy-val">—</span></div>
+        <div class="scale-dots" id="energy-dots"></div>
+        <div class="scale-ends"><span class="scale-end">Drained</span><span class="scale-end">Energised</span></div>
+      </div>
+
+      <div class="scale-group">
+        <div class="scale-head"><span class="scale-name">Sleep</span><span class="scale-val" id="sleep-val">—</span></div>
+        <div class="scale-dots" id="sleep-dots"></div>
+        <div class="scale-ends"><span class="scale-end">Poor</span><span class="scale-end">Great</span></div>
+      </div>
+
+      <div class="scale-group">
+        <div class="scale-head"><span class="scale-name">Stress</span><span class="scale-val" id="stress-val">—</span></div>
+        <div class="scale-dots" id="stress-dots"></div>
+        <div class="scale-ends"><span class="scale-end">Calm</span><span class="scale-end">Overwhelmed</span></div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="card">
+      <div class="card-label">A Note For Dejan</div>
+      <textarea class="notes-area" id="ci-notes" placeholder="How are you feeling about your progress? Anything you're struggling with or proud of?"></textarea>
+    </div>
+
+    <!-- Photo -->
+    <div class="card">
+      <div class="card-label">Progress Photo · Optional</div>
+      <div class="photo-upload" id="photo-upload" onclick="document.getElementById('ci-photo').click()">
+        <i class="ti ti-camera"></i>
+        <div class="photo-upload-text">Tap to add this week's photo</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitCheckin()">
+      <i class="ti ti-send"></i> Send Check-in to Dejan
+    </button>
+
+    <!-- History -->
+    <div class="card">
+      <div class="card-label">Past Check-ins</div>
+      <div id="history-list">
+        <div class="history-item">
+          <div class="history-top"><span class="history-week">Week 5</span><span class="history-date">7 days ago</span></div>
+          <div class="history-stats">
+            <span class="history-stat"><b>68.6</b> kg</span>
+            <span class="history-stat">Waist <b>78</b></span>
+            <span class="history-delta">↓ 0.9 kg</span>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-top"><span class="history-week">Week 4</span><span class="history-date">14 days ago</span></div>
+          <div class="history-stats">
+            <span class="history-stat"><b>69.5</b> kg</span>
+            <span class="history-stat">Waist <b>80</b></span>
+            <span class="history-delta">↓ 0.9 kg</span>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-top"><span class="history-week">Week 3</span><span class="history-date">21 days ago</span></div>
+          <div class="history-stats">
+            <span class="history-stat"><b>70.4</b> kg</span>
+            <span class="history-stat">Waist <b>81</b></span>
+            <span class="history-delta">↓ 0.8 kg</span>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-top"><span class="history-week">Week 2</span><span class="history-date">28 days ago</span></div>
+          <div class="history-stats">
+            <span class="history-stat"><b>71.2</b> kg</span>
+            <span class="history-stat">Waist <b>82</b></span>
+            <span class="history-delta">↓ 0.8 kg</span>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-top"><span class="history-week">Week 1</span><span class="history-date">35 days ago</span></div>
+          <div class="history-stats">
+            <span class="history-stat"><b>72.0</b> kg</span>
+            <span class="history-stat">Waist <b>82</b></span>
+            <span class="history-delta" style="color:#a898b8">Baseline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<input type="file" accept="image/*" capture="environment" class="hidden-file" id="ci-photo" onchange="onPhoto(event)">
+
+<!-- Success -->
+<div class="success-overlay" id="success">
+  <div class="success-emoji">🌿</div>
+  <div class="success-title">Check-in sent!</div>
+  <div class="success-sub">Dejan will review your week and get back to you with feedback and any adjustments.</div>
+  <button class="success-btn" onclick="document.getElementById('success').classList.remove('visible')">Done</button>
+</div>
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <div class="nav-item"><i class="ti ti-home"></i><div class="nav-label">Home</div></div>
+  <div class="nav-item"><i class="ti ti-barbell"></i><div class="nav-label">Programme</div></div>
+  <div class="nav-item"><i class="ti ti-apple"></i><div class="nav-label">Nutrition</div></div>
+  <div class="nav-item"><i class="ti ti-chart-bar"></i><div class="nav-label">Progress</div></div>
+  <div class="nav-item active"><i class="ti ti-clipboard-list"></i><div class="nav-label">Check-in</div></div>
+</div>
+
+<script>
+const scales = { energy:0, sleep:0, stress:0 };
+
+function buildScale(name) {
+  const wrap = document.getElementById(name + '-dots');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const b = document.createElement('button');
+    b.className = `scale-dot scale-${name}`;
+    b.textContent = i;
+    b.onclick = () => setScale(name, i);
+    wrap.appendChild(b);
+  }
+}
+function setScale(name, val) {
+  scales[name] = val;
+  const dots = document.getElementById(name + '-dots').children;
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].classList.toggle('filled', i < val);
+  }
+  document.getElementById(name + '-val').textContent = val + '/10';
+  if (navigator.vibrate) navigator.vibrate(5);
+}
+
+function onPhoto(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const up = document.getElementById('photo-upload');
+  up.innerHTML = `<img src="${url}" alt="">`;
+}
+
+function submitCheckin() {
+  // In production: POST to Supabase
+  document.getElementById('success').classList.add('visible');
+  if (navigator.vibrate) navigator.vibrate([10,40,10]);
+}
+
+buildScale('energy');
+buildScale('sleep');
+buildScale('stress');
+</script>
+</body>
+</html>
