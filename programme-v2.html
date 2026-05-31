@@ -685,9 +685,10 @@ function showScreen(id, dir) {
   void target.offsetWidth;
   target.classList.add(dir === 'r' ? 'slide-in-r' : 'slide-in-l');
   nav.style.display = id === 'workout' ? 'none' : 'flex';
-  // Update URL bar tint: neutral dark for the energetic workout screen, light elsewhere
+  // Reset URL bar to light when leaving the workout screen.
+  // The workout screen's tint is set per-exercise in setWorkoutBackground.
   const themeMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeMeta) themeMeta.setAttribute('content', id === 'workout' ? '#2a2a3a' : '#f0e8f4');
+  if (themeMeta && id !== 'workout') themeMeta.setAttribute('content', '#f0e8f4');
 }
 
 function openPreview(idx) {
@@ -804,11 +805,11 @@ function setWorkoutBackground(ex) {
   const stops = mood.stops.map(([pos, col]) =>
     `radial-gradient(ellipse at ${pos}, ${shiftHue(col, shift)} 0%, transparent 75%)`
   ).join(', ');
-  const fullBg = `${stops}, ${shiftHue(mood.base, shift)}`;
+  const baseShifted = shiftHue(mood.base, shift);
+  const fullBg = `${stops}, ${baseShifted}`;
   const bg1 = document.getElementById('wm-bg');
   const bg2 = document.getElementById('wm-bg2');
   if (!bg1 || !bg2) return;
-  // Paint the inactive layer, then crossfade to it
   if (activeBgLayer === 1) {
     bg2.style.background = fullBg;
     bg2.style.opacity = '1';
@@ -820,6 +821,9 @@ function setWorkoutBackground(ex) {
     bg2.style.opacity = '0';
     activeBgLayer = 1;
   }
+  // Match the URL bar tint to this exercise's mood — use the top-area colour
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', shiftHue(mood.stops[0][1], shift));
 }
 
 // ── DRUM PICKERS ──
