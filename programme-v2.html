@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f5f0fa">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Programme — Coached by Dejan</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -269,8 +272,8 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; oversc
 .start-btn:active { transform:scale(0.98); }
 
 /* ── WORKOUT MODE ── */
-#screen-workout { overflow:hidden; position:fixed; inset:0; background-color:#c87850; }
-#wm-bg { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:1; transition:opacity 0.5s ease; }
+#screen-workout { overflow:hidden; position:fixed; inset:0; background-color:#2a2a3a; }
+#wm-bg { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:1; transition:opacity 0.6s ease; }
 #screen-workout > .wm-header, #screen-workout > .ex-panel, #screen-workout > .rest-panel { position:relative; z-index:1; }
 .wm-header { padding:52px 20px 10px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
 .wm-back { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.8); border:none; color:#1e1a26; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.08); touch-action:manipulation; }
@@ -438,6 +441,7 @@ html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; oversc
 <!-- ══ WORKOUT MODE ══ -->
 <div class="screen" id="screen-workout">
   <div id="wm-bg"></div>
+  <div id="wm-bg2" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 0.6s ease"></div>
   <div class="wm-header">
     <button class="wm-back" onclick="confirmExitWorkout()">←</button>
     <div class="wm-progress-wrap">
@@ -790,20 +794,28 @@ function shiftHue(hex, deg) {
   return '#'+toHex(r2)+toHex(g2)+toHex(b2);
 }
 
+let activeBgLayer = 1;
 function setWorkoutBackground(ex) {
   const mood = MOODS[classifyExercise(ex)] || MOODS.strength;
   const shift = (currentExIdx * 12) - 18;
   const stops = mood.stops.map(([pos, col]) =>
     `radial-gradient(ellipse at ${pos}, ${shiftHue(col, shift)} 0%, transparent 75%)`
   ).join(', ');
-  const bg = document.getElementById('wm-bg');
-  if (bg) {
-    // Fade out, swap, fade in
-    bg.style.opacity = '0';
-    setTimeout(() => {
-      bg.style.background = `${stops}, ${shiftHue(mood.base, shift)}`;
-      bg.style.opacity = '1';
-    }, 200);
+  const fullBg = `${stops}, ${shiftHue(mood.base, shift)}`;
+  const bg1 = document.getElementById('wm-bg');
+  const bg2 = document.getElementById('wm-bg2');
+  if (!bg1 || !bg2) return;
+  // Paint the inactive layer, then crossfade to it
+  if (activeBgLayer === 1) {
+    bg2.style.background = fullBg;
+    bg2.style.opacity = '1';
+    bg1.style.opacity = '0';
+    activeBgLayer = 2;
+  } else {
+    bg1.style.background = fullBg;
+    bg1.style.opacity = '1';
+    bg2.style.opacity = '0';
+    activeBgLayer = 1;
   }
 }
 
