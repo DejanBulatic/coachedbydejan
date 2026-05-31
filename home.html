@@ -156,20 +156,19 @@ body {
   align-items: center;
 }
 .hero-card-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b0a0c8;
-  margin-bottom: 22px;
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1e1a26;
+  margin-bottom: 18px;
 }
 .hero-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
-  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
   color: #1e1a26;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
 }
 .hero-programme {
   font-size: 12px;
@@ -222,6 +221,26 @@ body {
   border-radius: 28px;
   padding: 20px 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+.gam-streak-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.gam-streak-label i { font-size: 15px; color: #C9A86A; }
+.gam-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin-bottom: 22px;
 }
 .gam-circles {
   display: flex;
@@ -663,6 +682,8 @@ body {
   <!-- 2. GAMIFICATION -->
   <div class="section reveal">
     <div class="gam-card tappable">
+      <div class="gam-streak-label"><i class="ti ti-sparkles"></i> Your accountability streak</div>
+      <div class="gam-headline" id="gam-headline">You're 2 sessions away from owning Week 3.</div>
       <div class="gam-circles">
 
         <div class="cw">
@@ -1136,7 +1157,51 @@ body {
 </div><!-- end page -->
 
 <script>
-// ── DAY PILL IMAGES ──
+// ── DYNAMIC GAM HEADLINE ──
+// Changes based on the client's current training situation.
+// In production, these inputs come from her real data (current week, day,
+// sessions done this week, sessions remaining, whether today is rest/training,
+// and whether she's returning after a missed day).
+const clientState = {
+  currentWeek: 3,
+  sessionsRemainingThisWeek: 2,
+  isRestDay: false,
+  isComeback: false,        // returning after a missed day
+  weekJustCompleted: false, // completed the final session of a week
+  streakDays: 7
+};
+
+function pickGamHeadline(s) {
+  // Priority order — most meaningful message wins
+  if (s.weekJustCompleted) {
+    return `Week ${s.currentWeek} — done. You showed up every time.`;
+  }
+  if (s.isComeback) {
+    return `Welcome back. One session is all it takes to be on track again.`;
+  }
+  if (s.isRestDay) {
+    return `Rest today. Your body grows stronger while you recover.`;
+  }
+  if (s.sessionsRemainingThisWeek === 1) {
+    return `One session away from owning Week ${s.currentWeek}.`;
+  }
+  if (s.sessionsRemainingThisWeek > 1) {
+    return `You're ${s.sessionsRemainingThisWeek} sessions away from owning Week ${s.currentWeek}.`;
+  }
+  // Default / streak celebration
+  if (s.streakDays >= 7) {
+    return `${s.streakDays} days strong. This is who you are now.`;
+  }
+  return `Let's make today count.`;
+}
+
+function updateGamHeadline() {
+  const el = document.getElementById('gam-headline');
+  if (el) el.textContent = pickGamHeadline(clientState);
+}
+updateGamHeadline();
+
+
 const restImg    = 'images/bg-8.jpg';
 const restFb     = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=200&h=320&fit=crop';
 const workoutImg = ['images/bg-5.jpg','images/bg-6.jpg','images/bg-7.jpg','images/bg-9.jpg'];
