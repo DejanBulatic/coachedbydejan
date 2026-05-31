@@ -685,6 +685,9 @@ function showScreen(id, dir) {
   void target.offsetWidth;
   target.classList.add(dir === 'r' ? 'slide-in-r' : 'slide-in-l');
   nav.style.display = id === 'workout' ? 'none' : 'flex';
+  // Update URL bar tint: neutral dark for the energetic workout screen, light elsewhere
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', id === 'workout' ? '#2a2a3a' : '#f0e8f4');
 }
 
 function openPreview(idx) {
