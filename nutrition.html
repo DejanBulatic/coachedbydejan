@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f0e8f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Nutrition — Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html,body { height:100%; font-family:'Inter',sans-serif; overflow:hidden; }
+
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color:#f5f0fa;
+}
+
+.screen { position:fixed; inset:0; z-index:10; display:flex; flex-direction:column; }
+
+#main {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding-bottom:100px;
+}
+#main::-webkit-scrollbar { display:none; }
+
+/* Header */
+.nut-header { padding:52px 20px 8px; display:flex; align-items:center; justify-content:space-between; }
+.nut-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; color:#1e1a26; letter-spacing:-0.01em; }
+.day-toggle { display:flex; background:rgba(255,255,255,0.7); border-radius:30px; padding:3px; backdrop-filter:blur(8px); }
+.day-toggle button { padding:7px 14px; border-radius:24px; border:none; background:transparent; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:#a898b8; cursor:pointer; touch-action:manipulation; transition:all 0.15s; }
+.day-toggle button.active { background:#1e1a26; color:white; }
+
+/* Hero ring */
+.cal-hero { padding:8px 20px 20px; display:flex; align-items:center; justify-content:center; gap:24px; }
+.cal-ring-wrap { position:relative; width:170px; height:170px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cal-ring-wrap svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.cal-ring-track { fill:none; stroke:rgba(0,0,0,0.06); stroke-width:11; }
+.cal-ring-fill { fill:none; stroke:url(#calGrad); stroke-width:11; stroke-linecap:round; stroke-dasharray:471; stroke-dashoffset:471; transition:stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1) 0.3s; }
+.cal-ring-inner { display:flex; flex-direction:column; align-items:center; position:relative; z-index:1; }
+.cal-consumed { font-family:'Inter',sans-serif; font-size:40px; font-weight:800; color:#1e1a26; letter-spacing:-0.03em; line-height:1; }
+.cal-target { font-size:13px; font-weight:500; color:#a898b8; margin-top:4px; }
+.cal-left-lbl { font-size:10px; font-weight:700; color:#A8B8A0; letter-spacing:0.1em; text-transform:uppercase; margin-top:6px; }
+
+/* Macros */
+.macros { padding:0 20px 18px; }
+.macro-row { margin-bottom:14px; }
+.macro-row:last-child { margin-bottom:0; }
+.macro-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+.macro-name { font-size:13px; font-weight:700; color:#1e1a26; }
+.macro-vals { font-size:12px; font-weight:500; color:#a898b8; }
+.macro-bar-track { height:8px; border-radius:4px; background:rgba(0,0,0,0.07); overflow:hidden; }
+.macro-bar-fill { height:100%; border-radius:4px; transition:width 1s ease 0.4s; }
+.macro-protein { background:linear-gradient(to right,#d48aa0,#c06a86); }
+.macro-carbs { background:linear-gradient(to right,#c9a86a,#b08a40); }
+.macro-fat { background:linear-gradient(to right,#8aa8c9,#6a86b0); }
+
+/* Section card */
+.card { margin:0 16px 14px; background:rgba(255,255,255,0.85); border-radius:24px; padding:20px; backdrop-filter:blur(8px); box-shadow:0 2px 12px rgba(160,140,180,0.10); }
+.card-label { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px; }
+
+/* Hydration */
+.hydration { display:flex; align-items:center; gap:8px; }
+.water-glasses { display:flex; gap:6px; flex:1; }
+.glass { flex:1; height:38px; border-radius:8px; background:rgba(0,0,0,0.06); border:2px solid transparent; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; touch-action:manipulation; }
+.glass.filled { background:linear-gradient(to top,#6aa8d4,#a8d4ec); }
+.glass i { font-size:15px; color:rgba(255,255,255,0.9); }
+.water-count { font-size:13px; font-weight:700; color:#6aa8d4; flex-shrink:0; width:54px; text-align:right; }
+
+/* Guidance grid */
+.guide-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.guide-item { background:rgba(255,255,255,0.5); border-radius:14px; padding:14px; }
+.guide-item-val { font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#1e1a26; letter-spacing:-0.02em; }
+.guide-item-lbl { font-size:11px; font-weight:600; color:#a898b8; margin-top:2px; }
+
+/* Snap meal button */
+.snap-btn { margin:0 16px 14px; width:calc(100% - 32px); padding:18px; background:#1e1a26; color:white; border:none; border-radius:20px; font-family:'Inter',sans-serif; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; touch-action:manipulation; box-shadow:0 4px 16px rgba(30,26,38,0.2); }
+.snap-btn:active { transform:scale(0.98); }
+.snap-btn i { font-size:20px; }
+
+/* Meals log */
+.meal-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05); }
+.meal-item:last-child { border-bottom:none; }
+.meal-thumb { width:48px; height:48px; border-radius:12px; background-size:cover; background-position:center; background-color:#e8e0f0; flex-shrink:0; }
+.meal-info { flex:1; }
+.meal-name { font-size:15px; font-weight:600; color:#1e1a26; }
+.meal-macros { font-size:12px; color:#a898b8; }
+.meal-cal { font-size:15px; font-weight:700; color:#1e1a26; flex-shrink:0; }
+
+/* Weekly bars */
+.week-bars { display:flex; align-items:flex-end; justify-content:space-between; gap:7px; height:130px; padding-top:10px; }
+.week-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:7px; height:100%; justify-content:flex-end; }
+.week-bar-track { width:100%; flex:1; display:flex; align-items:flex-end; border-radius:8px; overflow:hidden; background:rgba(0,0,0,0.04); position:relative; }
+.week-bar-fill { width:100%; border-radius:8px; transition:height 0.8s ease; }
+.wbf-under { background:linear-gradient(to top,#A8B8A0,#c0d0b8); }
+.wbf-over { background:linear-gradient(to top,#d48a8a,#e0a0a0); }
+.wbf-target-line { position:absolute; left:0; right:0; height:2px; background:rgba(30,26,38,0.25); z-index:2; }
+.week-bar-day { font-size:10px; font-weight:700; color:#a898b8; letter-spacing:0.04em; }
+.week-bar-day.today { color:#1e1a26; }
+
+/* ── CAMERA / ANALYSIS MODAL ── */
+.modal-overlay { position:fixed; inset:0; z-index:100; background:rgba(26,22,36,0.55); backdrop-filter:blur(4px); display:none; align-items:flex-end; }
+.modal-overlay.visible { display:flex; }
+.modal-sheet { width:100%; background:#faf6f2; border-radius:28px 28px 0 0; padding:24px 20px max(28px,env(safe-area-inset-bottom)); transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.34,1.3,0.64,1); max-height:90vh; overflow-y:auto; }
+.modal-overlay.visible .modal-sheet { transform:translateY(0); }
+.modal-handle { width:40px; height:4px; border-radius:2px; background:rgba(0,0,0,0.15); margin:0 auto 20px; }
+.modal-photo { width:100%; height:200px; border-radius:20px; background-size:cover; background-position:center; background-color:#e8e0f0; margin-bottom:20px; position:relative; overflow:hidden; }
+.analyzing { position:absolute; inset:0; background:rgba(26,22,36,0.6); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
+.analyzing-spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,0.2); border-top-color:white; border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.analyzing-text { font-size:14px; font-weight:600; color:white; }
+.modal-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:#1e1a26; margin-bottom:4px; }
+.modal-sub { font-size:13px; color:#a898b8; margin-bottom:20px; }
+.modal-est-cal { font-family:'Inter',sans-serif; font-size:44px; font-weight:800; color:#1e1a26; letter-spacing:-0.03em; text-align:center; margin-bottom:2px; }
+.modal-est-lbl { font-size:11px; font-weight:700; color:#A8B8A0; letter-spacing:0.1em; text-transform:uppercase; text-align:center; margin-bottom:20px; }
+.modal-macros { display:flex; gap:10px; margin-bottom:24px; }
+.modal-macro { flex:1; background:rgba(255,255,255,0.7); border-radius:14px; padding:12px; text-align:center; }
+.modal-macro-val { font-size:18px; font-weight:800; color:#1e1a26; }
+.modal-macro-lbl { font-size:10px; font-weight:600; color:#a898b8; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px; }
+
+/* Portion drum */
+.portion-section { margin-bottom:22px; }
+.portion-lbl { font-size:11px; font-weight:700; color:#b0a8bc; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:10px; text-align:center; }
+.portion-options { display:flex; gap:8px; }
+.portion-opt { flex:1; padding:14px 4px; border-radius:14px; background:rgba(255,255,255,0.7); border:2px solid transparent; font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:#a898b8; cursor:pointer; text-align:center; touch-action:manipulation; transition:all 0.15s; }
+.portion-opt.active { background:#1e1a26; color:white; border-color:#1e1a26; }
+.portion-opt:active { transform:scale(0.95); }
+
+.modal-actions { display:flex; gap:10px; }
+.modal-cancel { flex:1; padding:16px; border-radius:16px; background:rgba(0,0,0,0.05); border:none; font-family:'Inter',sans-serif; font-size:15px; font-weight:700; color:#6a6080; cursor:pointer; touch-action:manipulation; }
+.modal-add { flex:2; padding:16px; border-radius:16px; background:#1e1a26; border:none; font-family:'Inter',sans-serif; font-size:15px; font-weight:800; color:white; cursor:pointer; touch-action:manipulation; }
+.modal-add:active { transform:scale(0.98); }
+
+/* Disclaimer */
+.disclaimer { font-size:11px; color:#c0b8cc; text-align:center; padding:0 30px 8px; line-height:1.5; }
+
+/* Bottom nav */
+.bottom-nav { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); width:calc(100% - 16px); max-width:374px; background:#e8e4df; border-radius:40px; display:flex; justify-content:space-between; align-items:center; padding:6px; z-index:50; box-shadow:0 4px 24px rgba(0,0,0,0.12); }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:8px 12px; border-radius:32px; transition:background 0.18s ease; flex:1; touch-action:manipulation; }
+.nav-item.active { background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.10); }
+.nav-item i { font-size:20px; color:#9e9890; }
+.nav-item.active i { color:#1e1a26; }
+.nav-label { font-size:9px; font-weight:600; color:#9e9890; letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; }
+.nav-item.active .nav-label { color:#1e1a26; }
+
+.hidden-file { display:none; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="screen">
+  <div id="main">
+
+    <div class="nut-header">
+      <div class="nut-title">Nutrition</div>
+      <div class="day-toggle">
+        <button class="active" id="tab-today" onclick="switchView('today')">Today</button>
+        <button id="tab-week" onclick="switchView('week')">Week</button>
+      </div>
+    </div>
+
+    <!-- TODAY VIEW -->
+    <div id="view-today">
+      <!-- Calorie ring -->
+      <div class="cal-hero">
+        <div class="cal-ring-wrap">
+          <svg viewBox="0 0 170 170" width="170" height="170">
+            <defs>
+              <linearGradient id="calGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#A8B8A0"/>
+                <stop offset="100%" stop-color="#5c8c5c"/>
+              </linearGradient>
+            </defs>
+            <circle class="cal-ring-track" cx="85" cy="85" r="75"/>
+            <circle class="cal-ring-fill" id="cal-ring-fill" cx="85" cy="85" r="75"/>
+          </svg>
+          <div class="cal-ring-inner">
+            <div class="cal-consumed" id="cal-consumed">1240</div>
+            <div class="cal-target">of 1800 kcal</div>
+            <div class="cal-left-lbl" id="cal-left">560 left</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Macros -->
+      <div class="macros">
+        <div class="macro-row">
+          <div class="macro-top"><span class="macro-name">Protein</span><span class="macro-vals">82 / 120 g</span></div>
+          <div class="macro-bar-track"><div class="macro-bar-fill macro-protein" data-pct="68"></div></div>
+        </div>
+        <div class="macro-row">
+          <div class="macro-top"><span class="macro-name">Carbs</span><span class="macro-vals">130 / 180 g</span></div>
+          <div class="macro-bar-track"><div class="macro-bar-fill macro-carbs" data-pct="72"></div></div>
+        </div>
+        <div class="macro-row">
+          <div class="macro-top"><span class="macro-name">Fat</span><span class="macro-vals">38 / 60 g</span></div>
+          <div class="macro-bar-track"><div class="macro-bar-fill macro-fat" data-pct="63"></div></div>
+        </div>
+      </div>
+
+      <!-- Snap meal -->
+      <button class="snap-btn" onclick="openCamera()">
+        <i class="ti ti-camera"></i> Snap your meal
+      </button>
+      <div class="disclaimer">AI estimates are approximate. Use them as a guide, not exact science.</div>
+
+      <!-- Today's meals -->
+      <div class="card">
+        <div class="card-label">Today's Meals</div>
+        <div id="meals-list">
+          <div class="meal-item">
+            <div class="meal-thumb" style="background-image:url('https://images.unsplash.com/photo-1493770348161-369560ae357d?w=200&h=200&fit=crop')"></div>
+            <div class="meal-info"><div class="meal-name">Greek yogurt & berries</div><div class="meal-macros">P 18g · C 24g · F 6g</div></div>
+            <div class="meal-cal">220</div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-thumb" style="background-image:url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop')"></div>
+            <div class="meal-info"><div class="meal-name">Chicken & quinoa bowl</div><div class="meal-macros">P 42g · C 58g · F 16g</div></div>
+            <div class="meal-cal">540</div>
+          </div>
+          <div class="meal-item">
+            <div class="meal-thumb" style="background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=200&h=200&fit=crop')"></div>
+            <div class="meal-info"><div class="meal-name">Salmon salad</div><div class="meal-macros">P 32g · C 18g · F 22g</div></div>
+            <div class="meal-cal">480</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hydration -->
+      <div class="card">
+        <div class="card-label">Hydration · Goal 8 glasses</div>
+        <div class="hydration">
+          <div class="water-glasses" id="water-glasses"></div>
+          <div class="water-count" id="water-count">5/8</div>
+        </div>
+      </div>
+
+      <!-- Dejan's guidance -->
+      <div class="card">
+        <div class="card-label">Dejan's Plan For You</div>
+        <div class="guide-grid">
+          <div class="guide-item"><div class="guide-item-val">1800</div><div class="guide-item-lbl">Daily calories</div></div>
+          <div class="guide-item"><div class="guide-item-val">120g</div><div class="guide-item-lbl">Protein target</div></div>
+          <div class="guide-item"><div class="guide-item-val">8</div><div class="guide-item-lbl">Glasses water</div></div>
+          <div class="guide-item"><div class="guide-item-val">3+1</div><div class="guide-item-lbl">Meals + snack</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK VIEW -->
+    <div id="view-week" style="display:none">
+      <div class="card" style="margin-top:8px">
+        <div class="card-label">This Week · Calories vs Target</div>
+        <div class="week-bars" id="week-bars"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Weekly Averages</div>
+        <div class="guide-grid">
+          <div class="guide-item"><div class="guide-item-val">1690</div><div class="guide-item-lbl">Avg calories/day</div></div>
+          <div class="guide-item"><div class="guide-item-val">94%</div><div class="guide-item-lbl">Target adherence</div></div>
+          <div class="guide-item"><div class="guide-item-val">112g</div><div class="guide-item-lbl">Avg protein</div></div>
+          <div class="guide-item"><div class="guide-item-val">6.4</div><div class="guide-item-lbl">Avg water glasses</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Camera analysis modal -->
+<div class="modal-overlay" id="meal-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-photo" id="modal-photo">
+      <div class="analyzing" id="analyzing">
+        <div class="analyzing-spinner"></div>
+        <div class="analyzing-text">Analysing your meal…</div>
+      </div>
+    </div>
+    <div id="modal-results" style="display:none">
+      <div class="modal-title" id="meal-result-name">Grilled chicken salad</div>
+      <div class="modal-sub">Estimated by AI · adjust portion below</div>
+      <div class="modal-est-cal" id="meal-result-cal">420</div>
+      <div class="modal-est-lbl">Calories</div>
+      <div class="modal-macros">
+        <div class="modal-macro"><div class="modal-macro-val" id="mr-p">38g</div><div class="modal-macro-lbl">Protein</div></div>
+        <div class="modal-macro"><div class="modal-macro-val" id="mr-c">22g</div><div class="modal-macro-lbl">Carbs</div></div>
+        <div class="modal-macro"><div class="modal-macro-val" id="mr-f">18g</div><div class="modal-macro-lbl">Fat</div></div>
+      </div>
+      <div class="portion-section">
+        <div class="portion-lbl">Portion Size</div>
+        <div class="portion-options" id="portion-options">
+          <div class="portion-opt" data-mult="0.5" onclick="setPortion(0.5)">½×</div>
+          <div class="portion-opt active" data-mult="1" onclick="setPortion(1)">1×</div>
+          <div class="portion-opt" data-mult="1.5" onclick="setPortion(1.5)">1½×</div>
+          <div class="portion-opt" data-mult="2" onclick="setPortion(2)">2×</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeCamera()">Cancel</button>
+        <button class="modal-add" onclick="addMeal()">Add to Today</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" accept="image/*" capture="environment" class="hidden-file" id="camera-input" onchange="onPhotoTaken(event)">
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <div class="nav-item"><i class="ti ti-home"></i><div class="nav-label">Home</div></div>
+  <div class="nav-item"><i class="ti ti-barbell"></i><div class="nav-label">Programme</div></div>
+  <div class="nav-item active"><i class="ti ti-apple"></i><div class="nav-label">Nutrition</div></div>
+  <div class="nav-item"><i class="ti ti-chart-bar"></i><div class="nav-label">Progress</div></div>
+  <div class="nav-item"><i class="ti ti-clipboard-list"></i><div class="nav-label">Check-in</div></div>
+</div>
+
+<script>
+// ── STATE ──
+const DAILY_TARGET = 1800;
+let consumed = 1240;
+let waterGlasses = 5;
+const WATER_GOAL = 8;
+
+// Base AI estimate for demo
+const baseMeal = { name:'Grilled chicken salad', cal:420, p:38, c:22, f:18 };
+let portionMult = 1;
+
+// ── INIT ──
+function init() {
+  // Calorie ring
+  setTimeout(() => {
+    const pct = Math.min(consumed / DAILY_TARGET, 1);
+    document.getElementById('cal-ring-fill').style.strokeDashoffset = 471 * (1 - pct);
+  }, 200);
+  // Macro bars
+  setTimeout(() => {
+    document.querySelectorAll('.macro-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  }, 250);
+  buildWater();
+  buildWeekBars();
+}
+
+function buildWater() {
+  const wrap = document.getElementById('water-glasses');
+  wrap.innerHTML = '';
+  for (let i = 0; i < WATER_GOAL; i++) {
+    const g = document.createElement('div');
+    g.className = 'glass' + (i < waterGlasses ? ' filled' : '');
+    g.onclick = () => toggleWater(i);
+    if (i < waterGlasses) g.innerHTML = '<i class="ti ti-droplet-filled"></i>';
+    wrap.appendChild(g);
+  }
+  document.getElementById('water-count').textContent = waterGlasses + '/' + WATER_GOAL;
+}
+function toggleWater(i) {
+  waterGlasses = (i + 1 === waterGlasses) ? i : i + 1;
+  buildWater();
+  if (navigator.vibrate) navigator.vibrate(6);
+}
+
+function buildWeekBars() {
+  const days = ['M','T','W','T','F','S','S'];
+  const cals = [1720, 1850, 1680, 1900, 1640, 1750, 1240];
+  const todayIdx = 6;
+  const maxCal = 2200;
+  const wrap = document.getElementById('week-bars');
+  wrap.innerHTML = days.map((d, i) => {
+    const h = (cals[i] / maxCal * 100).toFixed(0);
+    const over = cals[i] > DAILY_TARGET;
+    const targetPct = (DAILY_TARGET / maxCal * 100).toFixed(0);
+    return `<div class="week-bar-col">
+      <div class="week-bar-track">
+        <div class="wbf-target-line" style="bottom:${targetPct}%"></div>
+        <div class="week-bar-fill ${over?'wbf-over':'wbf-under'}" style="height:0%" data-h="${h}"></div>
+      </div>
+      <div class="week-bar-day ${i===todayIdx?'today':''}">${d}</div>
+    </div>`;
+  }).join('');
+  setTimeout(() => {
+    wrap.querySelectorAll('.week-bar-fill').forEach(b => b.style.height = b.dataset.h + '%');
+  }, 300);
+}
+
+function switchView(v) {
+  document.getElementById('tab-today').classList.toggle('active', v === 'today');
+  document.getElementById('tab-week').classList.toggle('active', v === 'week');
+  document.getElementById('view-today').style.display = v === 'today' ? 'block' : 'none';
+  document.getElementById('view-week').style.display = v === 'week' ? 'block' : 'none';
+  if (v === 'week') buildWeekBars();
+  if (navigator.vibrate) navigator.vibrate(6);
+}
+
+// ── CAMERA FLOW ──
+function openCamera() {
+  // Trigger native camera/file picker
+  document.getElementById('camera-input').click();
+}
+
+function onPhotoTaken(e) {
+  const file = e.target.files && e.target.files[0];
+  const modal = document.getElementById('meal-modal');
+  const photo = document.getElementById('modal-photo');
+  const analyzing = document.getElementById('analyzing');
+  const results = document.getElementById('modal-results');
+
+  // Show the captured photo if available, else a demo image
+  if (file) {
+    const url = URL.createObjectURL(file);
+    photo.style.backgroundImage = `url('${url}')`;
+  } else {
+    photo.style.backgroundImage = "url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop')";
+  }
+
+  // Open modal, show analysing state
+  analyzing.style.display = 'flex';
+  results.style.display = 'none';
+  modal.classList.add('visible');
+
+  // Simulate AI analysis (replace with real API call later)
+  portionMult = 1;
+  setPortion(1);
+  setTimeout(() => {
+    analyzing.style.display = 'none';
+    results.style.display = 'block';
+  }, 2200);
+}
+
+function setPortion(mult) {
+  portionMult = mult;
+  document.querySelectorAll('.portion-opt').forEach(o => {
+    o.classList.toggle('active', parseFloat(o.dataset.mult) === mult);
+  });
+  document.getElementById('meal-result-cal').textContent = Math.round(baseMeal.cal * mult);
+  document.getElementById('mr-p').textContent = Math.round(baseMeal.p * mult) + 'g';
+  document.getElementById('mr-c').textContent = Math.round(baseMeal.c * mult) + 'g';
+  document.getElementById('mr-f').textContent = Math.round(baseMeal.f * mult) + 'g';
+  if (navigator.vibrate) navigator.vibrate(5);
+}
+
+function addMeal() {
+  const cal = Math.round(baseMeal.cal * portionMult);
+  const p = Math.round(baseMeal.p * portionMult);
+  const c = Math.round(baseMeal.c * portionMult);
+  const f = Math.round(baseMeal.f * portionMult);
+  const photo = document.getElementById('modal-photo').style.backgroundImage;
+
+  // Add to meals list
+  const list = document.getElementById('meals-list');
+  const item = document.createElement('div');
+  item.className = 'meal-item';
+  item.innerHTML = `
+    <div class="meal-thumb" style="background-image:${photo}"></div>
+    <div class="meal-info"><div class="meal-name">${baseMeal.name}</div><div class="meal-macros">P ${p}g · C ${c}g · F ${f}g</div></div>
+    <div class="meal-cal">${cal}</div>`;
+  list.appendChild(item);
+
+  // Update consumed
+  consumed += cal;
+  document.getElementById('cal-consumed').textContent = consumed;
+  const left = DAILY_TARGET - consumed;
+  document.getElementById('cal-left').textContent = (left >= 0 ? left + ' left' : Math.abs(left) + ' over');
+  const pct = Math.min(consumed / DAILY_TARGET, 1);
+  document.getElementById('cal-ring-fill').style.strokeDashoffset = 471 * (1 - pct);
+
+  if (navigator.vibrate) navigator.vibrate([10,40,10]);
+  closeCamera();
+}
+
+function closeCamera() {
+  document.getElementById('meal-modal').classList.remove('visible');
+  document.getElementById('camera-input').value = '';
+}
+
+init();
+</script>
+</body>
+</html>
