@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Coached by Dejan — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ─── RESET & BASE ─── */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0ebf8;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ─── LOGO ─── */
+.app-logo {
+  text-align: center;
+  padding: 48px 0 48px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b0a0c8;
+}
+
+/* ─── SECTION HEADLINE ─── */
+.section-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: #1e1a26;
+  padding: 0 4px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-headline i { font-size: 18px; color: #1e1a26; }
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav {
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 16px);
+  max-width: 374px;
+  background: #e8e4df;
+  border-radius: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 6px;
+  z-index: 50;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08);
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 32px;
+  transition: background 0.18s ease, transform 0.12s ease;
+  flex: 1;
+}
+.nav-item:active { transform: scale(0.92); }
+.nav-item.active {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.nav-item i { font-size: 20px; color: #9e9890; }
+.nav-item.active i { color: #1e1a26; }
+.nav-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: #9e9890;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.nav-item.active .nav-label { color: #1e1a26; }
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 12% 0%, #ffd8c8 0%, transparent 50%),
+    radial-gradient(ellipse at 88% 8%, #ffc8d8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 35%, #ffe8d8 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 78%, #f0d0e8 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 88%, #e8d0f0 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, #ffd8e0 0%, transparent 55%);
+  background-color: #fce8ec;
+}
+
+/* ─── PAGE ─── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 0 0 100px;
+}
+
+/* ─── SCROLL ANIMATION ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── TOUCH STATES ─── */
+.tappable {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+}
+.tappable:active { transform: scale(0.97); }
+
+.btn-tappable {
+  transition: transform 0.1s ease, filter 0.1s ease;
+  cursor: pointer;
+}
+.btn-tappable:active { transform: scale(0.95); filter: brightness(0.92); }
+
+/* ─── SECTION SPACING ─── */
+.section { margin-top: 30px; }
+.section:first-child { margin-top: 0; }
+
+/* ═══════════════════════════════
+   1. HERO — CARD STYLE
+═══════════════════════════════ */
+.hero-card {
+  position: relative;
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  border-radius: 0 0 32px 32px;
+  box-shadow: 0 8px 28px rgba(160,120,140,0.18);
+  padding: 52px 24px 0;
+  /* room for the avatar hanging below */
+  margin-bottom: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-card-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #1e1a26;
+  margin-bottom: 18px;
+}
+.hero-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #1e1a26;
+  letter-spacing: -0.02em;
+}
+.hero-programme {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a898c0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  margin-bottom: 18px;
+}
+/* Avatar hangs 1/3 below the card bottom edge */
+.hero-avatar-wrap {
+  position: relative;
+  width: 106px;
+  height: 106px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  margin-bottom: -35px; /* ~1/3 of 106px hangs below */
+  z-index: 2;
+}
+.hero-avatar-wrap:active { transform: scale(0.94); }
+.hero-avatar {
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c8b8e8, #e8c8d0);
+  border: 4px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(160,130,200,0.28);
+}
+.hero-avatar i { font-size: 32px; color: rgba(255,255,255,0.8); }
+.hero-avatar-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(200,180,230,0.4);
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 0.2; }
+}
+/* ═══════════════════════════════
+   2. GAMIFICATION CARD
+═══════════════════════════════ */
+.gam-card {
+  background: linear-gradient(160deg, rgba(46,30,68,0.82) 0%, rgba(26,18,40,0.85) 50%, rgba(12,10,22,0.88) 100%);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 28px;
+  padding: 20px 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+.gam-streak-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.gam-streak-label i { font-size: 15px; color: #C9A86A; }
+.gam-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  margin-bottom: 22px;
+}
+.gam-circles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+.cw {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+.gam-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+}
+.gam-bar-wrap {
+  margin-top: 16px;
+  height: 7px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.gam-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #c5ecff, #4140cc);
+  border-radius: 2px;
+  transition: width 1.4s cubic-bezier(0.4,0,0.2,1) 0.6s;
+}
+
+/* ═══════════════════════════════
+   3. PROGRESS ROW (Programme + KG)
+═══════════════════════════════ */
+.progress-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Programme card */
+.prog-card {
+  width: 100%;
+  min-width: 0;
+  background: linear-gradient(to bottom, rgba(71,184,107,0.55) 0%, rgba(141,212,160,0.4) 45%, rgba(255,255,255,0.35) 100%);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 24px;
+  padding: 16px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 20px rgba(60,160,90,0.18);
+}
+.prog-name     { font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.95); line-height: 1.15; letter-spacing: -0.01em; }
+.prog-duration { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: -2px; white-space: nowrap; }
+.prog-pct      { font-size: 32px; font-weight: 600; color: #ffffff; line-height: 1.0; margin-top: 4px; letter-spacing: -0.02em; }
+.prog-week     { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.82); }
+.bar-wrap      { margin-top: 8px; background: #f4f3fa; border-radius: 10px; padding: 6px 7px; display: flex; gap: 5px; align-items: center; }
+.tick          { flex: 1; height: 20px; border-radius: 4px; background: #e8e6f4; }
+.tick.filled   { background: var(--tc); }
+.bar-stats     { display: flex; justify-content: space-between; margin-top: 4px; padding: 0 2px; }
+.stat          { font-size: 18px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #f1fbf3; letter-spacing: 0.08em; }
+.stat-done     { color: #09b43a; }
+.stat-left     { color: #ea4137; }
+
+/* KG card */
+.kg-card {
+  width: 100%;
+  min-width: 0;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 24px;
+  padding: 14px 4px 8px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+.kg-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e1a26;
+  text-align: left;
+  padding: 0 12px 16px;
+  letter-spacing: -0.01em;
+}
+.kg-circles-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  align-items: flex-start;
+  flex: 1;
+}
+.col-left, .col-right { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+.date-block { text-align: center; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 76px; height: 76px; }
+.date-day   { font-size: 12px; font-weight: 500; color: #c0b8cc; letter-spacing: 0.08em; text-transform: uppercase; }
+.date-month { font-size: 15px; font-weight: 600; color: #1e1a26; }
+.date-num   { font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 600; color: #1e1a26; line-height: 1; }
+.kg-track { fill: none; stroke-linecap: round; }
+.kg-arc { fill: none; stroke-linecap: round; transform-origin: 50% 50%; transform: rotate(-90deg); stroke-dashoffset: 999; transition: stroke-dashoffset 1.3s cubic-bezier(0.35,0,0.25,1); }
+.rn { font-family: 'Inter', sans-serif; font-weight: 600; fill: #1e1a26; text-anchor: middle; dominant-baseline: middle; }
+.rl { font-family: 'Inter', sans-serif; font-weight: 400; fill: #c0b8cc; text-anchor: middle; dominant-baseline: middle; }
+
+/* ═══════════════════════════════
+   4. WEEK SCHEDULE
+═══════════════════════════════ */
+.week-scroll-wrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 8px;
+}
+.week-scroll-wrap::-webkit-scrollbar { display: none; }
+.days-row {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  padding: 0 2px;
+}
+.day-pill {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  transition: transform 0.12s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.day-pill:active { }
+.day-pill.today {
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.3);
+}
+.day-pill-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #2a2436;
+}
+.day-pill-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.0) 35%,
+    rgba(0,0,0,0.0) 55%,
+    rgba(0,0,0,0.65) 100%);
+}
+.day-pill-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 10px 12px;
+}
+.day-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.day-pill.today .day-name { color: #ffffff; }
+.day-workout-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+}
+.day-duration {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.03em;
+  margin-top: 3px;
+}
+
+/* ═══════════════════════════════
+   5. SESSION CARD
+═══════════════════════════════ */
+.session-card {
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.session-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #2a1a0e 0%, #5c3820 40%, #8b6040 70%, #c49070 100%);
+}
+.session-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.55) 100%);
+}
+.glass {
+  position: relative;
+  z-index: 2;
+  margin: 12px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 20px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.s-eyebrow { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.65); letter-spacing: 0.12em; text-transform: uppercase; }
+.s-title   { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: #ffffff; line-height: 1.1; }
+.s-meta    { display: flex; gap: 14px; }
+.s-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.80); }
+.s-dot     { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+.btn-session {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 20px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: #ffffff;
+  color: #1e1a26;
+  animation: sessionPulse 2.8s ease-in-out infinite;
+}
+@keyframes sessionPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+}
+
+/* ═══════════════════════════════
+   6. MOTIVATIONAL
+═══════════════════════════════ */
+.mot-card {
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-radius: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  min-height: 200px;
+  box-shadow: 0 4px 20px rgba(160,120,140,0.12);
+  border: 1px solid rgba(255,255,255,0.55);
+}
+.mot-photo {
+  width: 42%;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(160deg, #3a2a1a 0%, #7a5a3a 50%, #b89070 100%);
+  overflow: hidden;
+}
+.mot-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 70%, #faf8f5 100%);
+}
+.mot-photo-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.mot-photo-text  { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; text-align: center; line-height: 1.6; }
+.mot-content { flex: 1; padding: 22px 18px 22px 14px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+.mot-from    { font-size: 10px; font-weight: 500; color: #c0a888; letter-spacing: 0.12em; text-transform: uppercase; }
+.mot-message { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; font-weight: 500; color: #2a2018; line-height: 1.45; flex: 1; }
+.mot-divider { width: 28px; height: 2px; background: linear-gradient(to right, #c9a86a, transparent); border-radius: 2px; }
+.mot-name    { font-size: 12px; font-weight: 500; color: #a89880; letter-spacing: 0.04em; margin-top: 8px; }
+
+/* ═══════════════════════════════
+   7. BADGES
+═══════════════════════════════ */
+.badges-section { padding: 0; }
+.badges-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c4bdd0;
+  padding: 0 16px 14px;
+}
+.badges-count-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #ccc6d8;
+  letter-spacing: 0.06em;
+}
+.badges-header { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 14px; }
+.badges-count-label { font-size: 11px; font-weight: 500; color: #ccc6d8; letter-spacing: 0.06em; }
+.scroll-row { display: flex; gap: 18px; overflow-x: auto; padding: 4px 4px 12px; scrollbar-width: none; }
+.scroll-row::-webkit-scrollbar { display: none; }
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 64px;
+}
+
+/* UNLOCKED — gradient icons via background-clip */
+.badge-icon-wrap {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+.badge-icon-wrap:active { transform: scale(0.85); }
+.badge-icon-wrap.unlocked i {
+  font-size: 36px;
+  background: var(--badge-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.badge-icon-wrap.locked i {
+  font-size: 28px;
+  color: #c8c0d4;
+  opacity: 0.45;
+}
+
+.badge-icon-wrap.unlocked {
+  animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes badgePop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.badge-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a098b0;
+  text-align: center;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  width: 64px;
+}
+.badge-name.unlocked { color: #3a3050; }
+
+/* ═══════════════════════════════
+   8. CHECK-IN + WHATSAPP
+═══════════════════════════════ */
+.checkin-card {
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.55);
+  border-radius: 24px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 4px 20px rgba(160,140,180,0.10);
+}
+.checkin-left  { display: flex; align-items: center; gap: 14px; }
+.checkin-icon  { width: 46px; height: 46px; border-radius: 14px; background: #fff4e6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.checkin-icon i { font-size: 22px; color: #e8922a; }
+.checkin-title { font-size: 14px; font-weight: 600; color: #1e1a26; }
+.checkin-sub   { font-size: 12px; font-weight: 400; color: #b0a8bc; margin-top: 2px; }
+.checkin-btn   { background: #1e1a26; color: #ffffff; border: none; border-radius: 12px; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.wa-card {
+  background: transparent;
+  border-radius: 24px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  cursor: pointer;
+  position: relative;
+}
+.wa-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(135deg, #000000, #00c853, #00ff88);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.wa-left       { display: flex; align-items: center; gap: 14px; }
+.wa-icon       { width: 46px; height: 46px; border-radius: 14px; background: rgba(37,211,102,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wa-icon i     { font-size: 24px; color: #25d366; }
+.wa-title      { font-size: 14px; font-weight: 600; color: #2a2436; }
+.wa-sub        { font-size: 12px; font-weight: 400; color: rgba(42,36,54,0.5); margin-top: 2px; }
+.wa-arrow      { color: #2a2436; font-size: 20px; }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="page">
+
+  <!-- 1. HERO CARD -->
+  <div class="hero-card reveal">
+    <div class="hero-card-logo">Coached by Dejan</div>
+    <div class="hero-name">Sarah</div>
+    <div class="hero-programme">Level — Balanced · 12 Week</div>
+    <div class="hero-avatar-wrap">
+      <div class="hero-avatar">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+          <i class="ti ti-camera" style="font-size:24px;color:rgba(255,255,255,0.7)"></i>
+          <span style="font-size:9px;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase">Upload</span>
+        </div>
+      </div>
+      <div class="hero-avatar-ring"></div>
+    </div>
+  </div>
+
+  <!-- 2. GAMIFICATION -->
+  <div class="section reveal">
+    <div class="gam-card tappable">
+      <div class="gam-streak-label"><i class="ti ti-sparkles"></i> Your accountability streak</div>
+      <div class="gam-headline" id="gam-headline">You're 2 sessions away from owning Week 3.</div>
+      <div class="gam-circles">
+
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80" id="workouts-svg"></svg>
+          <div class="gam-label">Workouts</div>
+        </div>
+
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80" id="weeks-svg"></svg>
+          <div class="gam-label">Weeks</div>
+        </div>
+
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <defs>
+              <radialGradient id="cal-grad" cx="50%" cy="85%" r="70%">
+                <stop offset="0%" stop-color="#FF7A20"/>
+                <stop offset="40%" stop-color="#E85A00"/>
+                <stop offset="100%" stop-color="#1A1A00" stop-opacity="0.3"/>
+              </radialGradient>
+              <radialGradient id="cal-top" cx="50%" cy="20%" r="60%">
+                <stop offset="0%" stop-color="#2A2A2E"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </radialGradient>
+              <clipPath id="cal-clip"><circle cx="40" cy="40" r="30"/></clipPath>
+              <linearGradient id="ring-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#C85000"/>
+                <stop offset="50%" stop-color="#E87000"/>
+                <stop offset="100%" stop-color="#FF9020"/>
+              </linearGradient>
+            </defs>
+            <circle cx="40" cy="40" r="38" fill="#1a1624"/>
+            <circle cx="40" cy="40" r="30" fill="#1a1624"/>
+            <rect x="10" y="10" width="60" height="60" fill="url(#cal-grad)" clip-path="url(#cal-clip)"/>
+            <rect x="10" y="10" width="60" height="30" fill="url(#cal-top)" clip-path="url(#cal-clip)"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="url(#ring-grad)" stroke-width="3" opacity="0.7"/>
+            <ellipse cx="40" cy="62" rx="12" ry="5" fill="#FF6010" opacity="0.35"/>
+            <path d="M10 46C16 43,22 50,28 45C32 41,36 47,40 44C44 41,48 48,52 44C56 41,62 48,70 45L70 80L10 80Z" fill="url(#cal-grad)" clip-path="url(#cal-clip)" opacity="0.5"/>
+            <text x="40" y="41" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Inter" font-size="22" font-weight="600">0</text>
+          </svg>
+          <div class="gam-label">Calories</div>
+        </div>
+
+        <div class="cw">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <defs>
+              <linearGradient id="badge-grad" x1="6" y1="6" x2="74" y2="74" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#F5DCEA"/>
+                <stop offset="100%" stop-color="#C080BC"/>
+              </linearGradient>
+              <filter id="pinkify" color-interpolation-filters="sRGB">
+                <feColorMatrix type="matrix" values="
+                  0.18 0.61 0.06 0 0.15
+                  0.13 0.43 0.04 0 0.05
+                  0.17 0.58 0.06 0 0.15
+                  0    0    0    1 0"/>
+              </filter>
+            </defs>
+            <circle cx="40" cy="40" r="38" fill="#1a1624"/>
+            <circle cx="40" cy="40" r="33" fill="none" stroke="url(#badge-grad)" stroke-width="3"/>
+            <text x="40" y="36" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Inter" font-size="22" font-weight="600">8</text>
+            <text x="40" y="69" text-anchor="middle" dominant-baseline="central" font-size="21" filter="url(#pinkify)">👏</text>
+          </svg>
+          <div class="gam-label">Badges</div>
+        </div>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:16px">
+        <div class="gam-bar-wrap" style="flex:1;margin-top:0">
+          <div class="gam-bar-fill" id="gam-bar"></div>
+        </div>
+        <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.45);flex-shrink:0">47%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROGRESS ROW -->
+  <div class="section reveal">
+    <div class="section-headline">Your Progress</div>
+  <div class="progress-row">
+
+    <!-- Programme -->
+    <div class="prog-card tappable">
+      <div class="prog-name"><i class="ti ti-barbell" style="font-size:18px;margin-right:6px;vertical-align:-2px;opacity:0.8"></i>12-Week Strength & Burn</div>
+      <div class="prog-duration">Personalised Programme</div>
+      <div class="prog-pct" id="prog-pct">0%</div>
+      <div class="prog-week">Week 6 of 12</div>
+      <div class="bar-wrap" id="ticker-bar"></div>
+      <div class="bar-stats">
+        <div class="stat stat-done">+47%</div>
+        <div class="stat stat-left">-53%</div>
+      </div>
+    </div>
+
+    <!-- KG Rings -->
+    <div class="kg-card">
+      <div class="kg-headline"><i class="ti ti-scale" style="font-size:16px;margin-right:5px;vertical-align:-1px;color:#b0a8bc"></i>Weight Progress</div>
+      <div class="kg-circles-row">
+      <div class="col-left">
+        <div class="date-block">
+          <div class="date-day">Mon</div>
+          <div class="date-month">Jun</div>
+          <div class="date-num">9</div>
+        </div>
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh1" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00dd00"/>
+              <stop offset="100%" stop-color="#e8ff00"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh1)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#edfce8" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-lost" cx="45" cy="45" r="34" stroke="url(#kg1)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="42" font-size="19">4.2</text>
+          <text class="rl" x="45" y="57" font-size="11">kg lost</text>
+        </svg>
+      </div>
+      <div class="col-right">
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh2" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff9900"/>
+              <stop offset="100%" stop-color="#ffe600"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh2)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#fdf5e0" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-current" cx="45" cy="45" r="34" stroke="url(#kg2)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="41" font-size="16">72.8</text>
+          <text class="rl" x="45" y="55" font-size="11">current</text>
+        </svg>
+        <svg width="76" height="76" viewBox="0 0 90 90" style="overflow:visible">
+          <defs>
+            <filter id="sh3" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#b0a8c8" flood-opacity="0.38"/>
+            </filter>
+            <linearGradient id="kg3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5500ff"/>
+              <stop offset="100%" stop-color="#00ccff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="42" fill="white" filter="url(#sh3)"/>
+          <circle class="kg-track" cx="45" cy="45" r="34" stroke="#eae8fc" stroke-width="8"/>
+          <circle class="kg-arc" id="kg-goal" cx="45" cy="45" r="34" stroke="url(#kg3)" stroke-width="8" stroke-dasharray="213.6"/>
+          <text class="rn" x="45" y="42" font-size="19">68</text>
+          <text class="rl" x="45" y="57" font-size="11">goal</text>
+        </svg>
+      </div>
+      </div><!-- end kg-circles-row -->
+    </div>
+
+  </div><!-- end progress-row -->
+  </div><!-- end section -->
+
+  <!-- 4. WEEK SCHEDULE -->
+  <div class="section reveal">
+    <div class="section-headline">This Week <span style="font-size:11px;font-weight:400;font-style:italic;color:#b0a8bc;letter-spacing:0.02em;margin-left:2px">· hold to preview</span></div>
+    <div class="week-scroll-wrap" id="week-scroll">
+      <div class="days-row">
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-mon"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Mon</div>
+            <div>
+              <div class="day-workout-name">Rest<br>Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-tue"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Tue</div>
+            <div>
+              <div class="day-workout-name">Upper<br>Body</div>
+              <div class="day-duration">40 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-wed"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Wed</div>
+            <div>
+              <div class="day-workout-name">Cardio<br>& Core</div>
+              <div class="day-duration">35 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-thu"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Thu</div>
+            <div>
+              <div class="day-workout-name">Rest<br>Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill today" id="today-pill">
+          <div class="day-pill-bg" id="bg-fri"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Fri<br>Today</div>
+            <div>
+              <div class="day-workout-name">Full Body<br>Strength</div>
+              <div class="day-duration">45 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill rest">
+          <div class="day-pill-bg" id="bg-sat"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Sat</div>
+            <div>
+              <div class="day-workout-name">Rest<br>Day</div>
+              <div class="day-duration">Recovery</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-pill train">
+          <div class="day-pill-bg" id="bg-sun"></div>
+          <div class="day-pill-overlay"></div>
+          <div class="day-pill-content">
+            <div class="day-name">Sun</div>
+            <div>
+              <div class="day-workout-name">Lower<br>Body</div>
+              <div class="day-duration">45 min</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SESSION CARD -->
+  <div class="section reveal">
+    <div class="session-card tappable">
+      <div class="session-bg" id="session-bg"></div>
+      <div class="glass">
+        <div>
+          <div class="s-eyebrow">Today's Workout · Fri 9 Jun</div>
+          <div class="s-title">Full Body Strength</div>
+        </div>
+        <div class="s-meta">
+          <div class="s-meta-item"><div class="s-dot"></div>45 min</div>
+          <div class="s-meta-item"><div class="s-dot"></div>8 exercises</div>
+        </div>
+        <button class="btn-session btn-tappable">Begin Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. MOTIVATIONAL -->
+  <div class="section reveal">
+    <div class="section-headline">From Dejan</div>
+    <div class="mot-card">
+      <div class="mot-photo" id="mot-photo">
+        <div class="mot-photo-inner" id="mot-photo-inner" style="display:none">
+          <div class="mot-photo-text">Dejan's<br>photo</div>
+        </div>
+      </div>
+      <div class="mot-content">
+        <div class="mot-from">From your coach</div>
+        <div class="mot-message">"You showed up again. That's not nothing — that's everything."</div>
+        <div>
+          <div class="mot-divider"></div>
+          <div class="mot-name">— Dejan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. BADGES -->
+  <div class="section reveal badges-section">
+    <div class="badges-header">
+      <div class="section-headline" style="padding-bottom:0">Your Badges</div>
+      <div class="badges-count-label">8 of 34 earned</div>
+    </div>
+    <div class="scroll-row">
+
+      <!-- TIER 1: First Steps (unlocked) -->
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#f9a825,#ff6f00);animation-delay:0.05s">
+          <i class="ti ti-star"></i>
+        </div>
+        <div class="badge-name unlocked">First Workout</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#69f0ae,#00897b);animation-delay:0.10s">
+          <i class="ti ti-calendar-check"></i>
+        </div>
+        <div class="badge-name unlocked">First Week Done</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#4dd0e1,#006064);animation-delay:0.15s">
+          <i class="ti ti-clipboard-check"></i>
+        </div>
+        <div class="badge-name unlocked">First Check-In</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#ce93d8,#7b1fa2);animation-delay:0.20s">
+          <i class="ti ti-scale"></i>
+        </div>
+        <div class="badge-name unlocked">First Kilo Lost</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#f48fb1,#880e4f);animation-delay:0.25s">
+          <i class="ti ti-calendar-event"></i>
+        </div>
+        <div class="badge-name unlocked">Month One Done</div>
+      </div>
+
+      <!-- TIER 2: Streaks (unlocked) -->
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#ff7043,#b71c1c);animation-delay:0.30s">
+          <i class="ti ti-flame"></i>
+        </div>
+        <div class="badge-name unlocked">3-Day Streak</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#ffe57f,#ffc107);animation-delay:0.35s">
+          <i class="ti ti-bolt"></i>
+        </div>
+        <div class="badge-name unlocked">7-Day Streak</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-bolt"></i></div>
+        <div class="badge-name">14-Day Streak</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-crown"></i></div>
+        <div class="badge-name">30-Day Streak</div>
+      </div>
+
+      <!-- TIER 3: Volume -->
+      <div class="badge">
+        <div class="badge-icon-wrap unlocked" style="--badge-gradient:linear-gradient(135deg,#64b5f6,#1565c0);animation-delay:0.40s">
+          <i class="ti ti-activity"></i>
+        </div>
+        <div class="badge-name unlocked">Ten Workouts</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-award"></i></div>
+        <div class="badge-name">Fifty Workouts</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-diamond"></i></div>
+        <div class="badge-name">Hundred Workouts</div>
+      </div>
+
+      <!-- TIER 4: Weight Journey -->
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-target"></i></div>
+        <div class="badge-name">Five Kilos Lost</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-star"></i></div>
+        <div class="badge-name">Goal Reached</div>
+      </div>
+
+      <!-- TIER 5: Programme Milestones -->
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-flag"></i></div>
+        <div class="badge-name">Halfway There</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-calendar-event"></i></div>
+        <div class="badge-name">Month Two Done</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-trophy"></i></div>
+        <div class="badge-name">Programme Done</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-refresh"></i></div>
+        <div class="badge-name">Second Round</div>
+      </div>
+
+      <!-- TIER 6: Personality -->
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-sun"></i></div>
+        <div class="badge-name">Early Bird Award</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-moon"></i></div>
+        <div class="badge-name">Night Owl Award</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-camera"></i></div>
+        <div class="badge-name">Photo Progress</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-chart-line"></i></div>
+        <div class="badge-name">Personal Best</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon-wrap locked"><i class="ti ti-heart"></i></div>
+        <div class="badge-name">3 Rest Days</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 8. CHECK-IN -->
+  <div class="section reveal">
+    <div class="section-headline">Stay Connected</div>
+    <div class="checkin-card tappable">
+      <div class="checkin-left">
+        <div class="checkin-icon"><i class="ti ti-clipboard-list"></i></div>
+        <div>
+          <div class="checkin-title">Weekly Check-in</div>
+          <div class="checkin-sub">Due Friday · 2 days away</div>
+        </div>
+      </div>
+      <button class="checkin-btn btn-tappable">Check in</button>
+    </div>
+  </div>
+
+  <!-- 9. WHATSAPP -->
+  <div class="section reveal">
+    <div class="wa-card tappable">
+      <div class="wa-left">
+        <div class="wa-icon"><i class="ti ti-brand-whatsapp"></i></div>
+        <div>
+          <div class="wa-title">Message Dejan</div>
+          <div class="wa-sub">Questions? I'm here for you</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right wa-arrow"></i>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+<script>
+// ── DYNAMIC GAM HEADLINE ──
+// Changes based on the client's current training situation.
+// In production, these inputs come from her real data (current week, day,
+// sessions done this week, sessions remaining, whether today is rest/training,
+// and whether she's returning after a missed day).
+const clientState = {
+  currentWeek: 3,
+  sessionsRemainingThisWeek: 2,
+  isRestDay: false,
+  isComeback: false,        // returning after a missed day
+  weekJustCompleted: false, // completed the final session of a week
+  streakDays: 7
+};
+
+function pickGamHeadline(s) {
+  // Priority order — most meaningful message wins
+  if (s.weekJustCompleted) {
+    return `Week ${s.currentWeek} — done. You showed up every time.`;
+  }
+  if (s.isComeback) {
+    return `Welcome back. One session is all it takes to be on track again.`;
+  }
+  if (s.isRestDay) {
+    return `Rest today. Your body grows stronger while you recover.`;
+  }
+  if (s.sessionsRemainingThisWeek === 1) {
+    return `One session away from owning Week ${s.currentWeek}.`;
+  }
+  if (s.sessionsRemainingThisWeek > 1) {
+    return `You're ${s.sessionsRemainingThisWeek} sessions away from owning Week ${s.currentWeek}.`;
+  }
+  // Default / streak celebration
+  if (s.streakDays >= 7) {
+    return `${s.streakDays} days strong. This is who you are now.`;
+  }
+  return `Let's make today count.`;
+}
+
+function updateGamHeadline() {
+  const el = document.getElementById('gam-headline');
+  if (el) el.textContent = pickGamHeadline(clientState);
+}
+updateGamHeadline();
+
+
+const restImg    = 'images/bg-8.jpg';
+const restFb     = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=200&h=320&fit=crop';
+const workoutImg = ['images/bg-5.jpg','images/bg-6.jpg','images/bg-7.jpg','images/bg-9.jpg'];
+const workoutFb  = [
+  'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&h=320&fit=crop',
+  'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=200&h=320&fit=crop'
+];
+
+function setPillBg(elId, local, fallback) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => { el.style.backgroundImage = `url('${local}')`; };
+  img.onerror = () => { el.style.backgroundImage = `url('${fallback}')`; };
+  img.src = local;
+}
+
+setPillBg('bg-mon', restImg, restFb);
+setPillBg('bg-thu', restImg, restFb);
+setPillBg('bg-sat', restImg, restFb);
+setPillBg('bg-tue', workoutImg[0], workoutFb[0]);
+setPillBg('bg-wed', workoutImg[1], workoutFb[1]);
+setPillBg('bg-fri', workoutImg[2], workoutFb[2]);
+setPillBg('bg-sun', workoutImg[3], workoutFb[3]);
+
+// ── SCROLL TO TODAY ──
+const weekScroll = document.getElementById('week-scroll');
+if (weekScroll) {
+  const tabWidth = 160 + 8;
+  const todayIndex = 4; // Friday
+  weekScroll.scrollLeft = (todayIndex - 1) * tabWidth - (tabWidth / 2);
+}
+
+// ── IMAGE LOADING with fallbacks ──
+function loadBg(elId, localSrc, unsplashSrc) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${localSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  };
+  img.onerror = () => {
+    el.style.backgroundImage = `url('${unsplashSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  };
+  img.src = localSrc;
+}
+
+function loadMotPhoto(localSrc, unsplashSrc) {
+  const el = document.getElementById('mot-photo');
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${localSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'top center';
+  };
+  img.onerror = () => {
+    el.style.backgroundImage = `url('${unsplashSrc}')`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'top center';
+  };
+  img.src = localSrc;
+}
+
+loadBg('session-bg',
+  'images/bg-5.jpg',
+  'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop'
+);
+loadMotPhoto(
+  'images/dejan-coach.jpg',
+  'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=600&fit=crop'
+);
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.transitionDelay = '0.05s';
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.07) + 's';
+  observer.observe(el);
+});
+
+// ── GAM CIRCLES ──
+function lerpColor(c1,c2,t){return `rgb(${Math.round(c1.r+(c2.r-c1.r)*t)},${Math.round(c1.g+(c2.g-c1.g)*t)},${Math.round(c1.b+(c2.b-c1.b)*t)})`}
+const topColor={r:197,g:236,b:255},bottomColor={r:65,g:64,b:204};
+
+function buildWorkouts(svgId,number){
+  const svg=document.getElementById(svgId);
+  const cx=40,cy=40,totalTicks=48,tickInner=27,tickOuter=35;
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','rgba(46,30,68,0.0)');svg.appendChild(bg);
+  const bg2=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg2.setAttribute('cx',cx);bg2.setAttribute('cy',cy);bg2.setAttribute('r',25);bg2.setAttribute('fill','#1a1624');svg.appendChild(bg2);
+  for(let i=0;i<totalTicks;i++){
+    const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
+    const t=(1-Math.cos(theta+Math.PI/2))/2;
+    const color=lerpColor(topColor,bottomColor,t);
+    const x1=cx+tickInner*Math.cos(theta),y1=cy+tickInner*Math.sin(theta);
+    const x2=cx+tickOuter*Math.cos(theta),y2=cy+tickOuter*Math.sin(theta);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x1.toFixed(2));line.setAttribute('y1',y1.toFixed(2));
+    line.setAttribute('x2',x2.toFixed(2));line.setAttribute('y2',y2.toFixed(2));
+    line.setAttribute('stroke',color);line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-linecap','round');
+    svg.appendChild(line);
+  }
+  const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
+  text.setAttribute('font-family','Inter');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.textContent=number;svg.appendChild(text);
+}
+
+function buildWeeks(svgId,number){
+  const svg=document.getElementById(svgId);
+  const cx=40,cy=40,totalTicks=60;
+  const bg=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',38);bg.setAttribute('fill','rgba(46,30,68,0.0)');svg.appendChild(bg);
+  for(let i=0;i<totalTicks;i++){
+    const theta=(i/totalTicks)*2*Math.PI-Math.PI/2;
+    const isCardinal=(i===0||i===15||i===30||i===45);
+    const isWhite=(i%5===0);
+    const tickOuter=35,tickInner=isCardinal?27:isWhite?29:31;
+    const x1=cx+tickInner*Math.cos(theta),y1=cy+tickInner*Math.sin(theta);
+    const x2=cx+tickOuter*Math.cos(theta),y2=cy+tickOuter*Math.sin(theta);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x1.toFixed(2));line.setAttribute('y1',y1.toFixed(2));
+    line.setAttribute('x2',x2.toFixed(2));line.setAttribute('y2',y2.toFixed(2));
+    line.setAttribute('stroke',isWhite?'#ffffff':'#4140cc');
+    line.setAttribute('stroke-width',isCardinal?'1.5':'1');line.setAttribute('stroke-linecap','round');
+    svg.appendChild(line);
+  }
+  const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+  text.setAttribute('x',cx);text.setAttribute('y',cy);text.setAttribute('text-anchor','middle');
+  text.setAttribute('dominant-baseline','central');text.setAttribute('fill','white');
+  text.setAttribute('font-family','Inter');text.setAttribute('font-size','22');text.setAttribute('font-weight','600');
+  text.textContent=number;svg.appendChild(text);
+}
+
+buildWorkouts('workouts-svg', 18);
+buildWeeks('weeks-svg', 6);
+
+// ── KG ARCS ──
+function setKgArc(id, frac) {
+  const el = document.getElementById(id);
+  if (el) el.style.strokeDashoffset = 213.6 * (1 - frac);
+}
+
+// ── PROG TICKER ──
+function buildTicker() {
+  const TOTAL = 18, PROGRESS = 0.47;
+  const filled = Math.round(TOTAL * PROGRESS);
+  const bar = document.getElementById('ticker-bar');
+  for (let i = 0; i < TOTAL; i++) {
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    if (i < filled) {
+      tick.classList.add('filled');
+      const t = filled > 1 ? i / (filled - 1) : 0;
+      const r = Math.round(0x9d + (0x32 - 0x9d) * t);
+      const g = Math.round(0xe7 + (0xcb - 0xe7) * t);
+      const b = Math.round(0x24 + (0x19 - 0x24) * t);
+      tick.style.setProperty('--tc', `rgb(${r},${g},${b})`);
+      tick.style.opacity = '0';
+      tick.style.transition = `opacity 0.12s ease ${0.5 + i * 0.05}s`;
+    }
+    bar.appendChild(tick);
+  }
+}
+buildTicker();
+
+// ── PROG COUNTER ──
+function countUp(id, target, duration) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start) + '%';
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+// ── FIRE ALL ANIMATIONS after short delay ──
+setTimeout(() => {
+  // Gam progress bar
+  document.getElementById('gam-bar').style.width = '60%';
+
+  // KG arcs
+  setKgArc('kg-lost',    0.59);
+  setKgArc('kg-current', 0.82);
+  setKgArc('kg-goal',    0.47);
+
+  // Ticker
+  document.querySelectorAll('.tick.filled').forEach(t => t.style.opacity = '1');
+
+  // Prog counter
+  countUp('prog-pct', 47, 1000);
+}, 200);
+</script>
+
+<!-- ── PEEK & POP OVERLAY ── -->
+<style>
+.peek-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 100;
+  display: none;
+  transition: background 0.25s ease, backdrop-filter 0.25s ease;
+}
+.peek-backdrop.active {
+  display: block;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.peek-card {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.88);
+  width: 310px;
+  background: #ffffff;
+  border-radius: 28px;
+  overflow: hidden;
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
+  z-index: 101;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.peek-card.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.peek-photo {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.peek-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+}
+.peek-photo-title {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+}
+.peek-photo-day {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.peek-photo-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.peek-body {
+  padding: 16px 18px 20px;
+}
+.peek-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.peek-exercise {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.peek-ex-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e1a26;
+}
+.peek-ex-detail {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #a098b8;
+}
+.peek-divider {
+  height: 1px;
+  background: #f0eef8;
+  margin: 0 0 16px;
+}
+.peek-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: #1e1a26;
+  color: #ffffff;
+}
+.peek-btn.disabled {
+  background: #f0eef8;
+  color: #a098b8;
+}
+</style>
+
+<div class="peek-backdrop" id="peek-backdrop">
+  <div class="peek-card" id="peek-card">
+    <div class="peek-photo" id="peek-photo">
+      <div class="peek-photo-overlay"></div>
+      <div class="peek-photo-title">
+        <div class="peek-photo-day" id="peek-day"></div>
+        <div class="peek-photo-name" id="peek-name"></div>
+      </div>
+    </div>
+    <div class="peek-body">
+      <div class="peek-exercises" id="peek-exercises"></div>
+      <div class="peek-divider"></div>
+      <button class="peek-btn" id="peek-btn">Begin Session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const workouts = {
+  tue: {
+    day: 'Tuesday',
+    name: 'Upper Body',
+    bgId: 'bg-tue',
+    isToday: false,
+    exercises: [
+      { name: 'Push-ups',        detail: '3 × 15 reps' },
+      { name: 'Dumbbell Row',    detail: '3 × 12 reps · 8kg' },
+      { name: 'Shoulder Press',  detail: '3 × 10 reps · 6kg' },
+      { name: 'Tricep Dips',     detail: '3 × 12 reps' },
+      { name: 'Bicep Curls',     detail: '3 × 12 reps · 5kg' },
+    ]
+  },
+  wed: {
+    day: 'Wednesday',
+    name: 'Cardio & Core',
+    bgId: 'bg-wed',
+    isToday: false,
+    exercises: [
+      { name: 'Running',         detail: '20 min' },
+      { name: 'Plank',           detail: '3 × 45 sec' },
+      { name: 'Mountain Climbers', detail: '3 × 30 reps' },
+      { name: 'Bicycle Crunches', detail: '3 × 20 reps' },
+    ]
+  },
+  fri: {
+    day: 'Friday · Today',
+    name: 'Full Body Strength',
+    bgId: 'bg-fri',
+    isToday: true,
+    exercises: [
+      { name: 'Squats',          detail: '4 × 12 reps · 20kg' },
+      { name: 'Push-ups',        detail: '3 × 15 reps' },
+      { name: 'Deadlift',        detail: '3 × 10 reps · 30kg' },
+      { name: 'Dumbbell Row',    detail: '3 × 12 reps · 8kg' },
+      { name: 'Lunges',          detail: '3 × 10 each · 10kg' },
+    ]
+  },
+  sun: {
+    day: 'Sunday',
+    name: 'Lower Body',
+    bgId: 'bg-sun',
+    isToday: false,
+    exercises: [
+      { name: 'Squats',          detail: '4 × 12 reps · 20kg' },
+      { name: 'Leg Press',       detail: '3 × 15 reps · 40kg' },
+      { name: 'Lunges',          detail: '3 × 10 each · 10kg' },
+      { name: 'Calf Raises',     detail: '3 × 20 reps' },
+      { name: 'Glute Bridge',    detail: '3 × 15 reps' },
+    ]
+  }
+};
+
+let pressTimer = null;
+let peekOpen = false;
+
+function openPeek(key) {
+  const w = workouts[key];
+  if (!w) return;
+  if (navigator.vibrate) navigator.vibrate(10);
+
+  // Photo background
+  const bgEl = document.getElementById(w.bgId);
+  const bgUrl = bgEl ? bgEl.style.backgroundImage : '';
+  document.getElementById('peek-photo').style.backgroundImage = bgUrl;
+
+  document.getElementById('peek-day').textContent = w.day;
+  document.getElementById('peek-name').textContent = w.name;
+
+  // Exercises
+  const exList = document.getElementById('peek-exercises');
+  exList.innerHTML = w.exercises.map(e => `
+    <div class="peek-exercise">
+      <div class="peek-ex-name">${e.name}</div>
+      <div class="peek-ex-detail">${e.detail}</div>
+    </div>
+  `).join('');
+
+  // Button
+  const btn = document.getElementById('peek-btn');
+  if (w.isToday) {
+    btn.textContent = 'Begin Session';
+    btn.className = 'peek-btn';
+  } else {
+    btn.textContent = 'Not Today';
+    btn.className = 'peek-btn disabled';
+  }
+
+  document.getElementById('peek-backdrop').classList.add('active');
+  document.getElementById('peek-card').classList.add('active');
+  peekOpen = true;
+}
+
+function closePeek() {
+  document.getElementById('peek-backdrop').classList.remove('active');
+  document.getElementById('peek-card').classList.remove('active');
+  peekOpen = false;
+}
+
+// Attach long press to workout pills only
+['tue','wed','fri','sun'].forEach(key => {
+  const bgEl = document.getElementById('bg-' + key);
+  if (!bgEl) return;
+  const pill = bgEl.closest('.day-pill');
+  if (!pill) return;
+
+  pill.addEventListener('touchstart', (e) => {
+    pill.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
+    pill.style.transform = 'scale(0.97)';
+    pressTimer = setTimeout(() => {
+      if (navigator.vibrate) navigator.vibrate([12, 60, 12]);
+      openPeek(key);
+    }, 300);
+  }, { passive: true });
+
+  pill.addEventListener('touchend', () => {
+    clearTimeout(pressTimer);
+    pill.style.transform = 'scale(1)';
+  });
+
+  pill.addEventListener('touchmove', () => {
+    clearTimeout(pressTimer);
+    pill.style.transform = 'scale(1)';
+  });
+});
+
+// Explicitly disable any press effect on rest day pills
+['mon','thu','sat'].forEach(key => {
+  const bgEl = document.getElementById('bg-' + key);
+  if (!bgEl) return;
+  const pill = bgEl.closest('.day-pill');
+  if (!pill) return;
+  pill.style.cursor = 'default';
+});
+
+// Close on backdrop tap
+document.getElementById('peek-backdrop').addEventListener('touchstart', (e) => {
+  if (!document.getElementById('peek-card').contains(e.target)) closePeek();
+});
+
+document.getElementById('peek-backdrop').addEventListener('click', (e) => {
+  if (!document.getElementById('peek-card').contains(e.target)) closePeek();
+});
+</script>
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <i class="ti ti-home"></i>
+    <div class="nav-label">Home</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-barbell"></i>
+    <div class="nav-label">Train</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-apple"></i>
+    <div class="nav-label">Nutrition</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-chart-bar"></i>
+    <div class="nav-label">Progress</div>
+  </div>
+  <div class="nav-item">
+    <i class="ti ti-clipboard-list"></i>
+    <div class="nav-label">Check-in</div>
+  </div>
+</div>
+
+</body>
+</html>
