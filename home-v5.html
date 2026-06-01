@@ -90,19 +90,20 @@ body {
 .header { display:flex; justify-content:space-between; align-items:center; }
 .logo { font-size:24px; font-weight:800; letter-spacing:-0.04em; }
 .profile-btn { position:relative; width:72px; height:72px; flex-shrink:0; cursor:pointer; }
-.profile-btn .halo {
-  position:absolute; inset:0; border-radius:50%; z-index:0;
-  background:radial-gradient(circle, rgba(255,46,147,0.7) 0%, rgba(168,85,247,0.5) 60%, transparent 75%);
-  filter:blur(10px);
-  transform:scale(1.25);
-  opacity:0.6; transition:opacity 0.2s;
-}
-.profile-btn:active .halo { opacity:0.85; }
 .profile-btn img {
   position:relative; z-index:1; width:72px; height:72px;
   border-radius:50%; object-fit:cover;
-  border:2px solid rgba(255,255,255,0.25);
+  border:2px solid rgba(255,255,255,0.3);
   background:linear-gradient(135deg,#3a2540,#2a1e3a);
+  box-shadow:
+    0 0 16px 2px rgba(255,46,147,0.55),
+    0 0 28px 6px rgba(168,85,247,0.4);
+  transition:box-shadow 0.2s;
+}
+.profile-btn:active img {
+  box-shadow:
+    0 0 20px 4px rgba(255,46,147,0.75),
+    0 0 36px 10px rgba(168,85,247,0.55);
 }
 
 /* ── GREETING ── */
@@ -250,7 +251,6 @@ body {
       <header class="header">
         <div class="logo glow-lg">Coached by Dejan</div>
         <button class="profile-btn">
-          <div class="halo"></div>
           <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=200&h=200&fit=crop" alt="Profile">
         </button>
       </header>
