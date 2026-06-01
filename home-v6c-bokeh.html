@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#8e8fd6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Coached by Dejan — Background 6c</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; }
+body { overflow:hidden; background:#a890cf; }
+
+/* ── GRADIENT BASE ──
+   Diagonal cool→warm: periwinkle blue-purple (top-left) → purple →
+   mauve-pink → bright rose-pink (bottom). Top leans bluer, bottom warmer. */
+.grad-bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    linear-gradient(160deg,
+      #8b8ed8 0%,
+      #9489d4 18%,
+      #a487ca 38%,
+      #b98bc2 56%,
+      #cf89b4 74%,
+      #e87fa1 90%,
+      #f293ae 100%);
+}
+/* a faint extra warm glow pooling at the bottom-right, like the reference */
+.grad-warm {
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(ellipse 90% 60% at 70% 110%, rgba(240,130,165,0.55), transparent 60%);
+}
+/* a faint cool pool top-left */
+.grad-cool {
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(ellipse 80% 50% at 15% -5%, rgba(140,150,225,0.45), transparent 55%);
+}
+
+/* ── BOKEH FLARES ── soft out-of-focus orbs, drifting + breathing */
+#bokeh { position:fixed; inset:0; z-index:2; pointer-events:none; }
+.flare {
+  position:absolute; border-radius:50%; will-change:transform,opacity;
+  /* bokeh: soft center, slightly brighter rim, soft falloff */
+  background:radial-gradient(circle at 50% 50%,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.16) 55%,
+    rgba(255,255,255,0.28) 78%,
+    rgba(255,255,255,0.05) 92%,
+    transparent 100%);
+  filter:blur(2px);
+}
+</style>
+</head>
+<body>
+
+<div class="grad-bg"></div>
+<div class="grad-warm"></div>
+<div class="grad-cool"></div>
+<div id="bokeh"></div>
+
+<script>
+// ── DYNAMIC BOKEH FLARES ──
+// Soft out-of-focus orbs that slowly drift and "breathe" (scale + opacity).
+// Each flare gets a colour tint sampled to match its vertical position in the
+// gradient: bluer near the top, pinker near the bottom.
+(function() {
+  const layer = document.getElementById('bokeh');
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
+
+  // tint by vertical position (0 = top, 1 = bottom): cool blue → warm pink
+  function tintAt(t) {
+    // top  ~ (190,200,255)  bottom ~ (255,180,210)
+    const r = Math.round(190 + (255-190)*t);
+    const g = Math.round(200 + (180-200)*t);
+    const b = Math.round(255 + (210-255)*t);
+    return `${r},${g},${b}`;
+  }
+
+  // flare definitions roughly echoing the reference layout, sizes in vw
+  const defs = [
+    { x:0.20, y:0.16, d:0.30, base:0.55, drift:26, dur:19 }, // upper-left big
+    { x:0.34, y:0.30, d:0.16, base:0.40, drift:20, dur:23 }, // mid-left small
+    { x:0.46, y:0.40, d:0.20, base:0.45, drift:24, dur:21 }, // mid stack
+    { x:0.62, y:0.22, d:0.34, base:0.60, drift:30, dur:25 }, // center-right large (behind lock)
+    { x:0.50, y:0.55, d:0.18, base:0.42, drift:22, dur:20 }, // lower-center faint
+    { x:0.78, y:0.48, d:0.22, base:0.38, drift:28, dur:27 }, // right mid
+    { x:0.16, y:0.62, d:0.14, base:0.35, drift:18, dur:22 }, // lower-left tiny
+  ];
+
+  defs.forEach((f, i) => {
+    const el = document.createElement('div');
+    el.className = 'flare';
+    const size = f.d * W();
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    el.style.left = (f.x * W() - size/2) + 'px';
+    el.style.top  = (f.y * H() - size/2) + 'px';
+
+    // tint the orb to match its place in the gradient
+    const tint = tintAt(f.y);
+    el.style.background = `radial-gradient(circle at 50% 50%,
+      rgba(${tint},${(f.base*0.18).toFixed(3)}) 0%,
+      rgba(${tint},${(f.base*0.30).toFixed(3)}) 55%,
+      rgba(${tint},${(f.base*0.55).toFixed(3)}) 78%,
+      rgba(${tint},${(f.base*0.10).toFixed(3)}) 92%,
+      transparent 100%)`;
+    el.style.filter = `blur(${2 + f.d*6}px)`;
+
+    layer.appendChild(el);
+
+    // animate: independent drift on x/y (sine) + breathing scale/opacity
+    const phase = Math.random() * Math.PI * 2;
+    const dx = f.drift, dy = f.drift * 0.7;
+    const start = performance.now() + i * 400;
+    function tick(now) {
+      const t = (now - start) / 1000;
+      const ox = Math.sin(t / f.dur * Math.PI * 2 + phase) * dx;
+      const oy = Math.cos(t / (f.dur*1.3) * Math.PI * 2 + phase) * dy;
+      const breathe = 1 + Math.sin(t / (f.dur*0.6) + phase) * 0.08;
+      const op = 0.7 + Math.sin(t / (f.dur*0.5) + phase) * 0.3;
+      el.style.transform = `translate(${ox}px, ${oy}px) scale(${breathe.toFixed(3)})`;
+      el.style.opacity = op.toFixed(3);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+
+  // reposition on resize
+  let rt;
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      const flares = layer.querySelectorAll('.flare');
+      flares.forEach((el, i) => {
+        const f = defs[i];
+        const size = f.d * W();
+        el.style.width = size + 'px';
+        el.style.height = size + 'px';
+        el.style.left = (f.x * W() - size/2) + 'px';
+        el.style.top  = (f.y * H() - size/2) + 'px';
+      });
+    }, 200);
+  });
+})();
+</script>
+</body>
+</html>
