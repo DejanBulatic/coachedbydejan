@@ -64,21 +64,21 @@ body {
 .glass-light { background:rgba(255,255,255,0.05); }
 .glass-heavy { background:rgba(255,255,255,0.1); backdrop-filter:blur(40px) saturate(1.6); -webkit-backdrop-filter:blur(40px) saturate(1.6); }
 
-/* Screen-edge specular glow — a soft white light at the top/bottom EDGE OF THE SCREEN
-   that blooms based on scroll direction, like light catching the rim as content passes. */
-.edge-glow {
-  position:fixed; left:0; right:0; height:45px; z-index:40;
-  pointer-events:none; opacity:0; transition:opacity 0.3s ease;
+/* Glass edge highlight — lights up when the card edge is within the screen's top/bottom zone.
+   Clipped to the card, so it never bleeds onto the background. Radius kept tight. */
+.glass .edge-hi {
+  content:''; position:absolute; left:0; right:0; height:22px;
+  pointer-events:none; opacity:0; transition:opacity 0.25s ease; z-index:4;
 }
-.edge-glow-top {
-  top:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,0.35), transparent);
+.glass .edge-hi-top {
+  top:0; border-radius:28px 28px 0 0;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.45), transparent);
 }
-.edge-glow-bottom {
-  bottom:0;
-  background:linear-gradient(to top, rgba(255,255,255,0.35), transparent);
+.glass .edge-hi-bottom {
+  bottom:0; border-radius:0 0 28px 28px;
+  background:linear-gradient(to top, rgba(255,255,255,0.45), transparent);
 }
-.edge-glow.on { opacity:1; }
+.glass .edge-hi.on { opacity:1; }
 
 /* ── TYPOGRAPHY ── */
 .glow-sm { text-shadow:0 0 4px rgba(255,255,255,0.5); }
@@ -243,10 +243,6 @@ body {
   <div class="fluid-blob blob4"></div>
 </div>
 <div class="fluid-overlay"></div>
-
-<!-- Screen-edge specular glow -->
-<div class="edge-glow edge-glow-top" id="edge-top"></div>
-<div class="edge-glow edge-glow-bottom" id="edge-bottom"></div>
 
 <div class="app">
   <div class="scroll">
@@ -451,32 +447,42 @@ document.getElementById('badge-scroll').innerHTML = badges.map(b => `
     <span class="badge-name ${b.unlocked?'':'locked'}">${b.name}</span>
   </div>`).join('');
 
-// ── SCREEN-EDGE SPECULAR GLOW ──
-// A soft white light at the top or bottom EDGE OF THE SCREEN, based on scroll direction.
-// Scroll down → bottom edge glows. Scroll up → top edge glows. Fades when scrolling stops.
+// ── GLASS EDGE HIGHLIGHT ──
+// Each glass card gets a top + bottom highlight overlay (clipped to the card).
+// They light up whenever that edge of the card sits within the screen's top/bottom zone,
+// continuously — whether scrolling or static. Glow stays only on the glass.
 (function() {
   const scroller = document.querySelector('.scroll');
-  const top = document.getElementById('edge-top');
-  const bottom = document.getElementById('edge-bottom');
-  let lastY = scroller.scrollTop;
-  let fadeTimer = null;
+  const ZONE = 70; // px from top/bottom of screen where the "light" lives
 
-  scroller.addEventListener('scroll', () => {
-    const y = scroller.scrollTop;
-    if (y > lastY + 1) {            // scrolling down → TOP edge glows
-      top.classList.add('on');
-      bottom.classList.remove('on');
-    } else if (y < lastY - 1) {     // scrolling up → BOTTOM edge glows
-      bottom.classList.add('on');
-      top.classList.remove('on');
-    }
-    lastY = y;
-    clearTimeout(fadeTimer);
-    fadeTimer = setTimeout(() => {
-      top.classList.remove('on');
-      bottom.classList.remove('on');
-    }, 200);
-  }, { passive:true });
+  // Inject highlight overlays into every glass card
+  const cards = Array.from(document.querySelectorAll('.glass'));
+  cards.forEach(card => {
+    const t = document.createElement('div');
+    t.className = 'edge-hi edge-hi-top';
+    const b = document.createElement('div');
+    b.className = 'edge-hi edge-hi-bottom';
+    card.appendChild(t);
+    card.appendChild(b);
+    card._hiTop = t; card._hiBottom = b;
+  });
+
+  function update() {
+    const vh = window.innerHeight;
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      // Top edge of card within the top zone of the screen?
+      card._hiTop.classList.toggle('on', r.top <= ZONE && r.top >= -r.height + 10 && r.top < vh);
+      // Bottom edge of card within the bottom zone of the screen?
+      card._hiBottom.classList.toggle('on', r.bottom >= vh - ZONE && r.bottom <= vh + r.height - 10 && r.bottom > 0);
+    });
+  }
+
+  scroller.addEventListener('scroll', update, { passive:true });
+  window.addEventListener('resize', update);
+  // Run continuously for static state too (e.g. on load)
+  setTimeout(update, 100);
+  setTimeout(update, 600);
 })();
 
 // Nav switching
