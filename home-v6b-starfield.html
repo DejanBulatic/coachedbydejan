@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1d1822">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; }
+body {
+  font-family:'Plus Jakarta Sans', sans-serif;
+  background:#1d1822;
+  color:#ffffff;
+  overflow:hidden;
+}
+
+/* ── FLUID ANIMATED BACKGROUND (light gray-mauve, starfield hero) ── */
+.fluid-bg { position:fixed; inset:0; z-index:0; overflow:hidden; background:linear-gradient(165deg,#231b2b 0%,#1d1822 50%,#241a26 100%); }
+.fluid-blob {
+  position:absolute; border-radius:50%;
+  filter:blur(90px); opacity:0.32;
+  will-change:transform;
+}
+.blob1 { width:400px; height:400px; background:radial-gradient(circle,#ff2e93,transparent 70%); top:-90px; left:-70px; animation:float1 18s ease-in-out infinite; }
+.blob2 { width:320px; height:320px; background:radial-gradient(circle,#ff7ab8,transparent 70%); top:30%; right:-110px; animation:float2 22s ease-in-out infinite; }
+.blob3 { width:300px; height:300px; background:radial-gradient(circle,#d98ad6,transparent 70%); bottom:5%; left:-60px; animation:float3 20s ease-in-out infinite; }
+.blob4 { width:280px; height:280px; background:radial-gradient(circle,#ff2e93,transparent 70%); bottom:-50px; right:8%; animation:float1 24s ease-in-out infinite reverse; }
+@keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,60px) scale(1.1)} 66%{transform:translate(-30px,30px) scale(0.95)} }
+@keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-50px,40px) scale(1.05)} 66%{transform:translate(20px,-40px) scale(1.1)} }
+@keyframes float3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,-50px) scale(1.15)} }
+/* starfield sits above blobs, below vignette */
+#starfield { position:fixed; inset:0; z-index:1; pointer-events:none; }
+/* soft vignette so glass reads — lighter than dark theme */
+.fluid-overlay { position:fixed; inset:0; z-index:2; background:radial-gradient(ellipse at 50% 0%, rgba(40,28,50,0.1), rgba(26,18,32,0.55) 100%); pointer-events:none; }
+
+/* ── SCROLL CONTAINER ── */
+.app { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; }
+.scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:120px; scroll-behavior:smooth; }
+.scroll::-webkit-scrollbar { display:none; }
+
+.content { display:flex; flex-direction:column; gap:32px; padding:48px 20px 0; max-width:440px; margin:0 auto; }
+
+/* ── GLASS PANEL ── */
+.glass {
+  position:relative;
+  background:rgba(255,255,255,0.07);
+  backdrop-filter:blur(20px) saturate(1.5);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,0.12);
+  border-top:1px solid rgba(255,255,255,0.45);
+  border-radius:28px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.35), inset 0 -1px 1px rgba(0,0,0,0.1);
+}
+/* permanent top-edge sheen — light catching the glass rim */
+.glass > .sheen, .glass::after {
+  content:'';
+  position:absolute; top:0; left:12%; right:12%; height:1px;
+  background:linear-gradient(to right, transparent, rgba(255,255,255,0.7), transparent);
+  pointer-events:none; z-index:3;
+}
+/* permanent soft edge glow (top + bottom) — the look that makes the glass pop */
+.glass > .edge-glow-perm {
+  content:''; position:absolute; left:0; right:0; height:11%;
+  pointer-events:none; z-index:2;
+}
+.glass .glow-t {
+  top:0;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.28), transparent);
+}
+.glass .glow-b {
+  bottom:0;
+  background:linear-gradient(to top, rgba(255,255,255,0.20), transparent);
+}
+.glass-light { background:rgba(255,255,255,0.05); }
+.glass-heavy { background:rgba(255,255,255,0.1); backdrop-filter:blur(40px) saturate(1.6); -webkit-backdrop-filter:blur(40px) saturate(1.6); }
+
+.glass { overflow:hidden; }
+
+/* ── TYPOGRAPHY ── */
+.glow-sm { text-shadow:0 0 4px rgba(255,255,255,0.5); }
+.glow-md { text-shadow:0 0 8px rgba(255,255,255,0.3); }
+.glow-lg { text-shadow:0 0 12px rgba(255,255,255,0.4); }
+.accent { color:#ff2e93; }
+
+/* ── HEADER ── */
+.header { display:flex; justify-content:space-between; align-items:center; }
+.logo { font-size:24px; font-weight:800; letter-spacing:-0.04em; }
+.profile-btn {
+  position:relative; width:72px; height:72px; flex-shrink:0; cursor:pointer;
+  background:transparent; border:none; padding:0; margin:0;
+  -webkit-appearance:none; appearance:none; outline:none;
+  display:block; line-height:0;
+}
+.profile-btn img {
+  position:relative; z-index:1; width:72px; height:72px;
+  border-radius:50%; object-fit:cover;
+  border:2px solid rgba(255,255,255,0.3);
+  background:linear-gradient(135deg,#3a2540,#2a1e3a);
+  box-shadow:
+    0 0 16px 2px rgba(255,46,147,0.55),
+    0 0 28px 6px rgba(168,85,247,0.4);
+  transition:box-shadow 0.2s;
+}
+.profile-btn:active img {
+  box-shadow:
+    0 0 20px 4px rgba(255,46,147,0.75),
+    0 0 36px 10px rgba(168,85,247,0.55);
+}
+
+/* ── GREETING ── */
+.greeting h2 { font-size:30px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px; }
+.greeting p { font-size:14px; font-weight:500; color:rgba(255,255,255,0.6); }
+.greeting p b { color:rgba(255,255,255,0.9); font-weight:600; }
+
+/* ── GAMIFICATION ── */
+.gam { padding:20px; }
+.gam-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.gam-head h3 { font-size:18px; font-weight:600; }
+.gam-pct { color:#ff2e93; font-weight:700; font-size:14px; letter-spacing:0.02em; }
+.gam-bar { height:12px; width:100%; background:rgba(0,0,0,0.4); border-radius:6px; overflow:hidden; margin-bottom:20px; box-shadow:inset 0 1px 3px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.05); }
+.gam-bar-fill { height:100%; width:0; background:linear-gradient(to right,#a855f7,#ff2e93); border-radius:6px; position:relative; transition:width 1.5s cubic-bezier(0.4,0,0.2,1); }
+.gam-bar-fill::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:rgba(255,255,255,0.4); }
+.gam-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.gam-stat { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 4px; border-radius:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); }
+.gam-stat-val { font-size:20px; font-weight:700; }
+.gam-stat-lbl { font-size:10px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em; margin-top:3px; }
+
+/* ── PROGRESS ROW ── */
+.prog-row { display:flex; gap:16px; }
+.prog-card { flex:1; padding:20px; display:flex; flex-direction:column; justify-content:space-between; }
+.prog-card h4 { color:rgba(255,255,255,0.6); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.prog-card .prog-name { font-weight:700; font-size:18px; line-height:1.1; margin-bottom:16px; }
+.prog-week-row { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
+.prog-week { font-size:14px; font-weight:500; }
+.prog-delta { font-size:12px; color:#34d399; font-weight:700; }
+.ticker { display:flex; gap:4px; height:32px; align-items:flex-end; }
+.ticker div { flex:1; background:rgba(255,46,147,0.4); border-radius:2px 2px 0 0; }
+
+.kg-card { flex:0.8; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+.kg-card h4 { position:absolute; top:16px; left:16px; color:rgba(255,255,255,0.6); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+.kg-today { position:absolute; top:16px; right:16px; color:rgba(255,255,255,0.4); font-size:10px; }
+.kg-rings { margin-top:24px; position:relative; width:90px; height:90px; }
+.kg-legend { display:flex; justify-content:center; gap:12px; margin-top:16px; }
+.kg-leg { display:flex; flex-direction:column; align-items:center; }
+.kg-leg-dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
+.kg-leg span { font-size:9px; color:rgba(255,255,255,0.5); }
+
+/* ── SECTION ── */
+.section-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px; }
+.section-head h3 { font-size:20px; font-weight:700; letter-spacing:-0.01em; }
+.section-link { color:#ff2e93; font-size:14px; font-weight:600; cursor:pointer; }
+
+/* ── THIS WEEK ── */
+.week-scroll { display:flex; overflow-x:auto; gap:12px; padding:0 20px 16px; margin:0 -20px; }
+.week-scroll::-webkit-scrollbar { display:none; }
+.week-day { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.week-day-lbl { font-size:12px; font-weight:600; color:rgba(255,255,255,0.4); }
+.week-day-lbl.active { color:#fff; }
+.week-card { position:relative; width:140px; height:160px; border-radius:24px; overflow:hidden; cursor:pointer; }
+.week-card img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.week-card .ov { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2) 60%, transparent); }
+.week-card .rim { position:absolute; inset:0; border-radius:24px; border:1px solid rgba(255,255,255,0.2); box-shadow:inset 0 1px 1px rgba(255,255,255,0.4); pointer-events:none; }
+.week-card .info { position:absolute; bottom:12px; left:12px; right:12px; text-align:left; }
+.week-card .info p { font-weight:700; font-size:14px; line-height:1.1; margin-bottom:4px; }
+.week-card .info span { color:#ff2e93; font-size:12px; font-weight:700; }
+.week-circle { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid; }
+.week-circle.completed { background:rgba(255,46,147,0.2); border-color:#ff2e93; color:#ff2e93; }
+.week-circle.rest { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.2); font-size:11px; }
+
+/* ── TODAY SESSION ── */
+.today-card { position:relative; border-radius:32px; overflow:hidden; height:340px; border:1px solid rgba(255,255,255,0.2); box-shadow:0 32px 64px rgba(0,0,0,0.4); }
+.today-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.today-panel-wrap { position:absolute; bottom:8px; left:8px; right:8px; }
+.today-panel { padding:20px; border-radius:24px; }
+.today-meta { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.today-tag { padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; background:rgba(255,46,147,0.2); color:#ff2e93; border:1px solid rgba(255,46,147,0.3); text-transform:uppercase; letter-spacing:0.1em; }
+.today-sub { color:rgba(255,255,255,0.6); font-size:12px; font-weight:600; }
+.today-name { font-size:24px; font-weight:700; letter-spacing:-0.01em; margin-bottom:16px; }
+.begin-btn { width:100%; padding:16px; background:#fff; color:#000; font-weight:700; font-size:16px; border:none; border-radius:14px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; animation:beginGlow 2s infinite; }
+@keyframes beginGlow { 0%,100%{box-shadow:0 0 0 rgba(255,46,147,0)} 50%{box-shadow:0 0 20px rgba(255,46,147,0.5)} }
+.begin-btn:active { transform:scale(0.98); }
+
+/* ── FROM DEJAN ── */
+.dejan { padding:16px; display:flex; align-items:center; gap:16px; }
+.dejan img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.2); box-shadow:0 0 12px rgba(255,255,255,0.2); flex-shrink:0; }
+.dejan-label { font-size:12px; color:#ff2e93; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.dejan-msg { font-size:14px; font-weight:500; line-height:1.4; color:rgba(255,255,255,0.9); }
+
+/* ── BADGES ── */
+.badge-scroll { display:flex; overflow-x:auto; gap:16px; padding:0 20px 16px; margin:0 -20px; }
+.badge-scroll::-webkit-scrollbar { display:none; }
+.badge { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:8px; width:72px; }
+.badge-ic { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; }
+.badge-ic.unlocked { background:linear-gradient(135deg,#a855f7,#ff2e93); padding:2px; }
+.badge-ic.locked { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); }
+.badge-ic .glow { position:absolute; inset:0; background:rgba(255,255,255,0.2); border-radius:50%; filter:blur(8px); }
+.badge-inner { width:100%; height:100%; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#15131c; position:relative; z-index:1; }
+.badge-ic.locked .badge-inner { opacity:0.4; background:transparent; }
+.badge-name { font-size:10px; font-weight:600; text-align:center; line-height:1.1; }
+.badge-name.locked { color:rgba(255,255,255,0.4); }
+
+/* ── STAY CONNECTED ── */
+.connect-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.connect-card { padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+.connect-ic { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.connect-ic.blue { background:rgba(59,130,246,0.2); color:#60a5fa; }
+.connect-ic.green { background:rgba(16,185,129,0.2); color:#34d399; }
+.connect-card p.t { font-weight:700; font-size:14px; }
+.connect-card p.s { font-size:12px; color:rgba(255,255,255,0.5); margin-top:4px; }
+
+/* ── BOTTOM NAV (glass) ── */
+.nav {
+  position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
+  width:calc(100% - 24px); max-width:400px; z-index:50;
+  display:flex; justify-content:space-around; align-items:center;
+  padding:8px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(28px) saturate(1.8);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:32px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+}
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 14px; border-radius:24px; cursor:pointer; transition:all 0.18s; flex:1; }
+.nav-item i { font-size:22px; color:rgba(255,255,255,0.5); }
+.nav-item span { font-size:9px; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.04em; }
+.nav-item.active { background:rgba(255,46,147,0.15); }
+.nav-item.active i { color:#ff2e93; }
+.nav-item.active span { color:#ff2e93; }
+</style>
+</head>
+<body>
+
+<!-- Fluid animated background -->
+<div class="fluid-bg">
+  <div class="fluid-blob blob1"></div>
+  <div class="fluid-blob blob2"></div>
+  <div class="fluid-blob blob3"></div>
+  <div class="fluid-blob blob4"></div>
+</div>
+<canvas id="starfield"></canvas>
+<div class="fluid-overlay"></div>
+
+<div class="app">
+  <div class="scroll">
+    <div class="content">
+
+      <!-- 1. Header -->
+      <header class="header">
+        <div class="logo glow-lg">Coached by Dejan</div>
+        <button class="profile-btn">
+          <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=200&h=200&fit=crop" alt="Profile">
+        </button>
+      </header>
+
+      <!-- Greeting -->
+      <section class="greeting">
+        <h2 class="glow-md">Hi, Sarah</h2>
+        <p>Level 4 — <b>Shred &amp; Tone</b> · 12 Weeks</p>
+      </section>
+
+      <!-- 2. Gamification -->
+      <div class="glass gam">
+        <div class="gam-head">
+          <h3 class="glow-sm">Your Journey</h3>
+          <span class="gam-pct">65%</span>
+        </div>
+        <div class="gam-bar"><div class="gam-bar-fill" id="gam-fill"></div></div>
+        <div class="gam-stats">
+          <div class="gam-stat"><span class="gam-stat-val glow-sm">24</span><span class="gam-stat-lbl">Workouts</span></div>
+          <div class="gam-stat"><span class="gam-stat-val glow-sm">4/12</span><span class="gam-stat-lbl">Weeks</span></div>
+          <div class="gam-stat"><span class="gam-stat-val glow-sm">12k</span><span class="gam-stat-lbl">Kcal</span></div>
+          <div class="gam-stat"><span class="gam-stat-val glow-sm">3</span><span class="gam-stat-lbl">Badges</span></div>
+        </div>
+      </div>
+
+      <!-- 3. Progress Row -->
+      <div class="prog-row">
+        <div class="glass prog-card">
+          <div>
+            <h4>Current Programme</h4>
+            <p class="prog-name">Shred &amp; Tone</p>
+          </div>
+          <div>
+            <div class="prog-week-row">
+              <span class="prog-week">Week 4 of 12</span>
+              <span class="prog-delta">+2.4%</span>
+            </div>
+            <div class="ticker" id="ticker"></div>
+          </div>
+        </div>
+        <div class="glass kg-card">
+          <h4>Weight</h4>
+          <span class="kg-today">Today</span>
+          <div class="kg-rings" id="kg-rings"></div>
+          <div class="kg-legend">
+            <div class="kg-leg"><div class="kg-leg-dot" style="background:#ff2e93"></div><span>Lost</span></div>
+            <div class="kg-leg"><div class="kg-leg-dot" style="background:#a855f7"></div><span>Cur</span></div>
+            <div class="kg-leg"><div class="kg-leg-dot" style="background:#38bdf8"></div><span>Goal</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. This Week -->
+      <section>
+        <div class="section-head">
+          <h3 class="glow-sm">This Week</h3>
+          <span class="section-link">View All</span>
+        </div>
+        <div class="week-scroll" id="week-scroll"></div>
+      </section>
+
+      <!-- 5. Today's Session -->
+      <section>
+        <div class="section-head"><h3 class="glow-sm">Today's Session</h3></div>
+        <div class="today-card">
+          <img src="https://images.unsplash.com/photo-1762017740727-86f6ad9eab18?w=800&h=700&fit=crop" alt="">
+          <div class="today-panel-wrap">
+            <div class="glass-heavy glass today-panel">
+              <div class="today-meta">
+                <span class="today-tag">Upper Body</span>
+                <span class="today-sub">45 Min • 6 Exercises</span>
+              </div>
+              <div class="today-name glow-md">Sculpt &amp; Burn</div>
+              <button class="begin-btn"><i class="ti ti-player-play-filled"></i> Begin Session</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. From Dejan -->
+      <div class="glass glass-light dejan">
+        <img src="https://images.unsplash.com/photo-1619361814016-4acc36025fa9?w=200&h=200&fit=crop" alt="Dejan">
+        <div>
+          <div class="dejan-label">From Dejan</div>
+          <div class="dejan-msg">"You crushed it yesterday! Let's carry that energy into today's upper body focus. Form over speed."</div>
+        </div>
+      </div>
+
+      <!-- 7. Badges -->
+      <section>
+        <div class="section-head"><h3 class="glow-sm">Your Badges</h3></div>
+        <div class="badge-scroll" id="badge-scroll"></div>
+      </section>
+
+      <!-- 8. Stay Connected -->
+      <section style="padding-bottom:20px">
+        <div class="section-head"><h3 class="glow-sm">Stay Connected</h3></div>
+        <div class="connect-grid">
+          <div class="glass connect-card">
+            <div class="connect-ic blue"><i class="ti ti-info-circle" style="font-size:24px"></i></div>
+            <div><p class="t">Weekly Check-in</p><p class="s">Due in 2 days</p></div>
+          </div>
+          <div class="glass connect-card">
+            <div class="connect-ic green"><i class="ti ti-brand-whatsapp" style="font-size:24px"></i></div>
+            <div><p class="t">Message Dejan</p><p class="s">WhatsApp</p></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="nav">
+    <div class="nav-item active"><i class="ti ti-home"></i><span>Home</span></div>
+    <div class="nav-item"><i class="ti ti-barbell"></i><span>Programme</span></div>
+    <div class="nav-item"><i class="ti ti-apple"></i><span>Nutrition</span></div>
+    <div class="nav-item"><i class="ti ti-chart-bar"></i><span>Progress</span></div>
+    <div class="nav-item"><i class="ti ti-clipboard-list"></i><span>Check-in</span></div>
+  </nav>
+</div>
+
+<script>
+// ── STARFIELD ── denser, pinker; the hero layer of this variant
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr, stars;
+  const COUNT = 130;
+  const COLORS = ['255,255,255','255,46,147','255,122,184','255,160,210'];
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function makeStars() {
+    stars = Array.from({length: COUNT}, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.8 + 0.5,
+      c: COLORS[Math.random() < 0.55 ? 0 : 1 + Math.floor(Math.random()*3)],
+      vy: Math.random() * 0.14 + 0.03,
+      vx: (Math.random() - 0.5) * 0.06,
+      tw: Math.random() * Math.PI * 2,
+      tws: Math.random() * 0.018 + 0.005
+    }));
+  }
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    for (const s of stars) {
+      s.y += s.vy; s.x += s.vx; s.tw += s.tws;
+      if (s.y > h + 2) { s.y = -2; s.x = Math.random() * w; }
+      if (s.x < -2) s.x = w + 2; if (s.x > w + 2) s.x = -2;
+      const a = 0.4 + Math.sin(s.tw) * 0.4;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${s.c},${a.toFixed(3)})`;
+      ctx.shadowBlur = s.r * 3.5; ctx.shadowColor = `rgba(${s.c},${a.toFixed(3)})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  resize(); makeStars(); frame();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); makeStars(); }, 200); });
+})();
+
+// Ticker bars
+const tickerHeights = [40,60,45,80,65,90,75];
+document.getElementById('ticker').innerHTML = tickerHeights.map(h => `<div style="height:${h}%"></div>`).join('');
+
+// Animate gam bar on load
+setTimeout(() => { document.getElementById('gam-fill').style.width = '65%'; }, 300);
+
+// Nested KG rings (pink 80, purple 60, blue 30)
+function ring(progress, size, stroke, color, track) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - progress/100);
+  return `<svg width="${size}" height="${size}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg)">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" class="kg-ring-anim" data-off="${off}"/>
+  </svg>`;
+}
+document.getElementById('kg-rings').innerHTML =
+  ring(80, 90, 8, '#ff2e93', 'rgba(255,255,255,0.05)') +
+  ring(60, 66, 8, '#a855f7', 'rgba(255,255,255,0.05)') +
+  ring(30, 42, 8, '#38bdf8', 'rgba(255,255,255,0.05)');
+setTimeout(() => {
+  document.querySelectorAll('.kg-ring-anim').forEach(c => {
+    c.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(0.4,0,0.2,1)';
+    c.style.strokeDashoffset = c.dataset.off;
+  });
+}, 400);
+
+// This week schedule
+const week = [
+  { day:'Mon', type:'rest' },
+  { day:'Tue', type:'completed' },
+  { day:'Wed', type:'current', active:true, title:'Upper Body Power', dur:'45m', img:'https://images.unsplash.com/photo-1637870473618-8c9fa7d11f0a?w=300&h=340&fit=crop' },
+  { day:'Thu', type:'upcoming', title:'Active Recovery', dur:'30m', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=340&fit=crop' },
+  { day:'Fri', type:'upcoming', title:'Lower Body', dur:'45m', img:'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=340&fit=crop' },
+  { day:'Sat', type:'upcoming' },
+  { day:'Sun', type:'rest' },
+];
+document.getElementById('week-scroll').innerHTML = week.map(d => {
+  const lbl = `<span class="week-day-lbl ${d.active?'active':''}">${d.day}</span>`;
+  if (d.type === 'current' || d.type === 'upcoming') {
+    if (d.img) {
+      return `<div class="week-day">${lbl}<div class="week-card">
+        <img src="${d.img}" alt=""><div class="ov"></div><div class="rim"></div>
+        <div class="info"><p>${d.title}</p><span>${d.dur}</span></div></div></div>`;
+    }
+    return `<div class="week-day">${lbl}<div class="week-circle rest">Soon</div></div>`;
+  }
+  if (d.type === 'completed') {
+    return `<div class="week-day">${lbl}<div class="week-circle completed"><i class="ti ti-check" style="font-size:20px"></i></div></div>`;
+  }
+  return `<div class="week-day">${lbl}<div class="week-circle rest">Rest</div></div>`;
+}).join('');
+
+// Badges
+const badges = [
+  { name:'First Step', unlocked:true },
+  { name:'10k Calories', unlocked:true },
+  { name:'Week 4 Perfect', unlocked:true },
+  { name:'Heavy Lifter', unlocked:false },
+  { name:'Consistency', unlocked:false },
+  { name:'Marathon', unlocked:false },
+];
+document.getElementById('badge-scroll').innerHTML = badges.map(b => `
+  <div class="badge">
+    <div class="badge-ic ${b.unlocked?'unlocked':'locked'}">
+      ${b.unlocked?'<div class="glow"></div>':''}
+      <div class="badge-inner"><i class="ti ti-trophy" style="font-size:26px;color:${b.unlocked?'#fff':'rgba(255,255,255,0.2)'}"></i></div>
+    </div>
+    <span class="badge-name ${b.unlocked?'':'locked'}">${b.name}</span>
+  </div>`).join('');
+
+// (edge-light effect removed — may revisit later)
+
+// ── PERMANENT GLASS EDGE GLOW ──
+// Soft glow on the top inner edge of every glass card — default style.
+(function() {
+  document.querySelectorAll('.glass').forEach(card => {
+    const t = document.createElement('div');
+    t.className = 'edge-glow-perm glow-t';
+    card.appendChild(t);
+  });
+})();
+
+// Nav switching
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    if (navigator.vibrate) navigator.vibrate(6);
+  });
+});
+</script>
+</body>
+</html>
