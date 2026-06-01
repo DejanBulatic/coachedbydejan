@@ -64,21 +64,17 @@ body {
 .glass-light { background:rgba(255,255,255,0.05); }
 .glass-heavy { background:rgba(255,255,255,0.1); backdrop-filter:blur(40px) saturate(1.6); -webkit-backdrop-filter:blur(40px) saturate(1.6); }
 
-/* Glass edge highlight — lights up when the card edge is within the screen's top/bottom zone.
-   Clipped to the card, so it never bleeds onto the background. Radius kept tight. */
-.glass .edge-hi {
-  content:''; position:absolute; left:0; right:0; height:22px;
-  pointer-events:none; opacity:0; transition:opacity 0.25s ease; z-index:4;
+/* Glass edge light — a thin bright line locked to the exact top/bottom SCREEN edge,
+   visible only where a glass card crosses it. As the card scrolls, the line appears
+   to sweep across the card because the line stays pinned to the screen edge. */
+.glass { overflow:hidden; }
+.glass .edge-light {
+  position:absolute; left:0; right:0; height:2px;
+  background:linear-gradient(to right, transparent, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0.85) 70%, transparent);
+  box-shadow:0 0 8px 1px rgba(255,255,255,0.5);
+  pointer-events:none; opacity:0; z-index:5;
+  will-change:transform, opacity;
 }
-.glass .edge-hi-top {
-  top:0; border-radius:28px 28px 0 0;
-  background:linear-gradient(to bottom, rgba(255,255,255,0.45), transparent);
-}
-.glass .edge-hi-bottom {
-  bottom:0; border-radius:0 0 28px 28px;
-  background:linear-gradient(to top, rgba(255,255,255,0.45), transparent);
-}
-.glass .edge-hi.on { opacity:1; }
 
 /* ── TYPOGRAPHY ── */
 .glow-sm { text-shadow:0 0 4px rgba(255,255,255,0.5); }
@@ -447,40 +443,51 @@ document.getElementById('badge-scroll').innerHTML = badges.map(b => `
     <span class="badge-name ${b.unlocked?'':'locked'}">${b.name}</span>
   </div>`).join('');
 
-// ── GLASS EDGE HIGHLIGHT ──
-// Each glass card gets a top + bottom highlight overlay (clipped to the card).
-// They light up whenever that edge of the card sits within the screen's top/bottom zone,
-// continuously — whether scrolling or static. Glow stays only on the glass.
+// ── GLASS EDGE LIGHT ──
+// A thin bright line locked to the exact top AND bottom screen edges.
+// Visible only where a glass card crosses that edge. As the card scrolls through,
+// the line sweeps across it (line stays at screen edge, card moves).
 (function() {
   const scroller = document.querySelector('.scroll');
-  const ZONE = 70; // px from top/bottom of screen where the "light" lives
-
-  // Inject highlight overlays into every glass card
   const cards = Array.from(document.querySelectorAll('.glass'));
+
+  // Each card gets two light lines: one for the top screen edge, one for the bottom
   cards.forEach(card => {
-    const t = document.createElement('div');
-    t.className = 'edge-hi edge-hi-top';
-    const b = document.createElement('div');
-    b.className = 'edge-hi edge-hi-bottom';
-    card.appendChild(t);
-    card.appendChild(b);
-    card._hiTop = t; card._hiBottom = b;
+    const lt = document.createElement('div');
+    lt.className = 'edge-light';
+    const lb = document.createElement('div');
+    lb.className = 'edge-light';
+    card.appendChild(lt); card.appendChild(lb);
+    card._lt = lt; card._lb = lb;
   });
 
   function update() {
     const vh = window.innerHeight;
+    const TOP_EDGE = 0;       // exact top screen edge
+    const BOT_EDGE = vh;      // exact bottom screen edge
     cards.forEach(card => {
       const r = card.getBoundingClientRect();
-      // Top edge of card within the top zone of the screen?
-      card._hiTop.classList.toggle('on', r.top <= ZONE && r.top >= -r.height + 10 && r.top < vh);
-      // Bottom edge of card within the bottom zone of the screen?
-      card._hiBottom.classList.toggle('on', r.bottom >= vh - ZONE && r.bottom <= vh + r.height - 10 && r.bottom > 0);
+      // TOP edge light: visible if the top screen edge (y=0) crosses this card
+      if (r.top <= TOP_EDGE && r.bottom >= TOP_EDGE) {
+        const localY = TOP_EDGE - r.top; // position within the card
+        card._lt.style.transform = `translateY(${localY}px)`;
+        card._lt.style.opacity = '1';
+      } else {
+        card._lt.style.opacity = '0';
+      }
+      // BOTTOM edge light: visible if the bottom screen edge (y=vh) crosses this card
+      if (r.top <= BOT_EDGE && r.bottom >= BOT_EDGE) {
+        const localY = BOT_EDGE - r.top;
+        card._lb.style.transform = `translateY(${localY}px)`;
+        card._lb.style.opacity = '1';
+      } else {
+        card._lb.style.opacity = '0';
+      }
     });
   }
 
   scroller.addEventListener('scroll', update, { passive:true });
   window.addEventListener('resize', update);
-  // Run continuously for static state too (e.g. on load)
   setTimeout(update, 100);
   setTimeout(update, 600);
 })();
