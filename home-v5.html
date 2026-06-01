@@ -449,15 +449,12 @@ document.getElementById('badge-scroll').innerHTML = badges.map(b => `
 // (edge-light effect removed — may revisit later)
 
 // ── PERMANENT GLASS EDGE GLOW ──
-// Soft glow on the top and bottom inner edges of every glass card — default style.
+// Soft glow on the top inner edge of every glass card — default style.
 (function() {
   document.querySelectorAll('.glass').forEach(card => {
     const t = document.createElement('div');
     t.className = 'edge-glow-perm glow-t';
-    const b = document.createElement('div');
-    b.className = 'edge-glow-perm glow-b';
     card.appendChild(t);
-    card.appendChild(b);
   });
 })();
 
