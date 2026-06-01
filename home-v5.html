@@ -56,26 +56,21 @@ body {
 .glass-light { background:rgba(255,255,255,0.05); }
 .glass-heavy { background:rgba(255,255,255,0.1); backdrop-filter:blur(40px) saturate(1.6); -webkit-backdrop-filter:blur(40px) saturate(1.6); }
 
-/* Scroll-edge specular bloom — a light catching the rim of the glass as content moves past */
-.glass::before, .glass::after {
-  content:''; position:absolute; left:0; right:0; height:40%;
-  pointer-events:none; border-radius:28px; opacity:0;
-  transition:opacity 0.25s ease; z-index:2;
+/* Screen-edge specular glow — a soft white light at the top/bottom EDGE OF THE SCREEN
+   that blooms based on scroll direction, like light catching the rim as content passes. */
+.edge-glow {
+  position:fixed; left:0; right:0; height:90px; z-index:40;
+  pointer-events:none; opacity:0; transition:opacity 0.3s ease;
 }
-.glass::before {
+.edge-glow-top {
   top:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
-  -webkit-mask:linear-gradient(to bottom, #000, transparent);
-          mask:linear-gradient(to bottom, #000, transparent);
+  background:linear-gradient(to bottom, rgba(255,255,255,0.35), transparent);
 }
-.glass::after {
+.edge-glow-bottom {
   bottom:0;
-  background:linear-gradient(to top, rgba(255,255,255,0.5), transparent);
-  -webkit-mask:linear-gradient(to top, #000, transparent);
-          mask:linear-gradient(to top, #000, transparent);
+  background:linear-gradient(to top, rgba(255,255,255,0.35), transparent);
 }
-.glass.bloom-top::before { opacity:1; }
-.glass.bloom-bottom::after { opacity:1; }
+.edge-glow.on { opacity:1; }
 
 /* ── TYPOGRAPHY ── */
 .glow-sm { text-shadow:0 0 4px rgba(255,255,255,0.5); }
@@ -87,9 +82,20 @@ body {
 .header { display:flex; justify-content:space-between; align-items:center; }
 .logo { font-size:24px; font-weight:800; letter-spacing:-0.04em; }
 .profile-btn { position:relative; width:72px; height:72px; flex-shrink:0; cursor:pointer; }
-.profile-btn .halo { position:absolute; inset:-6px; background:linear-gradient(120deg,#ff2e93,#a855f7); border-radius:50%; filter:blur(14px); opacity:0.5; transition:opacity 0.2s; z-index:0; }
-.profile-btn:active .halo { opacity:0.8; }
-.profile-btn img { position:relative; z-index:1; width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.25); }
+.profile-btn .halo {
+  position:absolute; inset:0; border-radius:50%; z-index:0;
+  background:radial-gradient(circle, rgba(255,46,147,0.7) 0%, rgba(168,85,247,0.5) 60%, transparent 75%);
+  filter:blur(10px);
+  transform:scale(1.25);
+  opacity:0.6; transition:opacity 0.2s;
+}
+.profile-btn:active .halo { opacity:0.85; }
+.profile-btn img {
+  position:relative; z-index:1; width:72px; height:72px;
+  border-radius:50%; object-fit:cover;
+  border:2px solid rgba(255,255,255,0.25);
+  background:linear-gradient(135deg,#3a2540,#2a1e3a);
+}
 
 /* ── GREETING ── */
 .greeting h2 { font-size:30px; font-weight:700; letter-spacing:-0.02em; margin-bottom:4px; }
@@ -223,6 +229,10 @@ body {
   <div class="fluid-blob blob4"></div>
 </div>
 <div class="fluid-overlay"></div>
+
+<!-- Screen-edge specular glow -->
+<div class="edge-glow edge-glow-top" id="edge-top"></div>
+<div class="edge-glow edge-glow-bottom" id="edge-bottom"></div>
 
 <div class="app">
   <div class="scroll">
@@ -428,40 +438,31 @@ document.getElementById('badge-scroll').innerHTML = badges.map(b => `
     <span class="badge-name ${b.unlocked?'':'locked'}">${b.name}</span>
   </div>`).join('');
 
-// ── SCROLL-EDGE SPECULAR BLOOM ──
-// As content scrolls under each glass panel, the leading rim catches light.
-// Scroll down → bottom rim glows. Scroll up → top rim glows.
+// ── SCREEN-EDGE SPECULAR GLOW ──
+// A soft white light at the top or bottom EDGE OF THE SCREEN, based on scroll direction.
+// Scroll down → bottom edge glows. Scroll up → top edge glows. Fades when scrolling stops.
 (function() {
   const scroller = document.querySelector('.scroll');
-  const panels = () => Array.from(document.querySelectorAll('.glass'));
+  const top = document.getElementById('edge-top');
+  const bottom = document.getElementById('edge-bottom');
   let lastY = scroller.scrollTop;
-  let dir = 'down';
   let fadeTimer = null;
-
-  function update() {
-    panels().forEach(p => {
-      const r = p.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // Panel is within the viewport
-      const visible = r.top < vh && r.bottom > 0;
-      p.classList.remove('bloom-top', 'bloom-bottom');
-      if (visible) {
-        if (dir === 'down') p.classList.add('bloom-bottom');
-        else p.classList.add('bloom-top');
-      }
-    });
-    // Fade the bloom out shortly after scrolling stops
-    clearTimeout(fadeTimer);
-    fadeTimer = setTimeout(() => {
-      panels().forEach(p => p.classList.remove('bloom-top','bloom-bottom'));
-    }, 180);
-  }
 
   scroller.addEventListener('scroll', () => {
     const y = scroller.scrollTop;
-    dir = y > lastY ? 'down' : 'up';
+    if (y > lastY + 1) {            // scrolling down
+      bottom.classList.add('on');
+      top.classList.remove('on');
+    } else if (y < lastY - 1) {     // scrolling up
+      top.classList.add('on');
+      bottom.classList.remove('on');
+    }
     lastY = y;
-    update();
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => {
+      top.classList.remove('on');
+      bottom.classList.remove('on');
+    }, 200);
   }, { passive:true });
 })();
 
