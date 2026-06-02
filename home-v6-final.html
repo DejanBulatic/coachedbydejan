@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#e8f5f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; }
+body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
+
+/* ── BACKGROUND ── */
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 100% 0%, #cdeee6 0%, transparent 45%),
+    radial-gradient(ellipse at 0% 60%, #dff0ec 0%, transparent 50%),
+    linear-gradient(to bottom, #eaf6f3 0%, #eef7f4 50%, #e6f3ef 100%);
+  background-color:#e8f5f2;
+}
+/* dot cluster top-right */
+.bg-dots { position:fixed; top:0; right:0; width:200px; height:230px; z-index:0; opacity:0.5; pointer-events:none; }
+/* flowing line curve bottom-left */
+.bg-curve { position:fixed; bottom:0; left:0; width:260px; height:60%; z-index:0; opacity:0.4; pointer-events:none; }
+.bg-veil { position:fixed; inset:0; z-index:0; background:linear-gradient(to bottom, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.3) 100%); pointer-events:none; }
+
+/* ── LAYOUT ── */
+.app { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; }
+.scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:120px; max-width:448px; margin:0 auto; width:100%; }
+.scroll::-webkit-scrollbar { display:none; }
+
+/* ── HEADER ── */
+.header { padding:48px 20px 24px; display:flex; align-items:center; justify-content:space-between; }
+.header-left { display:flex; align-items:center; gap:16px; }
+.profile-ring {
+  width:100px; height:100px; border-radius:50%; padding:2px;
+  background:linear-gradient(to top right, #BF00FF, #FF0099, #FF4D00);
+  flex-shrink:0; cursor:pointer;
+}
+.profile-ring img { width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid #fff; display:block; background:#dfeeea; }
+.greeting h1 { font-family:'Syne', sans-serif; font-size:26px; font-weight:800; color:#0f172a; letter-spacing:-0.02em; line-height:1.1; }
+.greeting p { font-size:13px; color:#64748b; font-weight:500; margin-top:3px; }
+.bell-btn { width:40px; height:40px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.08); border:1px solid #f1f5f9; display:flex; align-items:center; justify-content:center; color:#475569; position:relative; cursor:pointer; flex-shrink:0; }
+.bell-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; border:1.5px solid #fff; background:#BF00FF; box-shadow:0 0 6px #BF00FF; }
+
+/* ── MAIN ── */
+.main { padding:0 20px; display:flex; flex-direction:column; gap:32px; }
+
+/* Card base */
+.card { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.18); }
+
+/* ── GAMIFICATION ── */
+.gam { padding:20px; }
+.gam-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:18px; }
+.gam-stat { display:flex; flex-direction:column; align-items:center; text-align:center; }
+.gam-stat .ic { margin-bottom:5px; font-size:20px; display:flex; }
+.gam-stat .val { font-weight:700; font-size:20px; color:#0f172a; font-family:'Syne',sans-serif; }
+.gam-stat .lbl { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-top:1px; }
+.gam-motiv { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; color:#0f172a; line-height:1.25; letter-spacing:-0.01em; margin-bottom:16px; }
+.gam-prog-head { display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-bottom:8px; }
+.gam-prog-head .l { font-weight:600; color:#475569; }
+.gam-prog-head .r { font-weight:700; color:#BF00FF; }
+.gam-bar { height:8px; width:100%; background:#f1f5f9; border-radius:4px; overflow:hidden; }
+.gam-bar-fill { height:100%; width:0; border-radius:4px; background:linear-gradient(to right, #BF00FF, #FF0099); transition:width 1s ease; }
+
+/* ── PROGRESS ROW ── */
+.prog-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.prog-card { padding:20px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+.prog-card .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.prog-card .phase { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; color:#0f172a; margin-bottom:16px; letter-spacing:-0.01em; }
+.prog-week-lbl { font-size:13px; font-weight:500; color:#475569; margin-bottom:6px; }
+.prog-pips { display:flex; gap:3px; }
+.prog-pip { height:4px; flex:1; border-radius:2px; background:#f1f5f9; }
+.prog-pip.on { background:#BF00FF; box-shadow:0 0 4px #BF00FF88; }
+.prog-delta { margin-top:14px; display:flex; align-items:center; gap:4px; font-size:13px; font-weight:600; color:#00CC6A; }
+
+.kg-card { padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.kg-card .kg-head { width:100%; text-align:left; margin-bottom:8px; }
+.kg-card .kg-head .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+.kg-card .kg-head .sub { font-size:10px; color:#94a3b8; margin-top:1px; }
+.kg-rings { width:100px; height:100px; position:relative; }
+.kg-legend { display:flex; justify-content:space-between; width:100%; margin-top:12px; padding:0 4px; }
+.kg-leg { display:flex; flex-direction:column; align-items:center; }
+.kg-leg .dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
+.kg-leg span { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; }
+
+/* ── SECTION HEADERS ── */
+.section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.section-head h2 { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:#0f172a; letter-spacing:-0.01em; }
+.section-link { font-size:13px; font-weight:600; color:#BF00FF; display:flex; align-items:center; gap:2px; cursor:pointer; }
+
+/* ── TODAY SESSION ── */
+.today-card { position:relative; border-radius:24px; overflow:hidden; height:320px; box-shadow:0 20px 50px rgba(120,40,160,0.12); }
+.today-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.today-ov { position:absolute; inset:0; background:linear-gradient(to top, #0f172a, rgba(15,23,42,0.4) 45%, transparent); }
+.today-panel-wrap { position:absolute; bottom:0; left:0; right:0; padding:24px; }
+.today-panel { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:16px; padding:20px; }
+.today-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.today-tag { padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#BF00FF; box-shadow:0 0 10px #BF00FF88; display:inline-block; margin-bottom:8px; }
+.today-name { font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#fff; }
+.today-dur { text-align:right; color:#fff; }
+.today-dur .n { display:block; font-family:'Syne',sans-serif; font-weight:700; font-size:20px; }
+.today-dur .u { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; opacity:0.8; }
+.today-meta { font-size:13px; color:rgba(255,255,255,0.9); display:flex; align-items:center; gap:8px; font-weight:500; margin-bottom:18px; }
+.today-meta i { color:#BF00FF; filter:drop-shadow(0 0 4px #BF00FF); }
+.begin-btn { width:100%; border:none; border-radius:12px; color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:0.04em; padding:16px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:linear-gradient(to right, #BF00FF, #FF0099); animation:beginPulse 2s infinite; }
+@keyframes beginPulse {
+  0% { box-shadow:0 0 15px rgba(191,0,255,0.5); }
+  50% { box-shadow:0 0 35px rgba(255,0,153,0.8); }
+  100% { box-shadow:0 0 15px rgba(191,0,255,0.5); }
+}
+.begin-btn:active { transform:scale(0.97); }
+
+/* ── THIS WEEK ── */
+.week-scroll { display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; margin:0 -20px; padding-left:20px; padding-right:20px; }
+.week-scroll::-webkit-scrollbar { display:none; }
+.week-card { flex-shrink:0; width:144px; border-radius:16px; overflow:hidden; background:#fff; border:1px solid #f1f5f9; box-shadow:0 4px 12px rgba(148,163,184,0.15); cursor:pointer; }
+.week-card.active { border-color:#BF00FF; box-shadow:0 4px 20px rgba(191,0,255,0.3); }
+.week-img { height:120px; position:relative; }
+.week-img img { width:100%; height:100%; object-fit:cover; }
+.week-img .ov { position:absolute; inset:0; background:rgba(15,23,42,0.2); }
+.week-day-tag { position:absolute; top:8px; left:8px; padding:3px 7px; border-radius:6px; background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); font-size:10px; font-weight:700; color:#0f172a; }
+.week-active-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:#BF00FF; box-shadow:0 0 10px #BF00FF; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.week-info { padding:12px; }
+.week-info h4 { font-weight:700; font-size:14px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.week-info p { font-size:12px; color:#64748b; font-weight:500; margin-top:1px; }
+
+/* ── FROM DEJAN ── */
+.dejan-card { padding:4px; position:relative; overflow:hidden; }
+.dejan-accent { position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(to bottom, #BF00FF, #FF0099); }
+.dejan-inner { padding:16px; display:flex; gap:16px; align-items:center; }
+.dejan-img { width:64px; height:64px; border-radius:50%; overflow:hidden; flex-shrink:0; border:2px solid #f1f5f9; }
+.dejan-img img { width:100%; height:100%; object-fit:cover; }
+.dejan-label { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.dejan-msg { font-size:13px; font-weight:500; color:#334155; font-style:italic; line-height:1.4; }
+
+/* ── BADGES ── */
+.badge-scroll { display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; margin:0 -20px; padding-left:20px; padding-right:20px; }
+.badge-scroll::-webkit-scrollbar { display:none; }
+.badge { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.badge-ic { width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.badge-ic.locked { background:#f8fafc; border:2px dashed #e2e8f0; opacity:0.7; }
+.badge-ic i { font-size:32px; }
+.badge-name { font-size:10px; font-weight:700; text-transform:uppercase; text-align:center; width:80px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.badge-name.unlocked { color:#334155; }
+.badge-name.locked { color:#94a3b8; }
+
+/* ── STAY CONNECTED ── */
+.connect-card { padding:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:12px; }
+.connect-left { display:flex; align-items:center; gap:16px; }
+.connect-ic { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.connect-card h4 { font-weight:700; font-size:14px; color:#0f172a; }
+.connect-card p { font-size:12px; color:#64748b; font-weight:500; margin-top:1px; }
+.connect-arrow { color:#cbd5e1; font-size:18px; }
+
+/* ── BOTTOM NAV ── */
+.nav { position:fixed; bottom:24px; left:0; right:0; z-index:50; display:flex; justify-content:center; pointer-events:none; }
+.nav-inner { background:rgba(255,255,255,0.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid #e2e8f0; padding:8px; border-radius:40px; box-shadow:0 12px 40px rgba(148,163,184,0.5); display:flex; gap:4px; pointer-events:auto; }
+.nav-item { position:relative; display:flex; align-items:center; justify-content:center; padding:12px; border-radius:50%; cursor:pointer; color:#94a3b8; transition:color 0.2s; border:none; background:none; }
+.nav-item i { position:relative; z-index:1; font-size:22px; }
+.nav-item.active { color:#fff; }
+.nav-item .pill { position:absolute; inset:0; border-radius:50%; background:linear-gradient(to right, #BF00FF, #FF0099); opacity:0; transform:scale(0.6); transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1); }
+.nav-item.active .pill { opacity:1; transform:scale(1); }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<!-- dot cluster top right -->
+<svg class="bg-dots" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" id="bg-dots"></svg>
+<!-- flowing curve bottom left -->
+<svg class="bg-curve" viewBox="0 0 260 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" id="bg-curve"></svg>
+<div class="bg-veil"></div>
+
+<div class="app">
+  <div class="scroll">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="profile-ring">
+          <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=200&h=200&fit=crop" alt="Profile">
+        </div>
+        <div class="greeting">
+          <h1>Hi, Sarah</h1>
+          <p>Level — Elite · 12-Week</p>
+        </div>
+      </div>
+      <button class="bell-btn"><i class="ti ti-bell" style="font-size:20px"></i><span class="bell-dot"></span></button>
+    </header>
+
+    <main class="main">
+
+      <!-- Gamification -->
+      <section>
+        <div class="card gam">
+          <div class="gam-stats">
+            <div class="gam-stat"><span class="ic" style="color:#BF00FF"><i class="ti ti-barbell"></i></span><span class="val">24</span><span class="lbl">Workouts</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FF0099"><i class="ti ti-calendar"></i></span><span class="val">4</span><span class="lbl">Weeks</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FF4D00"><i class="ti ti-flame"></i></span><span class="val">12k</span><span class="lbl">Cals</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FFB800"><i class="ti ti-trophy"></i></span><span class="val">5</span><span class="lbl">Badges</span></div>
+          </div>
+          <div class="gam-motiv" id="gam-motiv">You're 2 sessions away from owning Week 4.</div>
+          <div class="gam-prog-head"><span class="l">Programme Progress</span><span class="r">33%</span></div>
+          <div class="gam-bar"><div class="gam-bar-fill" id="gam-fill"></div></div>
+        </div>
+      </section>
+
+      <!-- Progress Row -->
+      <section class="prog-row">
+        <div class="card prog-card">
+          <div>
+            <div class="eyebrow">Current Phase</div>
+            <div class="phase">Shred &amp; Sculpt</div>
+            <div class="prog-week-lbl">Week 4 of 12</div>
+            <div class="prog-pips" id="prog-pips"></div>
+          </div>
+          <div class="prog-delta"><i class="ti ti-trending-up" style="font-size:16px"></i> +12% vs last week</div>
+        </div>
+        <div class="card kg-card">
+          <div class="kg-head"><div class="eyebrow">Weight Progress</div><div class="sub">As of Today</div></div>
+          <div class="kg-rings" id="kg-rings"></div>
+          <div class="kg-legend">
+            <div class="kg-leg"><span class="dot" style="background:#BF00FF;box-shadow:0 0 5px #BF00FF"></span><span>Lost</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF0099;box-shadow:0 0 5px #FF0099"></span><span>Curr</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF4D00;box-shadow:0 0 5px #FF4D00"></span><span>Goal</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Session -->
+      <section>
+        <div class="section-head"><h2>Today's Session</h2></div>
+        <div class="today-card">
+          <img src="https://images.unsplash.com/photo-1626337920103-ae64b9c688e4?w=800&h=700&fit=crop" alt="">
+          <div class="today-ov"></div>
+          <div class="today-panel-wrap">
+            <div class="today-panel">
+              <div class="today-top">
+                <div>
+                  <span class="today-tag">Lower Body Hypertrophy</span>
+                  <div class="today-name">Quad Dominant</div>
+                </div>
+                <div class="today-dur"><span class="n">60</span><span class="u">Mins</span></div>
+              </div>
+              <div class="today-meta"><i class="ti ti-circle-check" style="font-size:16px"></i> 6 Exercises • 24 Sets</div>
+              <button class="begin-btn"><i class="ti ti-player-play-filled"></i> Begin Session</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- This Week -->
+      <section>
+        <div class="section-head"><h2>This Week</h2><span class="section-link">View All <i class="ti ti-chevron-right"></i></span></div>
+        <div class="week-scroll" id="week-scroll"></div>
+      </section>
+
+      <!-- From Dejan -->
+      <section>
+        <div class="card dejan-card">
+          <div class="dejan-accent"></div>
+          <div class="dejan-inner">
+            <div class="dejan-img"><img src="https://images.unsplash.com/photo-1758875568932-0eefd3e60090?w=200&h=200&fit=crop" alt="Dejan"></div>
+            <div>
+              <div class="dejan-label">From Dejan</div>
+              <div class="dejan-msg">"You crushed those heavy squats yesterday, Sarah! Let's keep that same energy for today's session. You've got this."</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Badges -->
+      <section>
+        <div class="section-head"><h2>Your Badges</h2><span class="section-link" style="color:#64748b">5 / 34</span></div>
+        <div class="badge-scroll" id="badge-scroll"></div>
+      </section>
+
+      <!-- Stay Connected -->
+      <section>
+        <div class="section-head"><h2>Stay Connected</h2></div>
+        <div class="card connect-card">
+          <div class="connect-left">
+            <div class="connect-ic" style="background:#F5E6FF;color:#BF00FF"><i class="ti ti-chart-line" style="font-size:20px"></i></div>
+            <div><h4>Weekly Check-in</h4><p>Due in 2 days</p></div>
+          </div>
+          <i class="ti ti-arrow-right connect-arrow"></i>
+        </div>
+        <div class="card connect-card">
+          <div class="connect-left">
+            <div class="connect-ic" style="background:#E0FFF2;color:#00CC6A"><i class="ti ti-brand-whatsapp" style="font-size:20px"></i></div>
+            <div><h4>Message Dejan</h4><p>Usually replies in 1 hr</p></div>
+          </div>
+          <i class="ti ti-arrow-right connect-arrow"></i>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="nav">
+    <div class="nav-inner" id="nav">
+      <button class="nav-item active" data-id="home"><span class="pill"></span><i class="ti ti-home"></i></button>
+      <button class="nav-item" data-id="programme"><span class="pill"></span><i class="ti ti-barbell"></i></button>
+      <button class="nav-item" data-id="nutrition"><span class="pill"></span><i class="ti ti-apple"></i></button>
+      <button class="nav-item" data-id="progress"><span class="pill"></span><i class="ti ti-chart-line"></i></button>
+      <button class="nav-item" data-id="checkin"><span class="pill"></span><i class="ti ti-message-circle"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── BACKGROUND DOTS (top right cluster) ──
+(function() {
+  const dots = [];
+  const cols = 7, rows = 8;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      // density increases toward top-right corner
+      const fromCorner = (cols - c) + r;
+      if (fromCorner > 9) continue;
+      if (Math.random() > 0.85) continue;
+      const x = 30 + c * 24 + (Math.random()*4);
+      const y = 14 + r * 26 + (Math.random()*4);
+      const rad = 5 + Math.random()*5;
+      dots.push(`<circle cx="${x}" cy="${y}" r="${rad}" fill="#7fd9c4"/>`);
+    }
+  }
+  document.getElementById('bg-dots').innerHTML = dots.join('');
+})();
+
+// ── BACKGROUND CURVE (flowing lines bottom left) ──
+(function() {
+  let lines = '';
+  for (let i = 0; i < 18; i++) {
+    const off = i * 7;
+    lines += `<path d="M ${-20+off} 600 Q ${40+off} ${340-i*4}, ${180+off*1.5} ${120-i*3}" fill="none" stroke="#ade0d2" stroke-width="0.8" opacity="0.5"/>`;
+  }
+  document.getElementById('bg-curve').innerHTML = lines;
+})();
+
+// ── DYNAMIC MOTIVATIONAL TEXT ──
+const clientState = {
+  currentWeek: 4,
+  sessionsRemainingThisWeek: 2,
+  isRestDay: false,
+  isComeback: false,
+  weekJustCompleted: false,
+  streakDays: 7
+};
+function pickMotiv(s) {
+  if (s.weekJustCompleted) return `Week ${s.currentWeek} — done. You showed up every time.`;
+  if (s.isComeback) return `Welcome back. One session puts you right back on track.`;
+  if (s.isRestDay) return `Rest today. You grow stronger while you recover.`;
+  if (s.sessionsRemainingThisWeek === 1) return `One session away from owning Week ${s.currentWeek}.`;
+  if (s.sessionsRemainingThisWeek > 1) return `You're ${s.sessionsRemainingThisWeek} sessions away from owning Week ${s.currentWeek}.`;
+  if (s.streakDays >= 7) return `${s.streakDays} days strong. This is who you are now.`;
+  return `Let's make today count.`;
+}
+document.getElementById('gam-motiv').textContent = pickMotiv(clientState);
+
+// ── GAM PROGRESS ──
+setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 300);
+
+// ── PROGRAMME PIPS ──
+(function() {
+  let pips = '';
+  for (let i = 0; i < 12; i++) pips += `<div class="prog-pip ${i < 4 ? 'on' : ''}"></div>`;
+  document.getElementById('prog-pips').innerHTML = pips;
+})();
+
+// ── CONCENTRIC KG RINGS ──
+(function() {
+  const size = 100, sw = 8, c = size/2;
+  const rings = [
+    { r:40, color:'#BF00FF', prog:40 },
+    { r:30, color:'#FF0099', prog:66 },
+    { r:20, color:'#FF4D00', prog:90 },
+  ];
+  let svg = `<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">`;
+  rings.forEach((ring, i) => {
+    const circ = 2 * Math.PI * ring.r;
+    svg += `<circle cx="${c}" cy="${c}" r="${ring.r}" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="${sw}"/>`;
+    svg += `<circle class="kg-ring" cx="${c}" cy="${c}" r="${ring.r}" fill="none" stroke="${ring.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-off="${circ - (ring.prog/100)*circ}"/>`;
+  });
+  svg += `</svg>`;
+  document.getElementById('kg-rings').innerHTML = svg;
+  setTimeout(() => {
+    document.querySelectorAll('.kg-ring').forEach((c, i) => {
+      c.style.transition = `stroke-dashoffset 1.5s ease ${i*0.2}s`;
+      c.style.strokeDashoffset = c.dataset.off;
+    });
+  }, 400);
+})();
+
+// ── THIS WEEK ──
+const WORKOUT_IMG = 'https://images.unsplash.com/photo-1609899517237-77d357b047cf?w=300&h=300&fit=crop';
+const week = [
+  { day:'MON', title:'Lower Body', time:'60m', active:true },
+  { day:'TUE', title:'Active Rest', time:'20m', active:false },
+  { day:'WED', title:'Upper Body', time:'45m', active:false },
+  { day:'THU', title:'HIIT', time:'30m', active:false },
+  { day:'FRI', title:'Full Body', time:'60m', active:false },
+];
+document.getElementById('week-scroll').innerHTML = week.map(w => `
+  <div class="week-card ${w.active?'active':''}">
+    <div class="week-img">
+      <img src="${WORKOUT_IMG}" alt="">
+      <div class="ov"></div>
+      <div class="week-day-tag">${w.day}</div>
+      ${w.active?'<div class="week-active-dot"></div>':''}
+    </div>
+    <div class="week-info"><h4>${w.title}</h4><p>${w.time}</p></div>
+  </div>`).join('');
+
+// ── BADGES ──
+const badges = [
+  { name:'First Step', unlocked:true, icon:'ti-trophy', from:'#BF00FF', to:'#FF0099' },
+  { name:'Consistency', unlocked:true, icon:'ti-calendar', from:'#FF0099', to:'#FF4D00' },
+  { name:'Fire Starter', unlocked:true, icon:'ti-flame', from:'#FF4D00', to:'#FFE000' },
+  { name:'Heavy Lifter', unlocked:false, icon:'ti-lock' },
+  { name:'Marathon', unlocked:false, icon:'ti-lock' },
+  { name:'Elite', unlocked:false, icon:'ti-lock' },
+];
+document.getElementById('badge-scroll').innerHTML = badges.map(b => `
+  <div class="badge">
+    <div class="badge-ic ${b.unlocked?'':'locked'}" ${b.unlocked?`style="background:linear-gradient(135deg,${b.from},${b.to});box-shadow:0 4px 20px ${b.from}66"`:''}>
+      <i class="ti ${b.icon}" style="color:${b.unlocked?'#fff':'#94a3b8'}"></i>
+    </div>
+    <span class="badge-name ${b.unlocked?'unlocked':'locked'}">${b.name}</span>
+  </div>`).join('');
+
+// ── NAV ──
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    if (navigator.vibrate) navigator.vibrate(6);
+  });
+});
+</script>
+</body>
+</html>
