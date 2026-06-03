@@ -98,15 +98,15 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 
 
 /* ── CURRENT WEEK CARD ── */
-.cw-card { padding:20px; }
-.cw-eyebrow { color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:12px; }
-.cw-line { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-.cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; }
+.cw-card { padding:18px; display:flex; flex-direction:column; }
+.cw-eyebrow { color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:8px; }
+.cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; line-height:1.15; margin-bottom:8px; }
+.cw-line { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
 .cw-week { font-size:13px; font-weight:500; color:#64748b; }
-.cw-delta { margin-left:auto; display:flex; align-items:center; gap:3px; font-size:13px; font-weight:700; color:#00CC6A; }
-.cw-delta i { font-size:15px; }
-.cw-pillars { display:flex; gap:4px; }
-.cw-pillar { height:16px; flex:1; border-radius:4px; background:#eef2f6; transition:all 0.4s ease; }
+.cw-delta { margin-left:auto; display:flex; align-items:center; gap:2px; font-size:13px; font-weight:700; color:#00CC6A; }
+.cw-delta i { font-size:14px; }
+.cw-pillars { display:flex; gap:3px; margin-top:auto; }
+.cw-pillar { height:16px; flex:1; border-radius:3px; background:#eef2f6; transition:all 0.4s ease; }
 @keyframes cwPulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
 
 /* ── SECTION HEADERS ── */
@@ -164,7 +164,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .week-active-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:#FF0099; box-shadow:0 0 10px #FF0099; animation:pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .week-info { padding:12px; background:#0f172a; }
-.week-info h4 { font-weight:700; font-size:14px; color:#fff; letter-spacing:-0.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.week-info h4 { font-weight:700; font-size:13px; color:#fff; text-transform:uppercase; letter-spacing:0.08em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .week-info p { font-size:12px; color:rgba(255,255,255,0.6); font-weight:500; margin-top:1px; }
 
 
@@ -175,15 +175,16 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
   background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
 }
 .week-tick {
-  width:40px; height:40px; border-radius:50%;
+  width:52px; height:52px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   border:2px solid #FF0099; color:#FF0099;
   box-shadow:0 0 12px #FF0099, inset 0 0 8px rgba(255,0,153,0.3);
 }
-.week-tick i { font-size:22px; }
+.week-tick i { font-size:28px; }
 
 /* ── FROM DEJAN ── */
 .dejan-card { padding:0; position:relative; overflow:hidden; display:flex; min-height:140px; }
+.dejan-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(to bottom, #BF00FF, #FF0099); z-index:2; }
 .dejan-photo { width:38%; flex-shrink:0; position:relative; overflow:hidden; }
 .dejan-photo img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
 .dejan-inner { flex:1; padding:18px; display:flex; flex-direction:column; justify-content:center; }
@@ -262,21 +263,18 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
         </div>
       </section>
 
-      <!-- Current Week (full width) -->
-      <section>
+      <!-- Current Week + Weight (side by side) -->
+      <section class="prog-row">
         <div class="card cw-card">
           <div class="cw-eyebrow">Current Week</div>
+          <div class="cw-name">Shred &amp; Sculpt</div>
           <div class="cw-line">
-            <div class="cw-name">Shred &amp; Sculpt</div>
             <div class="cw-week">Week 4 of 12</div>
             <div class="cw-delta"><i class="ti ti-trending-up"></i> +12%</div>
           </div>
           <div class="cw-pillars" id="cw-pillars"></div>
         </div>
-      </section>
 
-      <!-- Weight Progress -->
-      <section>
         <div class="card kg-card">
           <div class="kg-head"><div class="eyebrow">Weight Progress</div><div class="sub">As of Today</div></div>
           <div class="kg-rings" id="kg-rings"></div>
@@ -400,33 +398,39 @@ setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 3
 // Filled weeks: solid color + graded glow. Current week: pulsing. Future: faint ghost gradient.
 (function() {
   const TOTAL = 12;
-  const completedWeeks = 12; // demo: all filled so user can preview. Real app: client's completed week count.
-  const currentWeek = 4;     // 1-indexed; used for the pulse when not all filled
+  const completedWeeks = 3;  // demo: 3 done, week 4 current (pulsing), rest ghost
+  const currentWeek = 4;     // 1-indexed
   function lerp(a,b,t){ return a+(b-a)*t; }
   function hexToRgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
-  const c1 = hexToRgb('#5DC8FA'); // blue
-  const c2 = hexToRgb('#FF4D00'); // orange
+  const cBlue = hexToRgb('#5DC8FA');
+  const cYellow = hexToRgb('#FFE000');
+  const cOrange = hexToRgb('#FF4D00');
+  // three-stop gradient: blue -> yellow (mid) -> orange
+  function gradColor(t) {
+    let a,b,lt;
+    if (t < 0.5) { a=cBlue; b=cYellow; lt=t/0.5; }
+    else { a=cYellow; b=cOrange; lt=(t-0.5)/0.5; }
+    return [Math.round(lerp(a[0],b[0],lt)), Math.round(lerp(a[1],b[1],lt)), Math.round(lerp(a[2],b[2],lt))];
+  }
+  // glow grades blue-end pink -> mid yellow -> orange-end orange
+  function glowColor(t) {
+    if (t < 0.5) { const lt=t/0.5; return `rgba(${Math.round(lerp(255,255,lt))},${Math.round(lerp(0,224,lt))},${Math.round(lerp(153,0,lt))},0.6)`; }
+    const lt=(t-0.5)/0.5; return `rgba(255,${Math.round(lerp(224,122,lt))},0,0.6)`;
+  }
   const wrap = document.getElementById('cw-pillars');
   let html = '';
   for (let i = 0; i < TOTAL; i++) {
     const t = i / (TOTAL - 1);
-    const r = Math.round(lerp(c1[0],c2[0],t));
-    const g = Math.round(lerp(c1[1],c2[1],t));
-    const b = Math.round(lerp(c1[2],c2[2],t));
+    const [r,g,b] = gradColor(t);
     const col = `rgb(${r},${g},${b})`;
-    // glow color: graded from pink-ish (#FF0099) on blue end toward orange (#FF7A00) on orange end
-    const gr = Math.round(lerp(255,255,t));
-    const gg = Math.round(lerp(0,122,t));
-    const gb = Math.round(lerp(153,0,t));
-    const glow = `rgba(${gr},${gg},${gb},0.6)`;
+    const glow = glowColor(t);
     const filled = i < completedWeeks;
     const isCurrent = (i === currentWeek - 1) && !filled;
     if (filled) {
       html += `<div class="cw-pillar" style="background:${col};box-shadow:0 0 6px ${glow}"></div>`;
     } else if (isCurrent) {
-      html += `<div class="cw-pillar" style="background:${col};box-shadow:0 0 8px ${glow};animation:cwPulse 1.6s ease-in-out infinite"></div>`;
+      html += `<div class="cw-pillar" style="background:${col};box-shadow:0 0 9px ${glow};animation:cwPulse 1.6s ease-in-out infinite"></div>`;
     } else {
-      // future ghost: faint version of its eventual color
       html += `<div class="cw-pillar" style="background:rgba(${r},${g},${b},0.14)"></div>`;
     }
   }
@@ -487,28 +491,30 @@ const badges = [
   { name:'Marathon', unlocked:false, icon:'ti-lock' },
   { name:'Elite', unlocked:false, icon:'ti-lock' },
 ];
-const WREATH = `<svg class="wreath" viewBox="0 0 100 100" width="80" height="80">
-  <g fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="2" stroke-linecap="round">
-    <path d="M50 92 C 30 86, 20 68, 20 50 C 20 36, 26 22, 34 14"/>
-    <path d="M50 92 C 70 86, 80 68, 80 50 C 80 36, 74 22, 66 14"/>
-  </g>
-  <g fill="rgba(255,255,255,0.92)">
-    <!-- left leaves -->
-    <ellipse cx="20" cy="50" rx="6" ry="3" transform="rotate(-20 20 50)"/>
-    <ellipse cx="22" cy="62" rx="6" ry="3" transform="rotate(-5 22 62)"/>
-    <ellipse cx="27" cy="73" rx="6" ry="3" transform="rotate(15 27 73)"/>
-    <ellipse cx="35" cy="82" rx="6" ry="3" transform="rotate(35 35 82)"/>
-    <ellipse cx="22" cy="38" rx="6" ry="3" transform="rotate(-35 22 38)"/>
-    <ellipse cx="27" cy="27" rx="6" ry="3" transform="rotate(-50 27 27)"/>
-    <!-- right leaves -->
-    <ellipse cx="80" cy="50" rx="6" ry="3" transform="rotate(20 80 50)"/>
-    <ellipse cx="78" cy="62" rx="6" ry="3" transform="rotate(5 78 62)"/>
-    <ellipse cx="73" cy="73" rx="6" ry="3" transform="rotate(-15 73 73)"/>
-    <ellipse cx="65" cy="82" rx="6" ry="3" transform="rotate(-35 65 82)"/>
-    <ellipse cx="78" cy="38" rx="6" ry="3" transform="rotate(35 78 38)"/>
-    <ellipse cx="73" cy="27" rx="6" ry="3" transform="rotate(50 73 27)"/>
-  </g>
-</svg>`;
+const WREATH = (function(){
+  const cx=50, cy=52, R=38;
+  let leaves='';
+  // left branch: angles from ~200deg down to ~110deg (bottom-left up to top-left)
+  const leftAngles=[205,190,172,154,136,118];
+  const rightAngles=[335,350,8,26,44,62];
+  function leaf(angleDeg, rx, ry){
+    const a=angleDeg*Math.PI/180;
+    const x=cx+R*Math.cos(a);
+    const y=cy+R*Math.sin(a);
+    // leaf points tangent to circle (rotate by angle+90)
+    const rot=angleDeg+90;
+    return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rx}" ry="${ry}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+  }
+  leftAngles.forEach(a=>leaves+=leaf(a,7,3));
+  rightAngles.forEach(a=>leaves+=leaf(a,7,3));
+  return `<svg class="wreath" viewBox="0 0 100 100" width="80" height="80">
+    <g fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round">
+      <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 1 ${(cx+R*Math.cos(118*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(118*Math.PI/180)).toFixed(1)}"/>
+      <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 0 ${(cx+R*Math.cos(62*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(62*Math.PI/180)).toFixed(1)}"/>
+    </g>
+    <g fill="rgba(255,255,255,0.92)">${leaves}</g>
+  </svg>`;
+})();
 document.getElementById('badge-scroll').innerHTML = badges.map(b => `
   <div class="badge">
     <div class="badge-ic ${b.unlocked?'':'locked'}" ${b.unlocked?`style="background:linear-gradient(135deg,${b.from},${b.to});box-shadow:0 4px 20px ${b.from}66"`:''}>
