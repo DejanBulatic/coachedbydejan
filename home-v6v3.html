@@ -90,7 +90,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .kg-card .kg-head { width:100%; text-align:left; margin-bottom:8px; }
 .kg-card .kg-head .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
 .kg-card .kg-head .sub { font-size:10px; color:#94a3b8; margin-top:1px; }
-.kg-rings { width:113px; height:113px; position:relative; margin-top:4px; }
+.kg-rings { width:111px; height:111px; position:relative; margin-top:4px; }
 .kg-legend { display:flex; justify-content:space-between; width:100%; margin-top:12px; padding:0 4px; }
 .kg-leg { display:flex; flex-direction:column; align-items:center; }
 .kg-leg .dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
@@ -444,11 +444,11 @@ setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 3
 
 // ── CONCENTRIC KG RINGS ──
 (function() {
-  const size = 113, sw = 9, c = size/2;
+  const size = 111, sw = 9, c = size/2;
   const rings = [
-    { r:45, color:'#BF00FF', prog:40 },
-    { r:34, color:'#FF0099', prog:66 },
-    { r:23, color:'#FF4D00', prog:90 },
+    { r:44, color:'#BF00FF', prog:40 },
+    { r:33, color:'#FF0099', prog:66 },
+    { r:22, color:'#FF4D00', prog:90 },
   ];
   let svg = `<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">`;
   rings.forEach((ring, i) => {
@@ -497,25 +497,31 @@ const badges = [
   { name:'Elite', unlocked:false, icon:'ti-lock' },
 ];
 const WREATH = (function(){
-  const cx=50, cy=52, R=38;
-  let leaves='';
-  // left branch: angles from ~200deg down to ~110deg (bottom-left up to top-left)
-  const leftAngles=[205,190,172,154,136,118];
-  const rightAngles=[335,350,8,26,44,62];
-  function leaf(angleDeg, rx, ry){
+  const cx=50, cy=50;
+  const Rleaf=30;   // radius where leaves sit — centered between icon and circle edge
+  const Rbranch=30; // branch arc radius
+  // 4 leaves per side, spread along the lower arc
+  const leftAngles=[150, 178, 206, 234];   // bottom-left quarter going up
+  const rightAngles=[30, 2, -26, -54];     // bottom-right quarter going up
+  function leaf(angleDeg){
     const a=angleDeg*Math.PI/180;
-    const x=cx+R*Math.cos(a);
-    const y=cy+R*Math.sin(a);
-    // leaf points tangent to circle (rotate by angle+90)
-    const rot=angleDeg+90;
-    return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rx}" ry="${ry}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+    const x=cx+Rleaf*Math.cos(a);
+    const y=cy+Rleaf*Math.sin(a);
+    const rot=angleDeg+90; // tangent to circle so leaf follows the curve
+    return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="4.5" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
   }
-  leftAngles.forEach(a=>leaves+=leaf(a,9,5));
-  rightAngles.forEach(a=>leaves+=leaf(a,9,5));
+  let leaves='';
+  leftAngles.forEach(a=>leaves+=leaf(a));
+  rightAngles.forEach(a=>leaves+=leaf(a));
+  // two branch arcs along the bottom, curving with the circle
+  const aL1=234, aL2=150, aR1=-54, aR2=30;
+  const p=(deg,r)=>[ (cx+r*Math.cos(deg*Math.PI/180)).toFixed(1), (cy+r*Math.sin(deg*Math.PI/180)).toFixed(1) ];
+  const [lx1,ly1]=p(aL2,Rbranch), [lx2,ly2]=p(aL1,Rbranch);
+  const [rx1,ry1]=p(aR2,Rbranch), [rx2,ry2]=p(aR1,Rbranch);
   return `<svg class="wreath" viewBox="0 0 100 100" width="80" height="80">
-    <g fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="6" stroke-linecap="round">
-      <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 1 ${(cx+R*Math.cos(118*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(118*Math.PI/180)).toFixed(1)}"/>
-      <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 0 ${(cx+R*Math.cos(62*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(62*Math.PI/180)).toFixed(1)}"/>
+    <g fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="3" stroke-linecap="round">
+      <path d="M ${lx1} ${ly1} A ${Rbranch} ${Rbranch} 0 0 1 ${lx2} ${ly2}"/>
+      <path d="M ${rx1} ${ry1} A ${Rbranch} ${Rbranch} 0 0 0 ${rx2} ${ry2}"/>
     </g>
     <g fill="rgba(255,255,255,0.92)">${leaves}</g>
   </svg>`;
