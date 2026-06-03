@@ -513,15 +513,14 @@ const WREATH = (function(){
   let leaves='';
   leftAngles.forEach(a=>leaves+=leaf(a));
   rightAngles.forEach(a=>leaves+=leaf(a));
-  // two branch arcs along the bottom, curving with the circle
-  const aL1=234, aL2=150, aR1=-54, aR2=30;
+  // single continuous branch arc sweeping the whole bottom (connected at the bottom)
   const p=(deg,r)=>[ (cx+r*Math.cos(deg*Math.PI/180)).toFixed(1), (cy+r*Math.sin(deg*Math.PI/180)).toFixed(1) ];
-  const [lx1,ly1]=p(aL2,Rbranch), [lx2,ly2]=p(aL1,Rbranch);
-  const [rx1,ry1]=p(aR2,Rbranch), [rx2,ry2]=p(aR1,Rbranch);
+  const [sx,sy]=p(-54,Rbranch);   // right top end
+  const [ex,ey]=p(234,Rbranch);   // left top end
+  // large-arc=1, sweep=1 goes clockwise from right end down around the bottom to left end
   return `<svg class="wreath" viewBox="0 0 100 100" width="80" height="80">
     <g fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="3" stroke-linecap="round">
-      <path d="M ${lx1} ${ly1} A ${Rbranch} ${Rbranch} 0 0 1 ${lx2} ${ly2}"/>
-      <path d="M ${rx1} ${ry1} A ${Rbranch} ${Rbranch} 0 0 0 ${rx2} ${ry2}"/>
+      <path d="M ${sx} ${sy} A ${Rbranch} ${Rbranch} 0 0 1 ${ex} ${ey}"/>
     </g>
     <g fill="rgba(255,255,255,0.92)">${leaves}</g>
   </svg>`;
