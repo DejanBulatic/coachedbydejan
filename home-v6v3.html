@@ -90,7 +90,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .kg-card .kg-head { width:100%; text-align:left; margin-bottom:8px; }
 .kg-card .kg-head .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
 .kg-card .kg-head .sub { font-size:10px; color:#94a3b8; margin-top:1px; }
-.kg-rings { width:132px; height:132px; position:relative; margin-top:4px; }
+.kg-rings { width:126px; height:126px; position:relative; margin-top:4px; }
 .kg-legend { display:flex; justify-content:space-between; width:100%; margin-top:12px; padding:0 4px; }
 .kg-leg { display:flex; flex-direction:column; align-items:center; }
 .kg-leg .dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
@@ -444,11 +444,11 @@ setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 3
 
 // ── CONCENTRIC KG RINGS ──
 (function() {
-  const size = 132, sw = 10, c = size/2;
+  const size = 126, sw = 10, c = size/2;
   const rings = [
-    { r:54, color:'#BF00FF', prog:40 },
-    { r:40, color:'#FF0099', prog:66 },
-    { r:26, color:'#FF4D00', prog:90 },
+    { r:51, color:'#BF00FF', prog:40 },
+    { r:38, color:'#FF0099', prog:66 },
+    { r:25, color:'#FF4D00', prog:90 },
   ];
   let svg = `<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">`;
   rings.forEach((ring, i) => {
