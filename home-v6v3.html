@@ -114,6 +114,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .cw-card { padding:18px; overflow:hidden; }
 .cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; margin-bottom:16px; }
 .cal { width:100%; box-sizing:border-box; }
+.cal-caption { margin-top:12px; font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.14em; text-align:center; }
 .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:8px; width:100%; }
 .cal-wd { text-align:center; font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.04em; }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; width:100%; }
@@ -187,7 +188,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .week-active-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:#FF0099; box-shadow:0 0 10px #FF0099; animation:pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 .week-info { padding:12px; background:#0f172a; }
-.week-info h4 { font-weight:700; font-size:13px; color:#fff; text-transform:uppercase; letter-spacing:0.08em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.week-info h4 { font-weight:700; font-size:13px; color:#fff; text-transform:uppercase; letter-spacing:0.14em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .week-info p { font-size:12px; color:rgba(255,255,255,0.6); font-weight:500; margin-top:1px; }
 
 
@@ -291,6 +292,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
         <div class="card cw-card">
           <div class="cw-name">Shred &amp; Sculpt</div>
           <div class="cal" id="cal"></div>
+          <div class="cal-caption">June · Week 4 of 12</div>
         </div>
 
         <div class="card kg-card">
@@ -508,10 +510,10 @@ const WREATH = (function(){
     const rot=angleDeg+90;
     return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rx}" ry="${ry}" transform="rotate(${rot.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
   }
-  leftAngles.forEach(a=>leaves+=leaf(a,7,3));
-  rightAngles.forEach(a=>leaves+=leaf(a,7,3));
+  leftAngles.forEach(a=>leaves+=leaf(a,9,5));
+  rightAngles.forEach(a=>leaves+=leaf(a,9,5));
   return `<svg class="wreath" viewBox="0 0 100 100" width="80" height="80">
-    <g fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round">
+    <g fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="6" stroke-linecap="round">
       <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 1 ${(cx+R*Math.cos(118*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(118*Math.PI/180)).toFixed(1)}"/>
       <path d="M ${cx-R*0.0} ${cy+R} A ${R} ${R} 0 0 0 ${(cx+R*Math.cos(62*Math.PI/180)).toFixed(1)} ${(cy+R*Math.sin(62*Math.PI/180)).toFixed(1)}"/>
     </g>
