@@ -34,7 +34,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .t-date-n { font-size:16px; font-weight:700; line-height:24px; letter-spacing:0; }
 .t-drophead { font-size:14px; font-weight:700; line-height:20px; letter-spacing:1.96px; text-transform:uppercase; color:#0f172a; }
 .t-dropsub { font-size:12px; font-weight:500; line-height:16px; color:#64748b; }
-.t-listhead { font-size:14px; font-weight:600; line-height:20px; letter-spacing:0; color:#0f172a; }
+.t-listhead { font-size:14px; font-weight:600; line-height:20px; letter-spacing:0; color:#0f172a; text-transform:none; }
 .t-listsub { font-size:11px; font-weight:500; line-height:16.5px; color:#64748b; }
 
 
@@ -113,7 +113,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .phase { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); overflow:hidden; margin-bottom:8px; }
 .phase.current { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
 .phase.locked { background:#f8fafc; }
-.phase.locked .phase-info h4 { color:#94a3b8; }
+.phase.locked .phase-info h4, .phase.locked .phase-ic i { color:#94a3b8; }
 .phase-head { width:100%; padding:16px; display:flex; align-items:center; gap:12px; cursor:pointer; }
 .phase-ic { width:40px; height:40px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; }
 .phase-ic.locked { background:#f1f5f9; color:#94a3b8; }
@@ -425,11 +425,12 @@ function dualBody(active, primary, w, h) {
 }
 
 // ─── RENDER THIS WEEK ───
+function toSentenceCase(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   let pillStyle;
   if (w.today) pillStyle = 'background:linear-gradient(135deg,#BF00FF,#FF0099);color:#fff;box-shadow:0 4px 16px rgba(255,0,153,0.4)';
   else if (w.rest) pillStyle = 'background:#F0FDF7;color:#00CC6A';
-  else if (w.locked) pillStyle = 'background:#F8FAFC;color:#94A3B8';
+  else if (w.locked) pillStyle = 'background:#F8FAFC;color:#475569';
   else pillStyle = `background:linear-gradient(135deg,${w.color},${w.color}CC);color:#fff;box-shadow:0 4px 16px ${w.color}66`;
   const calColor = w.color;
   const meta = w.rest
@@ -438,7 +439,7 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const lockIcon = w.locked ? `<i class="ti ti-lock" style="font-size:12px;color:#94a3b8;margin-left:4px"></i>` : '';
   return `<div class="week-row ${w.today?'today':''} ${w.rest?'rest':''} ${w.locked?'locked-card':''}" data-idx="${i}">
     <div class="day-pill" style="${pillStyle}"><span class="t-date-d">${w.day}</span><span class="t-date-n">${w.date}</span></div>
-    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}${lockIcon}</div><p style="font-size:12px;font-weight:500;line-height:16px;color:#64748b;text-transform:none">${w.focus}</p></div>
+    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}${lockIcon}</div><p style="font-size:12px;font-weight:500;line-height:16px;color:#64748b">${toSentenceCase(w.focus)}</p></div>
     <div class="week-meta">${meta}<i class="ti ti-chevron-right chev" style="color:${w.locked?'#e2e8f0':'#cbd5e1'}"></i></div>
   </div>`;
 }).join('');
