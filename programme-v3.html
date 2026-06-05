@@ -74,7 +74,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 /* ── PREVIEW TEASER CARD ── */
 .preview-teaser { margin-top:12px; width:100%; background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.15); padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; transition:box-shadow 0.2s; }
 .preview-teaser:active { box-shadow:0 2px 8px rgba(148,163,184,0.2); }
-.preview-teaser .bodymini { width:96px; flex-shrink:0; display:flex; align-items:center; }
+.preview-teaser .bodymini { width:120px; flex-shrink:0; display:flex; align-items:center; justify-content:center; height:66.39px; overflow:hidden; }
 .preview-teaser h4 { margin-bottom:6px; }
 .preview-teaser .ptxt { text-align:left; }
 .preview-teaser .chev { color:#cbd5e1; font-size:20px; margin-left:auto; }
@@ -84,6 +84,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .week-row { width:100%; border-radius:16px; border:1px solid #f1f5f9; background:#fff; display:flex; align-items:center; gap:12px; padding:12px; cursor:pointer; transition:border-color 0.2s; }
 .week-row.today { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); }
 .week-row.rest { background:rgba(255,255,255,0.6); }
+.week-row.locked-card { opacity:0.75; cursor:default; }
 .day-pill { width:48px; height:56px; border-radius:12px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .day-pill .d { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; opacity:0.8; }
 .day-pill .n { font-weight:700; font-size:16px; }
@@ -92,6 +93,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .week-info h4 { font-size:14px; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .week-info .dot { width:8px; height:8px; border-radius:50%; background:#FF0099; box-shadow:0 0 8px #FF0099; flex-shrink:0; animation:pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes bounceCard { 0%,100%{transform:scale(1)} 30%{transform:scale(0.97)} 60%{transform:scale(1.02)} 80%{transform:scale(0.99)} }
+.week-row.locked-bounce { animation:bounceCard 0.4s ease; }
+
 .week-info p { font-size:12px; color:#64748b; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .week-meta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
 .week-meta .badge { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; gap:3px; }
@@ -134,7 +138,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .drawer { position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:448px; margin:0 auto; background:#fff; border-radius:24px 24px 0 0; max-height:90vh; display:flex; flex-direction:column; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
 .drawer.open { transform:translateY(0); }
 .drawer-grip { width:40px; height:4px; border-radius:2px; background:#e2e8f0; margin:8px auto 0; }
-.drawer-head { padding:8px 20px 12px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+.drawer-head { padding:16px 20px 12px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .drawer-head h3 { font-size:17px; font-weight:700; color:#0f172a; }
 .drawer-head .sub { font-size:12px; color:#64748b; font-weight:500; }
 .drawer-head .btns { display:flex; gap:6px; }
@@ -155,7 +159,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .video-overlay .play i { font-size:28px; }
 .video-overlay .vlabel { position:absolute; bottom:10px; left:12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.7); }
 .demo-controls { display:flex; justify-content:center; margin:14px 20px 0; }
-.demo-btn { padding:12px 28px; border-radius:999px; background:#f1f5f9; border:1px solid #e2e8f0; color:#334155; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 6px rgba(148,163,184,0.15); }
+.demo-btn { padding:13px 32px; border-radius:999px; background:linear-gradient(to right,#BF00FF,#FF0099); border:none; color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 8px 24px rgba(191,0,255,0.35); }
 .demo-btn:active { transform:scale(0.97); }
 .ex-list { padding:20px; }
 .ex-list h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; font-weight:700; color:#64748b; margin-bottom:12px; }
@@ -238,8 +242,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
         <button class="preview-teaser" id="open-preview">
           <div class="bodymini" id="bodymini"></div>
           <div class="ptxt">
-            <h4 class="t-cardhead">Workout Preview</h4>
-            <p class="t-cardsub">Muscle map · demos · tips</p>
+            <h4 class="t-cardhead" style="line-height:20px">Tap to Explore<br>Today's Workout</h4>
+            <p class="t-cardsub" style="margin-top:6px">Muscle Map · Demos · Tips</p>
+            <p class="t-cardsub">For Each Exercise</p>
           </div>
           <i class="ti ti-chevron-right chev"></i>
         </button>
@@ -287,7 +292,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 <div class="drawer" id="drawer">
   <div class="drawer-grip"></div>
   <div class="drawer-head">
-    <div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <h3 id="dr-title">Quad Dominant</h3>
       <span class="sub" id="dr-sub">· 6 exercises</span>
     </div>
@@ -343,13 +348,13 @@ const EXERCISES = [
 ];
 
 const WEEK = [
-  { day:'MON', date:'03', title:'Quad Dominant', focus:'Lower Body Hypertrophy', cal:'480', rest:false, today:true, color:'#FF0099' },
-  { day:'TUE', date:'04', title:'Active Rest', focus:'Mobility & Walk', cal:'', rest:true, color:'#00CC6A' },
-  { day:'WED', date:'05', title:'Push Day', focus:'Chest · Shoulders · Triceps', cal:'420', rest:false, color:'#FF0099' },
-  { day:'THU', date:'06', title:'HIIT Burner', focus:'Conditioning', cal:'380', rest:false, color:'#FF4D00' },
-  { day:'FRI', date:'07', title:'Pull Day', focus:'Back · Biceps', cal:'450', rest:false, color:'#FFE000' },
-  { day:'SAT', date:'08', title:'Full Body', focus:'Strength Circuit', cal:'520', rest:false, color:'#BF00FF' },
-  { day:'SUN', date:'09', title:'Rest Day', focus:'Full Recovery', cal:'', rest:true, color:'#94A3B8' },
+  { day:'MON', date:'03', title:'Quad Dominant', focus:'lower body hypertrophy', cal:'480', rest:false, today:true, locked:false, color:'#FF0099' },
+  { day:'TUE', date:'04', title:'Active Rest', focus:'mobility & walk', cal:'', rest:true, today:false, locked:false, color:'#00CC6A' },
+  { day:'WED', date:'05', title:'Push Day', focus:'chest · shoulders · triceps', cal:'420', rest:false, today:false, locked:true, color:'#BF00FF' },
+  { day:'THU', date:'06', title:'HIIT Burner', focus:'conditioning', cal:'380', rest:false, today:false, locked:true, color:'#FF4D00' },
+  { day:'FRI', date:'07', title:'Pull Day', focus:'back · biceps', cal:'450', rest:false, today:false, locked:true, color:'#FFE000' },
+  { day:'SAT', date:'08', title:'Full Body', focus:'strength circuit', cal:'520', rest:false, today:false, locked:true, color:'#FF0099' },
+  { day:'SUN', date:'09', title:'Rest Day', focus:'full recovery', cal:'', rest:true, today:false, locked:false, color:'#94A3B8' },
 ];
 
 const PHASES = [
@@ -406,8 +411,8 @@ function bodyHalf(sil, mset, active, primary) {
   });
   return `<g transform="translate(0,-8)"><path d="${sil}" fill="url(#bf)" stroke="rgba(71,85,105,0.5)" stroke-width="0.6"/>${muscles}</g>`;
 }
-function dualBody(active, primary, w) {
-  return `<svg viewBox="0 0 170 195" style="width:100%;max-width:${w||180}px;height:auto;display:block;margin:0 auto">
+function dualBody(active, primary, w, h) {
+  return `<svg viewBox="0 0 170 195" style="width:100%;max-width:${w||180}px;${h?'height:'+h+';object-fit:cover;':'height:auto;'}display:block;margin:0 auto">
     <defs>
       <linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E2E8F0"/><stop offset="100%" stop-color="#CBD5E1"/></linearGradient>
       <filter id="ng" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -421,16 +426,20 @@ function dualBody(active, primary, w) {
 
 // ─── RENDER THIS WEEK ───
 document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
-  const pillStyle = w.today
-    ? 'background:linear-gradient(135deg,#BF00FF,#FF0099);color:#fff;box-shadow:0 4px 16px rgba(255,0,153,0.4)'
-    : w.rest ? 'background:#F0FDF7;color:#00CC6A' : 'background:#F8FAFC;color:#475569';
+  let pillStyle;
+  if (w.today) pillStyle = 'background:linear-gradient(135deg,#BF00FF,#FF0099);color:#fff;box-shadow:0 4px 16px rgba(255,0,153,0.4)';
+  else if (w.rest) pillStyle = 'background:#F0FDF7;color:#00CC6A';
+  else if (w.locked) pillStyle = 'background:#F8FAFC;color:#94A3B8';
+  else pillStyle = `background:linear-gradient(135deg,${w.color},${w.color}CC);color:#fff;box-shadow:0 4px 16px ${w.color}66`;
+  const calColor = w.color;
   const meta = w.rest
     ? `<span class="badge" style="color:#00CC6A"><i class="ti ti-coffee" style="font-size:11px"></i> Rest</span>`
-    : `<span class="badge" style="color:#FFE000"><i class="ti ti-flame" style="font-size:11px"></i> ${w.cal} CAL</span>`;
-  return `<div class="week-row ${w.today?'today':''} ${w.rest?'rest':''}" data-idx="${i}">
+    : `<span class="badge" style="color:${w.locked?w.color:calColor}"><i class="ti ti-flame" style="font-size:11px"></i> ${w.cal} CAL</span>`;
+  const lockIcon = w.locked ? `<i class="ti ti-lock" style="font-size:12px;color:#94a3b8;margin-left:4px"></i>` : '';
+  return `<div class="week-row ${w.today?'today':''} ${w.rest?'rest':''} ${w.locked?'locked-card':''}" data-idx="${i}">
     <div class="day-pill" style="${pillStyle}"><span class="t-date-d">${w.day}</span><span class="t-date-n">${w.date}</span></div>
-    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}</div><p class="t-cardsub">${w.focus}</p></div>
-    <div class="week-meta">${meta}<i class="ti ti-chevron-right chev"></i></div>
+    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}${lockIcon}</div><p style="font-size:12px;font-weight:500;line-height:16px;color:#64748b;text-transform:none">${w.focus}</p></div>
+    <div class="week-meta">${meta}<i class="ti ti-chevron-right chev" style="color:${w.locked?'#e2e8f0':'#cbd5e1'}"></i></div>
   </div>`;
 }).join('');
 
@@ -477,7 +486,7 @@ document.querySelectorAll('.phase-head').forEach(head => {
 });
 
 // ─── BODY MINI (teaser) ───
-document.getElementById('bodymini').innerHTML = dualBody(['quads','glutes','hamstrings'],'quads',96);
+document.getElementById('bodymini').innerHTML = dualBody(['quads','glutes','hamstrings'],'quads',110,'66.39px');
 
 // ─── EXERCISE DRAWER ───
 let activeEx = 0;
@@ -497,6 +506,7 @@ function renderDrawerExercise() {
   vw.innerHTML = `<div class="video-overlay" id="video-overlay"><div class="play"><i class="ti ti-player-play-filled"></i></div><span class="vlabel">Tap to play · ${ex.name}</span></div>`;
   document.getElementById('video-overlay').addEventListener('click', playVideo);
   document.getElementById('demo-toggle').innerHTML = '<i class="ti ti-player-play-filled" style="font-size:14px"></i> Play Demo';
+  document.getElementById('demo-toggle').style.background = 'linear-gradient(to right,#BF00FF,#FF0099)';
   // exercise list active state
   document.querySelectorAll('.ex-item').forEach((el,i) => el.classList.toggle('active', i===activeEx));
 }
@@ -529,7 +539,17 @@ function closeDrawer() { scrim.classList.remove('open'); drawer.classList.remove
 
 document.getElementById('open-preview').addEventListener('click', openDrawer);
 document.querySelectorAll('.week-row').forEach(row => {
-  row.addEventListener('click', () => { const w = WEEK[+row.dataset.idx]; if (!w.rest) openDrawer(); });
+  row.addEventListener('click', () => {
+    const w = WEEK[+row.dataset.idx];
+    if (w.locked) {
+      row.classList.remove('locked-bounce');
+      void row.offsetWidth; // reset animation
+      row.classList.add('locked-bounce');
+      setTimeout(() => row.classList.remove('locked-bounce'), 450);
+      return;
+    }
+    if (!w.rest) openDrawer();
+  });
 });
 document.getElementById('dr-close').addEventListener('click', closeDrawer);
 scrim.addEventListener('click', closeDrawer);
