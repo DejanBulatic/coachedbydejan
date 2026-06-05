@@ -27,6 +27,16 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; line-height:1.05; }
 h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
 .eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:#64748b; }
+/* ── LOCKED TYPE STYLES (from Figma) ── */
+.t-cardhead { font-size:14px; font-weight:700; line-height:20px; letter-spacing:1.96px; text-align:left; text-transform:uppercase; color:#0f172a; }
+.t-cardsub { font-size:12px; font-weight:500; line-height:16px; letter-spacing:0; text-transform:uppercase; color:#64748b; }
+.t-date-d { font-size:9px; font-weight:700; line-height:13.5px; letter-spacing:0.45px; text-transform:uppercase; }
+.t-date-n { font-size:16px; font-weight:700; line-height:24px; letter-spacing:0; }
+.t-drophead { font-size:14px; font-weight:700; line-height:20px; letter-spacing:1.96px; text-transform:uppercase; color:#0f172a; }
+.t-dropsub { font-size:12px; font-weight:500; line-height:16px; color:#64748b; }
+.t-listhead { font-size:14px; font-weight:600; line-height:20px; letter-spacing:0; color:#0f172a; }
+.t-listsub { font-size:11px; font-weight:500; line-height:16.5px; color:#64748b; }
+
 
 /* ── HEADER ── */
 .header { padding:48px 20px 24px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
@@ -40,8 +50,8 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 
 /* ── TODAY SESSION ── */
 .today-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.today-live { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 10px; border-radius:999px; background:#F5E6FF; color:#BF00FF; }
-.today-card { position:relative; border-radius:24px; overflow:hidden; height:340px; box-shadow:0 20px 50px rgba(120,40,160,0.14); border:2px solid #FF0099; }
+.today-live { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 10px; border-radius:999px; background:#FFE6F2; color:#FF0099; }
+.today-card { position:relative; border-radius:24px; overflow:hidden; height:340px; box-shadow:0 20px 50px rgba(120,40,160,0.14); }
 .today-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .today-ov { position:absolute; inset:0; background:linear-gradient(to top, #0f172a, rgba(15,23,42,0.45) 45%, rgba(15,23,42,0.1)); }
 .today-stats { position:absolute; top:16px; left:16px; right:16px; display:flex; gap:8px; }
@@ -64,9 +74,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 /* ── PREVIEW TEASER CARD ── */
 .preview-teaser { margin-top:12px; width:100%; background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.15); padding:16px; display:flex; align-items:center; gap:16px; cursor:pointer; transition:box-shadow 0.2s; }
 .preview-teaser:active { box-shadow:0 2px 8px rgba(148,163,184,0.2); }
-.preview-teaser .bodymini { width:64px; height:80px; flex-shrink:0; }
-.preview-teaser h4 { font-size:14px; font-weight:700; color:#0f172a; }
-.preview-teaser p { font-size:12px; color:#64748b; font-weight:500; margin-top:2px; }
+.preview-teaser .bodymini { width:96px; flex-shrink:0; display:flex; align-items:center; }
+.preview-teaser h4 { margin-bottom:6px; }
+.preview-teaser .ptxt { text-align:left; }
 .preview-teaser .chev { color:#cbd5e1; font-size:20px; margin-left:auto; }
 
 /* ── THIS WEEK ── */
@@ -98,6 +108,8 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .timeline-dates { display:flex; justify-content:space-between; font-size:10px; color:#64748b; font-weight:600; }
 .phase { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); overflow:hidden; margin-bottom:8px; }
 .phase.current { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
+.phase.locked { background:#f8fafc; }
+.phase.locked .phase-info h4 { color:#94a3b8; }
 .phase-head { width:100%; padding:16px; display:flex; align-items:center; gap:12px; cursor:pointer; }
 .phase-ic { width:40px; height:40px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; }
 .phase-ic.locked { background:#f1f5f9; color:#94a3b8; }
@@ -109,7 +121,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .phase-chev { color:#94a3b8; font-size:18px; transition:transform 0.25s; }
 .phase-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
 .phase-body-inner { padding:4px 16px 16px; border-top:1px solid #f1f5f9; }
-.phase-row { display:flex; align-items:center; gap:12px; padding:8px 0; }
+.phase-row { display:flex; align-items:center; gap:14px; padding:14px 0; }
 .phase-row .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
 .phase-row .l { flex:1; }
 .phase-row .l p:first-child { font-size:13px; font-weight:600; color:#334155; }
@@ -142,8 +154,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .video-overlay .play { width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.95); display:flex; align-items:center; justify-content:center; color:#FF0099; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
 .video-overlay .play i { font-size:28px; }
 .video-overlay .vlabel { position:absolute; bottom:10px; left:12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.7); }
-.demo-controls { display:flex; gap:8px; margin:12px 20px 0; }
-.demo-btn { width:calc(50% - 4px); padding:11px; border-radius:12px; background:#f1f5f9; border:none; color:#475569; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+.demo-controls { display:flex; justify-content:center; margin:14px 20px 0; }
+.demo-btn { padding:12px 28px; border-radius:999px; background:#f1f5f9; border:1px solid #e2e8f0; color:#334155; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 2px 6px rgba(148,163,184,0.15); }
+.demo-btn:active { transform:scale(0.97); }
 .ex-list { padding:20px; }
 .ex-list h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; font-weight:700; color:#64748b; margin-bottom:12px; }
 .ex-item { width:100%; text-align:left; border-radius:12px; padding:12px; display:flex; align-items:center; gap:12px; border:1px solid #f1f5f9; background:#fff; margin-bottom:8px; cursor:pointer; }
@@ -224,9 +237,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
         <!-- Preview teaser -->
         <button class="preview-teaser" id="open-preview">
           <div class="bodymini" id="bodymini"></div>
-          <div>
-            <h4>Today's Workout Preview</h4>
-            <p>See the muscle map, demos &amp; tips for each lift.</p>
+          <div class="ptxt">
+            <h4 class="t-cardhead">Workout Preview</h4>
+            <p class="t-cardsub">Muscle map · demos · tips</p>
           </div>
           <i class="ti ti-chevron-right chev"></i>
         </button>
@@ -330,18 +343,18 @@ const EXERCISES = [
 ];
 
 const WEEK = [
-  { day:'MON', date:'03', title:'Quad Dominant', focus:'Lower Body Hypertrophy', dur:'60m', rest:false, today:true, color:'#FF0099' },
-  { day:'TUE', date:'04', title:'Active Rest', focus:'Mobility & Walk', dur:'20m', rest:true, color:'#00CC6A' },
-  { day:'WED', date:'05', title:'Push Day', focus:'Chest · Shoulders · Triceps', dur:'45m', rest:false, color:'#FF0099' },
-  { day:'THU', date:'06', title:'HIIT Burner', focus:'Conditioning', dur:'30m', rest:false, color:'#FF4D00' },
-  { day:'FRI', date:'07', title:'Pull Day', focus:'Back · Biceps', dur:'50m', rest:false, color:'#FFB800' },
-  { day:'SAT', date:'08', title:'Full Body', focus:'Strength Circuit', dur:'60m', rest:false, color:'#BF00FF' },
-  { day:'SUN', date:'09', title:'Rest Day', focus:'Full Recovery', dur:'—', rest:true, color:'#94A3B8' },
+  { day:'MON', date:'03', title:'Quad Dominant', focus:'Lower Body Hypertrophy', cal:'480', rest:false, today:true, color:'#FF0099' },
+  { day:'TUE', date:'04', title:'Active Rest', focus:'Mobility & Walk', cal:'', rest:true, color:'#00CC6A' },
+  { day:'WED', date:'05', title:'Push Day', focus:'Chest · Shoulders · Triceps', cal:'420', rest:false, color:'#FF0099' },
+  { day:'THU', date:'06', title:'HIIT Burner', focus:'Conditioning', cal:'380', rest:false, color:'#FF4D00' },
+  { day:'FRI', date:'07', title:'Pull Day', focus:'Back · Biceps', cal:'450', rest:false, color:'#FFE000' },
+  { day:'SAT', date:'08', title:'Full Body', focus:'Strength Circuit', cal:'520', rest:false, color:'#BF00FF' },
+  { day:'SUN', date:'09', title:'Rest Day', focus:'Full Recovery', cal:'', rest:true, color:'#94A3B8' },
 ];
 
 const PHASES = [
-  { name:'Foundation', weeks:'1 – 4', status:'done', desc:'Movement quality & base capacity', color:'#FFB800' },
-  { name:'Shred & Sculpt', weeks:'5 – 8', status:'current', desc:'Hypertrophy & metabolic load', color:'#BF00FF' },
+  { name:'Foundation', weeks:'1 – 4', status:'done', desc:'Movement quality & base capacity', color:'#FFE000' },
+  { name:'Shred & Sculpt', weeks:'5 – 8', status:'current', desc:'Hypertrophy & metabolic load', color:'#FF0099' },
   { name:'Power Phase', weeks:'9 – 11', status:'locked', desc:'Strength peaking & explosivity', color:'#FF0099' },
   { name:'Peak Week', weeks:'12', status:'locked', desc:'Deload, test & celebrate', color:'#FF4D00' },
 ];
@@ -374,6 +387,38 @@ function bodyMapSVG(active, primary, w) {
     </g></svg>`;
 }
 
+
+// Back view silhouette + posterior muscles
+const BACK_SIL = FRONT_SIL; // same outline, mirrored feel; muscles differ
+const BACK_M = {
+  hamstrings:'M31 113 C 29 119, 29 142, 34 148 L 38 148 L 38 113 Z M49 113 C 51 119, 51 142, 46 148 L 42 148 L 42 113 Z',
+  glutes:'M30 102 C 28 108, 30 118, 39 119 L 39 100 Z M50 102 C 52 108, 50 118, 41 119 L 41 100 Z',
+  calves:'M32 152 C 30 159, 30 174, 34 177 C 36 177, 37 174, 37 167 L 37 152 Z M48 152 C 50 159, 50 174, 46 177 C 44 177, 43 174, 43 167 L 43 152 Z',
+  back:'M31 50 C 29 58, 30 78, 36 84 L 39 84 L 39 50 Z M49 50 C 51 58, 50 78, 44 84 L 41 84 L 41 50 Z',
+  quads:'M31 113 C 29 119, 29 140, 34 146 L 38 146 L 38 113 Z M49 113 C 51 119, 51 140, 46 146 L 42 146 L 42 113 Z',
+};
+function bodyHalf(sil, mset, active, primary) {
+  let muscles = '';
+  active.forEach(m => {
+    const d = mset[m]; if (!d) return;
+    const isP = m === primary;
+    muscles += `<path d="${d}" fill="${isP?'#FF0099':'#BF00FF'}" opacity="${isP?0.95:0.5}" filter="url(#ng)"><animate attributeName="opacity" values="${isP?'0.7;1;0.7':'0.5;0.5'}" dur="1.4s" repeatCount="indefinite"/></path>`;
+  });
+  return `<g transform="translate(0,-8)"><path d="${sil}" fill="url(#bf)" stroke="rgba(71,85,105,0.5)" stroke-width="0.6"/>${muscles}</g>`;
+}
+function dualBody(active, primary, w) {
+  return `<svg viewBox="0 0 170 195" style="width:100%;max-width:${w||180}px;height:auto;display:block;margin:0 auto">
+    <defs>
+      <linearGradient id="bf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E2E8F0"/><stop offset="100%" stop-color="#CBD5E1"/></linearGradient>
+      <filter id="ng" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <g>${bodyHalf(FRONT_SIL, FRONT_M, active, primary)}</g>
+    <text x="40" y="193" text-anchor="middle" font-size="8" font-weight="700" fill="#94a3b8" letter-spacing="0.5">FRONT</text>
+    <g transform="translate(90,0)">${bodyHalf(BACK_SIL, BACK_M, active, primary)}</g>
+    <text x="130" y="193" text-anchor="middle" font-size="8" font-weight="700" fill="#94a3b8" letter-spacing="0.5">BACK</text>
+  </svg>`;
+}
+
 // ─── RENDER THIS WEEK ───
 document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const pillStyle = w.today
@@ -381,10 +426,10 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
     : w.rest ? 'background:#F0FDF7;color:#00CC6A' : 'background:#F8FAFC;color:#475569';
   const meta = w.rest
     ? `<span class="badge" style="color:#00CC6A"><i class="ti ti-coffee" style="font-size:11px"></i> Rest</span>`
-    : `<span class="badge" style="color:${w.color}"><i class="ti ti-bolt" style="font-size:11px"></i> ${w.dur}</span>`;
+    : `<span class="badge" style="color:#FFE000"><i class="ti ti-flame" style="font-size:11px"></i> ${w.cal} CAL</span>`;
   return `<div class="week-row ${w.today?'today':''} ${w.rest?'rest':''}" data-idx="${i}">
-    <div class="day-pill" style="${pillStyle}"><span class="d">${w.day}</span><span class="n">${w.date}</span></div>
-    <div class="week-info"><div class="t"><h4>${w.title}</h4>${w.today?'<span class="dot"></span>':''}</div><p>${w.focus}</p></div>
+    <div class="day-pill" style="${pillStyle}"><span class="t-date-d">${w.day}</span><span class="t-date-n">${w.date}</span></div>
+    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}</div><p class="t-cardsub">${w.focus}</p></div>
     <div class="week-meta">${meta}<i class="ti ti-chevron-right chev"></i></div>
   </div>`;
 }).join('');
@@ -392,7 +437,7 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
 // ─── RENDER TIMELINE ───
 document.getElementById('timeline').innerHTML = Array.from({length:12}).map((_,i) => {
   const done = i < 4, current = i >= 4 && i < 8;
-  const style = done ? 'background:#FFB800;box-shadow:0 0 4px #FFB80088' : current ? 'background:#FF0099;box-shadow:0 0 6px #FF0099' : 'background:#E2E8F0';
+  const style = done ? 'background:#FFE000;box-shadow:0 0 4px #FFE00088' : current ? 'background:#FF0099;box-shadow:0 0 6px #FF0099' : 'background:#E2E8F0';
   return `<div class="tp"><div class="bar" style="${style}"></div><div class="n">${i+1}</div></div>`;
 }).join('');
 
@@ -407,11 +452,11 @@ document.getElementById('phases').innerHTML = PHASES.map((p,i) => {
   const locked = p.status==='locked', current = p.status==='current', done = p.status==='done';
   const icStyle = locked ? '' : `background:linear-gradient(135deg,${p.color},${p.color}CC);box-shadow:0 4px 12px ${p.color}66`;
   const icon = locked ? 'ti-lock' : done ? 'ti-circle-check' : 'ti-activity';
-  const rows = PHASE_ROWS.map(r => `<div class="phase-row"><div class="dot" style="background:${p.color};box-shadow:0 0 6px ${p.color}"></div><div class="l"><p>${r.label}</p><p>${r.meta}</p></div><i class="ti ti-barbell"></i></div>`).join('');
-  return `<div class="phase ${current?'current':''}" data-phase="${i}">
+  const rows = PHASE_ROWS.map(r => `<div class="phase-row"><div class="dot" style="background:${p.color};box-shadow:0 0 6px ${p.color}"></div><div class="l"><p class="t-listhead">${r.label}</p><p class="t-listsub">${r.meta}</p></div><i class="ti ti-barbell"></i></div>`).join('');
+  return `<div class="phase ${current?'current':''} ${locked?'locked':''}" data-phase="${i}">
     <button class="phase-head">
       <div class="phase-ic ${locked?'locked':''}" style="${icStyle}"><i class="ti ${icon}" style="font-size:18px"></i></div>
-      <div class="phase-info"><div class="t"><h4>${p.name}</h4>${current?'<span class="phase-now">Now</span>':''}</div><p>Weeks ${p.weeks} · ${p.desc}</p></div>
+      <div class="phase-info"><div class="t"><h4 class="t-drophead">${p.name}</h4>${current?'<span class="phase-now">Now</span>':''}</div><p class="t-dropsub">Weeks ${p.weeks} · ${p.desc}</p></div>
       <i class="ti ti-chevron-down phase-chev"></i>
     </button>
     <div class="phase-body"><div class="phase-body-inner">${rows}</div></div>
@@ -432,7 +477,7 @@ document.querySelectorAll('.phase-head').forEach(head => {
 });
 
 // ─── BODY MINI (teaser) ───
-document.getElementById('bodymini').innerHTML = bodyMapSVG(['quads','glutes','hamstrings'],'quads',64);
+document.getElementById('bodymini').innerHTML = dualBody(['quads','glutes','hamstrings'],'quads',96);
 
 // ─── EXERCISE DRAWER ───
 let activeEx = 0;
@@ -441,7 +486,7 @@ const scrim = document.getElementById('drawer-scrim');
 
 function renderDrawerExercise() {
   const ex = EXERCISES[activeEx];
-  document.getElementById('dr-bodymap').innerHTML = bodyMapSVG(ex.muscles, ex.primary, 200);
+  document.getElementById('dr-bodymap').innerHTML = dualBody(ex.muscles, ex.primary, 180);
   document.getElementById('dr-ex-tag').textContent = ex.primary;
   document.getElementById('dr-ex-name').textContent = ex.name;
   document.getElementById('dr-ex-tip').textContent = ex.tip;
@@ -466,7 +511,7 @@ function playVideo() {
 document.getElementById('ex-list-items').innerHTML = EXERCISES.map((e,i) => `
   <div class="ex-item ${i===0?'active':''}" data-ex="${i}">
     <div class="ei-num">${i+1}</div>
-    <div class="ei-info"><h5>${e.name}</h5><p>${e.primary}</p></div>
+    <div class="ei-info"><h5 class="t-listhead">${e.name}</h5><p class="t-listsub" style="text-transform:capitalize">${e.primary}</p></div>
     <div class="ei-sets">${e.sets}</div>
   </div>`).join('');
 
