@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#e8f5f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; scrollbar-width:none; -ms-overflow-style:none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display:none; width:0; height:0; }
+body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
+
+/* ── BACKGROUND ── */
+.bg {
+  position:fixed; inset:0; z-index:0;
+  background-color:#e8f5f2;
+  background-image:url('images/app-bg.png');
+  background-size:cover;
+  background-position:center top;
+  background-repeat:no-repeat;
+}
+.bg-fallback {
+  position:fixed; inset:0; z-index:-1;
+  background:
+    radial-gradient(ellipse at 100% 0%, #cdeee6 0%, transparent 45%),
+    radial-gradient(ellipse at 0% 60%, #dff0ec 0%, transparent 50%),
+    linear-gradient(to bottom, #eaf6f3 0%, #eef7f4 50%, #e6f3ef 100%);
+  background-color:#e8f5f2;
+}
+/* dot cluster top-right */
+.bg-veil { position:fixed; inset:0; z-index:0; background:linear-gradient(to bottom, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.28) 100%); pointer-events:none; }
+
+/* ── LAYOUT ── */
+.app { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; }
+.scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:120px; max-width:448px; margin:0 auto; width:100%; }
+.scroll::-webkit-scrollbar { display:none; }
+
+/* ── HEADER ── */
+.header { padding:48px 20px 24px; display:flex; align-items:center; justify-content:space-between; }
+.header-left { display:flex; align-items:center; gap:16px; }
+.profile-ring {
+  width:100px; height:100px; border-radius:50%; padding:2px;
+  background:linear-gradient(to top right, #BF00FF, #FF0099, #FF4D00);
+  flex-shrink:0; cursor:pointer;
+}
+.profile-ring img { width:100%; height:100%; border-radius:50%; object-fit:cover; border:2px solid #fff; display:block; background:#dfeeea; }
+.greeting h1 { font-family:'Inter', sans-serif; font-size:30px; font-weight:800; color:#0f172a; letter-spacing:-0.02em; line-height:1.1; }
+.greeting p { font-size:13px; color:#64748b; font-weight:500; margin-top:3px; }
+.bell-btn { width:40px; height:40px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.08); border:1px solid #f1f5f9; display:flex; align-items:center; justify-content:center; color:#475569; position:relative; cursor:pointer; flex-shrink:0; }
+.bell-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; border:1.5px solid #fff; background:#FF0099; box-shadow:0 0 6px #FF0099; }
+
+/* ── MAIN ── */
+.main { padding:0 20px; display:flex; flex-direction:column; gap:32px; }
+
+/* Card base */
+.card { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.18); }
+
+/* ── GAMIFICATION ── */
+.gam { padding:20px; }
+.gam-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:18px; }
+.gam-motiv { margin-bottom:20px; }
+.gam-stat { display:flex; flex-direction:column; align-items:center; text-align:center; }
+.gam-stat .ic { margin-bottom:6px; font-size:27px; display:flex; }
+.gam-stat .val { font-weight:800; font-size:19px; color:#0f172a; font-family:'Inter',sans-serif; }
+.gam-stat .lbl { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-top:1px; }
+.gam-motiv { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; line-height:1.25; letter-spacing:-0.01em; margin-bottom:18px; }
+.gam-prog-head { display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-bottom:8px; }
+.gam-prog-head .l { font-weight:600; color:#475569; }
+.gam-prog-head .r { font-weight:700; color:#BF00FF; }
+.gam-bar { height:8px; width:100%; background:#f1f5f9; border-radius:4px; overflow:hidden; }
+.gam-bar-fill { height:100%; width:0; border-radius:4px; background:linear-gradient(to right, #BF00FF, #FF0099); transition:width 1s ease; }
+
+/* ── PROGRESS ROW ── */
+.prog-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.prog-card { padding:20px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+.prog-card .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.prog-card .phase { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; }
+.prog-week-lbl { font-size:13px; font-weight:500; color:#475569; margin-bottom:6px; }
+.prog-pips { display:flex; gap:3px; }
+.prog-pip { height:4px; flex:1; border-radius:2px; background:#f1f5f9; }
+.prog-pip.on { background:#BF00FF; box-shadow:0 0 4px #BF00FF88; }
+.prog-delta { margin-top:14px; display:flex; align-items:center; gap:4px; font-size:13px; font-weight:600; color:#00CC6A; }
+
+.kg-card { padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.kg-card .kg-head { width:100%; text-align:left; margin-bottom:8px; }
+.kg-card .kg-head .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+.kg-card .kg-head .sub { font-size:10px; color:#94a3b8; margin-top:1px; }
+.kg-rings { width:111px; height:111px; position:relative; margin-top:4px; }
+.kg-legend { display:flex; justify-content:space-between; width:100%; margin-top:12px; padding:0 4px; }
+.kg-leg { display:flex; flex-direction:column; align-items:center; }
+.kg-leg .dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
+.kg-leg span { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; }
+
+
+/* ── CURRENT WEEK CARD ── */
+.cw-card { padding:18px; display:flex; flex-direction:column; }
+.cw-eyebrow { color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:8px; }
+.cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; line-height:1.15; margin-bottom:8px; }
+.cw-line { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+.cw-week { font-size:13px; font-weight:500; color:#64748b; }
+.cw-delta { margin-left:auto; display:flex; align-items:center; gap:2px; font-size:13px; font-weight:700; color:#00CC6A; }
+.cw-delta i { font-size:14px; }
+.cw-pillars { display:flex; gap:3px; margin-top:auto; }
+.cw-pillar { height:16px; flex:1; border-radius:3px; background:#eef2f6; transition:all 0.4s ease; }
+@keyframes cwPulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
+
+
+/* ── MONTH CALENDAR ── */
+.cw-card { padding:18px; overflow:hidden; }
+.cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; margin-bottom:16px; }
+.cal { width:100%; box-sizing:border-box; }
+.cal-caption { margin-top:12px; font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.14em; text-align:center; }
+.cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:8px; width:100%; }
+.cal-wd { text-align:center; font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.04em; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; width:100%; }
+.cal-cell { aspect-ratio:1; min-width:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; border-radius:50%; color:#64748b; position:relative; box-sizing:border-box; }
+.cal-cell.empty { visibility:hidden; }
+.cal-cell.plain { color:#94a3b8; }
+/* completed training day: pink circle with tick (matches thumbnails) */
+.cal-cell.done {
+  border:2px solid #6FD9FF; color:transparent;
+  box-shadow:0 0 10px rgba(111,217,255,0.8), inset 0 0 6px rgba(111,217,255,0.35);
+}
+.cal-cell.done i { position:absolute; color:#FF0099; font-size:25px; }
+/* today: green neon circle, no tick */
+.cal-cell.today {
+  border:2px solid #00CC6A; color:#0f172a; font-weight:800;
+  box-shadow:0 0 10px rgba(0,204,106,0.7), inset 0 0 6px rgba(0,204,106,0.25);
+}
+
+/* ── SECTION HEADERS ── */
+.section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.section-head h2 { font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#0f172a; letter-spacing:-0.01em; }
+.section-link { font-size:13px; font-weight:600; color:#FF0099; display:flex; align-items:center; gap:2px; cursor:pointer; }
+
+/* ── TODAY SESSION ── */
+.today-card { position:relative; border-radius:24px; overflow:hidden; height:320px; box-shadow:0 20px 50px rgba(120,40,160,0.12); }
+.today-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.today-ov { position:absolute; inset:0; background:linear-gradient(to top, #0f172a, rgba(15,23,42,0.4) 45%, transparent); }
+.today-panel-wrap { position:absolute; bottom:0; left:0; right:0; padding:24px; }
+.today-panel { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:16px; padding:20px; }
+.today-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.today-tag { padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#BF00FF; box-shadow:0 0 10px #BF00FF88; display:inline-block; margin-bottom:8px; }
+.today-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#fff; }
+.today-dur { text-align:right; color:#fff; }
+.today-dur .n { display:block; font-family:'Inter',sans-serif; font-weight:700; font-size:20px; }
+.today-dur .u { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; opacity:0.8; }
+.today-meta { font-size:13px; color:rgba(255,255,255,0.9); display:flex; align-items:center; gap:8px; font-weight:500; margin-bottom:18px; }
+.today-meta i { color:#BF00FF; filter:drop-shadow(0 0 4px #BF00FF); }
+.swipe-track {
+  position:relative; width:100%; height:60px; border-radius:14px; overflow:hidden;
+  background:linear-gradient(to right, #BF00FF, #FF0099);
+  animation:beginPulse 2s infinite; cursor:grab; touch-action:none;
+  display:flex; align-items:center; justify-content:center;
+}
+@keyframes beginPulse {
+  0% { box-shadow:0 0 15px rgba(191,0,255,0.5); }
+  50% { box-shadow:0 0 35px rgba(255,0,153,0.8); }
+  100% { box-shadow:0 0 15px rgba(191,0,255,0.5); }
+}
+.swipe-fill { position:absolute; left:0; top:0; bottom:0; width:0; background:rgba(255,255,255,0.18); pointer-events:none; }
+.swipe-label {
+  position:relative; z-index:1; color:#fff; font-family:'Inter',sans-serif; font-weight:700;
+  font-size:14px; text-transform:uppercase; letter-spacing:0.06em;
+  pointer-events:none; transition:opacity 0.2s;
+}
+.swipe-handle {
+  position:absolute; left:4px; top:4px; width:52px; height:52px; border-radius:11px;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  color:#FF0099; font-size:24px; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.swipe-handle i { font-size:24px; }
+
+/* ── THIS WEEK ── */
+.week-scroll { display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; margin:0 -20px; padding-left:20px; padding-right:20px; }
+.week-scroll::-webkit-scrollbar { display:none; }
+.week-card { flex-shrink:0; width:144px; border-radius:16px; overflow:hidden; background:#fff; border:1px solid #f1f5f9; box-shadow:0 4px 12px rgba(148,163,184,0.15); cursor:pointer; }
+.week-card.active { border-color:#FF0099; box-shadow:0 4px 20px rgba(255,0,153,0.35); }
+.week-img { height:120px; position:relative; }
+.week-img img { width:100%; height:100%; object-fit:cover; }
+.week-img .ov { position:absolute; inset:0; background:rgba(15,23,42,0.2); }
+.week-day-tag { position:absolute; top:8px; left:8px; padding:3px 7px; border-radius:6px; background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); font-size:10px; font-weight:700; color:#0f172a; }
+.week-active-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:#FF0099; box-shadow:0 0 10px #FF0099; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.week-info { padding:12px; background:#0f172a; }
+.week-info h4 { font-weight:700; font-size:13px; color:#fff; text-transform:uppercase; letter-spacing:0.14em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.week-info p { font-size:12px; color:rgba(255,255,255,0.6); font-weight:500; margin-top:1px; }
+
+
+/* completed workout: liquid glass square with pink tick (does not cover the day tag) */
+.week-completed-glass {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
+}
+.week-tick {
+  width:52px; height:52px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #FF0099; color:#FF0099;
+  box-shadow:0 0 12px #FF0099, inset 0 0 8px rgba(255,0,153,0.3);
+}
+.week-tick i { font-size:28px; }
+
+/* ── FROM DEJAN ── */
+.dejan-card { padding:0; position:relative; overflow:hidden; display:flex; min-height:140px; }
+.dejan-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(to bottom, #BF00FF, #FF0099); z-index:2; }
+.dejan-photo { width:38%; flex-shrink:0; position:relative; overflow:hidden; }
+.dejan-photo img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.dejan-inner { flex:1; padding:18px; display:flex; flex-direction:column; justify-content:center; }
+.dejan-label { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px; }
+.dejan-msg { font-size:13px; font-weight:500; color:#334155; font-style:italic; line-height:1.45; }
+
+/* ── BADGES ── */
+.badge-scroll { display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; margin:0 -20px; padding-left:20px; padding-right:20px; }
+.badge-scroll::-webkit-scrollbar { display:none; }
+.badge { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.badge-ic { width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.badge-ic.locked { background:#f8fafc; border:2px dashed #e2e8f0; opacity:0.7; }
+.badge-ic { position:relative; }
+.badge-ic i { font-size:26px; }
+.badge-name { font-size:10px; font-weight:700; text-transform:uppercase; text-align:center; width:80px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.badge-name.unlocked { color:#334155; }
+.badge-name.locked { color:#94a3b8; }
+
+/* ── STAY CONNECTED ── */
+.connect-card { padding:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:12px; }
+.connect-left { display:flex; align-items:center; gap:16px; }
+.connect-ic { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.connect-card h4 { font-weight:700; font-size:14px; color:#0f172a; }
+.connect-card p { font-size:12px; color:#64748b; font-weight:500; margin-top:1px; }
+.connect-arrow { color:#cbd5e1; font-size:18px; }
+
+/* ── BOTTOM NAV ── */
+.nav { position:fixed; bottom:24px; left:0; right:0; z-index:50; display:flex; justify-content:center; pointer-events:none; }
+.nav-inner { background:rgba(255,255,255,0.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid #e2e8f0; padding:8px; border-radius:40px; box-shadow:0 12px 40px rgba(148,163,184,0.5); display:flex; gap:4px; pointer-events:auto; }
+.nav-item { text-decoration:none; position:relative; display:flex; align-items:center; justify-content:center; padding:12px; border-radius:50%; cursor:pointer; color:#94a3b8; transition:color 0.2s; border:none; background:none; }
+.nav-item i { position:relative; z-index:1; font-size:22px; }
+.nav-item.active { color:#fff; }
+.nav-item .pill { position:absolute; inset:0; border-radius:50%; background:linear-gradient(to right, #BF00FF, #FF0099); opacity:0; transform:scale(0.6); transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1); }
+.nav-item.active .pill { opacity:1; transform:scale(1); }
+</style>
+</head>
+<body>
+
+<div class="bg-fallback"></div>
+<div class="bg"></div>
+<div class="bg-veil"></div>
+
+<div class="app">
+  <div class="scroll">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="profile-ring">
+          <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=200&h=200&fit=crop" alt="Profile">
+        </div>
+        <div class="greeting">
+          <h1>Hi, Sarah</h1>
+          <p>Level — Elite · 12-Week</p>
+        </div>
+      </div>
+      <button class="bell-btn"><i class="ti ti-bell" style="font-size:20px"></i><span class="bell-dot"></span></button>
+    </header>
+
+    <main class="main">
+
+      <!-- Gamification -->
+      <section>
+        <div class="card gam">
+          <div class="gam-motiv" id="gam-motiv">You're 2 sessions away from owning Week 4.</div>
+          <div class="gam-stats">
+            <div class="gam-stat"><span class="ic" style="color:#BF00FF"><i class="ti ti-barbell"></i></span><span class="val">24</span><span class="lbl">Workouts</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FF0099"><i class="ti ti-calendar"></i></span><span class="val">4</span><span class="lbl">Weeks</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FF4D00"><i class="ti ti-flame"></i></span><span class="val">12k</span><span class="lbl">Cals</span></div>
+            <div class="gam-stat"><span class="ic" style="color:#FFB800"><i class="ti ti-trophy"></i></span><span class="val">5</span><span class="lbl">Badges</span></div>
+          </div>
+          <div class="gam-prog-head"><span class="l">Programme Progress</span><span class="r">33%</span></div>
+          <div class="gam-bar"><div class="gam-bar-fill" id="gam-fill"></div></div>
+        </div>
+      </section>
+
+      <!-- Current Programme + Weight (side by side) -->
+      <section class="prog-row">
+        <div class="card cw-card">
+          <div class="cw-name">Shred &amp; Sculpt</div>
+          <div class="cal" id="cal"></div>
+          <div class="cal-caption">June · Week 4 of 12</div>
+        </div>
+
+        <div class="card kg-card">
+          <div class="kg-head"><div class="eyebrow">Weight Progress</div><div class="sub">As of Today</div></div>
+          <div class="kg-rings" id="kg-rings"></div>
+          <div class="kg-legend">
+            <div class="kg-leg"><span class="dot" style="background:#BF00FF;box-shadow:0 0 5px #BF00FF"></span><span>Lost</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF0099;box-shadow:0 0 5px #FF0099"></span><span>Curr</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF4D00;box-shadow:0 0 5px #FF4D00"></span><span>Goal</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Session -->
+      <section>
+        <div class="section-head"><h2>Today's Session</h2></div>
+        <div class="today-card">
+          <img src="https://images.unsplash.com/photo-1626337920103-ae64b9c688e4?w=800&h=700&fit=crop" alt="">
+          <div class="today-ov"></div>
+          <div class="today-panel-wrap">
+            <div class="today-panel">
+              <div class="today-top">
+                <div>
+                  <span class="today-tag">Lower Body Hypertrophy</span>
+                  <div class="today-name">Quad Dominant</div>
+                </div>
+                <div class="today-dur"><span class="n">60</span><span class="u">Mins</span></div>
+              </div>
+              <div class="today-meta"><i class="ti ti-circle-check" style="font-size:16px"></i> 6 Exercises • 24 Sets</div>
+              <div class="swipe-track" id="swipe-track">
+                <div class="swipe-fill" id="swipe-fill"></div>
+                <div class="swipe-label" id="swipe-label">Swipe to Begin</div>
+                <div class="swipe-handle" id="swipe-handle"><i class="ti ti-chevron-right"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- This Week -->
+      <section>
+        <div class="section-head"><h2>This Week</h2><span class="section-link">View All <i class="ti ti-chevron-right"></i></span></div>
+        <div class="week-scroll" id="week-scroll"></div>
+      </section>
+
+      <!-- From Dejan -->
+      <section>
+        <div class="card dejan-card">
+          <div class="dejan-photo"><img src="https://images.unsplash.com/photo-1758875568932-0eefd3e60090?w=300&h=400&fit=crop" alt="Dejan"></div>
+          <div class="dejan-inner">
+            <div class="dejan-label">From Dejan</div>
+            <div class="dejan-msg">"You crushed those heavy squats yesterday, Sarah! Let's keep that same energy for today's session. You've got this."</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Badges -->
+      <section>
+        <div class="section-head"><h2>Your Badges</h2><span class="section-link" style="color:#64748b">5 / 34</span></div>
+        <div class="badge-scroll" id="badge-scroll"></div>
+      </section>
+
+      <!-- Stay Connected -->
+      <section>
+        <div class="section-head"><h2>Stay Connected</h2></div>
+        <div class="card connect-card">
+          <div class="connect-left">
+            <div class="connect-ic" style="background:#F5E6FF;color:#BF00FF"><i class="ti ti-chart-line" style="font-size:20px"></i></div>
+            <div><h4>Weekly Check-in</h4><p>Due in 2 days</p></div>
+          </div>
+          <i class="ti ti-arrow-right connect-arrow"></i>
+        </div>
+        <div class="card connect-card">
+          <div class="connect-left">
+            <div class="connect-ic" style="background:#E0FFF2;color:#00CC6A"><i class="ti ti-brand-whatsapp" style="font-size:20px"></i></div>
+            <div><h4>Message Dejan</h4><p>Usually replies in 1 hr</p></div>
+          </div>
+          <i class="ti ti-arrow-right connect-arrow"></i>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="nav">
+    <div class="nav-inner" id="nav">
+      <a class="nav-item active" href="home-v6.html"><span class="pill"></span><i class="ti ti-home"></i></a>
+      <a class="nav-item" href="programme-v3.html"><span class="pill"></span><i class="ti ti-barbell"></i></a>
+      <a class="nav-item" href="nutrition-v2.html"><span class="pill"></span><i class="ti ti-apple"></i></a>
+      <a class="nav-item" href="progress.html"><span class="pill"></span><i class="ti ti-chart-line"></i></a>
+      <a class="nav-item" href="checkin.html"><span class="pill"></span><i class="ti ti-message-circle"></i></a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DYNAMIC MOTIVATIONAL TEXT ──
+const clientState = {
+  currentWeek: 4,
+  sessionsRemainingThisWeek: 2,
+  isRestDay: false,
+  isComeback: false,
+  weekJustCompleted: false,
+  streakDays: 7
+};
+function pickMotiv(s) {
+  if (s.weekJustCompleted) return `Week ${s.currentWeek} — done. You showed up every time.`;
+  if (s.isComeback) return `Welcome back. One session puts you right back on track.`;
+  if (s.isRestDay) return `Rest today. You grow stronger while you recover.`;
+  if (s.sessionsRemainingThisWeek === 1) return `One session away from owning Week ${s.currentWeek}.`;
+  if (s.sessionsRemainingThisWeek > 1) return `You're ${s.sessionsRemainingThisWeek} sessions away from owning Week ${s.currentWeek}.`;
+  if (s.streakDays >= 7) return `${s.streakDays} days strong. This is who you are now.`;
+  return `Let's make today count.`;
+}
+document.getElementById('gam-motiv').textContent = pickMotiv(clientState);
+
+// ── GAM PROGRESS ──
+setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 300);
+
+// ── MONTH CALENDAR ──
+// Past training days: pink circle + tick. Today: green neon circle (no tick). Others: plain/faint.
+(function() {
+  const cal = document.getElementById('cal');
+  if (!cal) return;
+  // Demo month: 30 days, week starts Monday. Today = 18.
+  const DAYS_IN_MONTH = 30;
+  const FIRST_WEEKDAY = 1; // 0=Mon ... 6=Sun. Month starts on Tuesday here for a natural look
+  const TODAY = 18;
+  // Training days completed so far (pink + tick) — e.g. Mon/Wed/Fri pattern up to today
+  const trainingDone = [2,4,6,9,11,13,16];
+  const weekdays = ['M','T','W','T','F','S','S'];
+
+  let wd = '<div class="cal-weekdays">' + weekdays.map(d => `<div class="cal-wd">${d}</div>`).join('') + '</div>';
+  let cells = '';
+  // leading empties
+  for (let i = 0; i < FIRST_WEEKDAY; i++) cells += '<div class="cal-cell empty"></div>';
+  for (let d = 1; d <= DAYS_IN_MONTH; d++) {
+    if (d === TODAY) {
+      cells += `<div class="cal-cell today">${d}</div>`;
+    } else if (trainingDone.includes(d)) {
+      cells += `<div class="cal-cell done"><i class="ti ti-check"></i></div>`;
+    } else {
+      cells += `<div class="cal-cell plain">${d}</div>`;
+    }
+  }
+  cal.innerHTML = wd + '<div class="cal-grid">' + cells + '</div>';
+})();
+
+// ── CONCENTRIC KG RINGS ──
+(function() {
+  const size = 111, sw = 9, c = size/2;
+  const rings = [
+    { r:44, color:'#BF00FF', prog:40 },
+    { r:33, color:'#FF0099', prog:66 },
+    { r:22, color:'#FF4D00', prog:90 },
+  ];
+  let svg = `<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">`;
+  rings.forEach((ring, i) => {
+    const circ = 2 * Math.PI * ring.r;
+    svg += `<circle cx="${c}" cy="${c}" r="${ring.r}" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="${sw}"/>`;
+    svg += `<circle class="kg-ring" cx="${c}" cy="${c}" r="${ring.r}" fill="none" stroke="${ring.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-off="${circ - (ring.prog/100)*circ}"/>`;
+  });
+  svg += `</svg>`;
+  document.getElementById('kg-rings').innerHTML = svg;
+  setTimeout(() => {
+    document.querySelectorAll('.kg-ring').forEach((c, i) => {
+      c.style.transition = `stroke-dashoffset 1.5s ease ${i*0.2}s`;
+      c.style.strokeDashoffset = c.dataset.off;
+    });
+  }, 400);
+})();
+
+// ── THIS WEEK ──
+const WORKOUT_IMG = 'https://images.unsplash.com/photo-1609899517237-77d357b047cf?w=300&h=300&fit=crop';
+const week = [
+  { day:'MON', title:'Lower Body', time:'60m', active:true, completed:false },
+  { day:'TUE', title:'Active Rest', time:'20m', active:false, completed:true },
+  { day:'WED', title:'Upper Body', time:'45m', active:false, completed:false },
+  { day:'THU', title:'HIIT', time:'30m', active:false, completed:false },
+  { day:'FRI', title:'Full Body', time:'60m', active:false, completed:false },
+];
+document.getElementById('week-scroll').innerHTML = week.map(w => `
+  <div class="week-card ${w.active?'active':''}">
+    <div class="week-img">
+      <img src="${WORKOUT_IMG}" alt="">
+      <div class="ov"></div>
+      ${w.completed ? '<div class="week-completed-glass"><div class="week-tick"><i class="ti ti-check"></i></div></div>' : ''}
+      <div class="week-day-tag">${w.day}</div>
+      ${w.active?'<div class="week-active-dot"></div>':''}
+    </div>
+    <div class="week-info"><h4>${w.title}</h4><p>${w.time}</p></div>
+  </div>`).join('');
+
+// ── BADGES ──
+const badges = [
+  { name:'First Step', unlocked:true, icon:'ti-trophy', from:'#BF00FF', to:'#FF0099' },
+  { name:'Consistency', unlocked:true, icon:'ti-calendar', from:'#FF0099', to:'#FF4D00' },
+  { name:'Fire Starter', unlocked:true, icon:'ti-flame', from:'#FF4D00', to:'#FFE000' },
+  { name:'Heavy Lifter', unlocked:false, icon:'ti-lock' },
+  { name:'Marathon', unlocked:false, icon:'ti-lock' },
+  { name:'Elite', unlocked:false, icon:'ti-lock' },
+];
+document.getElementById('badge-scroll').innerHTML = badges.map(b => `
+  <div class="badge">
+    <div class="badge-ic ${b.unlocked?'':'locked'}" ${b.unlocked?`style="background:linear-gradient(135deg,${b.from},${b.to});box-shadow:0 4px 20px ${b.from}66"`:''}>
+      <i class="ti ${b.icon}" style="color:${b.unlocked?'#fff':'#94a3b8'};position:relative;z-index:1"></i>
+    </div>
+    <span class="badge-name ${b.unlocked?'unlocked':'locked'}">${b.name}</span>
+  </div>`).join('');
+
+
+// ── SWIPE TO BEGIN ──
+(function() {
+  const track = document.getElementById('swipe-track');
+  const handle = document.getElementById('swipe-handle');
+  const fill = document.getElementById('swipe-fill');
+  const label = document.getElementById('swipe-label');
+  if (!track) return;
+  let dragging = false, startX = 0, x = 0, max = 0;
+
+  function setX(px) {
+    x = Math.max(0, Math.min(max, px));
+    handle.style.left = (4 + x) + 'px';
+    fill.style.width = (x + 56) + 'px';
+    label.style.opacity = Math.max(0, 1 - x / (max * 0.6));
+  }
+  function start(clientX) {
+    dragging = true;
+    max = track.offsetWidth - 60;
+    startX = clientX - x;
+    handle.style.transition = 'none';
+    fill.style.transition = 'none';
+  }
+  function move(clientX) {
+    if (!dragging) return;
+    setX(clientX - startX);
+  }
+  function end() {
+    if (!dragging) return;
+    dragging = false;
+    handle.style.transition = 'left 0.25s ease';
+    fill.style.transition = 'width 0.25s ease';
+    if (x >= max - 6) {
+      // Unlocked!
+      setX(max);
+      label.textContent = 'Starting…';
+      label.style.opacity = '1';
+      if (navigator.vibrate) navigator.vibrate([10,30,10]);
+      // (later: play unlock sound + navigate to workout)
+      setTimeout(() => {
+        setX(0);
+        label.textContent = 'Swipe to Begin';
+      }, 1200);
+    } else {
+      setX(0);
+    }
+  }
+  handle.addEventListener('touchstart', e => { e.preventDefault(); start(e.touches[0].clientX); }, {passive:false});
+  window.addEventListener('touchmove', e => { if(dragging){ e.preventDefault(); move(e.touches[0].clientX);} }, {passive:false});
+  window.addEventListener('touchend', end);
+  handle.addEventListener('mousedown', e => start(e.clientX));
+  window.addEventListener('mousemove', e => { if(dragging) move(e.clientX); });
+  window.addEventListener('mouseup', end);
+})();
+
+// ── NAV ──
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    if (navigator.vibrate) navigator.vibrate(6);
+  });
+});
+</script>
+</body>
+</html>
