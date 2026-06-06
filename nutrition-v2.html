@@ -128,7 +128,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .hydro-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:6px; }
 .glass { aspect-ratio:2/3; border-radius:8px; border:1px solid; display:flex; align-items:flex-end; justify-content:center; padding-bottom:4px; cursor:pointer; }
 .glass i { font-size:10px; }
-.glass.filled { background:linear-gradient(to top,#6FD9FF,#B8ECFF); border-color:#6FD9FF; box-shadow:0 0 8px rgba(111,217,255,0.5); color:#fff; }
+.glass.filled { background:linear-gradient(to top,#FFE000 0%,#FFE96B 35%,#9DE4F5 65%,#6FD9FF 100%); border-color:#6FD9FF; box-shadow:0 0 8px rgba(111,217,255,0.5); color:#fff; }
 .glass.empty { background:#F8FAFC; border-color:#E2E8F0; color:#cbd5e1; }
 
 /* ── WEEK ── */
@@ -238,7 +238,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
           <div class="hydro-head">
             <div class="hydro-l">
               <div class="hydro-ic"><i class="ti ti-droplet" style="font-size:20px"></i></div>
-              <div><h3>Hydration</h3><p id="hydro-count">5 of 8 glasses</p></div>
+              <div><h3>Hydration</h3><p style="display:flex;align-items:center;gap:5px;flex-wrap:wrap"><span style="display:inline-flex;align-items:center;gap:3px"><i class="ti ti-droplet" style="color:#6FD9FF;font-size:12px"></i><span style="font-size:12px;color:#64748b;font-weight:500">Water</span></span><span style="font-size:12px;color:#94a3b8">+</span><span style="display:inline-flex;align-items:center;gap:3px"><i class="ti ti-lemon-2" style="color:#FFE000;font-size:12px"></i><span style="font-size:12px;color:#64748b;font-weight:500">Lemon Juice</span></span><span style="font-size:12px;color:#cbd5e1">·</span><span id="hydro-count" style="font-size:12px;color:#64748b;font-weight:500">5 of 8</span></p></div>
             </div>
             <span class="hydro-total" id="hydro-total">1.25L</span>
           </div>
@@ -358,7 +358,7 @@ function renderHydro() {
     const filled = i < hydroCount;
     return `<button class="glass ${filled?'filled':'empty'}" data-i="${i}"><i class="ti ti-droplet" style="${filled?'':'opacity:0.5'}"></i></button>`;
   }).join('');
-  document.getElementById('hydro-count').textContent = `${hydroCount} of ${hydroGoal} glasses`;
+  document.getElementById('hydro-count').textContent = `${hydroCount} of ${hydroGoal}`;
   document.getElementById('hydro-total').textContent = (hydroCount*250/1000) + 'L';
   document.querySelectorAll('.glass').forEach(g => g.addEventListener('click', () => {
     const i = +g.dataset.i;
