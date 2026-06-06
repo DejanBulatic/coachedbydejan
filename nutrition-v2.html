@@ -26,7 +26,7 @@ button { font-family:inherit; }
 
 /* ── TYPE ── */
 h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; text-transform:uppercase; }
-.sec-h2 { font-size:14px; font-weight:700; line-height:20px; letter-spacing:1.96px; text-transform:uppercase; color:#0f172a; }
+.sec-h2 { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
 .eyebrow { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#64748b; }
 
 /* ── HEADER (not sticky) ── */
@@ -42,19 +42,19 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 /* ── HERO CALORIES ── */
 .cal-card { border-radius:24px; padding:24px; display:flex; flex-direction:column; align-items:center; position:relative; overflow:hidden; background:linear-gradient(160deg,#1e293b 0%,#0f172a 100%); border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 50px rgba(15,23,42,0.35); }
 .cal-top-l { position:absolute; top:16px; left:16px; display:flex; align-items:center; gap:6px; }
-.cal-top-l i { color:#FF4D00; font-size:14px; }
+.cal-top-l i { color:#FF0099; font-size:14px; }
 .cal-top-l span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:rgba(255,255,255,0.6); }
-.cal-top-r { position:absolute; top:16px; right:16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:4px 8px; border-radius:6px; background:#E0FFF2; color:#00CC6A; }
+.cal-top-r { position:absolute; top:16px; right:16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:4px 8px; border-radius:6px; background:#FF0099; color:#fff; box-shadow:0 0 10px rgba(255,0,153,0.5); }
 .cal-ring { margin-top:20px; position:relative; width:155px; height:155px; }
 .cal-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
 .cal-center .lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; color:rgba(255,255,255,0.6); }
 .cal-center .num { font-weight:800; font-size:32px; color:#fff; line-height:1; margin-top:2px; }
 .cal-center .of { font-size:11px; font-weight:500; color:rgba(255,255,255,0.55); margin-top:2px; }
 .cal-center .left { margin-top:8px; padding:3px 10px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 0 12px rgba(191,0,255,0.5); }
-.cal-stats { display:grid; grid-template-columns:1fr 1fr 1fr; width:100%; margin-top:20px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.1); text-align:center; }
-.cal-stats .mid { border-left:1px solid rgba(255,255,255,0.1); border-right:1px solid rgba(255,255,255,0.1); }
-.cal-stats .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.55); }
-.cal-stats .v { font-weight:700; color:#fff; margin-top:4px; }
+.cal-stats { display:flex; gap:8px; width:100%; margin-top:20px; }
+.cal-chip { flex:1; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:10px 8px; text-align:center; }
+.cal-chip .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.7); }
+.cal-chip .v { font-weight:700; color:#fff; font-size:15px; margin-top:3px; }
 
 /* ── MACROS ── */
 .macros { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
@@ -70,13 +70,13 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .log-snap { position:relative; overflow:hidden; border-radius:16px; padding:18px; color:#fff; text-align:left; border:none; cursor:pointer; background:linear-gradient(135deg,#BF00FF,#FF0099); animation:snapGlow 2.5s infinite; }
 @keyframes snapGlow { 0%{box-shadow:0 0 15px rgba(191,0,255,0.4)} 50%{box-shadow:0 0 25px rgba(255,0,153,0.65)} 100%{box-shadow:0 0 15px rgba(191,0,255,0.4)} }
 .log-snap i.cam { font-size:22px; margin-bottom:12px; display:block; }
-.log-snap h3 { font-weight:700; font-size:14px; }
-.log-snap p { font-size:11px; opacity:0.9; font-weight:500; margin-top:2px; }
+.log-snap h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; }
+.log-snap p { font-size:11px; line-height:16.5px; letter-spacing:0; opacity:0.9; font-weight:500; margin-top:4px; }
 .log-snap .ai { position:absolute; top:12px; right:12px; padding:2px 6px; border-radius:6px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:rgba(255,255,255,0.25); backdrop-filter:blur(4px); }
 .log-manual { border-radius:16px; padding:18px; text-align:left; background:#fff; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.15); cursor:pointer; }
 .log-manual .ic { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:8px; background:#F5E6FF; color:#BF00FF; }
-.log-manual h3 { font-weight:700; font-size:14px; color:#0f172a; }
-.log-manual p { font-size:11px; color:#64748b; font-weight:500; margin-top:2px; }
+.log-manual h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; color:#0f172a; }
+.log-manual p { font-size:11px; line-height:16.5px; letter-spacing:0; color:#64748b; font-weight:500; margin-top:4px; }
 
 /* ── SUGGESTED ── */
 .sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
@@ -90,9 +90,9 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .sug-card { flex-shrink:0; width:188px; border-radius:16px; overflow:hidden; background:#fff; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); cursor:pointer; }
 .sug-img { height:128px; position:relative; }
 .sug-img img { width:100%; height:100%; object-fit:cover; }
-.sug-tag { position:absolute; top:8px; left:8px; padding:4px 8px; border-radius:6px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; }
+.sug-tag { position:absolute; top:8px; left:8px; padding:4px 8px; border-radius:6px; font-size:9px; font-weight:700; line-height:13.5px; text-transform:uppercase; letter-spacing:0.12em; color:#fff; }
 .sug-info { padding:12px; }
-.sug-info h4 { font-weight:700; font-size:14px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sug-info h4 { font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:1.96px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sug-info .row { display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
 .sug-info .kcal { font-size:12px; color:#64748b; font-weight:500; }
 .sug-info .log { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; gap:1px; }
@@ -174,9 +174,9 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
           <div class="cal-top-r">On Track</div>
           <div class="cal-ring" id="cal-ring"></div>
           <div class="cal-stats">
-            <div><div class="l">Burned</div><div class="v">540</div></div>
-            <div class="mid"><div class="l">Net</div><div class="v">800</div></div>
-            <div><div class="l">Goal</div><div class="v">2100</div></div>
+            <div class="cal-chip"><div class="l">Burned</div><div class="v">540</div></div>
+            <div class="cal-chip"><div class="l">Net</div><div class="v">800</div></div>
+            <div class="cal-chip"><div class="l">Goal</div><div class="v">2100</div></div>
           </div>
         </div>
       </section>
@@ -209,7 +209,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
       <section>
         <div class="sec-head">
           <h2 class="sec-h2">Suggested Today</h2>
-          <button class="sec-link">Shopping <i class="ti ti-basket" style="font-size:14px"></i></button>
+          <button class="sec-link" style="color:#FF0099"><i class="ti ti-basket" style="font-size:14px"></i> Shopping List</button>
         </div>
         <div class="sug-note">
           <div class="ic"><i class="ti ti-basket" style="font-size:14px"></i></div>
@@ -294,9 +294,9 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 
 // ─── MACRO RINGS ───
 const MACROS = [
-  { label:'Protein', current:98, target:160, color:'#BF00FF' },
-  { label:'Carbs', current:142, target:220, color:'#FF4D00' },
-  { label:'Fats', current:48, target:70, color:'#FFE000' },
+  { label:'Protein', current:98, target:160, color:'#FF0099' },
+  { label:'Carbs', current:142, target:220, color:'#6FD9FF' },
+  { label:'Fats', current:48, target:70, color:'#FF4D00' },
 ];
 document.getElementById('macros').innerHTML = MACROS.map((m,i) => {
   const size=84, stroke=8, r=(size-stroke)/2, c=2*Math.PI*r, pct=Math.min(m.current/m.target,1), off=c-pct*c;
@@ -315,9 +315,9 @@ setTimeout(()=>{ document.querySelectorAll('.macro-c').forEach((c,i)=>{ c.style.
 
 // ─── SUGGESTED ───
 const SUGG = [
-  { name:'Salmon & Quinoa Bowl', kcal:560, tag:'High Protein', color:'#FF0099', img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop' },
-  { name:'Turkey Lettuce Wraps', kcal:410, tag:'Low Carb', color:'#00CC6A', img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop' },
-  { name:'Sweet Potato & Egg', kcal:380, tag:'Pre-Workout', color:'#FF4D00', img:'https://images.unsplash.com/photo-1432139509613-5c4255815697?w=400&h=300&fit=crop' },
+  { name:'Salmon & Quinoa Bowl', kcal:560, tag:'Breakfast', color:'#FF0099', img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=300&fit=crop' },
+  { name:'Turkey Lettuce Wraps', kcal:410, tag:'Lunch', color:'#00CC6A', img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop' },
+  { name:'Sweet Potato & Egg', kcal:380, tag:'Dinner', color:'#FF4D00', img:'https://images.unsplash.com/photo-1432139509613-5c4255815697?w=400&h=300&fit=crop' },
 ];
 document.getElementById('sug-scroll').innerHTML = SUGG.map(s => `
   <div class="sug-card">
