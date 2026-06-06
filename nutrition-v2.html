@@ -70,12 +70,12 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .log-snap { position:relative; overflow:hidden; border-radius:16px; padding:18px; color:#fff; text-align:left; border:none; cursor:pointer; background:linear-gradient(135deg,#BF00FF,#FF0099); animation:snapGlow 2.5s infinite; }
 @keyframes snapGlow { 0%{box-shadow:0 0 15px rgba(191,0,255,0.4)} 50%{box-shadow:0 0 25px rgba(255,0,153,0.65)} 100%{box-shadow:0 0 15px rgba(191,0,255,0.4)} }
 .log-snap i.cam { font-size:22px; margin-bottom:12px; display:block; }
-.log-snap h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; }
+.log-snap h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; text-transform:uppercase; }
 .log-snap p { font-size:11px; line-height:16.5px; letter-spacing:0; opacity:0.9; font-weight:500; margin-top:4px; }
 .log-snap .ai { position:absolute; top:12px; right:12px; padding:2px 6px; border-radius:6px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:rgba(255,255,255,0.25); backdrop-filter:blur(4px); }
 .log-manual { border-radius:16px; padding:18px; text-align:left; background:#fff; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.15); cursor:pointer; }
 .log-manual .ic { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:8px; background:#F5E6FF; color:#BF00FF; }
-.log-manual h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; color:#0f172a; }
+.log-manual h3 { font-weight:700; font-size:16px; line-height:20px; letter-spacing:2.24px; text-transform:uppercase; color:#0f172a; }
 .log-manual p { font-size:11px; line-height:16.5px; letter-spacing:0; color:#64748b; font-weight:500; margin-top:4px; }
 
 /* ── SUGGESTED ── */
@@ -106,11 +106,15 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .meal-info { flex:1; min-width:0; }
 .meal-info .type { display:flex; align-items:center; gap:6px; margin-bottom:2px; }
 .meal-info .type i { font-size:11px; }
-.meal-info .type span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; }
-.meal-info h4 { font-weight:700; font-size:14px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.meal-info .type .mtype { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; }
+.meal-info .type .mtime { font-size:10px; font-weight:600; color:#94a3b8; }
+.meal-info h4 { font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:1.96px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .meal-kcal { text-align:right; padding-right:4px; }
 .meal-kcal .n { font-weight:700; color:#0f172a; }
 .meal-kcal .u { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:600; }
+.meal-log-btn { border:none; padding:8px 18px; border-radius:999px; background:linear-gradient(to right,#BF00FF,#FF0099); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; box-shadow:0 0 12px rgba(255,0,153,0.45); cursor:pointer; }
+.meal.pending .meal-img { opacity:0.5; }
+.meal.pending .meal-info h4 { color:#94a3b8; }
 .add-meal { width:100%; border:2px dashed #e2e8f0; border-radius:16px; padding:14px; display:flex; align-items:center; justify-content:center; gap:8px; color:#64748b; font-size:14px; font-weight:600; background:none; cursor:pointer; }
 
 /* ── HYDRATION ── */
@@ -174,9 +178,9 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
           <div class="cal-top-r">On Track</div>
           <div class="cal-ring" id="cal-ring"></div>
           <div class="cal-stats">
-            <div class="cal-chip"><div class="l">Burned</div><div class="v">540</div></div>
-            <div class="cal-chip"><div class="l">Net</div><div class="v">800</div></div>
-            <div class="cal-chip"><div class="l">Goal</div><div class="v">2100</div></div>
+            <div class="cal-chip"><div class="l" style="color:#fff">Burned</div><div class="v">540</div></div>
+            <div class="cal-chip"><div class="l" style="color:#FF4D00">Net</div><div class="v">800</div></div>
+            <div class="cal-chip"><div class="l" style="color:#FF0099">Goal</div><div class="v">2100</div></div>
           </div>
         </div>
       </section>
@@ -330,20 +334,22 @@ document.getElementById('sug-scroll').innerHTML = SUGG.map(s => `
 
 // ─── TODAY'S MEALS ───
 const MEALS = [
-  { type:'Breakfast', time:'7:30 AM', name:'Oats, Berries & Whey', kcal:420, icon:'ti-coffee', color:'#FFE000', img:'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200&h=200&fit=crop' },
-  { type:'Lunch', time:'12:45 PM', name:'Chicken Rice Bowl', kcal:620, icon:'ti-bowl', color:'#FF4D00', img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop' },
-  { type:'Snack', time:'4:00 PM', name:'Greek Yogurt + Almonds', kcal:300, icon:'ti-cookie', color:'#6FD9FF', img:'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=200&h=200&fit=crop' },
+  { type:'Breakfast', time:'7:45 AM', name:'Greek Yogurt & Berries', kcal:320, icon:'ti-bolt', color:'#FFE000', img:'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=200&h=200&fit=crop' },
+  { type:'Lunch', time:'12:30 PM', name:'Chicken Quinoa Bowl', kcal:540, icon:'ti-sun', color:'#FF4D00', img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop' },
+  { type:'Snack', time:'3:15 PM', name:'Protein Shake & Almonds', kcal:280, icon:'ti-flame', color:'#FF0099', img:'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=200&h=200&fit=crop' },
+  { type:'Dinner', time:'—', name:'Pending', kcal:null, icon:'ti-moon', color:'#BF00FF', pending:true, img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=200&h=200&fit=crop' },
 ];
 document.getElementById('meal-list').innerHTML = MEALS.map(m => `
-  <div class="meal">
+  <div class="meal ${m.pending?'pending':''}">
     <div class="meal-img"><img src="${m.img}" alt=""></div>
     <div class="meal-info">
-      <div class="type"><i class="ti ${m.icon}" style="color:${m.color}"></i><span>${m.type} · ${m.time}</span></div>
+      <div class="type"><i class="ti ${m.icon}" style="color:${m.color};font-size:11px"></i><span class="mtype" style="color:${m.color}">${m.type}</span><span class="mtime">· ${m.time}</span></div>
       <h4>${m.name}</h4>
     </div>
-    <div class="meal-kcal"><div class="n">${m.kcal}</div><div class="u">kcal</div></div>
-  </div>`).join('') + `
-  <button class="add-meal"><i class="ti ti-pizza" style="font-size:16px"></i> Add Dinner</button>`;
+    ${m.pending
+      ? `<button class="meal-log-btn">Log</button>`
+      : `<div class="meal-kcal"><div class="n">${m.kcal}</div><div class="u">kcal</div></div>`}
+  </div>`).join('');
 
 // ─── HYDRATION ───
 let hydroCount = 5; const hydroGoal = 8;
