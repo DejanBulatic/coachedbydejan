@@ -40,21 +40,21 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .card { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.18); }
 
 /* ── HERO CALORIES ── */
-.cal-card { border-radius:24px; padding:24px; display:flex; flex-direction:column; align-items:center; position:relative; overflow:hidden; }
+.cal-card { border-radius:24px; padding:24px; display:flex; flex-direction:column; align-items:center; position:relative; overflow:hidden; background:linear-gradient(160deg,#1e293b 0%,#0f172a 100%); border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 50px rgba(15,23,42,0.35); }
 .cal-top-l { position:absolute; top:16px; left:16px; display:flex; align-items:center; gap:6px; }
 .cal-top-l i { color:#FF4D00; font-size:14px; }
-.cal-top-l span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; }
+.cal-top-l span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:rgba(255,255,255,0.6); }
 .cal-top-r { position:absolute; top:16px; right:16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:4px 8px; border-radius:6px; background:#E0FFF2; color:#00CC6A; }
 .cal-ring { margin-top:20px; position:relative; width:155px; height:155px; }
 .cal-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-.cal-center .lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; color:#64748b; }
-.cal-center .num { font-weight:800; font-size:32px; color:#0f172a; line-height:1; margin-top:2px; }
-.cal-center .of { font-size:11px; font-weight:500; color:#64748b; margin-top:2px; }
+.cal-center .lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; color:rgba(255,255,255,0.6); }
+.cal-center .num { font-weight:800; font-size:32px; color:#fff; line-height:1; margin-top:2px; }
+.cal-center .of { font-size:11px; font-weight:500; color:rgba(255,255,255,0.55); margin-top:2px; }
 .cal-center .left { margin-top:8px; padding:3px 10px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 0 12px rgba(191,0,255,0.5); }
-.cal-stats { display:grid; grid-template-columns:1fr 1fr 1fr; width:100%; margin-top:20px; padding-top:18px; border-top:1px solid #f1f5f9; text-align:center; }
-.cal-stats .mid { border-left:1px solid #f1f5f9; border-right:1px solid #f1f5f9; }
-.cal-stats .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; }
-.cal-stats .v { font-weight:700; color:#0f172a; margin-top:4px; }
+.cal-stats { display:grid; grid-template-columns:1fr 1fr 1fr; width:100%; margin-top:20px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.1); text-align:center; }
+.cal-stats .mid { border-left:1px solid rgba(255,255,255,0.1); border-right:1px solid rgba(255,255,255,0.1); }
+.cal-stats .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.55); }
+.cal-stats .v { font-weight:700; color:#fff; margin-top:4px; }
 
 /* ── MACROS ── */
 .macros { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
@@ -169,7 +169,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 
       <!-- Hero calories -->
       <section>
-        <div class="card cal-card">
+        <div class="cal-card">
           <div class="cal-top-l"><i class="ti ti-flame"></i><span>Daily Calories</span></div>
           <div class="cal-top-r">On Track</div>
           <div class="cal-ring" id="cal-ring"></div>
@@ -280,7 +280,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
   document.getElementById('cal-ring').innerHTML = `
     <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
       <defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#BF00FF"/><stop offset="50%" stop-color="#FF0099"/><stop offset="100%" stop-color="#FF4D00"/></linearGradient></defs>
-      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="${stroke}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="${stroke}"/>
       <circle id="cr" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#cg)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="filter:drop-shadow(0 0 6px rgba(255,0,153,0.45))"/>
     </svg>
     <div class="cal-center">
