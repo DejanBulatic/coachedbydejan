@@ -160,7 +160,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .video-overlay .play i { font-size:28px; }
 .video-overlay .vlabel { position:absolute; bottom:10px; left:12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.7); }
 .demo-controls { display:flex; justify-content:center; margin:14px 20px 0; }
-.demo-btn { padding:13px 32px; border-radius:999px; background:linear-gradient(to right,#BF00FF,#FF0099); border:none; color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 8px 24px rgba(191,0,255,0.35); }
+.demo-btn { padding:13px 32px; border-radius:14px; width:100%; background:linear-gradient(to right,#BF00FF,#FF0099); border:none; color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 8px 24px rgba(191,0,255,0.35); }
 .demo-btn:active { transform:scale(0.97); }
 .ex-list { padding:20px; }
 .ex-list h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; font-weight:700; color:#64748b; margin-bottom:12px; }
@@ -426,7 +426,7 @@ function dualBody(active, primary, w, h) {
 }
 
 // ─── RENDER THIS WEEK ───
-function toSentenceCase(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function toTitleCase(s){ return s ? s.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ') : s; }
 document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   let pillStyle;
   if (w.today) pillStyle = 'background:linear-gradient(135deg,#BF00FF,#FF0099);color:#fff;box-shadow:0 4px 16px rgba(255,0,153,0.4)';
@@ -440,7 +440,7 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const lockIcon = w.locked ? `<i class="ti ti-lock" style="font-size:12px;color:#94a3b8;margin-left:4px"></i>` : '';
   return `<div class="week-row ${w.today?'today':''} ${w.rest?'rest':''} ${w.locked?'locked-card':''}" data-idx="${i}">
     <div class="day-pill" style="${pillStyle}"><span class="t-date-d">${w.day}</span><span class="t-date-n">${w.date}</span></div>
-    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}${lockIcon}</div><p style="font-size:12px;font-weight:500;line-height:16px;color:#64748b">${toSentenceCase(w.focus)}</p></div>
+    <div class="week-info"><div class="t"><h4 class="t-cardhead">${w.title}</h4>${w.today?'<span class="dot"></span>':''}${lockIcon}</div><p style="font-size:12px;font-weight:500;line-height:16px;color:#64748b">${toTitleCase(w.focus)}</p></div>
     <div class="week-meta">${meta}<i class="ti ti-chevron-right chev" style="color:${w.locked?'#e2e8f0':'#cbd5e1'}"></i></div>
   </div>`;
 }).join('');
