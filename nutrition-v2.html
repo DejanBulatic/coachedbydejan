@@ -132,16 +132,29 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .glass.empty { background:#F8FAFC; border-color:#E2E8F0; color:#cbd5e1; }
 
 /* ── WEEK ── */
-.week-streak { font-size:13px; font-weight:600; color:#00CC6A; display:flex; align-items:center; gap:4px; }
+.week-streak { font-size:13px; font-weight:700; color:#00CC6A; display:flex; align-items:center; gap:4px; }
 .week-card { padding:20px; }
-.week-bars { display:flex; align-items:flex-end; justify-content:space-between; gap:8px; height:128px; }
-.week-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; }
-.week-bar-wrap { width:100%; flex:1; display:flex; align-items:flex-end; }
-.week-bar { width:100%; border-radius:8px 8px 0 0; transition:height 1s ease; }
-.week-bar-day { font-size:10px; font-weight:700; text-transform:uppercase; }
-.week-foot { margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
-.week-foot .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; }
-.week-foot .v { font-weight:700; color:#0f172a; margin-top:2px; }
+.wk-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.wk-streak { display:flex; align-items:center; gap:12px; }
+.wk-flame { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; background:linear-gradient(135deg,#FF0099,#FF4D00); box-shadow:0 4px 16px rgba(255,0,153,0.4); }
+.wk-streak-n { font-size:15px; color:#64748b; font-weight:500; }
+.wk-streak-n b { font-size:20px; color:#0f172a; font-weight:800; }
+.wk-streak-l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94a3b8; margin-top:1px; }
+.wk-avg { text-align:right; }
+.wk-avg-n { font-size:24px; font-weight:800; color:#0f172a; line-height:1; }
+.wk-avg-n small { font-size:14px; color:#94a3b8; }
+.wk-avg-l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94a3b8; margin-top:2px; }
+.wk-rings { display:flex; justify-content:space-between; gap:4px; }
+.wk-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.wk-col.today { background:#fff; border-radius:14px; box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.2); padding:6px 2px; }
+.wk-day { font-size:11px; font-weight:700; color:#94a3b8; }
+.wk-col.today .wk-day { color:#FF0099; }
+.wk-ring { position:relative; width:40px; height:40px; }
+.wk-ring .ctr { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+.wk-legend { display:flex; justify-content:center; gap:16px; margin-top:18px; }
+.wk-legend span { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:#64748b; }
+.wk-dot { width:8px; height:8px; border-radius:50%; }
+.wk-foot { margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:#475569; line-height:1.4; }
 
 /* ── NAV ── */
 .nav { position:fixed; bottom:24px; left:0; right:0; z-index:50; display:flex; justify-content:center; pointer-events:none; }
@@ -250,14 +263,23 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
       <section>
         <div class="sec-head">
           <h2 class="sec-h2">This Week</h2>
-          <span class="week-streak"><i class="ti ti-circle-check" style="font-size:14px"></i> 6-day streak</span>
+          <span class="week-streak"><i class="ti ti-check" style="font-size:14px"></i> 4 / 7 on target</span>
         </div>
         <div class="card week-card">
-          <div class="week-bars" id="week-bars"></div>
-          <div class="week-foot">
-            <div><div class="l">Weekly Avg</div><div class="v">86% of target</div></div>
-            <div style="text-align:right"><div class="l">Best Day</div><div class="v" style="color:#00CC6A">Wed · 100%</div></div>
+          <div class="wk-top">
+            <div class="wk-streak">
+              <div class="wk-flame"><i class="ti ti-flame" style="font-size:20px"></i></div>
+              <div><div class="wk-streak-n"><b>4</b> day streak</div><div class="wk-streak-l">On-Target Days</div></div>
+            </div>
+            <div class="wk-avg"><div class="wk-avg-n">86<small>%</small></div><div class="wk-avg-l">Avg Hit</div></div>
           </div>
+          <div class="wk-rings" id="wk-rings"></div>
+          <div class="wk-legend">
+            <span><span class="wk-dot" style="background:#00CC6A"></span>On Target</span>
+            <span><span class="wk-dot" style="background:#FF0099"></span>Today</span>
+            <span><span class="wk-dot" style="background:#cbd5e1"></span>Missed</span>
+          </div>
+          <div class="wk-foot"><i class="ti ti-sparkles" style="color:#FFE000;font-size:16px"></i> Best streak this month — close out today to make it 5. <i class="ti ti-flame" style="color:#FF4D00;font-size:14px"></i></div>
         </div>
       </section>
 
@@ -371,20 +393,30 @@ renderHydro();
 
 // ─── WEEK BARS ───
 const WEEK = [
-  { day:'M', pct:92 }, { day:'T', pct:78 }, { day:'W', pct:100 }, { day:'T', pct:86 },
-  { day:'F', pct:64 }, { day:'S', pct:95 }, { day:'S', pct:0, today:true },
+  { day:'M', pct:100 }, { day:'T', pct:100 }, { day:'W', pct:76 }, { day:'T', pct:100 },
+  { day:'F', pct:100 }, { day:'S', pct:70 }, { day:'S', pct:60, today:true },
 ];
-document.getElementById('week-bars').innerHTML = WEEK.map((d,i) => {
-  const hit = d.pct >= 90;
-  const top = d.today ? '#E2E8F0' : hit ? '#00CC6A' : '#BF00FF';
-  const bot = d.today ? '#F1F5F9' : hit ? '#7CFFB8' : '#FF0099';
-  const glow = d.today ? 'none' : `0 0 8px ${top}66`;
-  return `<div class="week-bar-col">
-    <div class="week-bar-wrap"><div class="week-bar" data-h="${Math.max(d.pct,6)}" style="height:0;background:linear-gradient(to top,${bot},${top});box-shadow:${glow}"></div></div>
-    <span class="week-bar-day" style="color:${d.today?'#0f172a':'#94a3b8'}">${d.day}</span>
+function wkRing(pct, state) {
+  const size=40, sw=4, r=(size-sw)/2, c=2*Math.PI*r, off=c-(pct/100)*c;
+  let color, track='rgba(0,0,0,0.06)', content;
+  if (state==='today') { color='#FF0099'; content=`<span style="color:#FF0099">${pct}%</span>`; }
+  else if (state==='ontarget') { color='#00CC6A'; content=`<i class="ti ti-check" style="color:#00CC6A;font-size:16px"></i>`; }
+  else { color='#cbd5e1'; content=`<span style="color:#94a3b8">${pct}%</span>`; }
+  return `<div class="wk-ring">
+    <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${sw}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" style="${state!=='missed'?`filter:drop-shadow(0 0 3px ${color}88)`:''}"/>
+    </svg>
+    <div class="ctr">${content}</div>
+  </div>`;
+}
+document.getElementById('wk-rings').innerHTML = WEEK.map(d => {
+  const state = d.today ? 'today' : d.pct >= 100 ? 'ontarget' : 'missed';
+  return `<div class="wk-col ${d.today?'today':''}">
+    <span class="wk-day">${d.day}</span>
+    ${wkRing(d.pct, state)}
   </div>`;
 }).join('');
-setTimeout(()=>{ document.querySelectorAll('.week-bar').forEach((b,i)=>{ b.style.transition=`height 1s ease ${i*0.08}s`; b.style.height=b.dataset.h+'%'; }); },300);
 
 // ─── NAV (haptic only; links navigate) ───
 document.querySelectorAll('.nav-item').forEach(item => {
