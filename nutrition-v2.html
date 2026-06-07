@@ -156,6 +156,72 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .wk-dot { width:8px; height:8px; border-radius:50%; }
 .wk-foot { margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9; display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:#475569; line-height:1.4; }
 
+/* ── OVERLAYS / SHEETS ── */
+.scrim { position:fixed; inset:0; z-index:60; background:rgba(15,23,42,0.55); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.scrim.open { opacity:1; pointer-events:auto; }
+.sheet { position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:448px; margin:0 auto; background:#fff; border-radius:24px 24px 0 0; max-height:92vh; display:flex; flex-direction:column; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
+.sheet.open { transform:translateY(0); }
+.sheet-grip { width:40px; height:4px; border-radius:2px; background:#e2e8f0; margin:8px auto 0; flex-shrink:0; }
+.sheet-head { padding:12px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f1f5f9; flex-shrink:0; }
+.sheet-head h3 { font-size:18px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
+.sheet-close { width:34px; height:34px; border-radius:50%; background:#f1f5f9; border:none; display:flex; align-items:center; justify-content:center; color:#475569; cursor:pointer; }
+.sheet-body { overflow-y:auto; flex:1; padding:20px; }
+.sheet-body::-webkit-scrollbar { display:none; }
+.sheet-foot { padding:16px 20px calc(16px + env(safe-area-inset-bottom)); border-top:1px solid #f1f5f9; flex-shrink:0; background:#fff; }
+.sheet-cta { width:100%; padding:16px; border-radius:14px; border:none; color:#fff; font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:0.06em; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 8px 24px rgba(191,0,255,0.4); display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+.sheet-cta:active { transform:scale(0.98); }
+.sheet-cta.secondary { background:#f1f5f9; color:#475569; box-shadow:none; }
+
+/* macro pills (shared) */
+.macro-pills { display:flex; gap:8px; margin-top:12px; }
+.macro-pill { flex:1; text-align:center; padding:10px 4px; border-radius:12px; background:#f8fafc; }
+.macro-pill .v { font-weight:800; font-size:16px; }
+.macro-pill .k { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; margin-top:2px; }
+
+/* ingredients list */
+.ing-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #f6f8fa; }
+.ing-row:last-child { border-bottom:none; }
+.ing-check { width:22px; height:22px; border-radius:7px; border:2px solid #e2e8f0; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:transparent; cursor:pointer; transition:all 0.15s; }
+.ing-check.on { background:#00CC6A; border-color:#00CC6A; color:#fff; }
+.ing-name { flex:1; font-size:14px; font-weight:500; color:#334155; }
+.ing-name.done { text-decoration:line-through; color:#94a3b8; }
+.ing-amt { font-size:12px; font-weight:600; color:#94a3b8; }
+
+/* snap flow */
+.snap-stage { display:flex; flex-direction:column; align-items:center; text-align:center; padding:10px 0; }
+.snap-photo { width:100%; aspect-ratio:4/3; border-radius:18px; overflow:hidden; position:relative; background:#0f172a; margin-bottom:16px; }
+.snap-photo img { width:100%; height:100%; object-fit:cover; }
+.snap-scanline { position:absolute; left:0; right:0; height:3px; background:linear-gradient(to right,transparent,#FF0099,transparent); box-shadow:0 0 12px #FF0099; animation:scan 1.6s ease-in-out infinite; }
+@keyframes scan { 0%{top:8%} 50%{top:88%} 100%{top:8%} }
+.snap-analyzing { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color:#BF00FF; }
+.snap-dots i { animation:snapDot 1.4s infinite; } 
+@keyframes snapDot { 0%,100%{opacity:0.3} 50%{opacity:1} }
+.snap-result-name { font-size:20px; font-weight:800; color:#0f172a; margin-top:4px; }
+.snap-kcal { font-size:32px; font-weight:800; background:linear-gradient(to right,#BF00FF,#FF0099); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin:8px 0; }
+.snap-conf { font-size:11px; color:#94a3b8; font-weight:600; }
+
+/* manual search */
+.search-box { display:flex; align-items:center; gap:10px; background:#f8fafc; border:1px solid #f1f5f9; border-radius:12px; padding:12px 14px; margin-bottom:8px; }
+.search-box i { color:#94a3b8; font-size:18px; }
+.search-box input { border:none; background:none; outline:none; flex:1; font-size:14px; font-family:inherit; color:#0f172a; }
+.food-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #f6f8fa; cursor:pointer; }
+.food-row .fr-info { flex:1; }
+.food-row .fr-info h4 { font-size:14px; font-weight:700; color:#0f172a; }
+.food-row .fr-info p { font-size:12px; color:#64748b; font-weight:500; }
+.food-row .fr-add { width:30px; height:30px; border-radius:50%; background:#F5E6FF; color:#BF00FF; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.portion-row { display:flex; align-items:center; justify-content:space-between; margin:16px 0; }
+.portion-ctrl { display:flex; align-items:center; gap:14px; }
+.portion-ctrl button { width:36px; height:36px; border-radius:50%; border:1px solid #e2e8f0; background:#fff; color:#475569; font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.portion-ctrl .pval { font-weight:800; font-size:18px; min-width:50px; text-align:center; }
+
+/* shopping groups */
+.shop-group-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:#94a3b8; margin:18px 0 8px; }
+.shop-group-title:first-child { margin-top:0; }
+.shop-progress { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.shop-bar { flex:1; height:8px; background:#f1f5f9; border-radius:4px; overflow:hidden; }
+.shop-bar-fill { height:100%; background:linear-gradient(to right,#00CC6A,#00FF88); border-radius:4px; transition:width 0.3s; }
+.shop-pct { font-size:12px; font-weight:700; color:#00CC6A; }
+
 /* ── NAV ── */
 .nav { position:fixed; bottom:24px; left:0; right:0; z-index:50; display:flex; justify-content:center; pointer-events:none; }
 .nav-inner { background:rgba(255,255,255,0.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid #e2e8f0; padding:8px; border-radius:40px; box-shadow:0 12px 40px rgba(148,163,184,0.5); display:flex; gap:4px; pointer-events:auto; }
@@ -284,6 +350,40 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
       </section>
 
     </main>
+  </div>
+
+  <!-- ══ OVERLAYS ══ -->
+  <div class="scrim" id="scrim"></div>
+
+  <!-- Snap Meal AI -->
+  <div class="sheet" id="snap-sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><h3>Snap Meal</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
+    <div class="sheet-body" id="snap-body"></div>
+    <div class="sheet-foot" id="snap-foot"></div>
+  </div>
+
+  <!-- Ingredients / recipe -->
+  <div class="sheet" id="ing-sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><h3 id="ing-title">Meal</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
+    <div class="sheet-body" id="ing-body"></div>
+    <div class="sheet-foot"><button class="sheet-cta" data-close><i class="ti ti-plus" style="font-size:16px"></i> Log This Meal</button></div>
+  </div>
+
+  <!-- Manual entry -->
+  <div class="sheet" id="manual-sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><h3>Add Food</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
+    <div class="sheet-body" id="manual-body"></div>
+    <div class="sheet-foot" id="manual-foot" style="display:none"></div>
+  </div>
+
+  <!-- Shopping list -->
+  <div class="sheet" id="shop-sheet">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head"><h3>Shopping List</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
+    <div class="sheet-body" id="shop-body"></div>
   </div>
 
   <!-- Bottom nav (linked) -->
@@ -417,6 +517,188 @@ document.getElementById('wk-rings').innerHTML = WEEK.map(d => {
     ${wkRing(d.pct, state)}
   </div>`;
 }).join('');
+
+// ─── OVERLAYS ───
+const scrim = document.getElementById('scrim');
+let openSheet = null;
+function open(id) {
+  closeSheet();
+  const s = document.getElementById(id);
+  s.classList.add('open'); scrim.classList.add('open'); openSheet = s;
+}
+function closeSheet() {
+  if (openSheet) openSheet.classList.remove('open');
+  scrim.classList.remove('open'); openSheet = null;
+}
+scrim.addEventListener('click', closeSheet);
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeSheet));
+
+// ── Snap Meal AI flow ──
+const SNAP_DEMO = { name:'Grilled Chicken Salad', kcal:420, p:38, c:12, f:18, img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=450&fit=crop' };
+function snapStart() {
+  open('snap-sheet');
+  // step 1: capture prompt
+  document.getElementById('snap-body').innerHTML = `
+    <div class="snap-stage">
+      <div class="snap-photo" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:rgba(255,255,255,0.6)">
+        <i class="ti ti-camera" style="font-size:48px"></i>
+        <span style="font-size:13px;font-weight:600">Point at your meal</span>
+      </div>
+      <p style="font-size:13px;color:#64748b;font-weight:500">Snap a photo and AI estimates the calories and macros instantly.</p>
+    </div>`;
+  document.getElementById('snap-foot').innerHTML = `<button class="sheet-cta" id="snap-capture"><i class="ti ti-camera" style="font-size:18px"></i> Take Photo</button>`;
+  document.getElementById('snap-capture').addEventListener('click', snapAnalyze);
+}
+function snapAnalyze() {
+  document.getElementById('snap-body').innerHTML = `
+    <div class="snap-stage">
+      <div class="snap-photo"><img src="${SNAP_DEMO.img}" alt=""><div class="snap-scanline"></div></div>
+      <div class="snap-analyzing"><i class="ti ti-sparkles"></i> Analyzing<span class="snap-dots"><i>.</i><i>.</i><i>.</i></span></div>
+    </div>`;
+  document.getElementById('snap-foot').innerHTML = '';
+  setTimeout(snapResult, 2200);
+}
+function snapResult() {
+  const d = SNAP_DEMO;
+  document.getElementById('snap-body').innerHTML = `
+    <div class="snap-stage">
+      <div class="snap-photo"><img src="${d.img}" alt=""></div>
+      <div class="snap-result-name">${d.name}</div>
+      <div class="snap-kcal">${d.kcal} kcal</div>
+      <span class="snap-conf">AI estimate · tap a value to adjust</span>
+      <div class="macro-pills" style="width:100%">
+        <div class="macro-pill"><div class="v" style="color:#FF0099">${d.p}g</div><div class="k">Protein</div></div>
+        <div class="macro-pill"><div class="v" style="color:#6FD9FF">${d.c}g</div><div class="k">Carbs</div></div>
+        <div class="macro-pill"><div class="v" style="color:#FF4D00">${d.f}g</div><div class="k">Fats</div></div>
+      </div>
+    </div>`;
+  document.getElementById('snap-foot').innerHTML = `<button class="sheet-cta" data-close><i class="ti ti-check" style="font-size:18px"></i> Confirm &amp; Log</button>`;
+  document.getElementById('snap-foot').querySelector('[data-close]').addEventListener('click', closeSheet);
+}
+document.querySelector('.log-snap').addEventListener('click', snapStart);
+
+// ── Ingredients (from suggested meals) ──
+const SUG_RECIPES = {
+  'Salmon & Quinoa Bowl': { kcal:560, p:42, c:48, f:22, ing:[['Salmon fillet','180g'],['Quinoa','80g dry'],['Avocado','½'],['Cherry tomatoes','100g'],['Spinach','1 handful'],['Olive oil','1 tbsp'],['Lemon','½']] },
+  'Turkey Lettuce Wraps': { kcal:410, p:38, c:18, f:20, ing:[['Ground turkey','150g'],['Romaine lettuce','6 leaves'],['Bell pepper','1'],['Garlic','2 cloves'],['Soy sauce','1 tbsp'],['Sesame oil','1 tsp']] },
+  'Sweet Potato & Egg': { kcal:380, p:24, c:40, f:14, ing:[['Sweet potato','200g'],['Eggs','2'],['Spinach','1 handful'],['Feta','30g'],['Olive oil','1 tsp']] },
+};
+function openIngredients(name, img) {
+  const r = SUG_RECIPES[name]; if (!r) return;
+  document.getElementById('ing-title').textContent = name;
+  document.getElementById('ing-body').innerHTML = `
+    <div style="border-radius:16px;overflow:hidden;margin-bottom:16px;height:160px"><img src="${img}" style="width:100%;height:100%;object-fit:cover" alt=""></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:13px;font-weight:700;color:#475569">${r.kcal} kcal</span>
+      <span style="font-size:11px;color:#94a3b8;font-weight:600">Serves 1</span>
+    </div>
+    <div class="macro-pills">
+      <div class="macro-pill"><div class="v" style="color:#FF0099">${r.p}g</div><div class="k">Protein</div></div>
+      <div class="macro-pill"><div class="v" style="color:#6FD9FF">${r.c}g</div><div class="k">Carbs</div></div>
+      <div class="macro-pill"><div class="v" style="color:#FF4D00">${r.f}g</div><div class="k">Fats</div></div>
+    </div>
+    <h4 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;font-weight:700;color:#64748b;margin:20px 0 4px">Ingredients</h4>
+    ${r.ing.map(i => `<div class="ing-row"><span class="ing-name">${i[0]}</span><span class="ing-amt">${i[1]}</span></div>`).join('')}`;
+  open('ing-sheet');
+}
+
+// ── Manual entry ──
+const FOODS = [
+  { name:'Chicken Breast', per:'100g · 165 kcal', kcal:165 },
+  { name:'White Rice', per:'100g · 130 kcal', kcal:130 },
+  { name:'Banana', per:'1 medium · 105 kcal', kcal:105 },
+  { name:'Whey Protein', per:'1 scoop · 120 kcal', kcal:120 },
+  { name:'Almonds', per:'30g · 174 kcal', kcal:174 },
+  { name:'Greek Yogurt', per:'170g · 100 kcal', kcal:100 },
+];
+function openManual() {
+  renderManualSearch('');
+  document.getElementById('manual-foot').style.display = 'none';
+  open('manual-sheet');
+}
+function renderManualSearch(q) {
+  const list = FOODS.filter(f => f.name.toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('manual-body').innerHTML = `
+    <div class="search-box"><i class="ti ti-search"></i><input id="food-search" placeholder="Search foods…" value="${q}"></div>
+    <div id="food-results">${list.map((f,i) => `
+      <div class="food-row" data-food="${FOODS.indexOf(f)}">
+        <div class="fr-info"><h4>${f.name}</h4><p>${f.per}</p></div>
+        <button class="fr-add"><i class="ti ti-plus" style="font-size:16px"></i></button>
+      </div>`).join('') || '<p style="text-align:center;color:#94a3b8;font-size:13px;padding:20px">No foods found</p>'}</div>`;
+  const inp = document.getElementById('food-search');
+  inp.addEventListener('input', e => renderManualSearch(e.target.value));
+  document.querySelectorAll('.food-row').forEach(r => r.addEventListener('click', () => openPortion(+r.dataset.food)));
+}
+let portionQty = 1;
+function openPortion(idx) {
+  const f = FOODS[idx]; portionQty = 1;
+  function render() {
+    const kcal = Math.round(f.kcal * portionQty);
+    document.getElementById('manual-body').innerHTML = `
+      <button id="back-search" style="background:none;border:none;color:#BF00FF;font-weight:600;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;margin-bottom:16px"><i class="ti ti-chevron-left"></i> Back to search</button>
+      <h3 style="font-size:20px;font-weight:800;color:#0f172a">${f.name}</h3>
+      <p style="font-size:13px;color:#64748b;font-weight:500;margin-top:2px">${f.per}</p>
+      <div class="portion-row">
+        <span style="font-size:14px;font-weight:600;color:#334155">Servings</span>
+        <div class="portion-ctrl">
+          <button id="p-minus">−</button>
+          <span class="pval">${portionQty}</span>
+          <button id="p-plus">+</button>
+        </div>
+      </div>
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:14px"><div style="font-size:32px;font-weight:800;background:linear-gradient(to right,#BF00FF,#FF0099);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">${kcal} kcal</div></div>`;
+    document.getElementById('back-search').addEventListener('click', () => { renderManualSearch(''); document.getElementById('manual-foot').style.display='none'; });
+    document.getElementById('p-minus').addEventListener('click', () => { if(portionQty>0.5){portionQty=Math.round((portionQty-0.5)*10)/10; render();} });
+    document.getElementById('p-plus').addEventListener('click', () => { portionQty=Math.round((portionQty+0.5)*10)/10; render(); });
+  }
+  render();
+  const foot = document.getElementById('manual-foot');
+  foot.style.display = 'block';
+  foot.innerHTML = `<button class="sheet-cta" data-close><i class="ti ti-plus" style="font-size:16px"></i> Add to Today</button>`;
+  foot.querySelector('[data-close]').addEventListener('click', closeSheet);
+}
+document.querySelector('.log-manual').addEventListener('click', openManual);
+
+// ── Shopping list ──
+const SHOP = {
+  'Proteins': [['Salmon fillet','360g'],['Ground turkey','300g'],['Eggs','12'],['Greek yogurt','500g'],['Whey protein','1 tub']],
+  'Carbs': [['Quinoa','250g'],['Sweet potato','4'],['White rice','500g'],['Bananas','6']],
+  'Veg & Fruit': [['Spinach','2 bags'],['Cherry tomatoes','250g'],['Avocado','3'],['Bell peppers','4'],['Lemons','4'],['Romaine lettuce','2']],
+  'Pantry': [['Olive oil','1 bottle'],['Soy sauce','1 bottle'],['Almonds','200g'],['Feta','200g']],
+};
+let shopState = {};
+function openShopping() {
+  renderShop(); open('shop-sheet');
+}
+function renderShop() {
+  const all = Object.values(SHOP).flat();
+  const total = all.length;
+  const checked = Object.values(shopState).filter(Boolean).length;
+  const pct = Math.round((checked/total)*100);
+  let html = `<div class="shop-progress"><div class="shop-bar"><div class="shop-bar-fill" style="width:${pct}%"></div></div><span class="shop-pct">${checked}/${total}</span></div>`;
+  for (const [group, items] of Object.entries(SHOP)) {
+    html += `<div class="shop-group-title">${group}</div>`;
+    items.forEach(it => {
+      const key = it[0]; const on = shopState[key];
+      html += `<div class="ing-row" data-shop="${key}">
+        <div class="ing-check ${on?'on':''}"><i class="ti ti-check" style="font-size:14px"></i></div>
+        <span class="ing-name ${on?'done':''}">${it[0]}</span>
+        <span class="ing-amt">${it[1]}</span>
+      </div>`;
+    });
+  }
+  document.getElementById('shop-body').innerHTML = html;
+  document.querySelectorAll('[data-shop]').forEach(row => row.addEventListener('click', () => {
+    const k = row.dataset.shop; shopState[k] = !shopState[k]; renderShop();
+    if(navigator.vibrate) navigator.vibrate(5);
+  }));
+}
+document.querySelector('.sec-link').addEventListener('click', openShopping);
+
+// wire suggested meal cards -> ingredients
+document.querySelectorAll('.sug-card').forEach((card,i) => {
+  card.addEventListener('click', () => openIngredients(SUGG[i].name, SUGG[i].img));
+});
 
 // ─── NAV (haptic only; links navigate) ───
 document.querySelectorAll('.nav-item').forEach(item => {
