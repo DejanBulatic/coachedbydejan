@@ -161,6 +161,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .scrim.open { opacity:1; pointer-events:auto; }
 .sheet { position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:448px; margin:0 auto; background:#fff; border-radius:24px 24px 0 0; max-height:92vh; display:flex; flex-direction:column; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
 .sheet.open { transform:translateY(0); }
+.sheet.lower { max-height:82vh; }
 .sheet-grip { width:40px; height:4px; border-radius:2px; background:#e2e8f0; margin:8px auto 0; flex-shrink:0; }
 .sheet-head { padding:12px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #f1f5f9; flex-shrink:0; }
 .sheet-head h3 { font-size:18px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
@@ -364,7 +365,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
   </div>
 
   <!-- Ingredients / recipe -->
-  <div class="sheet" id="ing-sheet">
+  <div class="sheet lower" id="ing-sheet">
     <div class="sheet-grip"></div>
     <div class="sheet-head"><h3 id="ing-title">Meal</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
     <div class="sheet-body" id="ing-body"></div>
@@ -380,7 +381,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
   </div>
 
   <!-- Shopping list -->
-  <div class="sheet" id="shop-sheet">
+  <div class="sheet lower" id="shop-sheet">
     <div class="sheet-grip"></div>
     <div class="sheet-head"><h3>Shopping List</h3><button class="sheet-close" data-close><i class="ti ti-x" style="font-size:16px"></i></button></div>
     <div class="sheet-body" id="shop-body"></div>
