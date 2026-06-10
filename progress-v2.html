@@ -27,6 +27,7 @@ button { font-family:inherit; }
 h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; text-transform:uppercase; }
 .sec-h2 { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
 .eyebrow { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#64748b; }
+.hero .eyebrow { color:rgba(255,255,255,0.7); }
 
 .header { padding:48px 20px 24px; }
 .header h1 { margin:8px 0; }
@@ -38,19 +39,19 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .sec-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
 
 /* HERO STAT */
-.hero { position:relative; overflow:hidden; border-radius:24px; padding:24px; border:1px solid #f1f5f9; box-shadow:0 20px 50px rgba(148,163,184,0.3); background:linear-gradient(135deg, rgba(255,255,255,0.96), rgba(255,255,255,0.86)); }
-.hero .blob1 { position:absolute; top:-64px; right:-64px; width:224px; height:224px; border-radius:50%; opacity:0.3; filter:blur(48px); background:radial-gradient(circle,#FF0099,transparent 70%); }
-.hero .blob2 { position:absolute; bottom:-80px; left:-40px; width:224px; height:224px; border-radius:50%; opacity:0.25; filter:blur(48px); background:radial-gradient(circle,#BF00FF,transparent 70%); }
-.hero-in { position:relative; }
+.hero { position:relative; overflow:hidden; border-radius:24px; padding:0; box-shadow:0 20px 50px rgba(120,40,160,0.25); min-height:300px; display:flex; }
+.hero > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.hero .ov { position:absolute; inset:0; background:linear-gradient(to top, #0f172a 0%, rgba(15,23,42,0.55) 50%, rgba(15,23,42,0.25) 100%); }
+.hero-in { position:relative; padding:24px; display:flex; flex-direction:column; justify-content:flex-end; width:100%; }
 .hero-big { display:flex; align-items:flex-end; gap:10px; margin-bottom:16px; }
-.hero-num { font-weight:800; font-size:64px; line-height:0.9; background:linear-gradient(135deg,#BF00FF,#FF0099); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 2px 12px rgba(255,0,153,0.2)); }
-.hero-unit { color:#64748b; font-weight:600; padding-bottom:8px; }
+.hero-num { font-weight:800; font-size:64px; line-height:0.9; background:linear-gradient(135deg,#E89BFF,#FF6BC0); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 2px 16px rgba(255,0,153,0.6)); }
+.hero-unit { color:rgba(255,255,255,0.7); font-weight:600; padding-bottom:8px; }
 .hero-badges { display:flex; align-items:center; gap:8px; margin-bottom:20px; }
 .hero-bf { display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700; background:#E0FFF2; color:#00CC6A; box-shadow:0 0 12px rgba(0,204,106,0.2); }
-.hero-wks { font-size:12px; color:#64748b; font-weight:500; }
-.hero-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; padding-top:16px; border-top:1px solid #f1f5f9; }
-.hero-grid .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; margin-bottom:4px; }
-.hero-grid .v { font-weight:700; color:#0f172a; }
+.hero-wks { font-size:12px; color:rgba(255,255,255,0.7); font-weight:500; }
+.hero-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; padding:14px; border-radius:14px; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); }
+.hero-grid .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-bottom:4px; }
+.hero-grid .v { font-weight:700; color:#fff; }
 
 /* RANGE TOGGLE */
 .range-toggle { display:flex; background:#fff; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.05); border-radius:999px; padding:4px; }
@@ -75,6 +76,29 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .meas-ctr .u { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; }
 .meas-delta { margin-top:12px; display:flex; align-items:center; gap:2px; font-size:12px; font-weight:700; color:#00CC6A; }
 
+
+/* MEASUREMENTS + WEIGHT (side by side) */
+.prog-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.meas-hero { padding:16px; display:flex; flex-direction:column; align-items:center; }
+.meas-hero .lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; align-self:flex-start; margin-bottom:8px; }
+.meas-hero .meas-ring { width:104px; height:104px; }
+.meas-hero .meas-delta { margin-top:10px; }
+.meas-others { width:100%; margin-top:14px; padding-top:12px; border-top:1px solid #f1f5f9; display:flex; flex-direction:column; gap:8px; }
+.meas-o-row { display:flex; align-items:center; justify-content:space-between; }
+.meas-o-row .n { font-size:11px; font-weight:600; color:#64748b; }
+.meas-o-row .r { display:flex; align-items:center; gap:6px; }
+.meas-o-row .val { font-size:12px; font-weight:700; color:#0f172a; }
+.meas-o-row .chg { font-size:10px; font-weight:700; color:#00CC6A; }
+.wp-card { padding:16px; display:flex; flex-direction:column; align-items:center; }
+.wp-head { width:100%; text-align:left; margin-bottom:8px; }
+.wp-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; }
+.wp-sub { font-size:10px; color:#94a3b8; margin-top:1px; }
+.wp-rings { width:111px; height:111px; position:relative; margin-top:4px; }
+.wp-legend { display:flex; justify-content:space-between; width:100%; margin-top:12px; padding:0 4px; }
+.wp-leg { display:flex; flex-direction:column; align-items:center; }
+.wp-leg .dot { width:8px; height:8px; border-radius:50%; margin-bottom:4px; }
+.wp-leg span { font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; }
+
 /* PHOTOS */
 .photo-card { border-radius:24px; overflow:hidden; box-shadow:0 20px 50px rgba(15,23,42,0.2); border:1px solid rgba(15,23,42,0.4); background:#0a0e1a; }
 .photo-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#1e293b; }
@@ -87,13 +111,24 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .photo .tag.before p { color:rgba(255,255,255,0.9); }
 .photo .tag.today { background:rgba(255,0,153,0.2); border:1px solid rgba(255,0,153,0.4); box-shadow:0 0 12px rgba(255,0,153,0.33); }
 .photo .tag.today p { color:#fff; }
-.photo .cap { position:absolute; bottom:12px; left:12px; color:#fff; }
+.photo .cap { position:absolute; bottom:12px; left:12px; color:#fff; padding:6px 10px; border-radius:10px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.18); }
 .photo .cap .d { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; opacity:0.7; }
 .photo .cap .w { font-weight:700; }
 .photo-foot { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#0a0e1a; }
 .photo-foot .l { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.6); }
 .photo-foot .l span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; }
 .photo-add { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:999px; border:none; color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 0 16px rgba(255,0,153,0.4); cursor:pointer; }
+
+
+/* HOW YOU FEEL (radar) */
+.feel-card { padding:20px; display:flex; align-items:center; gap:20px; }
+.feel-radar { width:150px; height:150px; flex-shrink:0; }
+.feel-legend { flex:1; display:flex; flex-direction:column; gap:14px; }
+.feel-item { display:flex; align-items:center; gap:10px; }
+.feel-item .fdot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.feel-item .fv { font-weight:800; font-size:20px; color:#0f172a; line-height:1; }
+.feel-item .fv small { font-size:12px; color:#94a3b8; font-weight:600; }
+.feel-item .fl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; margin-top:2px; }
 
 /* PBs */
 .pb-link { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:700; color:#00CC6A; }
@@ -155,7 +190,8 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
       <!-- Hero stat -->
       <section>
         <div class="hero">
-          <div class="blob1"></div><div class="blob2"></div>
+          <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=800&h=600&fit=crop" alt="">
+          <div class="ov"></div>
           <div class="hero-in">
             <p class="eyebrow" style="margin-bottom:12px">Total Change · Since Day 1</p>
             <div class="hero-big">
@@ -194,10 +230,28 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
         </div>
       </section>
 
-      <!-- Measurements -->
+      <!-- Measurements + Weight rings (side by side) -->
       <section>
         <h2 class="sec-h2" style="margin-bottom:16px">Body Measurements</h2>
-        <div class="meas-grid" id="meas-grid"></div>
+        <div class="prog-row">
+          <!-- Hero measurement card -->
+          <div class="card meas-hero">
+            <div class="lbl">Waist</div>
+            <div class="meas-ring" id="meas-hero-ring"></div>
+            <div class="meas-delta"><i class="ti ti-arrow-down-right" style="font-size:13px"></i> -8.0 cm</div>
+            <div class="meas-others" id="meas-others"></div>
+          </div>
+          <!-- Weight progress rings (from home) -->
+          <div class="card wp-card">
+            <div class="wp-head"><div class="wp-lbl">Weight Progress</div><div class="wp-sub">As of Today</div></div>
+            <div class="wp-rings" id="wp-rings"></div>
+            <div class="wp-legend">
+              <div class="wp-leg"><span class="dot" style="background:#BF00FF;box-shadow:0 0 5px #BF00FF"></span><span>Lost</span></div>
+              <div class="wp-leg"><span class="dot" style="background:#FF0099;box-shadow:0 0 5px #FF0099"></span><span>Curr</span></div>
+              <div class="wp-leg"><span class="dot" style="background:#FF4D00;box-shadow:0 0 5px #FF4D00"></span><span>Goal</span></div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Progress photos -->
@@ -224,6 +278,19 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
           <div class="photo-foot">
             <div class="l"><i class="ti ti-camera" style="font-size:14px"></i><span>16-week transformation</span></div>
             <button class="photo-add"><i class="ti ti-plus" style="font-size:14px"></i> Add Photo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- How You Feel (radar) -->
+      <section>
+        <h2 class="sec-h2" style="margin-bottom:16px">How You Feel</h2>
+        <div class="card feel-card">
+          <div class="feel-radar" id="feel-radar"></div>
+          <div class="feel-legend">
+            <div class="feel-item"><span class="fdot" style="background:#00CC6A"></span><div><div class="fv">8<small>/10</small></div><div class="fl">Energy</div></div></div>
+            <div class="feel-item"><span class="fdot" style="background:#6FD9FF"></span><div><div class="fv">7<small>/10</small></div><div class="fl">Sleep</div></div></div>
+            <div class="feel-item"><span class="fdot" style="background:#FF4D00"></span><div><div class="fv">3<small>/10</small></div><div class="fl">Stress</div></div></div>
           </div>
         </div>
       </section>
@@ -315,29 +382,44 @@ document.querySelectorAll('.range-btn').forEach(b => b.addEventListener('click',
   drawChart(SERIES[b.dataset.r]);
 }));
 
-// ─── MEASUREMENTS ───
+// ─── MEASUREMENTS (hero ring + others) ───
 const MEAS = [
   { label:'Waist', value:68, start:76, unit:'cm', color:ACCENT.pink },
   { label:'Hips', value:92, start:98, unit:'cm', color:ACCENT.purple },
   { label:'Thigh', value:56, start:61, unit:'cm', color:ACCENT.orange },
   { label:'Arm', value:28, start:30, unit:'cm', color:ACCENT.blue },
 ];
-document.getElementById('meas-grid').innerHTML = MEAS.map(m => {
-  const size=110, sw=8, r=(size-sw)/2, c=2*Math.PI*r;
-  const change = m.start - m.value, prog = Math.min(Math.abs(change)/m.start,1), off = c-prog*c;
-  return `<div class="card meas">
-    <div class="lbl">${m.label}</div>
-    <div class="meas-ring">
-      <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(15,23,42,0.06)" stroke-width="${sw}"/>
-        <circle class="meas-c" data-off="${off}" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${m.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="filter:drop-shadow(0 0 6px ${m.color}99)"/>
-      </svg>
-      <div class="meas-ctr"><span class="v">${m.value}</span><span class="u">${m.unit}</span></div>
-    </div>
-    <div class="meas-delta"><i class="ti ti-arrow-down-right" style="font-size:14px"></i> -${change.toFixed(1)} ${m.unit}</div>
-  </div>`;
+// hero ring (waist)
+(function(){
+  const m = MEAS[0], size=104, sw=8, r=(size-sw)/2, c2=2*Math.PI*r;
+  const change=m.start-m.value, prog=Math.min(Math.abs(change)/m.start,1), off=c2-prog*c2;
+  document.getElementById('meas-hero-ring').innerHTML = `
+    <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(15,23,42,0.06)" stroke-width="${sw}"/>
+      <circle class="mh-c" data-off="${off}" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${m.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${c2}" stroke-dashoffset="${c2}" style="filter:drop-shadow(0 0 6px ${m.color}99)"/>
+    </svg>
+    <div class="meas-ctr"><span class="v">${m.value}</span><span class="u">${m.unit}</span></div>`;
+  setTimeout(()=>{ const cc=document.querySelector('.mh-c'); cc.style.transition='stroke-dashoffset 1.4s ease'; cc.style.strokeDashoffset=cc.dataset.off; },400);
+})();
+// others as text rows
+document.getElementById('meas-others').innerHTML = MEAS.slice(1).map(m => {
+  const change=(m.start-m.value).toFixed(1);
+  return `<div class="meas-o-row"><span class="n">${m.label}</span><span class="r"><span class="val">${m.value}${m.unit}</span><span class="chg">-${change}</span></span></div>`;
 }).join('');
-setTimeout(()=>{ document.querySelectorAll('.meas-c').forEach((c,i)=>{ c.style.transition=`stroke-dashoffset 1.4s ease ${i*0.12}s`; c.style.strokeDashoffset=c.dataset.off; }); },400);
+
+// ─── WEIGHT PROGRESS RINGS (from home) ───
+(function(){
+  const size=111, sw=9, c2=size/2;
+  const rings=[{r:44,color:'#BF00FF',prog:40},{r:33,color:'#FF0099',prog:66},{r:22,color:'#FF4D00',prog:90}];
+  let svg=`<svg width="${size}" height="${size}" style="transform:rotate(-90deg)">`;
+  rings.forEach(ring=>{ const circ=2*Math.PI*ring.r;
+    svg+=`<circle cx="${c2}" cy="${c2}" r="${ring.r}" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="${sw}"/>`;
+    svg+=`<circle class="wp-ring" cx="${c2}" cy="${c2}" r="${ring.r}" fill="none" stroke="${ring.color}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-off="${circ-(ring.prog/100)*circ}"/>`;
+  });
+  svg+=`</svg>`;
+  document.getElementById('wp-rings').innerHTML=svg;
+  setTimeout(()=>{ document.querySelectorAll('.wp-ring').forEach((c,i)=>{ c.style.transition=`stroke-dashoffset 1.5s ease ${i*0.2}s`; c.style.strokeDashoffset=c.dataset.off; }); },400);
+})();
 
 // ─── PERSONAL BESTS ───
 const LIFTS = [
@@ -360,6 +442,38 @@ document.getElementById('pb-card').innerHTML = LIFTS.map(l => {
   </div>`;
 }).join('');
 setTimeout(()=>{ document.querySelectorAll('.pb-bar div').forEach((b,i)=>{ b.style.transition=`width 1.2s ease ${i*0.1}s`; b.style.width=b.dataset.w+'%'; }); },400);
+
+// ─── HOW YOU FEEL (radar triangle) ───
+(function(){
+  const cx=75, cy=78, R=58;
+  const axes = [
+    { label:'Energy', val:8, color:'#00CC6A', angle:-90 },
+    { label:'Sleep', val:7, color:'#6FD9FF', angle:30 },
+    { label:'Stress', val:3, color:'#FF4D00', angle:150 },
+  ];
+  function pt(angle, dist){ const a=angle*Math.PI/180; return [cx+dist*Math.cos(a), cy+dist*Math.sin(a)]; }
+  // grid rings
+  let grid='';
+  [0.33,0.66,1].forEach(t=>{
+    const p = axes.map(ax=>pt(ax.angle, R*t).map(n=>n.toFixed(1)).join(',')).join(' ');
+    grid += `<polygon points="${p}" fill="none" stroke="rgba(15,23,42,0.08)" stroke-width="1"/>`;
+  });
+  // axis lines
+  let lines='';
+  axes.forEach(ax=>{ const [x,y]=pt(ax.angle,R); lines+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(15,23,42,0.08)" stroke-width="1"/>`; });
+  // data polygon
+  const dpts = axes.map(ax=>pt(ax.angle, R*(ax.val/10)).map(n=>n.toFixed(1)).join(',')).join(' ');
+  // vertices
+  let dots='';
+  axes.forEach(ax=>{ const [x,y]=pt(ax.angle, R*(ax.val/10)); dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${ax.color}" style="filter:drop-shadow(0 0 4px ${ax.color})"/>`; });
+  document.getElementById('feel-radar').innerHTML = `
+    <svg viewBox="0 0 150 156" style="width:100%;height:auto">
+      <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00CC6A" stop-opacity="0.35"/><stop offset="100%" stop-color="#FF0099" stop-opacity="0.35"/></linearGradient></defs>
+      ${grid}${lines}
+      <polygon points="${dpts}" fill="url(#rg)" stroke="#BF00FF" stroke-width="2" style="filter:drop-shadow(0 0 6px rgba(191,0,255,0.4))"/>
+      ${dots}
+    </svg>`;
+})();
 
 // ─── CONSISTENCY HEATMAP ───
 const DONE = [3,3,2,3,3,3,2,3,3,3,3,2];
