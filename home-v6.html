@@ -98,7 +98,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 
 
 /* ── CURRENT WEEK CARD ── */
-.cw-card { padding:18px; display:flex; flex-direction:column; }
+.cw-card { padding:18px; display:flex; flex-direction:column; overflow:hidden; position:relative; }
 .cw-eyebrow { color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:8px; }
 .cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; line-height:1.15; margin-bottom:8px; }
 .cw-line { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
@@ -114,7 +114,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .cw-card { padding:18px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 50px rgba(15,23,42,0.3); }
 .cw-card > .cw-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
 .cw-card > .cw-ov { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%); }
-.cw-card > .cw-glow { position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; opacity:0.5; pointer-events:none; box-shadow:0 0 120px 60px rgba(255,0,153,0.4); z-index:0; }
+.cw-card > .cw-glow { position:absolute; top:-50px; right:-50px; width:200px; height:200px; border-radius:50%; pointer-events:none; z-index:0; background:radial-gradient(circle, rgba(255,0,153,0.45) 0%, rgba(255,0,153,0.18) 40%, transparent 70%); }
 .cw-card > *:not(.cw-bg):not(.cw-ov) { position:relative; z-index:1; }
 .cw-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#fff; margin-bottom:16px; }
 .cal { width:100%; box-sizing:border-box; }
