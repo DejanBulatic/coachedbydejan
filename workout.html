@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#e8f5f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Workout · Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; scrollbar-width:none; -ms-overflow-style:none; }
+*::-webkit-scrollbar { display:none; width:0; height:0; }
+body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
+button { font-family:inherit; cursor:pointer; }
+.hide-sb::-webkit-scrollbar { display:none; }
+.hide-sb { -ms-overflow-style:none; scrollbar-width:none; }
+
+.wm { position:fixed; inset:0; z-index:80; overflow:hidden; }
+.wm-base { position:absolute; inset:0; background:#e8f5f2; }
+.wm-aurora { position:absolute; inset:0; transition:background 0.8s ease; }
+.wm-veil { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.4) 100%); }
+
+.wm-content { position:relative; height:100%; max-width:448px; margin:0 auto; display:flex; flex-direction:column; }
+
+/* top bar */
+.wm-top { padding:48px 20px 12px; display:flex; align-items:center; justify-content:space-between; }
+.wm-icon-btn { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.8); backdrop-filter:blur(8px); border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; color:#475569; }
+.wm-top-c { text-align:center; }
+.wm-top-c .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.25em; color:#64748b; }
+.wm-top-c .s { font-size:12px; font-weight:700; color:#334155; margin-top:1px; }
+
+/* progress */
+.wm-prog { padding:0 20px 12px; }
+.wm-prog-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.wm-prog-head .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#64748b; }
+.wm-prog-head .r { font-size:10px; font-weight:700; color:#64748b; }
+.wm-bar { height:8px; width:100%; border-radius:4px; background:rgba(255,255,255,0.7); border:1px solid #f1f5f9; overflow:hidden; }
+.wm-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#BF00FF,#FF0099,#FF4D00); box-shadow:0 0 10px rgba(255,0,153,0.6); transition:width 0.5s cubic-bezier(0.34,1.2,0.64,1); }
+.wm-dots { display:flex; justify-content:space-between; margin-top:8px; }
+.wm-dot-wrap { flex:1; display:flex; justify-content:center; }
+.wm-dot { width:8px; height:8px; border-radius:50%; background:#CBD5E1; transition:all 0.2s; }
+
+/* exercise header card */
+.wm-ex { margin:4px 20px 0; border-radius:24px; background:#fff; border:1px solid #f1f5f9; box-shadow:0 8px 32px rgba(148,163,184,0.15); padding:20px; position:relative; overflow:hidden; }
+.wm-ex-glow { position:absolute; top:-48px; right:-48px; width:160px; height:160px; border-radius:50%; opacity:0.4; pointer-events:none; }
+.wm-ex-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; position:relative; }
+.wm-ex-meta { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.wm-ex-count { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; }
+.wm-ex-tag { padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; }
+.wm-ex-name { font-size:19px; font-weight:700; color:#0f172a; line-height:1.15; }
+.wm-ex-tip { font-size:12px; color:#64748b; font-style:italic; margin-top:4px; }
+.wm-ex-target { text-align:right; flex-shrink:0; }
+.wm-ex-target .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; }
+.wm-ex-target .v { font-weight:700; }
+.wm-chips { margin-top:16px; display:flex; gap:6px; }
+.wm-chip { flex:1; border-radius:8px; padding:6px 4px; display:flex; flex-direction:column; align-items:center; }
+.wm-chip .st { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; opacity:0.8; }
+.wm-chip .vl { font-size:12px; font-weight:700; }
+
+/* wheels */
+.wm-wheels { margin:16px 20px 0; border-radius:24px; background:#fff; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); padding:16px; }
+.wm-wheels-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.wm-wheels-head .l { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#0f172a; }
+.wm-wheels-head .r { font-size:10px; font-weight:700; color:#64748b; }
+.wm-wheels-row { display:flex; align-items:stretch; gap:8px; }
+.wm-wheel-col { flex:1; }
+.wm-wheel-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#334155; text-align:center; margin-bottom:6px; }
+.wm-wheel { position:relative; }
+.wm-band { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); height:44px; pointer-events:none; border-radius:12px; z-index:1; }
+.wm-fade-t { position:absolute; left:0; right:0; top:0; height:40px; pointer-events:none; z-index:3; background:linear-gradient(to bottom,#fff,rgba(255,255,255,0)); }
+.wm-fade-b { position:absolute; left:0; right:0; bottom:0; height:40px; pointer-events:none; z-index:3; background:linear-gradient(to top,#fff,rgba(255,255,255,0)); }
+.wm-scroll { height:176px; overflow-y:scroll; scroll-snap-type:y mandatory; position:relative; z-index:2; }
+.wm-item { height:44px; scroll-snap-align:center; display:flex; align-items:center; justify-content:center; }
+.wm-item span { font-weight:700; transition:all 0.15s; letter-spacing:-0.02em; }
+.wm-divider { width:1px; align-self:stretch; background:#f1f5f9; margin:12px 0; }
+
+/* actions */
+.wm-actions { margin:16px 20px 0; display:flex; align-items:center; gap:8px; }
+.wm-nav-btn { width:48px; height:56px; border-radius:16px; background:#fff; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.05); display:flex; align-items:center; justify-content:center; color:#475569; }
+.wm-nav-btn:disabled { opacity:0.4; }
+.wm-main-btn { flex:1; height:56px; border-radius:16px; border:none; color:#fff; font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:0.04em; display:flex; align-items:center; justify-content:center; gap:8px; }
+.wm-main-btn:active { transform:scale(0.97); }
+
+/* footer stats */
+.wm-foot { margin:16px 20px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.wm-foot-stat { background:rgba(255,255,255,0.8); backdrop-filter:blur(8px); border-radius:16px; border:1px solid #f1f5f9; padding:8px 12px; display:flex; align-items:center; gap:8px; }
+.wm-foot-stat .v { font-weight:700; font-size:14px; line-height:1; }
+.wm-foot-stat .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; margin-top:3px; }
+
+/* rest sheet */
+.rest-scrim { position:fixed; inset:0; z-index:69; background:rgba(15,23,42,0.3); opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.rest-scrim.open { opacity:1; pointer-events:auto; }
+.rest-sheet { position:fixed; left:0; right:0; bottom:0; z-index:70; max-width:448px; margin:0 auto; padding:0 12px 12px; transform:translateY(110%); transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1); }
+.rest-sheet.open { transform:translateY(0); }
+.rest-inner { background:#fff; border-radius:24px; border:1px solid #f1f5f9; overflow:hidden; }
+.rest-prog { height:6px; width:100%; background:#f1f5f9; position:relative; }
+.rest-prog-fill { position:absolute; inset:0 auto 0 0; transition:width 0.4s linear; }
+.rest-body { padding:20px; }
+.rest-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.rest-head .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; }
+.rest-head h3 { font-size:16px; font-weight:700; color:#0f172a; }
+.rest-time { font-weight:700; font-size:30px; letter-spacing:-0.02em; }
+.rest-btns { display:flex; gap:8px; }
+.rest-btn { padding:12px; border-radius:12px; background:#f8fafc; border:1px solid #f1f5f9; color:#475569; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px; }
+.rest-btn.flex { flex:1; }
+.rest-skip { padding:12px 16px; border-radius:12px; color:#fff; font-weight:700; font-size:13px; border:none; display:flex; align-items:center; gap:4px; }
+.rest-next { margin-top:12px; font-size:11px; color:#64748b; font-weight:500; text-align:center; }
+.rest-next b { color:#334155; font-weight:700; }
+
+/* completion */
+.wm-done { position:absolute; inset:0; z-index:20; display:none; flex-direction:column; align-items:center; justify-content:center; padding:0 32px; text-align:center; background:rgba(255,255,255,0.96); backdrop-filter:blur(8px); }
+.wm-done.show { display:flex; }
+.wm-trophy { width:96px; height:96px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:20px; color:#fff; animation:trophyPop 0.5s cubic-bezier(0.34,1.5,0.64,1); }
+@keyframes trophyPop { 0%{transform:scale(0) rotate(-30deg)} 100%{transform:scale(1) rotate(0)} }
+.wm-done .eyebrow { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.25em; color:#64748b; }
+.wm-done h1 { font-size:30px; font-weight:800; color:#0f172a; margin:4px 0 8px; }
+.wm-done .sub { font-size:14px; color:#64748b; font-weight:500; max-width:20rem; }
+.wm-done-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:28px; width:100%; max-width:20rem; }
+.wm-done-stat { background:#fff; border-radius:16px; border:1px solid #f1f5f9; padding:12px; }
+.wm-done-stat .v { font-weight:700; font-size:20px; }
+.wm-done-stat .l { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; margin-top:2px; }
+.wm-done-btn { margin-top:28px; width:100%; max-width:20rem; padding:16px; border-radius:16px; border:none; color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; background:linear-gradient(90deg,#BF00FF,#FF0099); box-shadow:0 8px 24px rgba(191,0,255,0.4); }
+</style>
+</head>
+<body>
+
+<div class="wm">
+  <div class="wm-base"></div>
+  <div class="wm-aurora" id="aurora"></div>
+  <div class="wm-veil"></div>
+
+  <div class="wm-content">
+    <!-- top bar -->
+    <div class="wm-top">
+      <button class="wm-icon-btn" id="close-btn"><i class="ti ti-x" style="font-size:18px"></i></button>
+      <div class="wm-top-c"><div class="l">Workout Mode</div><div class="s">Quad Dominant · Live</div></div>
+      <button class="wm-icon-btn" id="mute-btn"><i class="ti ti-volume" style="font-size:16px"></i></button>
+    </div>
+
+    <!-- progress -->
+    <div class="wm-prog">
+      <div class="wm-prog-head"><span class="l">Session Progress</span><span class="r" id="prog-count">0/21 sets</span></div>
+      <div class="wm-bar"><div class="wm-bar-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="wm-dots" id="dots"></div>
+    </div>
+
+    <!-- exercise header -->
+    <div class="wm-ex" id="ex-card"></div>
+
+    <!-- wheels -->
+    <div class="wm-wheels">
+      <div class="wm-wheels-head"><span class="l" id="log-label">Log Set 1</span><span class="r" id="sets-remaining"></span></div>
+      <div class="wm-wheels-row">
+        <div class="wm-wheel-col">
+          <div class="wm-wheel-lbl">KG</div>
+          <div class="wm-wheel" id="weight-wheel"></div>
+        </div>
+        <div class="wm-divider"></div>
+        <div class="wm-wheel-col">
+          <div class="wm-wheel-lbl">Reps</div>
+          <div class="wm-wheel" id="reps-wheel"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- actions -->
+    <div class="wm-actions">
+      <button class="wm-nav-btn" id="prev-btn"><i class="ti ti-chevron-left" style="font-size:20px"></i></button>
+      <button class="wm-main-btn" id="main-btn"></button>
+      <button class="wm-nav-btn" id="next-btn"><i class="ti ti-chevron-right" style="font-size:20px"></i></button>
+    </div>
+
+    <!-- footer stats -->
+    <div class="wm-foot" id="foot"></div>
+
+    <!-- completion -->
+    <div class="wm-done" id="done">
+      <div class="wm-trophy" id="trophy"><i class="ti ti-trophy" style="font-size:44px"></i></div>
+      <div class="eyebrow">Session Complete</div>
+      <h1>CRUSHED IT</h1>
+      <p class="sub">Every set logged. Every rep counted. Recovery starts now.</p>
+      <div class="wm-done-stats" id="done-stats"></div>
+      <button class="wm-done-btn" id="done-btn">Done</button>
+    </div>
+  </div>
+
+  <!-- rest sheet -->
+  <div class="rest-scrim" id="rest-scrim"></div>
+  <div class="rest-sheet" id="rest-sheet">
+    <div class="rest-inner">
+      <div class="rest-prog"><div class="rest-prog-fill" id="rest-prog-fill"></div></div>
+      <div class="rest-body">
+        <div class="rest-head">
+          <div><p class="l" id="rest-eyebrow">Rest · Recover</p><h3>Catch your breath</h3></div>
+          <div class="rest-time" id="rest-time">1:30</div>
+        </div>
+        <div class="rest-btns">
+          <button class="rest-btn flex" id="rest-pause"><i class="ti ti-player-pause-filled" style="font-size:14px"></i> Pause</button>
+          <button class="rest-btn" id="rest-add"><i class="ti ti-plus" style="font-size:14px"></i> 15s</button>
+          <button class="rest-skip" id="rest-skip">Skip <i class="ti ti-player-skip-forward-filled" style="font-size:14px"></i></button>
+        </div>
+        <p class="rest-next">Next: <b id="rest-next-label">—</b></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const withAlpha = (hex,a) => { const h=hex.replace('#',''); return `rgba(${parseInt(h.slice(0,2),16)},${parseInt(h.slice(2,4),16)},${parseInt(h.slice(4,6),16)},${a})`; };
+
+// ── DATA (green theme dropped: Walking Lunges #00CC6A -> #FF4D00) ──
+const EXERCISES = [
+  { name:'Back Squat', targetSets:4, targetReps:8, startWeight:60, rest:90, color:'#BF00FF', primary:'Quads', tip:'Drive through mid-foot, chest tall.' },
+  { name:'Romanian Deadlift', targetSets:4, targetReps:10, startWeight:50, rest:75, color:'#FF0099', primary:'Hamstrings', tip:'Hinge at hips, soft knees.' },
+  { name:'Bulgarian Split Squat', targetSets:3, targetReps:12, startWeight:16, rest:60, color:'#FF4D00', primary:'Glutes', tip:'Front knee tracks over toes.' },
+  { name:'Leg Press', targetSets:3, targetReps:15, startWeight:120, rest:60, color:'#6FD9FF', primary:'Quads', tip:'Full ROM, controlled tempo.' },
+  { name:'Walking Lunges', targetSets:3, targetReps:20, startWeight:12, rest:60, color:'#FF4D00', primary:'Glutes', tip:'Long stride, upright torso.' },
+  { name:'Standing Calf Raise', targetSets:4, targetReps:15, startWeight:40, rest:45, color:'#BF00FF', primary:'Calves', tip:'Pause at the top, full stretch at bottom.' },
+];
+
+const weightValues = Array.from({length:81}, (_,i)=>i*2.5);
+const repValues = Array.from({length:51}, (_,i)=>i);
+
+let state = { exIdx:0, logs:EXERCISES.map(()=>[]), weight:EXERCISES[0].startWeight, reps:EXERCISES[0].targetReps, muted:false };
+
+// ── Tick sound ──
+let audioCtx = null;
+function tick(freq=880, dur=0.08, gain=0.12) {
+  if (state.muted) return;
+  if (!audioCtx) { const AC = window.AudioContext||window.webkitAudioContext; if(AC) audioCtx=new AC(); }
+  if (!audioCtx) return;
+  const osc=audioCtx.createOscillator(), g=audioCtx.createGain();
+  osc.type='triangle'; osc.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(gain,audioCtx.currentTime+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+dur);
+  osc.connect(g).connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime+dur+0.02);
+}
+
+// ── Wheel picker ──
+function buildWheel(el, values, value, accent, onChange, tickFreq) {
+  const ITEM_H = 44;
+  el.innerHTML = `
+    <div class="wm-band" style="background:linear-gradient(90deg,${withAlpha(accent,0.08)},${withAlpha(accent,0.16)},${withAlpha(accent,0.08)});box-shadow:inset 0 0 0 1px ${withAlpha(accent,0.35)},0 0 18px ${withAlpha(accent,0.18)}"></div>
+    <div class="wm-fade-t"></div><div class="wm-fade-b"></div>
+    <div class="wm-scroll hide-sb">
+      <div style="height:66px"></div>
+      ${values.map(v=>`<div class="wm-item" data-v="${v}"><span>${v}</span></div>`).join('')}
+      <div style="height:66px"></div>
+    </div>`;
+  const scroll = el.querySelector('.wm-scroll');
+  const items = [...el.querySelectorAll('.wm-item')];
+  function paint(selV) {
+    items.forEach(it => {
+      const v = parseFloat(it.dataset.v), s = it.querySelector('span'), sel = v===selV;
+      s.style.fontSize = sel ? '30px' : '18px';
+      s.style.color = sel ? accent : '#94A3B8';
+      s.style.textShadow = sel ? `0 0 18px ${withAlpha(accent,0.55)}` : 'none';
+    });
+  }
+  let lastIdx = values.indexOf(value), settle;
+  scroll.scrollTop = Math.max(0,lastIdx)*ITEM_H;
+  paint(value);
+  scroll.addEventListener('scroll', () => {
+    const idx = Math.max(0, Math.min(values.length-1, Math.round(scroll.scrollTop/ITEM_H)));
+    if (idx !== lastIdx) { lastIdx=idx; paint(values[idx]); tick(tickFreq,0.04,0.06); }
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      const v = values[idx]; onChange(v);
+      const target = idx*ITEM_H;
+      if (Math.abs(scroll.scrollTop-target)>0.5) scroll.scrollTo({top:target,behavior:'smooth'});
+    }, 90);
+  }, {passive:true});
+}
+
+// ── Render ──
+function ex() { return EXERCISES[state.exIdx]; }
+function totalDoneSets() { return state.logs.reduce((s,l)=>s+l.length,0); }
+function totalTargetSets() { return EXERCISES.reduce((s,e)=>s+e.targetSets,0); }
+function totalReps() { return state.logs.flat().reduce((s,l)=>s+l.reps,0); }
+function totalVolume() { return Math.round(state.logs.flat().reduce((s,l)=>s+l.reps*l.weight,0)); }
+function totalCalories() { return Math.round(totalVolume()*0.045 + totalReps()*1.2); } // rough demo estimate
+
+function renderAll() {
+  const e = ex(), accent = e.color;
+  const done = state.logs[state.exIdx].length;
+  const complete = done >= e.targetSets;
+  const isLast = state.exIdx === EXERCISES.length-1;
+
+  // aurora
+  document.getElementById('aurora').style.background = `
+    radial-gradient(ellipse at 15% 10%, ${withAlpha(accent,0.28)}, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, ${withAlpha('#6FD9FF',0.25)}, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, ${withAlpha(accent,0.2)}, transparent 60%)`;
+
+  // progress
+  document.getElementById('prog-count').textContent = `${totalDoneSets()}/${totalTargetSets()} sets`;
+  document.getElementById('prog-fill').style.width = (totalDoneSets()/totalTargetSets()*100)+'%';
+  document.getElementById('dots').innerHTML = EXERCISES.map((ee,i)=>{
+    const d = state.logs[i].length>=ee.targetSets, a = i===state.exIdx;
+    let style = 'background:#CBD5E1';
+    if (d) style = `background:${ee.color};box-shadow:0 0 8px ${ee.color}`;
+    else if (a) style = `background:${ee.color};box-shadow:0 0 0 3px ${withAlpha(ee.color,0.25)},0 0 10px ${ee.color};transform:scale(1.3)`;
+    return `<div class="wm-dot-wrap" data-dot="${i}"><div class="wm-dot" style="${style}"></div></div>`;
+  }).join('');
+  document.querySelectorAll('[data-dot]').forEach(d=>d.addEventListener('click',()=>{ state.exIdx=+d.dataset.dot; resetWheels(); renderAll(); }));
+
+  // exercise card
+  document.getElementById('ex-card').innerHTML = `
+    <div class="wm-ex-glow" style="background:radial-gradient(circle,${withAlpha(accent,0.5)},transparent 70%)"></div>
+    <div class="wm-ex-top">
+      <div style="min-width:0">
+        <div class="wm-ex-meta">
+          <span class="wm-ex-count" style="color:${accent}">Exercise ${state.exIdx+1} of ${EXERCISES.length}</span>
+          <span class="wm-ex-tag" style="background:${accent};box-shadow:0 0 10px ${withAlpha(accent,0.6)}">${e.primary}</span>
+        </div>
+        <div class="wm-ex-name">${e.name}</div>
+        <div class="wm-ex-tip">${e.tip}</div>
+      </div>
+      <div class="wm-ex-target">
+        <div class="l">Target</div>
+        <div class="v" style="color:${accent};text-shadow:0 0 10px ${withAlpha(accent,0.4)}">${e.targetSets} × ${e.targetReps}</div>
+      </div>
+    </div>
+    <div class="wm-chips">
+      ${Array.from({length:e.targetSets}).map((_,i)=>{
+        const d = i<done, isCur = i===done && !complete, log = state.logs[state.exIdx][i];
+        let style;
+        if (d) style = `background:linear-gradient(135deg,${accent},${withAlpha(accent,0.75)});color:#fff;box-shadow:0 2px 10px ${withAlpha(accent,0.4)}`;
+        else if (isCur) style = `background:#fff;color:${accent};box-shadow:inset 0 0 0 1.5px ${accent},0 0 12px ${withAlpha(accent,0.25)}`;
+        else style = 'background:#F1F5F9;color:#94A3B8';
+        return `<div class="wm-chip" style="${style}"><span class="st">Set ${i+1}</span><span class="vl">${d&&log?`${log.weight}×${log.reps}`:isCur?'— · —':'—'}</span></div>`;
+      }).join('')}
+    </div>`;
+
+  // wheels header
+  document.getElementById('log-label').textContent = `Log Set ${done+1}`;
+  const rem = Math.max(0, e.targetSets-done);
+  document.getElementById('sets-remaining').textContent = complete ? 'Exercise complete' : `${rem} set${rem===1?'':'s'} to go`;
+
+  // main button
+  const mainBtn = document.getElementById('main-btn');
+  if (complete) {
+    mainBtn.innerHTML = isLast ? 'Finish Session <i class="ti ti-trophy" style="font-size:16px"></i>' : 'Next Exercise <i class="ti ti-chevron-right" style="font-size:18px"></i>';
+  } else {
+    mainBtn.innerHTML = '<i class="ti ti-check" style="font-size:18px"></i> Complete Set';
+  }
+  mainBtn.style.background = `linear-gradient(90deg,${accent},#FF0099)`;
+  mainBtn.style.boxShadow = `0 8px 24px ${withAlpha(accent,0.45)},0 0 30px ${withAlpha(accent,0.3)}`;
+
+  document.getElementById('prev-btn').disabled = state.exIdx===0;
+  document.getElementById('next-btn').disabled = isLast;
+
+  // footer (Volume -> Calories)
+  document.getElementById('foot').innerHTML = [
+    { l:'Sets', v:totalDoneSets(), c:'#BF00FF' },
+    { l:'Reps', v:totalReps(), c:'#FF0099' },
+    { l:'Calories', v:totalCalories(), c:'#FF4D00' },
+  ].map(s=>`<div class="wm-foot-stat"><i class="ti ti-flame" style="color:${s.c};font-size:14px"></i><div><div class="v" style="color:${s.c}">${s.v}</div><div class="l">${s.l}</div></div></div>`).join('');
+}
+
+function resetWheels() {
+  const e = ex();
+  state.weight = e.startWeight; state.reps = e.targetReps;
+  buildWheel(document.getElementById('weight-wheel'), weightValues, state.weight, e.color, v=>state.weight=v, 720);
+  buildWheel(document.getElementById('reps-wheel'), repValues, state.reps, e.color, v=>state.reps=v, 820);
+}
+
+// ── Actions ──
+function completeSet() {
+  const e = ex(), done = state.logs[state.exIdx].length;
+  if (done >= e.targetSets) return;
+  tick(1040,0.12,0.18);
+  state.logs[state.exIdx].push({ weight:state.weight, reps:state.reps });
+  const willDone = done+1 >= e.targetSets, isLast = state.exIdx===EXERCISES.length-1;
+  renderAll();
+  if (willDone && isLast) { setTimeout(showDone, 350); return; }
+  openRest();
+}
+function goNext() {
+  if (state.exIdx === EXERCISES.length-1) { showDone(); return; }
+  state.exIdx++; resetWheels(); renderAll();
+}
+function goPrev() { if (state.exIdx>0){ state.exIdx--; resetWheels(); renderAll(); } }
+
+document.getElementById('main-btn').addEventListener('click', () => {
+  const e = ex(), complete = state.logs[state.exIdx].length >= e.targetSets;
+  if (complete) goNext(); else completeSet();
+});
+document.getElementById('prev-btn').addEventListener('click', goPrev);
+document.getElementById('next-btn').addEventListener('click', goNext);
+document.getElementById('close-btn').addEventListener('click', ()=>{ window.location.href='programme-v3.html'; });
+document.getElementById('mute-btn').addEventListener('click', e2 => {
+  state.muted = !state.muted;
+  document.getElementById('mute-btn').innerHTML = `<i class="ti ti-volume${state.muted?'-off':''}" style="font-size:16px"></i>`;
+});
+
+// ── Rest sheet ──
+let restTimer=null, restRemaining=0, restDuration=0, restPaused=false;
+function openRest() {
+  const e = ex();
+  restDuration = e.rest; restRemaining = e.rest; restPaused = false;
+  const accent = e.color;
+  document.getElementById('rest-eyebrow').style.color = accent;
+  document.getElementById('rest-time').style.color = accent;
+  document.getElementById('rest-time').style.textShadow = `0 0 16px ${withAlpha(accent,0.5)}`;
+  document.getElementById('rest-prog-fill').style.background = `linear-gradient(90deg,${accent},${withAlpha(accent,0.6)})`;
+  document.getElementById('rest-prog-fill').style.boxShadow = `0 0 10px ${accent}`;
+  document.getElementById('rest-skip').style.background = `linear-gradient(135deg,${accent},${withAlpha(accent,0.7)})`;
+  document.getElementById('rest-skip').style.boxShadow = `0 4px 16px ${withAlpha(accent,0.45)}`;
+  // next label
+  const done = state.logs[state.exIdx].length, complete = done>=e.targetSets, isLast = state.exIdx===EXERCISES.length-1;
+  const nextLabel = complete ? (isLast?'Finish session':`${EXERCISES[state.exIdx+1].name} · Set 1`) : `${e.name} · Set ${done+1}`;
+  document.getElementById('rest-next-label').textContent = nextLabel;
+  document.getElementById('rest-pause').innerHTML = '<i class="ti ti-player-pause-filled" style="font-size:14px"></i> Pause';
+  updateRestUI();
+  document.getElementById('rest-scrim').classList.add('open');
+  document.getElementById('rest-sheet').classList.add('open');
+  clearInterval(restTimer);
+  restTimer = setInterval(() => {
+    if (restPaused) return;
+    restRemaining--;
+    if (restRemaining<=3 && restRemaining>0) tick(900+(4-restRemaining)*80,0.1,0.15);
+    if (restRemaining<=0) { tick(1200,0.25,0.18); closeRest(true); return; }
+    updateRestUI();
+  }, 1000);
+}
+function updateRestUI() {
+  const mm = Math.floor(Math.max(0,restRemaining)/60), ss = Math.max(0,restRemaining)%60;
+  document.getElementById('rest-time').textContent = `${mm}:${ss.toString().padStart(2,'0')}`;
+  document.getElementById('rest-prog-fill').style.width = (Math.max(0,restRemaining)/restDuration*100)+'%';
+}
+function closeRest(advance) {
+  clearInterval(restTimer);
+  document.getElementById('rest-scrim').classList.remove('open');
+  document.getElementById('rest-sheet').classList.remove('open');
+  const e = ex(), complete = state.logs[state.exIdx].length>=e.targetSets, isLast = state.exIdx===EXERCISES.length-1;
+  if (advance && complete && !isLast) { state.exIdx++; resetWheels(); renderAll(); }
+}
+document.getElementById('rest-pause').addEventListener('click', () => {
+  restPaused = !restPaused;
+  document.getElementById('rest-pause').innerHTML = restPaused
+    ? '<i class="ti ti-player-play-filled" style="font-size:14px"></i> Resume'
+    : '<i class="ti ti-player-pause-filled" style="font-size:14px"></i> Pause';
+});
+document.getElementById('rest-add').addEventListener('click', () => { restRemaining += 15; updateRestUI(); });
+document.getElementById('rest-skip').addEventListener('click', () => closeRest(true));
+document.getElementById('rest-scrim').addEventListener('click', () => closeRest(false));
+
+// ── Completion ──
+function showDone() {
+  const accent = ex().color;
+  const t = document.getElementById('trophy');
+  t.style.background = `linear-gradient(135deg,${accent},#FF0099)`;
+  t.style.boxShadow = `0 0 40px ${withAlpha(accent,0.6)},0 0 80px ${withAlpha('#FF0099',0.4)}`;
+  document.getElementById('done-stats').innerHTML = [
+    { l:'Sets', v:totalDoneSets(), c:'#BF00FF' },
+    { l:'Reps', v:totalReps(), c:'#FF0099' },
+    { l:'Calories', v:totalCalories(), c:'#FF4D00' },
+  ].map(s=>`<div class="wm-done-stat"><div class="v" style="color:${s.c};text-shadow:0 0 12px ${withAlpha(s.c,0.4)}">${s.v}</div><div class="l">${s.l}</div></div>`).join('');
+  document.getElementById('done').classList.add('show');
+}
+document.getElementById('done-btn').addEventListener('click', ()=>{ window.location.href='programme-v3.html'; });
+
+// init
+resetWheels();
+renderAll();
+</script>
+</body>
+</html>
