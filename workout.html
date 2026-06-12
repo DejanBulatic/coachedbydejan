@@ -220,7 +220,7 @@ const EXERCISES = [
   { name:'Standing Calf Raise', targetSets:4, targetReps:15, startWeight:40, rest:45, color:'#BF00FF', primary:'Calves', tip:'Pause at the top, full stretch at bottom.' },
 ];
 
-const weightValues = Array.from({length:81}, (_,i)=>i*2.5);
+const weightValues = Array.from({length:401}, (_,i)=>i*0.5);
 const repValues = Array.from({length:51}, (_,i)=>i);
 
 let state = { exIdx:0, logs:EXERCISES.map(()=>[]), weight:EXERCISES[0].startWeight, reps:EXERCISES[0].targetReps, muted:false };
