@@ -71,7 +71,14 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .nav-item.active .pill { opacity:1; transform:scale(1); }
 
 /* ══ FORM SHELL ══ */
-.shell { position:fixed; inset:0; z-index:90; display:none; flex-direction:column; background-color:#e8f5f2; }
+.shell { position:fixed; inset:0; z-index:90; display:none; flex-direction:column;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color:#f5f0fa; }
 .shell .bg-tint { position:absolute; inset:0; opacity:0.5; transition:background-color 0.6s ease; pointer-events:none; }
 .shell-inner { position:relative; z-index:1; height:100%; max-width:448px; margin:0 auto; width:100%; display:flex; flex-direction:column; }
 .form-top { padding:48px 20px 0; }
@@ -134,7 +141,14 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; tex
 .photo-skip { text-align:center; font-size:14px; color:#94a3b8; font-weight:500; margin-top:12px; }
 
 /* success */
-.success { position:fixed; inset:0; z-index:95; display:none; flex-direction:column; align-items:center; justify-content:center; padding:0 32px; text-align:center; background-color:#e8f5f2; }
+.success { position:fixed; inset:0; z-index:95; display:none; flex-direction:column; align-items:center; justify-content:center; padding:0 32px; text-align:center;
+  background:
+    radial-gradient(ellipse at 10% 0%, #ddd0f0 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 5%, #f5ddd8 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 40%, #faf4ec 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, #e8e0f4 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, #f0e8f8 0%, transparent 45%);
+  background-color:#f5f0fa; }
 .success.show { display:flex; }
 .suc-check { width:96px; height:96px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:24px; color:#fff; background:linear-gradient(135deg,#BF00FF,#FF0099); box-shadow:0 0 40px rgba(191,0,255,0.5); animation:sucPop 0.5s cubic-bezier(0.34,1.5,0.64,1); }
 @keyframes sucPop { 0%{transform:scale(0)} 100%{transform:scale(1)} }
