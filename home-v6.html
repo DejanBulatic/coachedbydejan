@@ -130,11 +130,15 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
   box-shadow:0 0 10px rgba(111,217,255,0.8), inset 0 0 6px rgba(111,217,255,0.35);
 }
 .cal-cell.done i { position:absolute; color:#FF0099; font-size:25px; }
-/* today: green neon circle, no tick */
+/* today: orange neon circle (matches progress bar end) */
 .cal-cell.today {
-  border:2px solid #00CC6A; color:#fff; font-weight:800;
-  box-shadow:0 0 10px rgba(0,204,106,0.7), inset 0 0 6px rgba(0,204,106,0.25);
+  border:2px solid #FF4D00; color:#fff; font-weight:800;
+  box-shadow:0 0 10px rgba(255,77,0,0.7), inset 0 0 6px rgba(255,77,0,0.25);
 }
+.cal-grid { position:relative; }
+.cal-prog-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+.cal-cell { z-index:1; }
+.cal-cell.today { z-index:2; background:rgba(15,23,42,0.85); }
 
 /* ── SECTION HEADERS ── */
 .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
@@ -450,26 +454,65 @@ setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 3
   if (!cal) return;
   // Demo month: 30 days, week starts Monday. Today = 18.
   const DAYS_IN_MONTH = 30;
-  const FIRST_WEEKDAY = 1; // 0=Mon ... 6=Sun. Month starts on Tuesday here for a natural look
+  const FIRST_WEEKDAY = 1; // 0=Mon ... 6=Sun
   const TODAY = 18;
-  // Training days completed so far (pink + tick) — e.g. Mon/Wed/Fri pattern up to today
-  const trainingDone = [2,4,6,9,11,13,16];
   const weekdays = ['M','T','W','T','F','S','S'];
 
   let wd = '<div class="cal-weekdays">' + weekdays.map(d => `<div class="cal-wd">${d}</div>`).join('') + '</div>';
   let cells = '';
-  // leading empties
   for (let i = 0; i < FIRST_WEEKDAY; i++) cells += '<div class="cal-cell empty"></div>';
   for (let d = 1; d <= DAYS_IN_MONTH; d++) {
     if (d === TODAY) {
       cells += `<div class="cal-cell today">${d}</div>`;
-    } else if (trainingDone.includes(d)) {
-      cells += `<div class="cal-cell done"><i class="ti ti-check"></i></div>`;
     } else {
       cells += `<div class="cal-cell plain">${d}</div>`;
     }
   }
-  cal.innerHTML = wd + '<div class="cal-grid">' + cells + '</div>';
+  cal.innerHTML = wd + '<div class="cal-grid" id="cal-grid">' + cells + '</div>';
+
+  // ── SNAKING PROGRESS BAR over passed days → today ──
+  requestAnimationFrame(() => {
+    const grid = document.getElementById('cal-grid');
+    if (!grid) return;
+    const allCells = [...grid.children];
+    // index of day cell within grid (accounting for leading empties)
+    function cellForDay(day) { return allCells[FIRST_WEEKDAY + day - 1]; }
+    const gridRect = grid.getBoundingClientRect();
+    // build points from day 1 to TODAY at each cell center
+    const pts = [];
+    for (let d = 1; d <= TODAY; d++) {
+      const cell = cellForDay(d); if (!cell) continue;
+      const r = cell.getBoundingClientRect();
+      pts.push({ x: r.left - gridRect.left + r.width/2, y: r.top - gridRect.top + r.height/2, col: (FIRST_WEEKDAY + d - 1) % 7 });
+    }
+    if (pts.length < 2) return;
+    // build a path that snakes: straight across a row, then curve down to next row's start
+    let dpath = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) {
+      const prev = pts[i-1], p = pts[i];
+      if (p.col === 0 && prev.col === 6) {
+        // wrap: curve from right edge down to left edge of next row
+        const midY = (prev.y + p.y) / 2;
+        dpath += ` C ${prev.x+18} ${prev.y}, ${prev.x+18} ${midY}, ${(prev.x+p.x)/2} ${midY}`;
+        dpath += ` S ${p.x-18} ${p.y}, ${p.x} ${p.y}`;
+      } else {
+        dpath += ` L ${p.x} ${p.y}`;
+      }
+    }
+    const W = gridRect.width, H = gridRect.height;
+    const svg = `<svg class="cal-prog-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="calProg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#BF00FF"/><stop offset="55%" stop-color="#FF0099"/><stop offset="100%" stop-color="#FF4D00"/>
+        </linearGradient>
+      </defs>
+      <path d="${dpath}" fill="none" stroke="url(#calProg)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px rgba(255,77,0,0.5))" id="calProgPath"/>
+    </svg>`;
+    grid.insertAdjacentHTML('afterbegin', svg);
+    // animate draw
+    const path = document.getElementById('calProgPath');
+    if (path) { const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len; setTimeout(()=>{ path.style.transition='stroke-dashoffset 1.4s ease'; path.style.strokeDashoffset = 0; }, 200); }
+  });
 })();
 
 // ── CONCENTRIC KG RINGS ──
