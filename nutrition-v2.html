@@ -436,7 +436,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
   const consumed=1340, goal=2100, pct=Math.min(consumed/goal,1), off=c-pct*c, remaining=Math.max(goal-consumed,0);
   document.getElementById('cal-ring').innerHTML = `
     <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
-      <defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#BF00FF"/><stop offset="50%" stop-color="#FF0099"/><stop offset="100%" stop-color="#FF4D00"/></linearGradient></defs>
+      <defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FF4D00"/><stop offset="50%" stop-color="#FF0099"/><stop offset="100%" stop-color="#BF00FF"/></linearGradient></defs>
       <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="${stroke}"/>
       <circle id="cr" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#cg)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="filter:drop-shadow(0 0 6px rgba(255,0,153,0.45))"/>
     </svg>

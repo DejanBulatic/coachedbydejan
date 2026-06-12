@@ -53,6 +53,22 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .hero-grid .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-bottom:4px; }
 .hero-grid .v { font-weight:700; color:#fff; }
 
+
+/* total change dark card = exact copy of Check-in hero (calci- prefix) */
+.calci-hero { border-radius:24px; overflow:hidden; position:relative; padding:24px; box-shadow:0 20px 50px rgba(15,23,42,0.3); }
+.calci-hero > .calci-bg-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.calci-hero > .calci-ov { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.93) 100%); }
+.calci-hero .glow { position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; opacity:0.5; pointer-events:none; box-shadow:0 0 120px 60px rgba(255,0,153,0.4); }
+.calci-hero-in { position:relative; }
+.calci-due { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:#FF0099; color:#fff; box-shadow:0 0 16px rgba(255,0,153,0.5); margin-bottom:16px; }
+.calci-hero h2 { font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.01em; }
+.calci-meta { display:flex; gap:10px; margin:20px 0 0; }
+.calci-chip { flex:1; backdrop-filter:blur(10px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:12px; text-align:center; }
+.calci-chip .v { font-weight:800; font-size:20px; color:#fff; }
+.calci-chip .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-top:3px; }
+.calci-hero-in .hero-big { margin-top:12px; }
+.calci-hero-in .hero-unit { color:rgba(255,255,255,0.7); }
+
 /* RANGE TOGGLE */
 .range-toggle { display:flex; background:#fff; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.05); border-radius:999px; padding:4px; }
 .range-btn { position:relative; padding:5px 14px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; border:none; background:none; cursor:pointer; transition:color 0.2s; }
@@ -105,13 +121,13 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .photo { position:relative; aspect-ratio:3/4; background:#0a0e1a; }
 .photo img { width:100%; height:100%; object-fit:cover; }
 .photo .ov { position:absolute; inset:0; background:linear-gradient(to top,#0a0e1a,transparent 50%); }
-.photo .tag { position:absolute; top:12px; left:12px; padding:4px 8px; border-radius:6px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
-.photo .tag p { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; }
-.photo .tag.before { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); }
+.photo .tag { position:absolute; top:12px; left:12px; padding:5px 12px; border-radius:999px; }
+.photo .tag p { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
+.photo .tag.before { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
 .photo .tag.before p { color:rgba(255,255,255,0.9); }
-.photo .tag.today { background:rgba(255,0,153,0.2); border:1px solid rgba(255,0,153,0.4); box-shadow:0 0 12px rgba(255,0,153,0.33); }
+.photo .tag.today { background:#FF0099; border:none; box-shadow:0 0 16px rgba(255,0,153,0.5); }
 .photo .tag.today p { color:#fff; }
-.photo .cap { position:absolute; bottom:12px; left:12px; color:#fff; padding:6px 10px; border-radius:10px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.18); }
+.photo .cap { position:absolute; bottom:12px; left:12px; color:#fff; padding:8px 12px; border-radius:14px; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); }
 .photo .cap .d { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; opacity:0.7; }
 .photo .cap .w { font-weight:700; }
 .photo-foot { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:#0a0e1a; }
@@ -187,25 +203,23 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 
     <main class="main">
 
-      <!-- Hero stat -->
+      <!-- Hero stat (exact Check-in card) -->
       <section>
-        <div class="hero">
-          <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=800&h=600&fit=crop" alt="">
-          <div class="ov"></div>
-          <div class="hero-in">
-            <p class="eyebrow" style="margin-bottom:12px">Total Change · Since Day 1</p>
+        <div class="calci-hero">
+          <img class="calci-bg-img" src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=800&h=600&fit=crop" alt="">
+          <div class="calci-ov"></div>
+          <div class="glow"></div>
+          <div class="calci-hero-in">
+            <span class="calci-due"><i class="ti ti-trending-down" style="font-size:13px"></i> 2.3% body fat in 16 weeks</span>
+            <h2>Total Change · Since Day 1</h2>
             <div class="hero-big">
               <span class="hero-num" id="hero-num">-7.6</span>
               <span class="hero-unit">kg</span>
             </div>
-            <div class="hero-badges">
-              <span class="hero-bf"><i class="ti ti-trending-down" style="font-size:12px"></i> -2.3% body fat</span>
-              <span class="hero-wks">in 16 weeks</span>
-            </div>
-            <div class="hero-grid">
-              <div><div class="l">Start</div><div class="v">78.2 kg</div></div>
-              <div><div class="l">Today</div><div class="v">70.6 kg</div></div>
-              <div><div class="l">Goal</div><div class="v" style="color:#BF00FF">68.0 kg</div></div>
+            <div class="calci-meta">
+              <div class="calci-chip"><div class="v">78.2</div><div class="l">Start</div></div>
+              <div class="calci-chip"><div class="v">70.6</div><div class="l">Today</div></div>
+              <div class="calci-chip"><div class="v">68.0</div><div class="l">Goal</div></div>
             </div>
           </div>
         </div>
