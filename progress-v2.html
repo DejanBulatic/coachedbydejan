@@ -75,11 +75,14 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .range-btn.active { color:#fff; background:linear-gradient(to right,#BF00FF,#FF0099); }
 
 /* WEIGHT CHART CARD */
-.chart-card { padding:20px; }
+.chart-card { padding:20px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 50px rgba(15,23,42,0.3); }
+.chart-card > .chart-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.chart-card > .chart-ov { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg, rgba(30,41,59,0.88) 0%, rgba(15,23,42,0.94) 100%); }
+.chart-card > *:not(.chart-bg):not(.chart-ov) { position:relative; z-index:1; }
 .chart-top { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px; }
-.chart-top .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; }
-.chart-top .big { font-weight:800; font-size:30px; color:#0f172a; }
-.chart-top .big small { font-size:14px; color:#94a3b8; font-weight:600; margin-left:2px; }
+.chart-top .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); }
+.chart-top .big { font-weight:800; font-size:30px; color:#fff; }
+.chart-top .big small { font-size:14px; color:rgba(255,255,255,0.5); font-weight:600; margin-left:2px; }
 .chart-delta { display:flex; align-items:center; gap:4px; font-size:14px; font-weight:700; color:#00CC6A; }
 
 /* MEASUREMENTS */
@@ -236,6 +239,8 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
           </div>
         </div>
         <div class="card chart-card">
+          <img class="chart-bg" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop" alt="">
+          <div class="chart-ov"></div>
           <div class="chart-top">
             <div><div class="l">Current</div><div class="big">70.6<small>kg</small></div></div>
             <div class="chart-delta" id="chart-delta"><i class="ti ti-trending-down" style="font-size:16px"></i> <span>-5.9 this range</span></div>
@@ -364,8 +369,8 @@ function drawChart(data) {
   // smooth with quadratic
   path = pts.map((p,i)=>{ if(i===0)return `M ${p.x} ${p.y}`; const pr=pts[i-1]; const cx=(pr.x+p.x)/2; return `Q ${cx} ${pr.y} ${cx} ${(pr.y+p.y)/2} T ${p.x} ${p.y}`; }).join(' ');
   const area = `${path} L ${pts[pts.length-1].x} ${H-padY} L ${pts[0].x} ${H-padY} Z`;
-  const grid = [0.25,0.5,0.75].map(t=>`<line x1="${padX}" x2="${W-padX}" y1="${padY+(H-padY*2)*t}" y2="${padY+(H-padY*2)*t}" stroke="rgba(15,23,42,0.06)" stroke-dasharray="3 4"/>`).join('');
-  const dots = pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="white" stroke="${ACCENT.pink}" stroke-width="2"/>${p.l?`<text x="${p.x}" y="${H-4}" text-anchor="middle" font-size="9" font-weight="600" fill="rgba(100,116,139,0.9)">${p.l}</text>`:''}`).join('');
+  const grid = [0.25,0.5,0.75].map(t=>`<line x1="${padX}" x2="${W-padX}" y1="${padY+(H-padY*2)*t}" y2="${padY+(H-padY*2)*t}" stroke="rgba(255,255,255,0.1)" stroke-dasharray="3 4"/>`).join('');
+  const dots = pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="white" stroke="${ACCENT.pink}" stroke-width="2"/>${p.l?`<text x="${p.x}" y="${H-4}" text-anchor="middle" font-size="9" font-weight="600" fill="rgba(255,255,255,0.6)">${p.l}</text>`:''}`).join('');
   const last = pts[pts.length-1];
   document.getElementById('chart').innerHTML = `
     <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
