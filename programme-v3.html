@@ -53,6 +53,24 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 /* ── TODAY SESSION ── */
 .today-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .today-live { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 10px; border-radius:999px; background:#FFE6F2; color:#FF0099; }
+/* ── LOCKED DARK CARD (standard from Check-in hero) ── */
+.dcard { border-radius:24px; overflow:hidden; position:relative; padding:24px; box-shadow:0 20px 50px rgba(15,23,42,0.3); }
+.dcard > .dcard-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.dcard > .dcard-ov { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.93) 100%); }
+.dcard .dcard-glow { position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; opacity:0.5; pointer-events:none; box-shadow:0 0 120px 60px rgba(255,0,153,0.4); }
+.dcard-in { position:relative; }
+.dcard-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:#FF0099; color:#fff; box-shadow:0 0 16px rgba(255,0,153,0.5); margin-bottom:16px; }
+.dcard-in h2 { font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.01em; line-height:1.2; }
+.dcard-meta { display:flex; gap:10px; margin:20px 0; }
+.dcard-chip { flex:1; backdrop-filter:blur(10px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:12px 8px; text-align:center; }
+.dcard-chip .ic { font-size:20px; display:block; margin-bottom:4px; }
+.dcard-chip .v { font-weight:800; font-size:18px; color:#fff; }
+.dcard-chip .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-top:2px; }
+.dcard-prog-head { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:8px; }
+.dcard-prog-head .l { font-weight:600; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.06em; font-size:10px; }
+.dcard-prog-head .r { font-weight:800; color:#fff; }
+.dcard-bar { height:14px; width:100%; background:rgba(255,255,255,0.12); border-radius:999px; overflow:hidden; }
+.dcard-bar-fill { height:100%; width:0; border-radius:999px; background:linear-gradient(to right,#BF00FF,#FF0099,#FF4D00); box-shadow:0 0 12px rgba(255,0,153,0.6); transition:width 1.2s ease; }
 .today-card { position:relative; border-radius:24px; overflow:hidden; height:340px; box-shadow:0 20px 50px rgba(120,40,160,0.14); }
 .today-card > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .today-ov { position:absolute; inset:0; background:linear-gradient(to top, #0f172a, rgba(15,23,42,0.45) 45%, rgba(15,23,42,0.1)); }
@@ -217,23 +235,22 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 
       <!-- Today's Session -->
       <section>
-        <div class="today-card">
-          <img src="https://images.unsplash.com/photo-1626337920103-ae64b9c688e4?w=800&h=700&fit=crop" alt="">
-          <div class="today-ov"></div>
-          <div class="today-stats">
-            <div class="stat-chip"><i class="ti ti-clock" style="color:#fff"></i><span>60m</span></div>
-            <div class="stat-chip"><i class="ti ti-flame" style="color:#FF4D00"></i><span>480 cal</span></div>
-            <div class="stat-chip"><i class="ti ti-target" style="color:#FF0099"></i><span>6 ex</span></div>
-          </div>
-          <div class="today-panel-wrap">
-            <div class="today-panel">
-              <span class="today-tag">Lower Body Hypertrophy</span>
-              <div class="today-name">Quad Dominant</div>
-              <div class="swipe-track" id="swipe-track">
-                <div class="swipe-fill" id="swipe-fill"></div>
-                <div class="swipe-label" id="swipe-label">Slide to Begin</div>
-                <div class="swipe-handle" id="swipe-handle"><i class="ti ti-chevron-right"></i></div>
-              </div>
+        <div class="dcard">
+          <img class="dcard-img" src="https://images.unsplash.com/photo-1626337920103-ae64b9c688e4?w=800&h=700&fit=crop" alt="">
+          <div class="dcard-ov"></div>
+          <div class="dcard-glow"></div>
+          <div class="dcard-in">
+            <span class="dcard-badge"><i class="ti ti-barbell" style="font-size:13px"></i> Lower Body Hypertrophy</span>
+            <h2>Quad Dominant</h2>
+            <div class="dcard-meta">
+              <div class="dcard-chip"><div class="v">60</div><div class="l">Minutes</div></div>
+              <div class="dcard-chip"><div class="v">6</div><div class="l">Exercises</div></div>
+              <div class="dcard-chip"><div class="v">24</div><div class="l">Sets</div></div>
+            </div>
+            <div class="swipe-track" id="swipe-track">
+              <div class="swipe-fill" id="swipe-fill"></div>
+              <div class="swipe-label" id="swipe-label">Slide to Begin</div>
+              <div class="swipe-handle" id="swipe-handle"><i class="ti ti-chevron-right"></i></div>
             </div>
           </div>
         </div>
