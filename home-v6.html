@@ -227,6 +227,26 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .badge-name.unlocked { color:#334155; }
 .badge-name.locked { color:#94a3b8; }
 
+
+/* ── LOCKED DARK CARD (standard from Check-in hero) ── */
+.dcard { border-radius:24px; overflow:hidden; position:relative; padding:24px; box-shadow:0 20px 50px rgba(15,23,42,0.3); }
+.dcard > .dcard-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.dcard > .dcard-ov { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg, rgba(30,41,59,0.85) 0%, rgba(15,23,42,0.93) 100%); }
+.dcard .dcard-glow { position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; opacity:0.5; pointer-events:none; box-shadow:0 0 120px 60px rgba(255,0,153,0.4); }
+.dcard-in { position:relative; }
+.dcard-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:#FF0099; color:#fff; box-shadow:0 0 16px rgba(255,0,153,0.5); margin-bottom:16px; }
+.dcard-in h2 { font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.01em; line-height:1.2; }
+.dcard-meta { display:flex; gap:10px; margin:20px 0; }
+.dcard-chip { flex:1; backdrop-filter:blur(10px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:12px 8px; text-align:center; }
+.dcard-chip .ic { font-size:20px; display:block; margin-bottom:4px; }
+.dcard-chip .v { font-weight:800; font-size:18px; color:#fff; }
+.dcard-chip .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-top:2px; }
+.dcard-prog-head { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:8px; }
+.dcard-prog-head .l { font-weight:600; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.06em; font-size:10px; }
+.dcard-prog-head .r { font-weight:800; color:#fff; }
+.dcard-bar { height:14px; width:100%; background:rgba(255,255,255,0.12); border-radius:999px; overflow:hidden; }
+.dcard-bar-fill { height:100%; width:0; border-radius:999px; background:linear-gradient(to right,#BF00FF,#FF0099,#FF4D00); box-shadow:0 0 12px rgba(255,0,153,0.6); transition:width 1.2s ease; }
+
 /* ── STAY CONNECTED ── */
 .connect-card { padding:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; margin-bottom:12px; }
 .connect-left { display:flex; align-items:center; gap:16px; }
@@ -270,18 +290,24 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 
     <main class="main">
 
-      <!-- Gamification -->
+      <!-- Gamification (locked dark card) -->
       <section>
-        <div class="card gam">
-          <div class="gam-motiv" id="gam-motiv">You're 2 sessions away from owning Week 4.</div>
-          <div class="gam-stats">
-            <div class="gam-stat"><span class="ic" style="color:#BF00FF"><i class="ti ti-barbell"></i></span><span class="val">24</span><span class="lbl">Workouts</span></div>
-            <div class="gam-stat"><span class="ic" style="color:#FF0099"><i class="ti ti-calendar"></i></span><span class="val">4</span><span class="lbl">Weeks</span></div>
-            <div class="gam-stat"><span class="ic" style="color:#FF4D00"><i class="ti ti-flame"></i></span><span class="val">12k</span><span class="lbl">Cals</span></div>
-            <div class="gam-stat"><span class="ic" style="color:#FFB800"><i class="ti ti-trophy"></i></span><span class="val">5</span><span class="lbl">Badges</span></div>
+        <div class="dcard">
+          <img class="dcard-img" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&h=600&fit=crop" alt="">
+          <div class="dcard-ov"></div>
+          <div class="dcard-glow"></div>
+          <div class="dcard-in">
+            <span class="dcard-badge"><i class="ti ti-calendar" style="font-size:13px"></i> Mon · Jun 6</span>
+            <h2 id="gam-motiv">You're 2 sessions away from owning Week 4</h2>
+            <div class="dcard-meta">
+              <div class="dcard-chip"><span class="ic" style="color:#BF00FF"><i class="ti ti-barbell"></i></span><div class="v">24</div><div class="l">Workouts</div></div>
+              <div class="dcard-chip"><span class="ic" style="color:#FF0099"><i class="ti ti-calendar"></i></span><div class="v">4</div><div class="l">Weeks</div></div>
+              <div class="dcard-chip"><span class="ic" style="color:#FF4D00"><i class="ti ti-flame"></i></span><div class="v">12k</div><div class="l">Cals</div></div>
+              <div class="dcard-chip"><span class="ic" style="color:#FFE000"><i class="ti ti-trophy"></i></span><div class="v">5</div><div class="l">Badges</div></div>
+            </div>
+            <div class="dcard-prog-head"><span class="l">Programme Progress</span><span class="r">33%</span></div>
+            <div class="dcard-bar"><div class="dcard-bar-fill" id="gam-fill"></div></div>
           </div>
-          <div class="gam-prog-head"><span class="l">Programme Progress</span><span class="r">33%</span></div>
-          <div class="gam-bar"><div class="gam-bar-fill" id="gam-fill"></div></div>
         </div>
       </section>
 
