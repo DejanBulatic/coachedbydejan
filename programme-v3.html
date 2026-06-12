@@ -45,6 +45,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .header .wk .eyebrow { display:block; margin-bottom:2px; }
 .header .wk .num { font-size:26px; font-weight:800; color:#FF0099; letter-spacing:-0.02em; }
 .header .wk .num small { color:#cbd5e1; font-size:16px; font-weight:700; }
+.prog-sub { font-size:14px; color:#64748b; font-weight:500; line-height:1.5; margin-top:8px; max-width:20rem; }
 
 .main { padding:0 20px; display:flex; flex-direction:column; gap:32px; }
 
@@ -60,7 +61,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .stat-chip span { color:#fff; font-size:12px; font-weight:700; }
 .today-panel-wrap { position:absolute; bottom:0; left:0; right:0; padding:16px; }
 .today-panel { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:16px; padding:18px; }
-.today-tag { display:inline-block; padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#BF00FF; box-shadow:0 0 10px rgba(191,0,255,0.5); margin-bottom:8px; }
+.today-tag { display:inline-block; padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#FF0099; box-shadow:0 0 10px rgba(255,0,153,0.5); margin-bottom:8px; }
 .today-name { font-size:19px; font-weight:700; color:#fff; margin-bottom:16px; }
 
 /* swipe-to-begin (from home-v6) */
@@ -80,7 +81,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .preview-teaser .chev { color:#cbd5e1; font-size:20px; margin-left:auto; }
 
 /* ── THIS WEEK ── */
-.week-list { display:flex; flex-direction:column; gap:8px; }
+.week-list { display:flex; flex-direction:column; gap:12px; }
 .week-row { width:100%; border-radius:16px; border:1px solid #f1f5f9; background:#fff; display:flex; align-items:center; gap:12px; padding:12px; cursor:pointer; transition:border-color 0.2s; }
 .week-row.today { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); }
 .week-row.rest { background:rgba(255,255,255,0.6); }
@@ -110,7 +111,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .tp .bar { width:100%; height:8px; border-radius:4px; }
 .tp .n { font-size:8px; color:#94a3b8; font-weight:700; }
 .timeline-dates { display:flex; justify-content:space-between; font-size:10px; color:#64748b; font-weight:600; }
-.phase { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); overflow:hidden; margin-bottom:8px; }
+.phase { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); overflow:hidden; margin-bottom:12px; }
 .phase.current { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
 .phase.done { background:#ffffff; box-shadow:0 4px 20px rgba(148,163,184,0.18); }
 .phase.locked { background:#f1f5f9; }
@@ -201,8 +202,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
     <!-- Header -->
     <header class="header">
       <div>
-        <p class="eyebrow plan-label">Your Plan</p>
+        <p class="eyebrow plan-label">Monday · Jun 3</p>
         <h1 id="prog-title">Shred &amp; Sculpt</h1>
+        <p class="prog-sub">Week 4 of 12 — your strongest phase yet. Let's move.</p>
       </div>
       <div class="wk">
         <span class="eyebrow">Week</span>
@@ -215,7 +217,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
       <!-- Today's Session -->
       <section>
         <div class="today-head">
-          <h2 class="sec" id="today-label">Today · Mon 3 June</h2>
+          <h2 class="sec" id="today-label">Today's Session</h2>
           <span class="today-live">Live</span>
         </div>
         <div class="today-card">

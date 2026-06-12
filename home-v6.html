@@ -145,7 +145,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .today-panel-wrap { position:absolute; bottom:0; left:0; right:0; padding:24px; }
 .today-panel { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:16px; padding:20px; }
 .today-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
-.today-tag { padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#BF00FF; box-shadow:0 0 10px #BF00FF88; display:inline-block; margin-bottom:8px; }
+.today-tag { padding:4px 8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#fff; border-radius:6px; background:#FF0099; box-shadow:0 0 10px #FF009988; display:inline-block; margin-bottom:8px; }
 .today-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#fff; }
 .today-dur { text-align:right; color:#fff; }
 .today-dur .n { display:block; font-family:'Inter',sans-serif; font-weight:700; font-size:20px; }
@@ -474,7 +474,7 @@ const week = [
   { day:'FRI', title:'Full Body', time:'60m', active:false, completed:false },
 ];
 document.getElementById('week-scroll').innerHTML = week.map(w => `
-  <div class="week-card ${w.active?'active':''}">
+  <a class="week-card ${w.active?'active':''}" href="programme-v3.html" style="text-decoration:none;color:inherit">
     <div class="week-img">
       <img src="${WORKOUT_IMG}" alt="">
       <div class="ov"></div>
@@ -483,7 +483,7 @@ document.getElementById('week-scroll').innerHTML = week.map(w => `
       ${w.active?'<div class="week-active-dot"></div>':''}
     </div>
     <div class="week-info"><h4>${w.title}</h4><p>${w.time}</p></div>
-  </div>`).join('');
+  </a>`).join('');
 
 // ── BADGES ──
 const badges = [
@@ -540,9 +540,8 @@ document.getElementById('badge-scroll').innerHTML = badges.map(b => `
       label.textContent = 'Starting…';
       label.style.opacity = '1';
       if (navigator.vibrate) navigator.vibrate([10,30,10]);
-      // (later: play unlock sound + navigate to workout)
       setTimeout(() => {
-        setX(0);
+        window.location.href = 'workout.html';
         label.textContent = 'Swipe to Begin';
       }, 1200);
     } else {
