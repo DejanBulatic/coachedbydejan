@@ -500,8 +500,8 @@ setTimeout(() => { document.getElementById('gam-fill').style.width = '33%'; }, 3
     Object.values(rows).forEach(days => {
       const first = cellForDay(days[0]).getBoundingClientRect();
       const last  = cellForDay(days[days.length-1]).getBoundingClientRect();
-      const x1 = first.left - gridRect.left + first.width/2;
-      const x2 = last.left - gridRect.left + last.width/2;
+      const x1 = first.left - gridRect.left;
+      const x2 = last.left - gridRect.left + last.width;
       const y  = first.top - gridRect.top + first.height/2 - BAR_H/2;
       const w  = (x2 - x1);
       // gradient slice for this row
