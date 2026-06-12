@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#e8f5f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Check-in · Coached by Dejan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
+html, body { height:100%; scrollbar-width:none; -ms-overflow-style:none; }
+*::-webkit-scrollbar { display:none; width:0; height:0; }
+body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
+button { font-family:inherit; cursor:pointer; }
+
+.bg { position:fixed; inset:0; z-index:0; background-color:#e8f5f2; background-image:url('images/app-bg.png'); background-size:cover; background-position:center top; background-repeat:no-repeat; }
+.bg-fallback { position:fixed; inset:0; z-index:-1; background:radial-gradient(ellipse at 100% 0%, #cdeee6 0%, transparent 45%), radial-gradient(ellipse at 0% 60%, #dff0ec 0%, transparent 50%), linear-gradient(to bottom, #eaf6f3 0%, #eef7f4 50%, #e6f3ef 100%); background-color:#e8f5f2; }
+.bg-veil { position:fixed; inset:0; z-index:0; background:linear-gradient(to bottom, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.28) 100%); pointer-events:none; }
+
+/* ══ LANDING ══ */
+.app { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; }
+.scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding-bottom:120px; max-width:448px; margin:0 auto; width:100%; }
+h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; text-transform:uppercase; }
+.sec-h2 { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; }
+.eyebrow { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#64748b; }
+.header { padding:48px 20px 24px; }
+.header h1 { margin:8px 0; }
+.header .lead { font-size:14px; color:#64748b; font-weight:500; line-height:1.5; }
+.main { padding:0 20px; display:flex; flex-direction:column; gap:24px; }
+.card { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 10px 30px rgba(148,163,184,0.18); }
+
+/* hero check-in card */
+.ci-hero { border-radius:24px; overflow:hidden; position:relative; padding:24px; background:linear-gradient(160deg,#1e293b 0%,#0f172a 100%); box-shadow:0 20px 50px rgba(15,23,42,0.3); }
+.ci-hero .glow { position:absolute; top:-60px; right:-40px; width:200px; height:200px; border-radius:50%; opacity:0.5; pointer-events:none; box-shadow:0 0 120px 60px rgba(255,0,153,0.4); }
+.ci-hero-in { position:relative; }
+.ci-due { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:#FF0099; color:#fff; box-shadow:0 0 16px rgba(255,0,153,0.5); margin-bottom:16px; }
+.ci-hero h2 { font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.01em; }
+.ci-hero p { font-size:13px; color:rgba(255,255,255,0.7); font-weight:500; margin-top:6px; line-height:1.5; }
+.ci-meta { display:flex; gap:10px; margin:20px 0; }
+.ci-chip { flex:1; backdrop-filter:blur(10px); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:12px; text-align:center; }
+.ci-chip .v { font-weight:800; font-size:20px; color:#fff; }
+.ci-chip .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); margin-top:3px; }
+.ci-start { width:100%; padding:16px; border-radius:14px; border:none; color:#fff; font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:0.06em; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 8px 24px rgba(191,0,255,0.5); display:flex; align-items:center; justify-content:center; gap:8px; }
+.ci-start:active { transform:scale(0.98); }
+
+/* streak card */
+.streak-card { padding:20px; display:flex; align-items:center; gap:16px; }
+.streak-flame { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; background:linear-gradient(135deg,#FF0099,#FF4D00); box-shadow:0 4px 16px rgba(255,0,153,0.4); flex-shrink:0; }
+.streak-info h3 { font-size:15px; color:#64748b; font-weight:500; }
+.streak-info h3 b { font-size:22px; color:#0f172a; font-weight:800; }
+.streak-info p { font-size:12px; color:#94a3b8; font-weight:600; margin-top:2px; }
+
+/* past check-ins */
+.past-row { padding:14px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #f1f5f9; }
+.past-row:last-child { border-bottom:none; }
+.past-ic { width:36px; height:36px; border-radius:10px; background:#F0FDF7; color:#00CC6A; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.past-info { flex:1; }
+.past-info h4 { font-size:14px; font-weight:700; color:#0f172a; }
+.past-info p { font-size:12px; color:#64748b; font-weight:500; }
+.past-delta { font-size:12px; font-weight:700; color:#00CC6A; }
+
+/* ══ NAV ══ */
+.nav { position:fixed; bottom:24px; left:0; right:0; z-index:50; display:flex; justify-content:center; pointer-events:none; }
+.nav-inner { background:rgba(255,255,255,0.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid #e2e8f0; padding:8px; border-radius:40px; box-shadow:0 12px 40px rgba(148,163,184,0.5); display:flex; gap:4px; pointer-events:auto; }
+.nav-item { text-decoration:none; position:relative; display:flex; align-items:center; justify-content:center; padding:12px; border-radius:50%; color:#94a3b8; }
+.nav-item i { position:relative; z-index:1; font-size:22px; }
+.nav-item.active { color:#fff; }
+.nav-item .pill { position:absolute; inset:0; border-radius:50%; background:linear-gradient(to right, #BF00FF, #FF0099); opacity:0; transform:scale(0.6); transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1); }
+.nav-item.active .pill { opacity:1; transform:scale(1); }
+
+/* ══ FORM SHELL ══ */
+.shell { position:fixed; inset:0; z-index:90; display:none; flex-direction:column; background-color:#e8f5f2; }
+.shell .bg-tint { position:absolute; inset:0; opacity:0.5; transition:background-color 0.6s ease; pointer-events:none; }
+.shell-inner { position:relative; z-index:1; height:100%; max-width:448px; margin:0 auto; width:100%; display:flex; flex-direction:column; }
+.form-top { padding:48px 20px 0; }
+.form-top-row { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.form-back { width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.85); border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; color:#475569; flex-shrink:0; }
+.prog-track { flex:1; height:8px; border-radius:4px; background:rgba(255,255,255,0.7); border:1px solid #f1f5f9; overflow:hidden; }
+.prog-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#BF00FF,#FF0099); box-shadow:0 0 10px rgba(255,0,153,0.5); transition:width 0.4s cubic-bezier(0.34,1.2,0.64,1); width:0%; }
+.content { flex:1; overflow-y:auto; padding:24px 20px 20px; }
+.sec-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.2em; color:#BF00FF; }
+.q { font-size:26px; font-weight:800; letter-spacing:-0.01em; color:#0f172a; margin-top:10px; line-height:1.2; }
+.hint { font-size:14px; color:#64748b; font-weight:500; margin-top:8px; }
+.spacer { height:24px; }
+.form-foot { padding:16px 20px calc(20px + env(safe-area-inset-bottom)); }
+.cont-btn { width:100%; padding:17px; border-radius:16px; border:none; color:#fff; font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:0.06em; background:linear-gradient(to right,#BF00FF,#FF0099); box-shadow:0 8px 24px rgba(191,0,255,0.4); }
+.cont-btn:active { transform:scale(0.98); }
+
+/* inputs */
+.inp-group { margin-bottom:16px; }
+.inp-lbl { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#64748b; margin-bottom:8px; }
+.big-inp { width:100%; padding:18px; border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; font-size:18px; font-weight:600; font-family:inherit; color:#0f172a; outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+.big-inp:focus { border-color:#BF00FF; box-shadow:0 0 0 4px rgba(191,0,255,0.1); }
+.big-inp::placeholder { color:#cbd5e1; font-weight:500; }
+.inp-row { display:flex; gap:12px; }
+.inp-row .inp-group { flex:1; }
+.big-ta { width:100%; padding:18px; border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; font-size:16px; font-weight:500; font-family:inherit; color:#0f172a; outline:none; min-height:120px; resize:none; line-height:1.5; }
+.big-ta:focus { border-color:#BF00FF; box-shadow:0 0 0 4px rgba(191,0,255,0.1); }
+.big-ta::placeholder { color:#cbd5e1; }
+
+/* single select */
+.opt-row { display:flex; align-items:center; gap:14px; padding:16px; border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; margin-bottom:10px; transition:all 0.2s; }
+.opt-row.sel { border-color:#BF00FF; background:linear-gradient(to right, rgba(191,0,255,0.06), rgba(255,0,153,0.06)); box-shadow:0 0 0 1px #BF00FF, 0 8px 24px rgba(191,0,255,0.15); }
+.opt-badge { width:34px; height:34px; border-radius:10px; background:#f1f5f9; color:#64748b; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; transition:all 0.2s; }
+.opt-row.sel .opt-badge { background:linear-gradient(135deg,#BF00FF,#FF0099); color:#fff; }
+.opt-text { font-size:16px; font-weight:600; color:#0f172a; }
+
+/* multi pills */
+.pill-wrap { display:flex; flex-wrap:wrap; gap:10px; }
+.pill { padding:12px 18px; border-radius:999px; border:1.5px solid #e2e8f0; background:#fff; font-size:14px; font-weight:600; color:#475569; transition:all 0.2s; }
+.pill.sel { border-color:transparent; background:linear-gradient(to right,#BF00FF,#FF0099); color:#fff; box-shadow:0 4px 16px rgba(191,0,255,0.3); }
+
+/* scale 1-10 */
+.scale-wrap { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.sc-btn { aspect-ratio:1; border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; font-size:18px; font-weight:700; color:#475569; transition:all 0.2s; }
+.sc-btn.sel { border-color:transparent; background:linear-gradient(135deg,#BF00FF,#FF0099); color:#fff; box-shadow:0 4px 16px rgba(191,0,255,0.35); transform:scale(1.05); }
+.scale-labels { display:flex; justify-content:space-between; margin-top:12px; }
+.scale-label { font-size:12px; color:#94a3b8; font-weight:600; }
+
+/* yes/no */
+.yn-row { display:flex; gap:12px; margin-bottom:4px; }
+.yn-btn { flex:1; padding:18px; border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; font-size:16px; font-weight:700; color:#475569; transition:all 0.2s; }
+.yn-btn.sel { border-color:transparent; background:linear-gradient(135deg,#BF00FF,#FF0099); color:#fff; box-shadow:0 4px 16px rgba(191,0,255,0.3); }
+.cond-inp { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+.cond-inp.show { max-height:200px; margin-top:14px; }
+
+/* photo upload */
+.photo-up { border:2px dashed #cbd5e1; border-radius:18px; padding:32px 20px; display:flex; flex-direction:column; align-items:center; gap:10px; background:rgba(255,255,255,0.5); }
+.photo-up i { font-size:36px; color:#BF00FF; }
+.photo-up .t { font-size:15px; font-weight:700; color:#0f172a; }
+.photo-up .s { font-size:13px; color:#94a3b8; font-weight:500; }
+.photo-skip { text-align:center; font-size:14px; color:#94a3b8; font-weight:500; margin-top:12px; }
+
+/* success */
+.success { position:fixed; inset:0; z-index:95; display:none; flex-direction:column; align-items:center; justify-content:center; padding:0 32px; text-align:center; background-color:#e8f5f2; }
+.success.show { display:flex; }
+.suc-check { width:96px; height:96px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:24px; color:#fff; background:linear-gradient(135deg,#BF00FF,#FF0099); box-shadow:0 0 40px rgba(191,0,255,0.5); animation:sucPop 0.5s cubic-bezier(0.34,1.5,0.64,1); }
+@keyframes sucPop { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+.success h1 { font-size:28px; font-weight:800; color:#0f172a; margin-bottom:10px; }
+.success p { font-size:15px; color:#64748b; font-weight:500; max-width:20rem; line-height:1.5; margin-bottom:28px; }
+.suc-btn { width:100%; max-width:20rem; padding:16px; border-radius:16px; border:none; color:#fff; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; font-size:14px; background:linear-gradient(90deg,#BF00FF,#FF0099); box-shadow:0 8px 24px rgba(191,0,255,0.4); }
+
+.slide-r { animation:slideR 0.3s ease; }
+.slide-l { animation:slideL 0.3s ease; }
+@keyframes slideR { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideL { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+</style>
+</head>
+<body>
+
+<div class="bg-fallback"></div>
+<div class="bg"></div>
+<div class="bg-veil"></div>
+
+<!-- ══ LANDING ══ -->
+<div class="app" id="landing">
+  <div class="scroll">
+    <header class="header">
+      <p class="eyebrow">Week 4 · Shred &amp; Sculpt</p>
+      <h1>Weekly Check-in</h1>
+      <p class="lead">Your weekly moment with Dejan — a few quick questions so he can see how you're doing and fine-tune your plan.</p>
+    </header>
+
+    <main class="main">
+      <!-- Hero: this week's check-in -->
+      <div class="ci-hero">
+        <div class="glow"></div>
+        <div class="ci-hero-in">
+          <span class="ci-due"><i class="ti ti-clock" style="font-size:13px"></i> Due Today</span>
+          <h2>This Week's Check-in</h2>
+          <p>Takes about 2 minutes. Your answers go straight to Dejan and update your progress.</p>
+          <div class="ci-meta">
+            <div class="ci-chip"><div class="v">10</div><div class="l">Questions</div></div>
+            <div class="ci-chip"><div class="v">~2</div><div class="l">Minutes</div></div>
+            <div class="ci-chip"><div class="v">7d</div><div class="l">Since Last</div></div>
+          </div>
+          <button class="ci-start" id="start-btn"><i class="ti ti-pencil" style="font-size:18px"></i> Start This Week's Check-in</button>
+        </div>
+      </div>
+
+      <!-- Streak -->
+      <div class="card streak-card">
+        <div class="streak-flame"><i class="ti ti-flame" style="font-size:24px"></i></div>
+        <div class="streak-info">
+          <h3><b>4</b> week streak</h3>
+          <p>Every check-in completed since you started 🔥</p>
+        </div>
+      </div>
+
+      <!-- Past check-ins -->
+      <section>
+        <h2 class="sec-h2" style="margin-bottom:14px">Recent Check-ins</h2>
+        <div class="card">
+          <div class="past-row">
+            <div class="past-ic"><i class="ti ti-check" style="font-size:18px"></i></div>
+            <div class="past-info"><h4>Week 3 · May 31</h4><p>Energy 8 · Sleep 7 · 4/4 sessions</p></div>
+            <span class="past-delta">-1.2kg</span>
+          </div>
+          <div class="past-row">
+            <div class="past-ic"><i class="ti ti-check" style="font-size:18px"></i></div>
+            <div class="past-info"><h4>Week 2 · May 24</h4><p>Energy 7 · Sleep 6 · 3/4 sessions</p></div>
+            <span class="past-delta">-0.8kg</span>
+          </div>
+          <div class="past-row">
+            <div class="past-ic"><i class="ti ti-check" style="font-size:18px"></i></div>
+            <div class="past-info"><h4>Week 1 · May 17</h4><p>Energy 6 · Sleep 7 · 4/4 sessions</p></div>
+            <span class="past-delta">-1.0kg</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="nav-item" href="home-v6.html"><span class="pill"></span><i class="ti ti-home"></i></a>
+      <a class="nav-item" href="programme-v3.html"><span class="pill"></span><i class="ti ti-barbell"></i></a>
+      <a class="nav-item" href="nutrition-v2.html"><span class="pill"></span><i class="ti ti-apple"></i></a>
+      <a class="nav-item" href="progress-v2.html"><span class="pill"></span><i class="ti ti-chart-line"></i></a>
+      <a class="nav-item active" href="checkin-v2.html"><span class="pill"></span><i class="ti ti-message-circle"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORM SHELL ══ -->
+<div class="shell" id="shell">
+  <div class="bg-tint" id="bg-tint"></div>
+  <div class="shell-inner">
+    <div class="form-top">
+      <div class="form-top-row">
+        <button class="form-back" id="back-btn"><i class="ti ti-chevron-left" style="font-size:20px"></i></button>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+    <div class="form-foot">
+      <button class="cont-btn" id="cont-btn">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUCCESS ══ -->
+<div class="success" id="success">
+  <div class="suc-check"><i class="ti ti-check" style="font-size:48px"></i></div>
+  <h1>Check-in Complete!</h1>
+  <p>Nicely done, Sarah. Dejan will review your week and adjust your plan if needed. Your progress is updated.</p>
+  <button class="suc-btn" id="suc-btn">Back to Check-in</button>
+</div>
+
+<script>
+// ── WEEKLY QUESTIONS (placeholder set; tweak later) ──
+const SCREENS = [
+  { s:'Body', type:'weight', q:'What\'s your weight this week?', hint:'Weigh in first thing, same conditions each week' },
+  { s:'Body', type:'measure', q:'Quick measurements', hint:'Optional — leave blank to skip', optional:true },
+  { s:'Body', type:'photo', q:'Add this week\'s progress photo', hint:'Optional — only you and Dejan see this', optional:true },
+  { s:'How You Feel', type:'scale', q:'How\'s your energy been?', g:'energy', lo:'Drained', hi:'Energised' },
+  { s:'How You Feel', type:'scale', q:'How well have you slept?', g:'sleep', lo:'Poorly', hi:'Great' },
+  { s:'How You Feel', type:'scale', q:'How are your stress levels?', g:'stress', lo:'Calm', hi:'Very high' },
+  { s:'Training', type:'single', q:'How did training go this week?', g:'training', opts:['Nailed every session','Missed one','Missed a couple','Struggled this week'] },
+  { s:'Nutrition', type:'single', q:'How did nutrition go?', g:'nutrition', opts:['On point all week','Mostly on track','A few slip-ups','Off track this week'] },
+  { s:'Reflect', type:'ta', q:'Any wins this week?', fid:'wins', fp:'Big or small — what went well?' },
+  { s:'Reflect', type:'ta', q:'Anything Dejan should know?', fid:'notes', fp:'Struggles, questions, anything at all...', optional:true },
+];
+const TOTAL = SCREENS.length;
+let cur = 0;
+let d = {};            // text/number answers
+let single = {};       // single-select
+let scales = {};       // 1-10
+
+const SECTION_TINTS = {
+  'Body':'#f8d8cc', 'How You Feel':'#c8e4f0', 'Training':'#c8e8cc', 'Nutrition':'#f0e4c0', 'Reflect':'#e4c8f0',
+};
+
+// ── NAV ──
+document.getElementById('start-btn').addEventListener('click', startForm);
+function startForm() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('shell').style.display = 'flex';
+  cur = 1; render(cur, 'r');
+}
+document.getElementById('cont-btn').addEventListener('click', goForward);
+document.getElementById('back-btn').addEventListener('click', goBack);
+function goForward() { saveCur(); if (cur < TOTAL) { cur++; render(cur,'r'); } else submitForm(); }
+function goBack() {
+  saveCur();
+  if (cur > 1) { cur--; render(cur,'l'); }
+  else { document.getElementById('shell').style.display='none'; document.getElementById('landing').style.display='flex'; }
+}
+
+function render(n, dir) {
+  const sc = SCREENS[n-1];
+  document.getElementById('prog-fill').style.width = ((n-1)/TOTAL*100).toFixed(0)+'%';
+  document.getElementById('bg-tint').style.backgroundColor = SECTION_TINTS[sc.s] || '#e8d8f8';
+  document.getElementById('cont-btn').textContent = n===TOTAL ? 'Submit Check-in →' : 'Continue →';
+  const el = document.getElementById('content');
+  el.innerHTML = buildHTML(sc, n);
+  el.className = 'content ' + (dir==='r'?'slide-r':'slide-l');
+  restore(sc);
+  el.scrollTop = 0;
+}
+
+const LETTERS = 'ABCDE';
+function buildHTML(sc, n) {
+  let h = `<span class="sec-lbl">${sc.s}</span><div class="q">${sc.q}</div>${sc.hint?`<div class="hint">${sc.hint}</div>`:'<div class="spacer"></div>'}`;
+  if (sc.type === 'weight') {
+    h += field('Current weight (kg)','weight','70.6','number');
+  } else if (sc.type === 'measure') {
+    h += `<div class="inp-row">${field('Waist (cm)','waist','68','number')}${field('Hips (cm)','hips','92','number')}</div>`;
+  } else if (sc.type === 'photo') {
+    h += `<div class="photo-up" onclick="document.getElementById('photo-in').click()">
+      <i class="ti ti-camera"></i><div class="t">Tap to add a photo</div><div class="s">Front, side or back — your choice</div>
+      <input type="file" accept="image/*" id="photo-in" style="display:none" onchange="d['photo']=this.files[0]?this.files[0].name:''; if(this.files[0]){this.closest('.photo-up').querySelector('.t').textContent='Photo added ✓'; this.closest('.photo-up').querySelector('.t').style.color='#00CC6A';}">
+    </div>
+    <div class="photo-skip">Optional — skip if you prefer</div>`;
+  } else if (sc.type === 'single') {
+    sc.opts.forEach((o,i)=>{ h += `<div class="opt-row" id="opt${i}" onclick="selOpt('${sc.g}',${i},'${o.replace(/'/g,"\\'")}')"><div class="opt-badge">${LETTERS[i]||i+1}</div><div class="opt-text">${o}</div></div>`; });
+  } else if (sc.type === 'scale') {
+    h += '<div class="scale-wrap">';
+    for (let i=1;i<=10;i++) h += `<button class="sc-btn" id="sc${i}" onclick="selScale('${sc.g}',${i})">${i}</button>`;
+    h += '</div>';
+    h += `<div class="scale-labels"><span class="scale-label">${sc.lo}</span><span class="scale-label">${sc.hi}</span></div>`;
+  } else if (sc.type === 'ta') {
+    h += `<textarea class="big-ta" id="${sc.fid}" placeholder="${sc.fp}"></textarea>`;
+    if (sc.optional) h += `<div class="photo-skip">Optional — skip if you prefer</div>`;
+  }
+  h += '<div class="spacer"></div>';
+  return h;
+}
+function field(label,id,ph,type) {
+  return `<div class="inp-group"><span class="inp-lbl">${label}</span><input class="big-inp" type="${type}" id="${id}" placeholder="${ph}" ${type==='number'?'inputmode="decimal"':''}></div>`;
+}
+
+// ── SELECT HANDLERS ──
+function selOpt(g,i,val) {
+  single[g] = val;
+  document.querySelectorAll('.opt-row').forEach((r,idx)=>r.classList.toggle('sel', idx===i));
+}
+function selScale(g,v) {
+  scales[g] = v;
+  for (let i=1;i<=10;i++) document.getElementById('sc'+i).classList.toggle('sel', i===v);
+}
+
+// ── SAVE / RESTORE ──
+function saveCur() {
+  const sc = SCREENS[cur-1]; if (!sc) return;
+  if (sc.type==='weight') setD('weight');
+  else if (sc.type==='measure') { setD('waist'); setD('hips'); }
+  else if (sc.type==='ta') setD(sc.fid);
+}
+function setD(id){ const e=document.getElementById(id); if(e) d[id]=e.value; }
+function setV(id){ const e=document.getElementById(id); if(e&&d[id]!=null) e.value=d[id]; }
+function restore(sc) {
+  if (sc.type==='weight') setV('weight');
+  else if (sc.type==='measure') { setV('waist'); setV('hips'); }
+  else if (sc.type==='photo') { if(d['photo']){ const t=document.querySelector('.photo-up .t'); if(t){t.textContent='Photo added ✓';t.style.color='#00CC6A';} } }
+  else if (sc.type==='single') {
+    if (single[sc.g]!=null) { const idx=sc.opts.indexOf(single[sc.g]); if(idx>=0){ const r=document.getElementById('opt'+idx); if(r)r.classList.add('sel'); } }
+  }
+  else if (sc.type==='scale') { if (scales[sc.g]!=null){ const b=document.getElementById('sc'+scales[sc.g]); if(b)b.classList.add('sel'); } }
+  else if (sc.type==='ta') setV(sc.fid);
+}
+
+// ── SUBMIT ──
+function submitForm() {
+  saveCur();
+  document.getElementById('shell').style.display='none';
+  document.getElementById('success').classList.add('show');
+  // (Later: POST answers to Supabase / Formspree)
+}
+document.getElementById('suc-btn').addEventListener('click', () => {
+  document.getElementById('success').classList.remove('show');
+  document.getElementById('landing').style.display='flex';
+  // reset
+  cur=0; d={}; single={}; scales={};
+});
+
+// nav haptic
+document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => { if(navigator.vibrate) navigator.vibrate(6); }));
+</script>
+</body>
+</html>
