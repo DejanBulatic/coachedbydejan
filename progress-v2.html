@@ -421,7 +421,7 @@ function drawChart(key, range) {
   const last = pts[pts.length-1];
   const sid = key;
   document.getElementById('chart-'+key).innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;touch-action:none" id="svg-${sid}">
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;touch-action:pan-y" id="svg-${sid}">
       <defs>
         <linearGradient id="ws-${sid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${color}" stop-opacity="0.7"/><stop offset="100%" stop-color="${color}"/></linearGradient>
         <linearGradient id="wf-${sid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.25"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient>
@@ -461,17 +461,12 @@ function drawChart(key, range) {
     const r = svg.getBoundingClientRect();
     return (clientX - r.left) / r.width * W;
   }
-  function moveScrub(clientX) {
-    const x = svgX(clientX);
-    // nearest data point
-    let nearest = pts[0], ni = 0;
-    pts.forEach((p,i)=>{ if(Math.abs(p.x-x) < Math.abs(nearest.x-x)){ nearest=p; ni=i; } });
+  function moveScrubToIndex(ni) {
+    const nearest = pts[ni];
     scrub.style.opacity = '1';
     sLine.setAttribute('x1', nearest.x); sLine.setAttribute('x2', nearest.x);
     sDot.setAttribute('cx', nearest.x); sDot.setAttribute('cy', nearest.y);
-    const val = data[ni].v + cfg.unit;
-    sVal.textContent = val;
-    // tooltip box positioned above the dot, clamped to chart width
+    sVal.textContent = data[ni].v + cfg.unit;
     let tx = nearest.x;
     tx = Math.max(padX+27, Math.min(W-padX-27, tx));
     let ty = nearest.y - 16;
@@ -479,13 +474,34 @@ function drawChart(key, range) {
     sRect.setAttribute('x', tx-27); sRect.setAttribute('y', ty-22);
     sVal.setAttribute('x', tx); sVal.setAttribute('y', ty-4);
   }
-  function endScrub(){ scrub.style.opacity = '0'; }
-  hit.addEventListener('pointerdown', e=>{ hit.setPointerCapture(e.pointerId); moveScrub(e.clientX); });
-  hit.addEventListener('pointermove', e=>{ if(e.pressure>0 || e.buttons>0 || e.pointerType==='touch') moveScrub(e.clientX); });
-  hit.addEventListener('pointerup', endScrub);
-  hit.addEventListener('pointerleave', endScrub);
+  function nearestIndex(clientX) {
+    const x = svgX(clientX);
+    let ni = 0;
+    pts.forEach((p,i)=>{ if(Math.abs(p.x-x) < Math.abs(pts[ni].x-x)) ni=i; });
+    return ni;
+  }
+  function moveScrub(clientX) { moveScrubToIndex(nearestIndex(clientX)); }
+
+  // default: show scrubber at the FIRST point so it's visible before touch
+  moveScrubToIndex(0);
+  function endScrub(){ /* keep visible at default; do nothing on release */ }
+
+  // ── mouse (desktop): hover scrubs ──
   hit.addEventListener('mousemove', e=>moveScrub(e.clientX));
-  hit.addEventListener('mouseleave', endScrub);
+  hit.addEventListener('mouseleave', ()=>moveScrubToIndex(0));
+
+  // ── touch: only scrub if the gesture is mostly HORIZONTAL; otherwise let the page scroll ──
+  let tStartX=0, tStartY=0, mode=null; // mode: null | 'scrub' | 'scroll'
+  hit.addEventListener('touchstart', e=>{
+    const t=e.touches[0]; tStartX=t.clientX; tStartY=t.clientY; mode=null;
+  }, {passive:true});
+  hit.addEventListener('touchmove', e=>{
+    const t=e.touches[0];
+    const dx=Math.abs(t.clientX-tStartX), dy=Math.abs(t.clientY-tStartY);
+    if (mode===null && (dx>6 || dy>6)) mode = dx>dy ? 'scrub' : 'scroll';
+    if (mode==='scrub') { e.preventDefault(); moveScrub(t.clientX); }
+    // if 'scroll', do nothing -> browser scrolls the page (touch-action:pan-y allows it)
+  }, {passive:false});
   // delta + current value
   const diff = (data[data.length-1].v - data[0].v);
   const absd = Math.abs(diff).toFixed(1);
