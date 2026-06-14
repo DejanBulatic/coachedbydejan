@@ -83,7 +83,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .chart-card > *:not(.chart-bg):not(.chart-ov) { position:relative; z-index:1; }
 .chart-top { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:16px; }
 .chart-top .l { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.6); }
-.chart-top .big { font-weight:800; font-size:30px; color:#fff; }
+.chart-top .big { font-weight:800; font-size:24px; letter-spacing:-0.01em; color:#fff; }
 .chart-top .big small { font-size:14px; color:rgba(255,255,255,0.5); font-weight:600; margin-left:6px; }
 .chart-delta { display:flex; align-items:center; gap:4px; font-size:14px; font-weight:700; color:#00CC6A; }
 
@@ -421,7 +421,7 @@ function drawChart(key, range) {
   const last = pts[pts.length-1];
   const sid = key;
   document.getElementById('chart-'+key).innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;touch-action:none" id="svg-${sid}">
       <defs>
         <linearGradient id="ws-${sid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${color}" stop-opacity="0.7"/><stop offset="100%" stop-color="${color}"/></linearGradient>
         <linearGradient id="wf-${sid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.25"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient>
@@ -432,11 +432,60 @@ function drawChart(key, range) {
       <path id="line-${sid}" d="${path}" fill="none" stroke="url(#ws-${sid})" stroke-width="3" stroke-linecap="round" filter="url(#wg-${sid})"/>
       ${dots}
       <circle cx="${last.x}" cy="${last.y}" r="6" fill="${color}" style="filter:drop-shadow(0 0 6px ${color})"/>
+      <!-- scrubber -->
+      <g id="scrub-${sid}" style="opacity:0;transition:opacity 0.15s">
+        <line id="scrubline-${sid}" x1="0" y1="${padY-6}" x2="0" y2="${H-padY}" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle id="scrubdot-${sid}" cx="0" cy="0" r="5" fill="#fff" stroke="${color}" stroke-width="3"/>
+        <g id="scrubtip-${sid}">
+          <rect id="scrubrect-${sid}" x="0" y="0" width="54" height="26" rx="8" fill="rgba(15,23,42,0.92)" stroke="${color}" stroke-width="1"/>
+          <text id="scrubval-${sid}" x="0" y="0" text-anchor="middle" font-size="13" font-weight="800" fill="#fff"></text>
+        </g>
+      </g>
+      <rect id="hit-${sid}" x="0" y="0" width="${W}" height="${H}" fill="transparent" style="cursor:crosshair"/>
     </svg>`;
   const line = document.getElementById('line-'+sid);
   const len = line.getTotalLength();
   line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
   setTimeout(()=>{ line.style.transition='stroke-dashoffset 1.2s ease'; line.style.strokeDashoffset=0; },100);
+
+  // ── scrubber interaction ──
+  const svg = document.getElementById('svg-'+sid);
+  const hit = document.getElementById('hit-'+sid);
+  const scrub = document.getElementById('scrub-'+sid);
+  const sLine = document.getElementById('scrubline-'+sid);
+  const sDot = document.getElementById('scrubdot-'+sid);
+  const sTip = document.getElementById('scrubtip-'+sid);
+  const sRect = document.getElementById('scrubrect-'+sid);
+  const sVal = document.getElementById('scrubval-'+sid);
+  function svgX(clientX) {
+    const r = svg.getBoundingClientRect();
+    return (clientX - r.left) / r.width * W;
+  }
+  function moveScrub(clientX) {
+    const x = svgX(clientX);
+    // nearest data point
+    let nearest = pts[0], ni = 0;
+    pts.forEach((p,i)=>{ if(Math.abs(p.x-x) < Math.abs(nearest.x-x)){ nearest=p; ni=i; } });
+    scrub.style.opacity = '1';
+    sLine.setAttribute('x1', nearest.x); sLine.setAttribute('x2', nearest.x);
+    sDot.setAttribute('cx', nearest.x); sDot.setAttribute('cy', nearest.y);
+    const val = data[ni].v + cfg.unit;
+    sVal.textContent = val;
+    // tooltip box positioned above the dot, clamped to chart width
+    let tx = nearest.x;
+    tx = Math.max(padX+27, Math.min(W-padX-27, tx));
+    let ty = nearest.y - 16;
+    if (ty < padY+8) ty = nearest.y + 28;
+    sRect.setAttribute('x', tx-27); sRect.setAttribute('y', ty-22);
+    sVal.setAttribute('x', tx); sVal.setAttribute('y', ty-4);
+  }
+  function endScrub(){ scrub.style.opacity = '0'; }
+  hit.addEventListener('pointerdown', e=>{ hit.setPointerCapture(e.pointerId); moveScrub(e.clientX); });
+  hit.addEventListener('pointermove', e=>{ if(e.pressure>0 || e.buttons>0 || e.pointerType==='touch') moveScrub(e.clientX); });
+  hit.addEventListener('pointerup', endScrub);
+  hit.addEventListener('pointerleave', endScrub);
+  hit.addEventListener('mousemove', e=>moveScrub(e.clientX));
+  hit.addEventListener('mouseleave', endScrub);
   // delta + current value
   const diff = (data[data.length-1].v - data[0].v);
   const absd = Math.abs(diff).toFixed(1);
