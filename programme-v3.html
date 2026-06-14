@@ -114,9 +114,10 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .sw-title-row { display:flex; align-items:center; gap:8px; }
 .sw-title { font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:1.96px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sw-sub { font-size:11px; font-weight:700; line-height:16px; margin-top:3px; text-transform:uppercase; letter-spacing:0.14em; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sw-right { display:flex; align-items:center; gap:4px; flex-shrink:0; }
-.sw-num { font-size:18px; font-weight:700; color:#0f172a; }
-.sw-num small { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-left:2px; opacity:0.7; }
+.sw-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.sw-numwrap { display:flex; flex-direction:column; align-items:center; min-width:38px; }
+.sw-num { font-size:18px; font-weight:700; color:#0f172a; line-height:1; }
+.sw-unit { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#94a3b8; margin-top:3px; }
 .sw-chev { color:#cbd5e1; font-size:18px; }
 .sw-card .dot { width:8px; height:8px; border-radius:50%; background:#FF0099; box-shadow:0 0 8px #FF0099; flex-shrink:0; animation:pulse 1.5s infinite; }
 .week-row { width:100%; border-radius:16px; border:1px solid #f1f5f9; background:#fff; display:flex; align-items:center; gap:12px; padding:12px; cursor:pointer; transition:border-color 0.2s; }
@@ -155,7 +156,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .tl-sub { font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:6px; }
 .timeline-dates { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:14px; }
 .phase { border-radius:16px; overflow:hidden; margin-bottom:12px; }
-.phase.current .phase-head { box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
+.phase.current .phase-head { box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); }
 .phase.done .phase-head { background:#ffffff; }
 .phase.locked .phase-head { background:#f8fafc; }
 .phase.locked .phase-info h4, .phase.locked .phase-ic i { color:#94a3b8; }
@@ -479,8 +480,8 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const thumbGlow = w.rest ? 'rgba(0,204,106,0.4)' : 'rgba(255,0,153,0.4)';
   const subColor = w.rest ? '#00CC6A' : '#FF0099';
   const right = w.rest
-    ? `<span class="sw-num" style="color:#00CC6A">Rest</span>`
-    : `<span class="sw-num" style="color:#FF0099">${w.dur}<small>MIN</small></span><i class="ti ti-chevron-right sw-chev"></i>`;
+    ? `<div class="sw-numwrap"><span class="sw-num" style="color:#00CC6A;font-size:14px">Rest</span></div>`
+    : `<div class="sw-numwrap"><span class="sw-num" style="color:#FF0099">${w.dur}</span><span class="sw-unit">MIN</span></div><i class="ti ti-chevron-right sw-chev"></i>`;
   return `<div class="sw-card ${w.today?'today':''}" data-idx="${i}">
     <div class="sw-thumb" style="background:${thumbGrad};box-shadow:0 4px 16px ${thumbGlow}">
       <span class="sw-thumb-d">${w.day}</span><span class="sw-thumb-n">${w.date}</span>
@@ -518,10 +519,10 @@ document.getElementById('phases').innerHTML = PHASES.map((p,i) => {
     <button class="phase-head sw-card" style="cursor:pointer">
       <div class="sw-thumb" style="${thumbStyle}"><i class="ti ${icon}"></i></div>
       <div class="sw-info">
-        <div class="sw-title-row"><h4 class="sw-title">${p.name}</h4>${current?'<span class="phase-now">Now</span>':''}</div>
+        <div class="sw-title-row"><h4 class="sw-title">${p.name}</h4>${current?'<span class="dot"></span>':''}</div>
         <p class="sw-sub">Weeks ${p.weeks}</p>
       </div>
-      <div class="sw-right"><span class="sw-num" style="color:${locked?'#94a3b8':p.color}">2×<small>/wk</small></span><i class="ti ti-chevron-down phase-chev"></i></div>
+      <div class="sw-right"><div class="sw-numwrap"><span class="sw-num" style="color:${locked?'#94a3b8':p.color}">2×</span><span class="sw-unit">WKS</span></div><i class="ti ti-chevron-down phase-chev"></i></div>
     </button>
     <div class="phase-body"><div class="phase-body-inner">${rows}</div></div>
   </div>`;
