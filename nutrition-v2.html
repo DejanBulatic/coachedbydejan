@@ -75,7 +75,10 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 
 /* ── MACROS ── */
 .macros { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-.macro { padding:16px; display:flex; flex-direction:column; align-items:center; }
+.macro { padding:16px; display:flex; flex-direction:column; align-items:center; overflow:hidden; position:relative; }
+.macro > .macro-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.macro > .macro-ov { position:absolute; inset:0; z-index:0; background:radial-gradient(ellipse 90% 75% at 90% 5%, rgba(255,0,153,0.10) 0%, transparent 70%), linear-gradient(160deg, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.96) 100%); }
+.macro > *:not(.macro-bg):not(.macro-ov) { position:relative; z-index:1; }
 .macro-ring { position:relative; width:84px; height:84px; }
 .macro-ctr { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .macro-ctr .c { font-weight:700; font-size:18px; color:#0f172a; line-height:1; }
@@ -458,6 +461,8 @@ const MACROS = [
 document.getElementById('macros').innerHTML = MACROS.map((m,i) => {
   const size=84, stroke=8, r=(size-stroke)/2, c=2*Math.PI*r, pct=Math.min(m.current/m.target,1), off=c-pct*c;
   return `<div class="card macro">
+    <img class="macro-bg" src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=400&fit=crop" alt="">
+    <div class="macro-ov"></div>
     <div class="macro-ring">
       <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
         <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="${stroke}"/>
