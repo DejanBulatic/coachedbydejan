@@ -156,7 +156,9 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .tl-sub { font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:6px; }
 .timeline-dates { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:14px; }
 .phase { margin-bottom:12px; }
-.phase.current .phase-head { box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); }
+.phase.current { border-radius:16px; box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); overflow:hidden; }
+.phase.current .phase-head { border-color:transparent; box-shadow:none; }
+.phase.current .phase-head.sw-card { box-shadow:none; }
 .phase.done .phase-head { background:#ffffff; }
 .phase.locked .phase-head { background:#f8fafc; }
 .phase.locked .phase-info h4, .phase.locked .phase-ic i { color:#94a3b8; }
@@ -481,7 +483,7 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const subColor = w.rest ? '#00CC6A' : '#FF0099';
   const right = w.rest
     ? `<div class="sw-numwrap"><span class="sw-num" style="color:#00CC6A;font-size:14px">Rest</span></div><i class="ti ti-chevron-right sw-chev" style="visibility:hidden"></i>`
-    : `<div class="sw-numwrap"><span class="sw-num" style="color:#FF0099">${w.dur}</span><span class="sw-unit">MIN</span></div><i class="ti ti-chevron-right sw-chev"></i>`;
+    : `<div class="sw-numwrap"><span class="sw-num" style="color:#FF0099">${w.dur}</span><span class="sw-unit" style="color:#FF0099">MIN</span></div><i class="ti ti-chevron-right sw-chev"></i>`;
   return `<div class="sw-card ${w.today?'today':''}" data-idx="${i}">
     <div class="sw-thumb" style="background:${thumbGrad};box-shadow:0 4px 16px ${thumbGlow}">
       <span class="sw-thumb-d">${w.day}</span><span class="sw-thumb-n">${w.date}</span>
@@ -522,7 +524,7 @@ document.getElementById('phases').innerHTML = PHASES.map((p,i) => {
         <div class="sw-title-row"><h4 class="sw-title">${p.name}</h4>${current?'<span class="dot"></span>':''}</div>
         <p class="sw-sub">Weeks ${p.weeks}</p>
       </div>
-      <div class="sw-right"><div class="sw-numwrap"><span class="sw-num" style="color:${locked?'#94a3b8':p.color}">2×</span><span class="sw-unit">WKS</span></div><i class="ti ti-chevron-down phase-chev"></i></div>
+      <div class="sw-right"><div class="sw-numwrap"><span class="sw-num" style="color:${locked?'#94a3b8':p.color}">2×</span><span class="sw-unit" style="color:${locked?'#94a3b8':p.color}">WKS</span></div><i class="ti ti-chevron-down phase-chev"></i></div>
     </button>
     <div class="phase-body"><div class="phase-body-inner">${rows}</div></div>
   </div>`;

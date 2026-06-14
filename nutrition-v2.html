@@ -523,7 +523,7 @@ document.getElementById('meal-list').innerHTML = MEALS.map((m,i) => `
     </div>
     ${m.pending
       ? `<div class="sw-right"><button class="meal-log-btn">Log</button></div>`
-      : `<div class="sw-right"><div class="sw-numwrap"><span class="sw-num" style="color:${m.color}">${m.kcal}</span><span class="sw-unit">KCAL</span></div><i class="ti ti-chevron-right sw-chev"></i></div>`}
+      : `<div class="sw-right"><div class="sw-numwrap"><span class="sw-num" style="color:${m.color}">${m.kcal}</span><span class="sw-unit" style="color:${m.color}">KCAL</span></div><i class="ti ti-chevron-right sw-chev"></i></div>`}
   </div>`).join('');
 // tappable logged meals -> detail sheet
 document.querySelectorAll('.meal').forEach(row => {
