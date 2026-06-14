@@ -113,7 +113,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .sw-info { flex:1; min-width:0; }
 .sw-title-row { display:flex; align-items:center; gap:8px; }
 .sw-title { font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:1.96px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sw-sub { font-size:12px; font-weight:600; line-height:16px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sw-sub { font-size:11px; font-weight:700; line-height:16px; margin-top:3px; text-transform:uppercase; letter-spacing:0.14em; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sw-right { display:flex; align-items:center; gap:4px; flex-shrink:0; }
 .sw-num { font-size:18px; font-weight:700; color:#0f172a; }
 .sw-num small { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-left:2px; opacity:0.7; }
@@ -154,12 +154,12 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .tl-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#fff; line-height:1.15; }
 .tl-sub { font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:6px; }
 .timeline-dates { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:14px; }
-.phase { background:#fff; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 4px 16px rgba(148,163,184,0.12); overflow:hidden; margin-bottom:12px; }
-.phase.current { border-color:transparent; box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
-.phase.done { background:#ffffff; box-shadow:0 4px 20px rgba(148,163,184,0.18); }
-.phase.locked { background:#f1f5f9; }
+.phase { border-radius:16px; overflow:hidden; margin-bottom:12px; }
+.phase.current .phase-head { box-shadow:0 0 0 2px #FF0099, 0 4px 16px rgba(255,0,153,0.15); }
+.phase.done .phase-head { background:#ffffff; }
+.phase.locked .phase-head { background:#f8fafc; }
 .phase.locked .phase-info h4, .phase.locked .phase-ic i { color:#94a3b8; }
-.phase-head { width:100%; padding:16px; display:flex; align-items:center; gap:12px; cursor:pointer; background:transparent; border:none; -webkit-appearance:none; appearance:none; text-align:left; }
+.phase-head.sw-card { width:100%; text-align:left; -webkit-appearance:none; appearance:none; }
 .phase-ic { width:40px; height:40px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; }
 .phase-ic.locked { background:#f1f5f9; color:#94a3b8; }
 .phase-info { flex:1; text-align:left; min-width:0; }
@@ -168,7 +168,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .phase-now { font-size:9px; text-transform:uppercase; font-weight:700; letter-spacing:0.06em; padding:2px 6px; border-radius:4px; color:#fff; background:#FF0099; }
 .phase-info p { font-size:12px; color:#64748b; font-weight:500; margin-top:1px; }
 .phase-chev { color:#94a3b8; font-size:18px; transition:transform 0.25s; }
-.phase-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+.phase-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; background:#fff; border:1px solid #f1f5f9; border-top:none; border-radius:0 0 16px 16px; margin-top:-8px; }
 .phase-body-inner { padding:4px 16px 16px; border-top:1px solid #f1f5f9; }
 .phase-row { display:flex; align-items:center; gap:14px; padding:14px 0; }
 .phase-row .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
@@ -392,13 +392,13 @@ const EXERCISES = [
 ];
 
 const WEEK = [
-  { day:'MON', date:'03', title:'Quad Dominant', focus:'lower body hypertrophy', cal:'480', rest:false, today:true, locked:false, color:'#FF0099' },
-  { day:'TUE', date:'04', title:'Active Rest', focus:'mobility & walk', cal:'', rest:true, today:false, locked:false, color:'#00CC6A' },
-  { day:'WED', date:'05', title:'Push Day', focus:'chest · shoulders · triceps', cal:'420', rest:false, today:false, locked:true, color:'#BF00FF' },
-  { day:'THU', date:'06', title:'HIIT Burner', focus:'conditioning', cal:'380', rest:false, today:false, locked:true, color:'#FF4D00' },
-  { day:'FRI', date:'07', title:'Pull Day', focus:'back · biceps', cal:'450', rest:false, today:false, locked:true, color:'#FFE000' },
-  { day:'SAT', date:'08', title:'Full Body', focus:'strength circuit', cal:'520', rest:false, today:false, locked:true, color:'#FF0099' },
-  { day:'SUN', date:'09', title:'Rest Day', focus:'full recovery', cal:'', rest:true, today:false, locked:false, color:'#94A3B8' },
+  { day:'MON', date:'03', title:'Quad Dominant', focus:'lower body hypertrophy', cal:'480', dur:'60', rest:false, today:true, locked:false, color:'#FF0099' },
+  { day:'TUE', date:'04', title:'Active Rest', focus:'mobility & walk', cal:'', dur:'20', rest:true, today:false, locked:false, color:'#00CC6A' },
+  { day:'WED', date:'05', title:'Push Day', focus:'chest · shoulders · triceps', cal:'420', dur:'45', rest:false, today:false, locked:true, color:'#BF00FF' },
+  { day:'THU', date:'06', title:'HIIT Burner', focus:'conditioning', cal:'380', dur:'30', rest:false, today:false, locked:true, color:'#FF4D00' },
+  { day:'FRI', date:'07', title:'Pull Day', focus:'back · biceps', cal:'450', dur:'50', rest:false, today:false, locked:true, color:'#FFE000' },
+  { day:'SAT', date:'08', title:'Full Body', focus:'strength circuit', cal:'520', dur:'60', rest:false, today:false, locked:true, color:'#FF0099' },
+  { day:'SUN', date:'09', title:'Rest Day', focus:'full recovery', cal:'', dur:'', rest:true, today:false, locked:false, color:'#94A3B8' },
 ];
 
 const PHASES = [
@@ -480,16 +480,16 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const subColor = w.rest ? '#00CC6A' : '#FF0099';
   const right = w.rest
     ? `<span class="sw-num" style="color:#00CC6A">Rest</span>`
-    : `<span class="sw-num" style="color:#FF0099">${w.cal}<small>CAL</small></span>`;
+    : `<span class="sw-num" style="color:#FF0099">${w.dur}<small>MIN</small></span><i class="ti ti-chevron-right sw-chev"></i>`;
   return `<div class="sw-card ${w.today?'today':''}" data-idx="${i}">
     <div class="sw-thumb" style="background:${thumbGrad};box-shadow:0 4px 16px ${thumbGlow}">
       <span class="sw-thumb-d">${w.day}</span><span class="sw-thumb-n">${w.date}</span>
     </div>
     <div class="sw-info">
       <div class="sw-title-row"><h4 class="sw-title">${w.title}</h4>${w.today?'<span class="dot"></span>':''}</div>
-      <p class="sw-sub" style="color:${subColor}">${toTitleCase(w.focus)}</p>
+      <p class="sw-sub">${toTitleCase(w.focus)}</p>
     </div>
-    <div class="sw-right">${right}<i class="ti ti-chevron-right sw-chev"></i></div>
+    <div class="sw-right">${right}</div>
   </div>`;
 }).join('');
 
@@ -509,14 +509,19 @@ const PHASE_ROWS = [
 ];
 document.getElementById('phases').innerHTML = PHASES.map((p,i) => {
   const locked = p.status==='locked', current = p.status==='current', done = p.status==='done';
-  const icStyle = locked ? '' : `background:linear-gradient(135deg,${p.color},${p.color}CC);box-shadow:0 4px 12px ${p.color}66`;
+  const thumbStyle = locked
+    ? 'background:#f1f5f9;color:#94a3b8;'
+    : `background:linear-gradient(135deg,${p.color},${p.color}CC);color:#fff;box-shadow:0 4px 16px ${p.color}66;`;
   const icon = locked ? 'ti-lock' : done ? 'ti-circle-check' : 'ti-activity';
   const rows = PHASE_ROWS.map(r => `<div class="phase-row"><div class="dot" style="background:${p.color};box-shadow:0 0 6px ${p.color}"></div><div class="l"><p class="t-listhead">${r.label}</p><p class="t-listsub">${r.meta}</p></div><i class="ti ti-barbell"></i></div>`).join('');
   return `<div class="phase ${current?'current':''} ${locked?'locked':''} ${done?'done':''}" data-phase="${i}">
-    <button class="phase-head">
-      <div class="phase-ic ${locked?'locked':''}" style="${icStyle}"><i class="ti ${icon}" style="font-size:18px"></i></div>
-      <div class="phase-info"><div class="t"><h4 class="t-drophead">${p.name}</h4>${current?'<span class="phase-now">Now</span>':''}</div><p class="t-dropsub">Weeks ${p.weeks} · ${p.desc}</p></div>
-      <i class="ti ti-chevron-down phase-chev"></i>
+    <button class="phase-head sw-card" style="cursor:pointer">
+      <div class="sw-thumb" style="${thumbStyle}"><i class="ti ${icon}"></i></div>
+      <div class="sw-info">
+        <div class="sw-title-row"><h4 class="sw-title">${p.name}</h4>${current?'<span class="phase-now">Now</span>':''}</div>
+        <p class="sw-sub">Weeks ${p.weeks}</p>
+      </div>
+      <div class="sw-right"><span class="sw-num" style="color:${locked?'#94a3b8':p.color}">2×<small>/wk</small></span><i class="ti ti-chevron-down phase-chev"></i></div>
     </button>
     <div class="phase-body"><div class="phase-body-inner">${rows}</div></div>
   </div>`;

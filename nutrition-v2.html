@@ -128,8 +128,7 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .sw-thumb i { font-size:24px; }
 .sw-info { flex:1; min-width:0; }
 .sw-title { font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:1.96px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.sw-sub { font-size:12px; font-weight:600; line-height:16px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:5px; }
-.sw-sub i { font-size:11px; }
+.sw-sub { font-size:11px; font-weight:700; line-height:16px; margin-top:3px; text-transform:uppercase; letter-spacing:0.14em; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sw-right { display:flex; align-items:center; gap:4px; flex-shrink:0; }
 .sw-num { font-size:18px; font-weight:700; color:#0f172a; }
 .sw-num small { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-left:2px; opacity:0.7; }
@@ -519,11 +518,11 @@ document.getElementById('meal-list').innerHTML = MEALS.map((m,i) => `
     <div class="sw-thumb"><img src="${m.img}" alt=""></div>
     <div class="sw-info">
       <h4 class="sw-title">${m.name}</h4>
-      <p class="sw-sub" style="color:${m.color}"><i class="ti ${m.icon}"></i>${m.type} · ${m.time}</p>
+      <p class="sw-sub">${m.type} · ${m.time}</p>
     </div>
     ${m.pending
       ? `<div class="sw-right"><button class="meal-log-btn">Log</button></div>`
-      : `<div class="sw-right"><span class="sw-num">${m.kcal}<small>kcal</small></span><i class="ti ti-chevron-right sw-chev"></i></div>`}
+      : `<div class="sw-right"><span class="sw-num" style="color:${m.color}">${m.kcal}<small>kcal</small></span><i class="ti ti-chevron-right sw-chev"></i></div>`}
   </div>`).join('');
 // tappable logged meals -> detail sheet
 document.querySelectorAll('.meal').forEach(row => {
