@@ -232,20 +232,22 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 
       <!-- Trends: Weight / Strength / Energy -->
       <section>
-        <h2 class="sec-h2" style="margin-bottom:16px">Your Trends</h2>
+        <div class="sec-head" style="margin-bottom:16px">
+          <h2 class="sec-h2">Your Trends</h2>
+          <div class="range-toggle" id="shared-toggle">
+            <button class="range-btn" data-r="1M">1M</button>
+            <button class="range-btn active" data-r="3M">3M</button>
+            <button class="range-btn" data-r="ALL">All</button>
+          </div>
+        </div>
 
         <!-- Weight -->
         <div class="card chart-card" style="margin-bottom:16px">
           <img class="chart-bg" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop" alt="">
           <div class="chart-ov"></div>
           <div class="chart-top">
-            <div><div class="l">Weight · Current</div><div class="big" id="weight-cur">70.6<small>kg</small></div></div>
+            <div><div class="big">Weight</div></div>
             <div class="chart-delta" id="weight-delta"><i class="ti ti-trending-down" style="font-size:16px"></i> <span>-5.9 this range</span></div>
-          </div>
-          <div class="range-toggle inline-toggle" data-chart="weight">
-            <button class="range-btn" data-r="1M">1M</button>
-            <button class="range-btn active" data-r="3M">3M</button>
-            <button class="range-btn" data-r="ALL">All</button>
           </div>
           <div id="chart-weight"></div>
         </div>
@@ -255,13 +257,8 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
           <img class="chart-bg" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop" alt="">
           <div class="chart-ov"></div>
           <div class="chart-top">
-            <div><div class="l">Strength · Volume</div><div class="big" id="strength-cur">12.4<small>k kg</small></div></div>
+            <div><div class="big">Strength</div></div>
             <div class="chart-delta up" id="strength-delta"><i class="ti ti-trending-up" style="font-size:16px"></i> <span>+3.8k this range</span></div>
-          </div>
-          <div class="range-toggle inline-toggle" data-chart="strength">
-            <button class="range-btn" data-r="1M">1M</button>
-            <button class="range-btn active" data-r="3M">3M</button>
-            <button class="range-btn" data-r="ALL">All</button>
           </div>
           <div id="chart-strength"></div>
         </div>
@@ -271,13 +268,8 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
           <img class="chart-bg" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop" alt="">
           <div class="chart-ov"></div>
           <div class="chart-top">
-            <div><div class="l">Energy · Avg</div><div class="big" id="energy-cur">8.2<small>/10</small></div></div>
+            <div><div class="big">Energy</div></div>
             <div class="chart-delta up" id="energy-delta"><i class="ti ti-trending-up" style="font-size:16px"></i> <span>+2.1 this range</span></div>
-          </div>
-          <div class="range-toggle inline-toggle" data-chart="energy">
-            <button class="range-btn" data-r="1M">1M</button>
-            <button class="range-btn active" data-r="3M">3M</button>
-            <button class="range-btn" data-r="ALL">All</button>
           </div>
           <div id="chart-energy"></div>
         </div>
@@ -450,21 +442,17 @@ function drawChart(key, range) {
   const absd = Math.abs(diff).toFixed(1);
   const sign = diff>=0 ? '+' : '-';
   document.querySelector(`#${key}-delta span`).textContent = `${sign}${absd} this range`;
-  document.getElementById(key+'-cur').innerHTML = `${data[data.length-1].v}<small>${cfg.unit}</small>`;
 }
 
 // init all three
 ['weight','strength','energy'].forEach(k => drawChart(k, '3M'));
 
-// per-card toggles
-document.querySelectorAll('.inline-toggle').forEach(tog => {
-  const key = tog.dataset.chart;
-  tog.querySelectorAll('.range-btn').forEach(b => b.addEventListener('click', () => {
-    tog.querySelectorAll('.range-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    drawChart(key, b.dataset.r);
-  }));
-});
+// single shared toggle controls all three
+document.querySelectorAll('#shared-toggle .range-btn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#shared-toggle .range-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  ['weight','strength','energy'].forEach(k => drawChart(k, b.dataset.r));
+}));
 
 // ─── MEASUREMENTS (hero ring + others) ───
 const MEAS = [
