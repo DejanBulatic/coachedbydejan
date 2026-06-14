@@ -516,7 +516,7 @@ const MEALS = [
 ];
 document.getElementById('meal-list').innerHTML = MEALS.map((m,i) => `
   <div class="sw-card meal ${m.pending?'pending':''}" data-meal="${i}">
-    <div class="sw-thumb" style="box-shadow:0 4px 16px ${m.color}66"><img src="${m.img}" alt=""></div>
+    <div class="sw-thumb"><img src="${m.img}" alt=""></div>
     <div class="sw-info">
       <h4 class="sw-title">${m.name}</h4>
       <p class="sw-sub">${m.type} · ${m.time}</p>

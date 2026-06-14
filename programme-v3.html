@@ -155,7 +155,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .tl-name { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#fff; line-height:1.15; }
 .tl-sub { font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:6px; }
 .timeline-dates { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,0.6); font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-top:14px; }
-.phase { border-radius:16px; overflow:hidden; margin-bottom:12px; }
+.phase { margin-bottom:12px; }
 .phase.current .phase-head { box-shadow:0 0 0 2px #FF0099, 0 8px 24px rgba(255,0,153,0.2); }
 .phase.done .phase-head { background:#ffffff; }
 .phase.locked .phase-head { background:#f8fafc; }
@@ -169,7 +169,7 @@ h2.sec { font-size:22px; font-weight:800; letter-spacing:-0.01em; color:#0f172a;
 .phase-now { font-size:9px; text-transform:uppercase; font-weight:700; letter-spacing:0.06em; padding:2px 6px; border-radius:4px; color:#fff; background:#FF0099; }
 .phase-info p { font-size:12px; color:#64748b; font-weight:500; margin-top:1px; }
 .phase-chev { color:#94a3b8; font-size:18px; transition:transform 0.25s; }
-.phase-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; background:#fff; border:1px solid #f1f5f9; border-top:none; border-radius:0 0 16px 16px; margin-top:-8px; }
+.phase-body { max-height:0; overflow:hidden; transition:max-height 0.3s ease; background:#fff; border:1px solid #f1f5f9; border-top:none; border-radius:0 0 16px 16px; margin-top:-12px; padding-top:12px; }
 .phase-body-inner { padding:4px 16px 16px; border-top:1px solid #f1f5f9; }
 .phase-row { display:flex; align-items:center; gap:14px; padding:14px 0; }
 .phase-row .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
@@ -480,7 +480,7 @@ document.getElementById('week-list').innerHTML = WEEK.map((w,i) => {
   const thumbGlow = w.rest ? 'rgba(0,204,106,0.4)' : 'rgba(255,0,153,0.4)';
   const subColor = w.rest ? '#00CC6A' : '#FF0099';
   const right = w.rest
-    ? `<div class="sw-numwrap"><span class="sw-num" style="color:#00CC6A;font-size:14px">Rest</span></div>`
+    ? `<div class="sw-numwrap"><span class="sw-num" style="color:#00CC6A;font-size:14px">Rest</span></div><i class="ti ti-chevron-right sw-chev" style="visibility:hidden"></i>`
     : `<div class="sw-numwrap"><span class="sw-num" style="color:#FF0099">${w.dur}</span><span class="sw-unit">MIN</span></div><i class="ti ti-chevron-right sw-chev"></i>`;
   return `<div class="sw-card ${w.today?'today':''}" data-idx="${i}">
     <div class="sw-thumb" style="background:${thumbGrad};box-shadow:0 4px 16px ${thumbGlow}">
