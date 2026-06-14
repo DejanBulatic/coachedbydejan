@@ -73,6 +73,8 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 .range-toggle { display:flex; background:rgba(15,23,42,0.9); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.12); box-shadow:0 4px 16px rgba(15,23,42,0.25); border-radius:999px; padding:4px; }
 .range-btn { position:relative; padding:5px 14px; border-radius:999px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:rgba(255,255,255,0.55); border:none; background:none; cursor:pointer; transition:color 0.2s; }
 .range-btn.active { color:#fff; background:linear-gradient(to right,#BF00FF,#FF0099); }
+.inline-toggle { display:inline-flex; margin:14px 0 4px; }
+.chart-delta.up { color:#00CC6A; }
 
 /* WEIGHT CHART CARD */
 .chart-card { padding:20px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 50px rgba(15,23,42,0.3); }
@@ -228,24 +230,56 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
         </div>
       </section>
 
-      <!-- Weight trend -->
+      <!-- Trends: Weight / Strength / Energy -->
       <section>
-        <div class="sec-head">
-          <h2 class="sec-h2">Weight Trend</h2>
-          <div class="range-toggle" id="range-toggle">
+        <h2 class="sec-h2" style="margin-bottom:16px">Your Trends</h2>
+
+        <!-- Weight -->
+        <div class="card chart-card" style="margin-bottom:16px">
+          <img class="chart-bg" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop" alt="">
+          <div class="chart-ov"></div>
+          <div class="chart-top">
+            <div><div class="l">Weight · Current</div><div class="big" id="weight-cur">70.6<small>kg</small></div></div>
+            <div class="chart-delta" id="weight-delta"><i class="ti ti-trending-down" style="font-size:16px"></i> <span>-5.9 this range</span></div>
+          </div>
+          <div class="range-toggle inline-toggle" data-chart="weight">
             <button class="range-btn" data-r="1M">1M</button>
             <button class="range-btn active" data-r="3M">3M</button>
             <button class="range-btn" data-r="ALL">All</button>
           </div>
+          <div id="chart-weight"></div>
         </div>
-        <div class="card chart-card">
-          <img class="chart-bg" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop" alt="">
+
+        <!-- Strength -->
+        <div class="card chart-card" style="margin-bottom:16px">
+          <img class="chart-bg" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop" alt="">
           <div class="chart-ov"></div>
           <div class="chart-top">
-            <div><div class="l">Current</div><div class="big">70.6<small>kg</small></div></div>
-            <div class="chart-delta" id="chart-delta"><i class="ti ti-trending-down" style="font-size:16px"></i> <span>-5.9 this range</span></div>
+            <div><div class="l">Strength · Volume</div><div class="big" id="strength-cur">12.4<small>k kg</small></div></div>
+            <div class="chart-delta up" id="strength-delta"><i class="ti ti-trending-up" style="font-size:16px"></i> <span>+3.8k this range</span></div>
           </div>
-          <div id="chart"></div>
+          <div class="range-toggle inline-toggle" data-chart="strength">
+            <button class="range-btn" data-r="1M">1M</button>
+            <button class="range-btn active" data-r="3M">3M</button>
+            <button class="range-btn" data-r="ALL">All</button>
+          </div>
+          <div id="chart-strength"></div>
+        </div>
+
+        <!-- Energy -->
+        <div class="card chart-card">
+          <img class="chart-bg" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop" alt="">
+          <div class="chart-ov"></div>
+          <div class="chart-top">
+            <div><div class="l">Energy · Avg</div><div class="big" id="energy-cur">8.2<small>/10</small></div></div>
+            <div class="chart-delta up" id="energy-delta"><i class="ti ti-trending-up" style="font-size:16px"></i> <span>+2.1 this range</span></div>
+          </div>
+          <div class="range-toggle inline-toggle" data-chart="energy">
+            <button class="range-btn" data-r="1M">1M</button>
+            <button class="range-btn active" data-r="3M">3M</button>
+            <button class="range-btn" data-r="ALL">All</button>
+          </div>
+          <div id="chart-energy"></div>
         </div>
       </section>
 
@@ -355,51 +389,82 @@ h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#0f172a; }
 <script>
 const ACCENT = { purple:'#BF00FF', pink:'#FF0099', orange:'#FF4D00', blue:'#6FD9FF', green:'#00CC6A', yellow:'#FFE000' };
 
-// ─── WEIGHT CHART ───
-const SERIES = {
-  '1M':[{l:'W1',v:72.4},{l:'W2',v:71.8},{l:'W3',v:71.1},{l:'W4',v:70.6}],
-  '3M':[{l:'Mar',v:76.5},{l:'',v:75.8},{l:'Apr',v:74.2},{l:'',v:73.4},{l:'May',v:72.3},{l:'',v:71.4},{l:'Jun',v:70.6}],
-  'ALL':[{l:'Jan',v:78.2},{l:'Feb',v:77.4},{l:'Mar',v:76.1},{l:'Apr',v:74.0},{l:'May',v:72.1},{l:'Jun',v:70.6}],
+// ─── TREND CHARTS (Weight / Strength / Energy) ───
+const CHARTS = {
+  weight: {
+    color: ACCENT.pink, unit:'kg', dir:'down',
+    series: {
+      '1M':[{l:'W1',v:72.4},{l:'W2',v:71.8},{l:'W3',v:71.1},{l:'W4',v:70.6}],
+      '3M':[{l:'Mar',v:76.5},{l:'',v:75.8},{l:'Apr',v:74.2},{l:'',v:73.4},{l:'May',v:72.3},{l:'',v:71.4},{l:'Jun',v:70.6}],
+      'ALL':[{l:'Jan',v:78.2},{l:'Feb',v:77.4},{l:'Mar',v:76.1},{l:'Apr',v:74.0},{l:'May',v:72.1},{l:'Jun',v:70.6}],
+    }
+  },
+  strength: {
+    color: ACCENT.purple, unit:'k kg', dir:'up',
+    series: {
+      '1M':[{l:'W1',v:10.8},{l:'W2',v:11.3},{l:'W3',v:11.9},{l:'W4',v:12.4}],
+      '3M':[{l:'Mar',v:8.6},{l:'',v:9.2},{l:'Apr',v:9.9},{l:'',v:10.6},{l:'May',v:11.4},{l:'',v:11.9},{l:'Jun',v:12.4}],
+      'ALL':[{l:'Jan',v:6.4},{l:'Feb',v:7.5},{l:'Mar',v:8.6},{l:'Apr',v:9.9},{l:'May',v:11.4},{l:'Jun',v:12.4}],
+    }
+  },
+  energy: {
+    color: ACCENT.green, unit:'/10', dir:'up',
+    series: {
+      '1M':[{l:'W1',v:6.5},{l:'W2',v:7.2},{l:'W3',v:7.8},{l:'W4',v:8.2}],
+      '3M':[{l:'Mar',v:5.8},{l:'',v:6.3},{l:'Apr',v:6.9},{l:'',v:7.3},{l:'May',v:7.8},{l:'',v:8.0},{l:'Jun',v:8.2}],
+      'ALL':[{l:'Jan',v:5.1},{l:'Feb',v:5.6},{l:'Mar',v:6.2},{l:'Apr',v:7.0},{l:'May',v:7.8},{l:'Jun',v:8.2}],
+    }
+  },
 };
-function drawChart(data) {
+
+function drawChart(key, range) {
+  const cfg = CHARTS[key], data = cfg.series[range], color = cfg.color;
   const W=320, H=160, padX=16, padY=20;
-  const vals = data.map(d=>d.v), min=Math.min(...vals)-0.5, max=Math.max(...vals)+0.5, range=max-min||1;
-  const pts = data.map((d,i)=>({ x:padX+(i*(W-padX*2))/(data.length-1), y:padY+(H-padY*2)*(1-(d.v-min)/range), l:d.l }));
-  let path = pts.map((p,i)=> i===0?`M ${p.x} ${p.y}`:`L ${p.x} ${p.y}`).join(' ');
-  // smooth with quadratic
-  path = pts.map((p,i)=>{ if(i===0)return `M ${p.x} ${p.y}`; const pr=pts[i-1]; const cx=(pr.x+p.x)/2; return `Q ${cx} ${pr.y} ${cx} ${(pr.y+p.y)/2} T ${p.x} ${p.y}`; }).join(' ');
+  const vals = data.map(d=>d.v), min=Math.min(...vals)-(Math.max(...vals)-Math.min(...vals))*0.15-0.3, max=Math.max(...vals)+(Math.max(...vals)-Math.min(...vals))*0.15+0.3, range2=max-min||1;
+  const pts = data.map((d,i)=>({ x:padX+(i*(W-padX*2))/(data.length-1), y:padY+(H-padY*2)*(1-(d.v-min)/range2), l:d.l }));
+  let path = pts.map((p,i)=>{ if(i===0)return `M ${p.x} ${p.y}`; const pr=pts[i-1]; const cx=(pr.x+p.x)/2; return `Q ${cx} ${pr.y} ${cx} ${(pr.y+p.y)/2} T ${p.x} ${p.y}`; }).join(' ');
   const area = `${path} L ${pts[pts.length-1].x} ${H-padY} L ${pts[0].x} ${H-padY} Z`;
   const grid = [0.25,0.5,0.75].map(t=>`<line x1="${padX}" x2="${W-padX}" y1="${padY+(H-padY*2)*t}" y2="${padY+(H-padY*2)*t}" stroke="rgba(255,255,255,0.1)" stroke-dasharray="3 4"/>`).join('');
-  const dots = pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="white" stroke="${ACCENT.pink}" stroke-width="2"/>${p.l?`<text x="${p.x}" y="${H-4}" text-anchor="middle" font-size="11" font-weight="500" letter-spacing="0.5" fill="rgba(255,255,255,0.7)" style="text-transform:uppercase">${(p.l||"").toUpperCase()}</text>`:''}`).join('');
+  const dots = pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3" fill="white" stroke="${color}" stroke-width="2"/>${p.l?`<text x="${p.x}" y="${H-4}" text-anchor="middle" font-size="11" font-weight="500" fill="rgba(255,255,255,0.7)">${(p.l||"").toUpperCase()}</text>`:''}`).join('');
   const last = pts[pts.length-1];
-  document.getElementById('chart').innerHTML = `
+  const sid = key;
+  document.getElementById('chart-'+key).innerHTML = `
     <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
       <defs>
-        <linearGradient id="ws" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${ACCENT.purple}"/><stop offset="100%" stop-color="${ACCENT.pink}"/></linearGradient>
-        <linearGradient id="wf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${ACCENT.pink}" stop-opacity="0.25"/><stop offset="100%" stop-color="${ACCENT.pink}" stop-opacity="0"/></linearGradient>
-        <filter id="wg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="ws-${sid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${color}" stop-opacity="0.7"/><stop offset="100%" stop-color="${color}"/></linearGradient>
+        <linearGradient id="wf-${sid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.25"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient>
+        <filter id="wg-${sid}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       ${grid}
-      <path d="${area}" fill="url(#wf)"/>
-      <path id="wline" d="${path}" fill="none" stroke="url(#ws)" stroke-width="3" stroke-linecap="round" filter="url(#wg)"/>
+      <path d="${area}" fill="url(#wf-${sid})"/>
+      <path id="line-${sid}" d="${path}" fill="none" stroke="url(#ws-${sid})" stroke-width="3" stroke-linecap="round" filter="url(#wg-${sid})"/>
       ${dots}
-      <circle cx="${last.x}" cy="${last.y}" r="6" fill="${ACCENT.pink}" style="filter:drop-shadow(0 0 6px ${ACCENT.pink})"/>
+      <circle cx="${last.x}" cy="${last.y}" r="6" fill="${color}" style="filter:drop-shadow(0 0 6px ${color})"/>
     </svg>`;
-  // animate line draw
-  const line = document.getElementById('wline');
+  const line = document.getElementById('line-'+sid);
   const len = line.getTotalLength();
   line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
   setTimeout(()=>{ line.style.transition='stroke-dashoffset 1.2s ease'; line.style.strokeDashoffset=0; },100);
-  // delta
-  const delta = (data[0].v - data[data.length-1].v).toFixed(1);
-  document.querySelector('#chart-delta span').textContent = `-${delta} this range`;
+  // delta + current value
+  const diff = (data[data.length-1].v - data[0].v);
+  const absd = Math.abs(diff).toFixed(1);
+  const sign = diff>=0 ? '+' : '-';
+  document.querySelector(`#${key}-delta span`).textContent = `${sign}${absd} this range`;
+  document.getElementById(key+'-cur').innerHTML = `${data[data.length-1].v}<small>${cfg.unit}</small>`;
 }
-drawChart(SERIES['3M']);
-document.querySelectorAll('.range-btn').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('.range-btn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  drawChart(SERIES[b.dataset.r]);
-}));
+
+// init all three
+['weight','strength','energy'].forEach(k => drawChart(k, '3M'));
+
+// per-card toggles
+document.querySelectorAll('.inline-toggle').forEach(tog => {
+  const key = tog.dataset.chart;
+  tog.querySelectorAll('.range-btn').forEach(b => b.addEventListener('click', () => {
+    tog.querySelectorAll('.range-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    drawChart(key, b.dataset.r);
+  }));
+});
 
 // ─── MEASUREMENTS (hero ring + others) ───
 const MEAS = [
