@@ -91,7 +91,7 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
 .kg-card > .kg-ov { position:absolute; inset:0; z-index:0; background:radial-gradient(ellipse 90% 75% at 90% 5%, rgba(255,0,153,0.10) 0%, transparent 70%), linear-gradient(160deg, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.96) 100%); }
 .kg-card > *:not(.kg-bg):not(.kg-ov) { position:relative; z-index:1; }
 .kg-card .kg-head { width:100%; text-align:left; margin-bottom:8px; }
-.kg-title { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; line-height:1.15; }
+.kg-title { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; color:#0f172a; letter-spacing:0; line-height:1.15; white-space:nowrap; }
 .kg-card .kg-head .eyebrow { color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
 .kg-card .kg-head .sub { font-size:10px; color:#94a3b8; margin-top:1px; }
 .kg-rings { width:111px; height:111px; position:relative; margin-top:4px; }
@@ -337,12 +337,12 @@ body { font-family:'Inter', sans-serif; color:#0f172a; overflow:hidden; }
         <div class="card kg-card">
           <img class="kg-bg" src="https://images.unsplash.com/photo-1434596922112-19c563067271?w=600&h=700&fit=crop" alt="">
           <div class="kg-ov"></div>
-          <div class="kg-head"><div class="kg-title">Weight Progress</div></div>
+          <div class="kg-head"><div class="kg-title">Weight</div></div>
           <div class="kg-rings" id="kg-rings"></div>
           <div class="kg-legend">
-            <div class="kg-leg"><span class="dot" style="background:#BF00FF;box-shadow:0 0 5px #BF00FF"></span><span>Lost</span></div>
-            <div class="kg-leg"><span class="dot" style="background:#FF0099;box-shadow:0 0 5px #FF0099"></span><span>Curr</span></div>
-            <div class="kg-leg"><span class="dot" style="background:#FF4D00;box-shadow:0 0 5px #FF4D00"></span><span>Goal</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#BF00FF"></span><span>Lost</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF0099"></span><span>Curr</span></div>
+            <div class="kg-leg"><span class="dot" style="background:#FF4D00"></span><span>Goal</span></div>
           </div>
         </div>
         </div>
