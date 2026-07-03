@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmo — Cognitive Operating System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#05060a;
+    --bg-2:#0a0c14;
+    --panel:rgba(20,24,38,0.55);
+    --panel-brd:rgba(120,160,255,0.14);
+    --ink:#eaf0ff;
+    --ink-dim:#9aa6c8;
+    --ink-faint:#5f6b8f;
+    --cyan:#3ff0e0;
+    --violet:#8b7bff;
+    --pink:#ff5ea8;
+    --blue:#4d8cff;
+    --amber:#ffb454;
+    --green:#4be59a;
+    --line:rgba(120,160,255,0.22);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ambient background glows */
+  body::before{
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 15% 8%, rgba(77,140,255,0.16), transparent 60%),
+      radial-gradient(700px 500px at 85% 20%, rgba(139,123,255,0.14), transparent 60%),
+      radial-gradient(600px 500px at 50% 100%, rgba(63,240,224,0.10), transparent 60%);
+  }
+
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  h1,h2,h3,.mono-label{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---- hero ---- */
+  header{padding:96px 0 40px;text-align:center;}
+  .maker{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:4px;
+    text-transform:uppercase;color:var(--ink-faint);margin:0 auto 20px;
+    position:relative;display:block;padding-bottom:14px;width:max-content;
+  }
+  .maker::after{
+    content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--violet),transparent);
+  }
+  .brandmark{
+    display:inline-flex;align-items:center;gap:14px;margin-bottom:30px;
+  }
+  .orb{
+    width:52px;height:52px;border-radius:50%;
+    background:conic-gradient(from 180deg, var(--cyan), var(--violet), var(--pink), var(--blue), var(--cyan));
+    filter:blur(0.3px);
+    box-shadow:0 0 30px rgba(139,123,255,0.6), 0 0 60px rgba(63,240,224,0.3);
+    animation:spin 14s linear infinite;
+    position:relative;
+  }
+  .orb::after{
+    content:'';position:absolute;inset:9px;border-radius:50%;
+    background:var(--bg);
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .brandname{font-size:30px;font-weight:700;letter-spacing:2px;}
+  .brandname span{color:var(--cyan);}
+
+  h1{
+    font-size:clamp(38px,6vw,72px);font-weight:700;line-height:1.05;letter-spacing:-1.5px;
+    margin:0 auto 22px;max-width:16ch;
+    background:linear-gradient(120deg,#fff 20%,#b9c6ff 55%,var(--cyan) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{font-size:clamp(16px,2.2vw,21px);color:var(--ink-dim);max-width:60ch;margin:0 auto 14px;}
+  .tag{
+    display:inline-block;margin-top:26px;padding:8px 18px;border-radius:100px;
+    border:1px solid var(--panel-brd);background:var(--panel);backdrop-filter:blur(12px);
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-dim);letter-spacing:0.5px;
+  }
+  .tag b{color:var(--cyan);font-weight:500;}
+
+  /* ---- section scaffolding ---- */
+  section{padding:70px 0;position:relative;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;
+    text-transform:uppercase;color:var(--cyan);margin-bottom:14px;
+  }
+  h2{font-size:clamp(28px,4vw,42px);font-weight:600;letter-spacing:-0.5px;margin-bottom:16px;}
+  .lead{font-size:18px;color:var(--ink-dim);max-width:64ch;margin-bottom:44px;}
+
+  /* ---- the architecture diagram ---- */
+  .arch{
+    border:1px solid var(--panel-brd);border-radius:24px;
+    background:linear-gradient(180deg, rgba(16,20,34,0.6), rgba(8,10,18,0.4));
+    backdrop-filter:blur(20px);
+    padding:38px 34px;position:relative;overflow:hidden;
+  }
+  .arch-grid{
+    position:absolute;inset:0;opacity:0.4;pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:44px 44px;mask-image:radial-gradient(circle at 50% 40%,#000 30%,transparent 80%);
+  }
+  .layer{position:relative;z-index:2;margin-bottom:26px;}
+  .layer:last-child{margin-bottom:0;}
+  .layer-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--ink-faint);margin-bottom:12px;display:flex;align-items:center;gap:10px;
+  }
+  .layer-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+
+  .nodes{display:flex;gap:14px;flex-wrap:wrap;}
+  .node{
+    flex:1;min-width:150px;border-radius:16px;padding:18px 18px 16px;
+    background:var(--panel);border:1px solid var(--panel-brd);backdrop-filter:blur(10px);
+    position:relative;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .node:hover{transform:translateY(-4px);border-color:rgba(139,123,255,0.5);
+    box-shadow:0 0 0 1px rgba(139,123,255,0.3),0 14px 40px rgba(77,140,255,0.18);}
+  .node .ntitle{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+  .node .ndesc{font-size:12.5px;color:var(--ink-dim);line-height:1.5;}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 0 10px currentColor;}
+  .d-cyan{background:var(--cyan);color:var(--cyan);}
+  .d-violet{background:var(--violet);color:var(--violet);}
+  .d-pink{background:var(--pink);color:var(--pink);}
+  .d-blue{background:var(--blue);color:var(--blue);}
+  .d-amber{background:var(--amber);color:var(--amber);}
+  .d-green{background:var(--green);color:var(--green);}
+
+  .flow{display:flex;justify-content:center;padding:2px 0;position:relative;z-index:2;}
+  .flow svg{width:40px;height:26px;}
+  .flow-line{stroke:var(--violet);stroke-width:1.5;filter:drop-shadow(0 0 4px var(--violet));}
+
+  .heart{border-color:rgba(63,240,224,0.4);box-shadow:0 0 0 1px rgba(63,240,224,0.15),0 0 30px rgba(63,240,224,0.1);}
+  .heart .ntitle{color:#fff;}
+  .heart-tag{position:absolute;top:-8px;right:12px;font-family:'JetBrains Mono',monospace;font-size:9px;
+    letter-spacing:1px;color:var(--bg);background:var(--cyan);padding:2px 7px;border-radius:20px;font-weight:600;}
+
+  /* ---- day strip ---- */
+  .day{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;}
+  .moment{
+    border-radius:18px;padding:22px 20px;background:var(--panel);border:1px solid var(--panel-brd);
+    backdrop-filter:blur(10px);position:relative;overflow:hidden;
+  }
+  .moment::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+    background:linear-gradient(90deg,var(--accent,var(--cyan)),transparent);}
+  .moment .mtime{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent,var(--cyan));margin-bottom:8px;letter-spacing:1px;}
+  .moment .mtitle{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;margin-bottom:7px;}
+  .moment .mdesc{font-size:13px;color:var(--ink-dim);line-height:1.55;}
+
+  /* ---- pillars ---- */
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+  .pillar{border-radius:16px;padding:20px;background:var(--panel);border:1px solid var(--panel-brd);
+    backdrop-filter:blur(10px);text-align:center;}
+  .pillar .picon{font-size:26px;margin-bottom:8px;}
+  .pillar .pname{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:4px;}
+  .pillar .pdesc{font-size:12px;color:var(--ink-faint);}
+
+  /* ---- principles ---- */
+  .principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .principle{border-left:2px solid var(--violet);padding:4px 0 4px 18px;}
+  .principle h3{font-size:16px;font-weight:600;margin-bottom:6px;}
+  .principle p{font-size:13.5px;color:var(--ink-dim);}
+
+  /* ---- footer ---- */
+  footer{padding:60px 0 80px;text-align:center;border-top:1px solid var(--panel-brd);margin-top:40px;}
+  .powered{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-faint);letter-spacing:0.5px;}
+  .powered b{color:var(--ink-dim);font-weight:500;}
+  .foot-orb{width:34px;height:34px;margin:0 auto 18px;border-radius:50%;
+    background:conic-gradient(from 180deg,var(--cyan),var(--violet),var(--pink),var(--blue),var(--cyan));
+    box-shadow:0 0 24px rgba(139,123,255,0.5);position:relative;}
+  .foot-orb::after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--bg);}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  @media (max-width:640px){
+    header{padding:64px 0 20px;}
+    .nodes{flex-direction:column;}
+    section{padding:52px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .orb,.foot-orb{animation:none;}
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header>
+    <div class="maker">Dejan AI Systems &amp; Co</div>
+    <div class="brandmark">
+      <div class="orb"></div>
+      <div class="brandname">COS<span>MO</span></div>
+    </div>
+    <h1>Your whole life, brought into order.</h1>
+    <p class="sub">Cosmo is a Cognitive Operating System — a voice-first AI that remembers your life, plans your goals end-to-end, and quietly runs the day around you. Not another app to check. A mind that holds the whole picture, so you don't have to.</p>
+    <div class="tag"><b>Cosmo</b> · Cognitive Operating System — Memory &amp; Orchestration</div>
+  </header>
+
+  <!-- THE PROBLEM / THESIS -->
+  <section class="reveal">
+    <div class="eyebrow">The idea</div>
+    <h2>The intelligence already exists. Cosmo is the body and the memory around it.</h2>
+    <p class="lead">Frontier AI can already think, plan, and reason. What it lacks is a persistent memory of <em>your</em> life and the ability to act inside it. Cosmo is that missing layer: a structured memory of everything you're working toward, a set of skills that act on it, and a conductor that interleaves every goal into a single coherent day.</p>
+  </section>
+
+  <!-- ARCHITECTURE DIAGRAM -->
+  <section class="reveal">
+    <div class="eyebrow">System architecture</div>
+    <h2>One store. One conductor. Every part a window into the same mind.</h2>
+    <p class="lead">Cosmo's features aren't separate apps bolted together — they're operations on one shared memory, orchestrated by one engine. Here's how it all connects.</p>
+
+    <div class="arch">
+      <div class="arch-grid"></div>
+
+      <!-- input -->
+      <div class="layer">
+        <div class="layer-label">Perception &amp; input</div>
+        <div class="nodes">
+          <div class="node"><div class="ntitle"><span class="dot d-cyan"></span>Voice &amp; capture</div><div class="ndesc">Speak, dictate, or drop a screenshot. The front door to everything — on desktop, phone, or watch.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-cyan"></span>The Watcher</div><div class="ndesc">Always-on. Tracks dates, deadlines, appointments and speaks up unprompted at the right moment.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-cyan"></span>Sensors &amp; spokes</div><div class="ndesc">Phone and watch read health, activity and location — windows into the hub, not the brain itself.</div></div>
+        </div>
+      </div>
+
+      <div class="flow"><svg viewBox="0 0 40 26"><path class="flow-line" d="M20 2 L20 18 M14 13 L20 20 L26 13" fill="none"/></svg></div>
+
+      <!-- the two hearts -->
+      <div class="layer">
+        <div class="layer-label">The two hearts — memory &amp; orchestration</div>
+        <div class="nodes">
+          <div class="node heart"><span class="heart-tag">HEART</span><div class="ntitle"><span class="dot d-cyan"></span>The Memory</div><div class="ndesc">Every goal, plan, note and tracker as structured local files. A raw capture zone that refines into organised, navigable knowledge. Yours, on your machine — never in the cloud.</div></div>
+          <div class="node heart"><span class="heart-tag">HEART</span><div class="ntitle"><span class="dot d-violet"></span>The Orchestrator</div><div class="ndesc">The decision-maker. Understands what you want, picks the right skill by meaning, reads and writes the memory, and conducts every goal into one coherent day.</div></div>
+        </div>
+      </div>
+
+      <div class="flow"><svg viewBox="0 0 40 26"><path class="flow-line" d="M20 2 L20 18 M14 13 L20 20 L26 13" fill="none"/></svg></div>
+
+      <!-- knowledge -->
+      <div class="layer">
+        <div class="layer-label">Knowledge &amp; judgment</div>
+        <div class="nodes">
+          <div class="node"><div class="ntitle"><span class="dot d-violet"></span>Skills library</div><div class="ndesc">The <em>how</em> — reusable methods the engine reads and follows. Soft, editable, and growing; add one by writing text, not code.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-pink"></span>Mentors</div><div class="ndesc">The <em>judgment</em> — real experts distilled into lenses Cosmo reasons through, and cites when it does. Your personal board of advisors.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-amber"></span>Verified research</div><div class="ndesc">Facts come from the real world, sourced and checked — never invented. Every claim traceable, or flagged for you.</div></div>
+        </div>
+      </div>
+
+      <div class="flow"><svg viewBox="0 0 40 26"><path class="flow-line" d="M20 2 L20 18 M14 13 L20 20 L26 13" fill="none"/></svg></div>
+
+      <!-- operations -->
+      <div class="layer">
+        <div class="layer-label">What it does — operations on the store</div>
+        <div class="nodes">
+          <div class="node"><div class="ntitle"><span class="dot d-blue"></span>Vision Board</div><div class="ndesc">Turns what you want into a real plan — where you're going, where you are, and how you cross.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-blue"></span>Roadmap Creator</div><div class="ndesc">Breaks any finished plan into scheduled steps and lays it on the calendar.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-blue"></span>Idea Funnel</div><div class="ndesc">Runs a business idea through a company of expert gates — most ideas die cheaply; survivors earn a plan.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-blue"></span>Trackers &amp; admin</div><div class="ndesc">Body, nutrition, budgets, subscriptions — the running state of your life, read against everything else.</div></div>
+        </div>
+      </div>
+
+      <div class="flow"><svg viewBox="0 0 40 26"><path class="flow-line" d="M20 2 L20 18 M14 13 L20 20 L26 13" fill="none"/></svg></div>
+
+      <!-- surface -->
+      <div class="layer">
+        <div class="layer-label">The face — how you see it</div>
+        <div class="nodes">
+          <div class="node"><div class="ntitle"><span class="dot d-green"></span>The cockpit</div><div class="ndesc">A dense, glanceable dashboard — the whole state of your life on one screen. Voice speaks the headline; the screen holds the detail.</div></div>
+          <div class="node"><div class="ntitle"><span class="dot d-green"></span>Pillar pages</div><div class="ndesc">Click into any part — Body, Mind, Money, Craft, People — for the full depth behind the glance.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section class="reveal">
+    <div class="eyebrow">One life, five pillars</div>
+    <h2>Everything Cosmo knows sorts into the parts of a life.</h2>
+    <p class="lead">Not folders you file into — labels a thing can carry many of at once, so an idea that's both a body project and a money play is read against both. This is what lets Cosmo see your whole life as connected, not siloed.</p>
+    <div class="pillars">
+      <div class="pillar"><div class="picon">◆</div><div class="pname">Body</div><div class="pdesc">Training · nutrition · health</div></div>
+      <div class="pillar"><div class="picon">◇</div><div class="pname">Mind</div><div class="pdesc">Journaling · learning · notes</div></div>
+      <div class="pillar"><div class="picon">◆</div><div class="pname">Money</div><div class="pdesc">Budgets · subscriptions · plays</div></div>
+      <div class="pillar"><div class="picon">◇</div><div class="pname">Craft</div><div class="pdesc">Projects · building · shipping</div></div>
+      <div class="pillar"><div class="picon">◆</div><div class="pname">People</div><div class="pdesc">Relationships · dates · network</div></div>
+    </div>
+  </section>
+
+  <!-- A DAY WITH COSMO -->
+  <section class="reveal">
+    <div class="eyebrow">A day with Cosmo</div>
+    <h2>It doesn't wait to be opened. It runs the day around you.</h2>
+    <p class="lead">The day is a closed loop — the evening sets tomorrow, which feeds the morning. You're always in conversation; the screen just shows what the conversation is looking at.</p>
+    <div class="day">
+      <div class="moment" style="--accent:var(--cyan)"><div class="mtime">06:30</div><div class="mtitle">Morning brief</div><div class="mdesc">Wakes you the way last night decided. Speaks the day — goals, schedule, a brief per pillar, weather, what's on the radar.</div></div>
+      <div class="moment" style="--accent:var(--violet)"><div class="mtime">07:00</div><div class="mtitle">The sit-down</div><div class="mdesc">"Let's go through today." You talk freely; it reshuffles the schedule in real time and flags conflicts.</div></div>
+      <div class="moment" style="--accent:var(--blue)"><div class="mtime">09:30</div><div class="mtitle">Deep work</div><div class="mdesc">Protects the block. Hand it real work — "research this, draft that" — and it reports back when done.</div></div>
+      <div class="moment" style="--accent:var(--amber)"><div class="mtime">14:00</div><div class="mtitle">Midday reset</div><div class="mdesc">A quick pulse — what's done, what's left, is the rest of the day still realistic? Re-plans on the fly.</div></div>
+      <div class="moment" style="--accent:var(--pink)"><div class="mtime">21:00</div><div class="mtitle">Wind-down</div><div class="mdesc">Walks the day back with you, captures your reflection, and quietly promotes what matters into long-term memory.</div></div>
+      <div class="moment" style="--accent:var(--green)"><div class="mtime">21:15</div><div class="mtitle">Tomorrow</div><div class="mdesc">Lays out tomorrow, takes your changes, locks it in — and sets how hard to wake you. The loop closes.</div></div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="reveal">
+    <div class="eyebrow">What makes it different</div>
+    <h2>Built on principles, not features.</h2>
+    <div class="principles">
+      <div class="principle"><h3>Yours, and local</h3><p>Your life stays on your machine. No cloud copy of the things that matter most. Private by architecture, not by promise.</p></div>
+      <div class="principle"><h3>Never a black box</h3><p>Cosmo shows its work — how it decided, why, and where a fact came from. You stay in control of every judgment.</p></div>
+      <div class="principle"><h3>You confirm, it acts</h3><p>Nothing touches your life without your word. It proposes; you decide. Trust is earned, then widened.</p></div>
+      <div class="principle"><h3>The conductor</h3><p>Its real job isn't any single feature — it's holding every goal at once and weaving them into one day you can actually live.</p></div>
+      <div class="principle"><h3>A plan, not a nag</h3><p>Goals are thought through fully in advance, so day-to-day you execute pre-decided actions instead of deciding on the spot.</p></div>
+      <div class="principle"><h3>Grows from use</h3><p>New skills and mentors are added as text, not code — the system gets smarter the more you live in it, not more cluttered.</p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="reveal">
+    <div class="foot-orb"></div>
+    <p class="powered"><b>Cosmo</b> — Cognitive Operating System · Memory &amp; Orchestration</p>
+    <p class="powered" style="margin-top:8px;">Powered by <b>Claude (Anthropic)</b> — and model-agnostic by design, connectable to any frontier LLM.</p>
+    <p class="powered" style="margin-top:18px;color:var(--ink-faint);letter-spacing:2px;">DEJAN AI SYSTEMS &amp; CO</p>
+  </footer>
+
+</div>
+
+<script>
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
